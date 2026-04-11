@@ -12,3 +12,4 @@ One line per committed DAG frontier event.
 2026-04-11 | commit dff611e | settled N02a state-key and occurrence-identity layer with fixture checks
 2026-04-11 | commit 9a97f9b | settled N03 declared corpus ingestion into continuous occurrence paths
 2026-04-11 | commit 4910e46 | settled N02b repeated-state relation index and runtime query surface
+2026-04-11 | commit 995ac08 | settled N04 occurrence DAG metrics and convergence validation
