@@ -32,6 +32,7 @@ Minimal uv-managed Python project for environment validation during roadmap node
 
 ```bash
 uv run python -m unittest discover -s tests
+uv run chessviz-builder export-fixture-artifacts
 ```
 
 ## Usage
@@ -39,4 +40,5 @@ uv run python -m unittest discover -s tests
 ```bash
 uv sync
 uv run chessviz-builder env-check
+uv run chessviz-builder export-fixture-artifacts
 ```

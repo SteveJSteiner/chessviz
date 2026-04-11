@@ -9,6 +9,7 @@ import platform
 
 import chess
 
+from chessviz_builder.artifact_manifest import write_fixture_artifacts
 from chessviz_builder.config import ARTIFACT_ROOT_ENV, load_builder_workspace
 from chessviz_builder.corpus_ingest import initial_corpus_declaration
 from chessviz_builder.pipeline import create_placeholder_pipeline
@@ -100,10 +101,29 @@ def run_env_check() -> int:
     return 0 if not failed_imports else 1
 
 
+def run_export_fixture_artifacts() -> int:
+    """Write builder/runtime fixture manifests for viewer-side exploration."""
+    workspace = load_builder_workspace()
+    pipeline = create_placeholder_pipeline(workspace)
+    dry_run = pipeline.dry_run(initial_corpus_declaration())
+    builder_manifest, viewer_scene_manifest = write_fixture_artifacts(
+        workspace,
+        dry_run,
+    )
+
+    print(f"builder manifest written: {builder_manifest}")
+    print(f"viewer manifest written: {viewer_scene_manifest}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="chessviz-builder")
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("env-check", help="Validate builder runtime environment")
+    subparsers.add_parser(
+        "export-fixture-artifacts",
+        help="Write fixture-owned builder and viewer manifests",
+    )
     return parser
 
 
@@ -113,6 +133,9 @@ def main() -> int:
 
     if args.command == "env-check":
         return run_env_check()
+
+    if args.command == "export-fixture-artifacts":
+        return run_export_fixture_artifacts()
 
     parser.error(f"unknown command: {args.command}")
 

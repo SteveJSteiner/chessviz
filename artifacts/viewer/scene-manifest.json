@@ -1,0 +1,43 @@
+{
+  "sceneId": "runtime-exploration-fixture",
+  "title": "Runtime Exploration Fixture",
+  "summary": "N08a runtime neighborhood exploration over builder-owned canonical surfaces.",
+  "accentColor": "#0f766e",
+  "camera": {
+    "position": [
+      0.0,
+      0.45,
+      4.2
+    ],
+    "lookAt": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "fov": 48
+  },
+  "runtime": {
+    "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
+    "initialFocusOccurrenceId": "occ-27e2be7f2bf706c6",
+    "focusCandidateOccurrenceIds": [
+      "occ-27e2be7f2bf706c6",
+      "occ-7b367264afad7c15",
+      "occ-d10897875e44e59b",
+      "occ-2ec900ca21098443",
+      "occ-39672723f3979502",
+      "occ-854ee946e516ebcc",
+      "occ-efe95b9c393f7960",
+      "occ-63c6882f2a36737a",
+      "occ-d6e94fa5dd427d26",
+      "occ-65caf3375c92984c",
+      "occ-8e57e74a73537a36",
+      "occ-387cdce9c0bf5677",
+      "occ-f7b8af2a834d288f"
+    ],
+    "defaultNeighborhoodRadius": 1,
+    "maxNeighborhoodRadius": 2,
+    "defaultRefinementBudget": 6,
+    "maxRefinementBudget": 12,
+    "cacheCapacity": 6
+  }
+}

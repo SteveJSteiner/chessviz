@@ -1,0 +1,1742 @@
+{
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
+  "sourceName": "initial-represented-subset",
+  "version": "2026-04-11-fixture-002",
+  "rootOccurrenceIds": [
+    "occ-27e2be7f2bf706c6",
+    "occ-7b367264afad7c15",
+    "occ-d10897875e44e59b",
+    "occ-2ec900ca21098443",
+    "occ-39672723f3979502"
+  ],
+  "leafOccurrenceIds": [
+    "occ-7108d24f15ffe66c",
+    "occ-8a3b915d604d5403",
+    "occ-d6e94fa5dd427d26",
+    "occ-63c6882f2a36737a",
+    "occ-854ee946e516ebcc"
+  ],
+  "priorityFrontierOccurrenceIds": [
+    "occ-854ee946e516ebcc",
+    "occ-efe95b9c393f7960",
+    "occ-63c6882f2a36737a",
+    "occ-d6e94fa5dd427d26",
+    "occ-65caf3375c92984c",
+    "occ-8e57e74a73537a36",
+    "occ-387cdce9c0bf5677",
+    "occ-f7b8af2a834d288f"
+  ],
+  "occurrences": [
+    {
+      "occurrenceId": "occ-27e2be7f2bf706c6",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-a"
+      ],
+      "ply": 0,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.325,
+        "normalizedScore": 0.20000000000000004,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 18,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.029123495291,
+          0.070132221177,
+          0.025165324849
+        ],
+        "ballRadius": 0.08,
+        "azimuth": 1.9643930006853567,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-1f6a34476710cf44",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:qgd-bogo-a",
+        "1:d2d4"
+      ],
+      "ply": 1,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.25,
+        "normalizedScore": 0.10000000000000002,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 25,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.010447303477,
+          0.225923328325,
+          0.074948603662
+        ],
+        "ballRadius": 0.23825992030209497,
+        "azimuth": 1.6170061020434143,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-9ebdccf7cb340e19",
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-a",
+        "1:d2d4",
+        "2:g8f6"
+      ],
+      "ply": 2,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.2,
+        "normalizedScore": 0.03333333333333336,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 33,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.053604137773,
+          0.363041623305,
+          0.121612517914
+        ],
+        "ballRadius": 0.38660345103397864,
+        "azimuth": 1.71739000655902,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-7dbf8aaca2b3697d",
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:qgd-bogo-a",
+        "1:d2d4",
+        "2:g8f6",
+        "3:c2c4"
+      ],
+      "ply": 3,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.2,
+        "normalizedScore": 0.03333333333333336,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 32,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.074719509937,
+          0.485468297385,
+          0.162773426981
+        ],
+        "ballRadius": 0.5174530524237938,
+        "azimuth": 1.723510206335349,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-6ff7efa5769bde3d",
+      "stateKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-a",
+        "1:d2d4",
+        "2:g8f6",
+        "3:c2c4",
+        "4:e7e6"
+      ],
+      "ply": 4,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.25,
+        "normalizedScore": 0.10000000000000002,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 27,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.076459040693,
+          0.590073130125,
+          0.197178724479
+        ],
+        "ballRadius": 0.6268267170328193,
+        "azimuth": 1.6996538960705683,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-ffd06139cfd8d752",
+      "stateKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+      "path": [
+        "game:qgd-bogo-a",
+        "1:d2d4",
+        "2:g8f6",
+        "3:c2c4",
+        "4:e7e6",
+        "5:b1c3"
+      ],
+      "ply": 5,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.25,
+        "normalizedScore": 0.10000000000000002,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 30,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.162405584567,
+          0.658215810379,
+          0.224667261836
+        ],
+        "ballRadius": 0.7142121571865022,
+        "azimuth": 1.812700707778581,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-7108d24f15ffe66c",
+      "stateKey": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-a",
+        "1:d2d4",
+        "2:g8f6",
+        "3:c2c4",
+        "4:e7e6",
+        "5:b1c3",
+        "6:f8b4"
+      ],
+      "ply": 6,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.175,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 35,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.236479843993,
+          0.744908824659,
+          0.0
+        ],
+        "ballRadius": 0.7815445436252338,
+        "azimuth": 1.8781948390107261,
+        "elevation": 0.0,
+        "rootGameId": "qgd-bogo-a",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-7b367264afad7c15",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-b"
+      ],
+      "ply": 0,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.325,
+        "normalizedScore": 0.20000000000000004,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 21,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.070873062785,
+          0.027271145864,
+          0.025165324849
+        ],
+        "ballRadius": 0.08,
+        "azimuth": 2.774267943835681,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-79415c2c47c30301",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:qgd-bogo-b",
+        "1:d2d4"
+      ],
+      "ply": 1,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.25,
+        "normalizedScore": 0.10000000000000002,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 29,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.210117552223,
+          0.083672639969,
+          0.074948603662
+        ],
+        "ballRadius": 0.23825992030209497,
+        "azimuth": 2.7626232272490996,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-191cfbfe7e7d01d9",
+      "stateKey": "rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-b",
+        "1:d2d4",
+        "2:e7e6"
+      ],
+      "ply": 2,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.2,
+        "normalizedScore": 0.03333333333333336,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 31,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.338933359768,
+          0.140701106871,
+          0.121612517914
+        ],
+        "ballRadius": 0.38660345103397864,
+        "azimuth": 2.748112348893277,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-fe3302c45c2e1b15",
+      "stateKey": "rnbqkbnr/pppp1ppp/4p3/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:qgd-bogo-b",
+        "1:d2d4",
+        "2:e7e6",
+        "3:c2c4"
+      ],
+      "ply": 3,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.2,
+        "normalizedScore": 0.03333333333333336,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 34,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.472241812768,
+          0.135093090887,
+          0.162773426981
+        ],
+        "ballRadius": 0.5174530524237938,
+        "azimuth": 2.862966358622464,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-3b54c1ad347a763b",
+      "stateKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-b",
+        "1:d2d4",
+        "2:e7e6",
+        "3:c2c4",
+        "4:g8f6"
+      ],
+      "ply": 4,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.25,
+        "normalizedScore": 0.10000000000000002,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 26,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.530249779847,
+          0.26993972433,
+          0.197178724479
+        ],
+        "ballRadius": 0.6268267170328193,
+        "azimuth": 2.6707072091049664,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-75aa920e2785885d",
+      "stateKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+      "path": [
+        "game:qgd-bogo-b",
+        "1:d2d4",
+        "2:e7e6",
+        "3:c2c4",
+        "4:g8f6",
+        "5:b1c3"
+      ],
+      "ply": 5,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.25,
+        "normalizedScore": 0.10000000000000002,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 28,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.583361125437,
+          0.345417753251,
+          0.224667261836
+        ],
+        "ballRadius": 0.7142121571865022,
+        "azimuth": 2.606990003349583,
+        "elevation": 0.32,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-8a3b915d604d5403",
+      "stateKey": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+      "path": [
+        "game:qgd-bogo-b",
+        "1:d2d4",
+        "2:e7e6",
+        "3:c2c4",
+        "4:g8f6",
+        "5:b1c3",
+        "6:f8b4"
+      ],
+      "ply": 6,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.175,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.4,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 36,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.707010977026,
+          0.333087604146,
+          0.0
+        ],
+        "ballRadius": 0.7815445436252338,
+        "azimuth": 2.701314119879655,
+        "elevation": 0.0,
+        "rootGameId": "qgd-bogo-b",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-d10897875e44e59b",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:scholars-mate-white"
+      ],
+      "ply": 0,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.325,
+        "normalizedScore": 0.20000000000000004,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 22,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.021668067149,
+          -0.072781874744,
+          0.025165324849
+        ],
+        "ballRadius": 0.08,
+        "azimuth": -1.8601530933893544,
+        "elevation": 0.32,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-828d34dd90220088",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4"
+      ],
+      "ply": 1,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.2857142857142857,
+        "normalizedScore": 0.14761904761904762,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.14285714285714285,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 23,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.068190327746,
+          -0.208308787886,
+          0.093409409128
+        ],
+        "ballRadius": 0.23825992030209497,
+        "azimuth": -1.2544384695599577,
+        "elevation": 0.40285714285714286,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-8f867a23923fe752",
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4",
+        "2:e7e5"
+      ],
+      "ply": 2,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.37142857142857144,
+        "normalizedScore": 0.2619047619047619,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.2857142857142857,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 15,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.111830228255,
+          -0.32308276215,
+          0.180482013513
+        ],
+        "ballRadius": 0.38660345103397864,
+        "azimuth": -1.2375689206623408,
+        "elevation": 0.4857142857142857,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-da1729ad0178e787",
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4",
+        "2:e7e5",
+        "3:f1c4"
+      ],
+      "ply": 3,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.4571428571428571,
+        "normalizedScore": 0.37619047619047613,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.42857142857142855,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 13,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.062731333421,
+          -0.43150667207,
+          0.278611617183
+        ],
+        "ballRadius": 0.5174530524237938,
+        "azimuth": -1.4264302615102935,
+        "elevation": 0.5685714285714285,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-40e4e824d7eaa81e",
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4",
+        "2:e7e5",
+        "3:f1c4",
+        "4:b8c6"
+      ],
+      "ply": 4,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.5428571428571428,
+        "normalizedScore": 0.49047619047619045,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.5714285714285714,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 11,
+          "priorityBand": "context",
+          "retainFromZoom": "medium"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.052347932473,
+          -0.495707790329,
+          0.380059487132
+        ],
+        "ballRadius": 0.6268267170328193,
+        "azimuth": -1.4655838753120343,
+        "elevation": 0.6514285714285715,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-e183cdedadef1bf0",
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4",
+        "2:e7e5",
+        "3:f1c4",
+        "4:b8c6",
+        "5:d1h5"
+      ],
+      "ply": 5,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.6285714285714286,
+        "normalizedScore": 0.6047619047619047,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.7142857142857143,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 9,
+          "priorityBand": "context",
+          "retainFromZoom": "medium"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.065183743429,
+          -0.52614409278,
+          0.478562930761
+        ],
+        "ballRadius": 0.7142121571865022,
+        "azimuth": -1.4475348688716203,
+        "elevation": 0.7342857142857142,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-65caf3375c92984c",
+      "stateKey": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4",
+        "2:e7e5",
+        "3:f1c4",
+        "4:b8c6",
+        "5:d1h5",
+        "6:g8f6"
+      ],
+      "ply": 6,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.7142857142857143,
+        "normalizedScore": 0.7190476190476192,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.8571428571428571,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 5,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.079773147184,
+          -0.682289914403,
+          0.372731258902
+        ],
+        "ballRadius": 0.7815445436252338,
+        "azimuth": -1.454405049871122,
+        "elevation": 0.4971428571428571,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-d6e94fa5dd427d26",
+      "stateKey": "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq -",
+      "path": [
+        "game:scholars-mate-white",
+        "1:e2e4",
+        "2:e7e5",
+        "3:f1c4",
+        "4:b8c6",
+        "5:d1h5",
+        "6:g8f6",
+        "7:h5f7"
+      ],
+      "ply": 7,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P7]",
+      "salience": {
+        "rawScore": 0.725,
+        "normalizedScore": 0.7333333333333334,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 1.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 4,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": {
+        "wdlLabel": "W",
+        "outcomeClass": "white-win",
+        "anchorId": "terminal:white-win"
+      },
+      "embedding": {
+        "coordinate": [
+          0.090508454355,
+          -0.690018709983,
+          0.45595092456
+        ],
+        "ballRadius": 0.8319908930049684,
+        "azimuth": -1.4403727916118136,
+        "elevation": 0.58,
+        "rootGameId": "scholars-mate-white",
+        "terminalAnchorId": "terminal:white-win"
+      }
+    },
+    {
+      "occurrenceId": "occ-2ec900ca21098443",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:fools-mate-black"
+      ],
+      "ply": 0,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.325,
+        "normalizedScore": 0.20000000000000004,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 19,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.066296562714,
+          -0.037033393006,
+          0.025165324849
+        ],
+        "ballRadius": 0.08,
+        "azimuth": -0.5094234422886881,
+        "elevation": 0.32,
+        "rootGameId": "fools-mate-black",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-098b343ea6d64bd5",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:fools-mate-black",
+        "1:f2f3"
+      ],
+      "ply": 1,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.35,
+        "normalizedScore": 0.2333333333333333,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.25,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 16,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.211908525369,
+          -0.10070614657,
+          0.041482990987
+        ],
+        "ballRadius": 0.23825992030209497,
+        "azimuth": -0.44363928223478394,
+        "elevation": 0.17500000000000002,
+        "rootGameId": "fools-mate-black",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-e98487c361da0f1a",
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:fools-mate-black",
+        "1:f2f3",
+        "2:e7e5"
+      ],
+      "ply": 2,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.5,
+        "normalizedScore": 0.43333333333333335,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.5,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 12,
+          "priorityBand": "context",
+          "retainFromZoom": "medium"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.378225827823,
+          -0.079202120321,
+          0.011596363894
+        ],
+        "ballRadius": 0.38660345103397864,
+        "azimuth": -0.206421600889916,
+        "elevation": 0.030000000000000027,
+        "rootGameId": "fools-mate-black",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-f7b8af2a834d288f",
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq -",
+      "path": [
+        "game:fools-mate-black",
+        "1:f2f3",
+        "2:e7e5",
+        "3:g2g4"
+      ],
+      "ply": 3,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.6499999999999999,
+        "normalizedScore": 0.6333333333333332,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.75,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 8,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.500808702051,
+          -0.115856778686,
+          -0.059376024165
+        ],
+        "ballRadius": 0.5174530524237938,
+        "azimuth": -0.2273401095328385,
+        "elevation": -0.11499999999999994,
+        "rootGameId": "fools-mate-black",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-63c6882f2a36737a",
+      "stateKey": "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq -",
+      "path": [
+        "game:fools-mate-black",
+        "1:f2f3",
+        "2:e7e5",
+        "3:g2g4",
+        "4:d8h4"
+      ],
+      "ply": 4,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.725,
+        "normalizedScore": 0.7333333333333334,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 1.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 3,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": {
+        "wdlLabel": "L",
+        "outcomeClass": "black-win",
+        "anchorId": "terminal:black-win"
+      },
+      "embedding": {
+        "coordinate": [
+          0.598177970864,
+          -0.095536122783,
+          -0.161144958356
+        ],
+        "ballRadius": 0.6268267170328193,
+        "azimuth": -0.1583743123327693,
+        "elevation": -0.25999999999999995,
+        "rootGameId": "fools-mate-black",
+        "terminalAnchorId": "terminal:black-win"
+      }
+    },
+    {
+      "occurrenceId": "occ-39672723f3979502",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:repetition-draw"
+      ],
+      "ply": 0,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.325,
+        "normalizedScore": 0.20000000000000004,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 20,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.069500905954,
+          -0.030599517918,
+          0.025165324849
+        ],
+        "ballRadius": 0.08,
+        "azimuth": -2.7268553279866783,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-3df389a83da4b1a6",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3"
+      ],
+      "ply": 1,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.275,
+        "normalizedScore": 0.1333333333333334,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.125,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 24,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.221884559913,
+          -0.043791991319,
+          0.074948603662
+        ],
+        "ballRadius": 0.23825992030209497,
+        "azimuth": -2.9467331321889145,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-5844c88338924ed3",
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6"
+      ],
+      "ply": 2,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.35,
+        "normalizedScore": 0.2333333333333333,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.25,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 17,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.32773627758,
+          -0.165110739191,
+          0.121612517914
+        ],
+        "ballRadius": 0.38660345103397864,
+        "azimuth": -2.6749164754945562,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-a348e528205679e9",
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6",
+        "3:f3g1"
+      ],
+      "ply": 3,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.42499999999999993,
+        "normalizedScore": 0.33333333333333326,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.375,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 14,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.398522668824,
+          -0.287127420085,
+          0.162773426981
+        ],
+        "ballRadius": 0.5174530524237938,
+        "azimuth": -2.5172538680523266,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-8e57e74a73537a36",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6",
+        "3:f3g1",
+        "4:f6g8"
+      ],
+      "ply": 4,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.7000000000000001,
+        "normalizedScore": 0.7000000000000002,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 0.5,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 6,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.516732931129,
+          -0.29499044338,
+          0.197178724479
+        ],
+        "ballRadius": 0.6268267170328193,
+        "azimuth": -2.6228631710480728,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-80fd3ca4f20451b4",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6",
+        "3:f3g1",
+        "4:f6g8",
+        "5:g1f3"
+      ],
+      "ply": 5,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.575,
+        "normalizedScore": 0.5333333333333333,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.625,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 10,
+          "priorityBand": "context",
+          "retainFromZoom": "medium"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.534449164458,
+          -0.417118349563,
+          0.224667261836
+        ],
+        "ballRadius": 0.7142121571865022,
+        "azimuth": -2.478877919592438,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-387cdce9c0bf5677",
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6",
+        "3:f3g1",
+        "4:f6g8",
+        "5:g1f3",
+        "6:g8f6"
+      ],
+      "ply": 6,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.6499999999999999,
+        "normalizedScore": 0.6333333333333332,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.75,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 7,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.540124687654,
+          -0.508562744398,
+          0.245847779056
+        ],
+        "ballRadius": 0.7815445436252338,
+        "azimuth": -2.386282024188323,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-efe95b9c393f7960",
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6",
+        "3:f3g1",
+        "4:f6g8",
+        "5:g1f3",
+        "6:g8f6",
+        "7:f3g1"
+      ],
+      "ply": 7,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.7250000000000001,
+        "normalizedScore": 0.7333333333333334,
+        "frequencySignal": 0.2,
+        "terminalPullSignal": 0.875,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 2,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.538486626499,
+          -0.577707075943,
+          0.261716513677
+        ],
+        "ballRadius": 0.8319908930049684,
+        "azimuth": -2.321071267359258,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-854ee946e516ebcc",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:repetition-draw",
+        "1:g1f3",
+        "2:g8f6",
+        "3:f3g1",
+        "4:f6g8",
+        "5:g1f3",
+        "6:g8f6",
+        "7:f3g1",
+        "8:f6g8"
+      ],
+      "ply": 8,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.9249999999999999,
+        "normalizedScore": 1.0,
+        "frequencySignal": 1.0,
+        "terminalPullSignal": 1.0,
+        "centralitySignal": 0.5,
+        "priorityHint": {
+          "priorityRank": 1,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
+        }
+      },
+      "terminal": {
+        "wdlLabel": "D",
+        "outcomeClass": "draw",
+        "anchorId": "terminal:draw"
+      },
+      "embedding": {
+        "coordinate": [
+          -0.670063185023,
+          -0.481089968336,
+          0.273357540154
+        ],
+        "ballRadius": 0.8689974535721419,
+        "azimuth": -2.518903189864463,
+        "elevation": 0.32,
+        "rootGameId": "repetition-draw",
+        "terminalAnchorId": "terminal:draw"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "sourceOccurrenceId": "occ-27e2be7f2bf706c6",
+      "targetOccurrenceId": "occ-1f6a34476710cf44"
+    },
+    {
+      "sourceOccurrenceId": "occ-1f6a34476710cf44",
+      "targetOccurrenceId": "occ-9ebdccf7cb340e19"
+    },
+    {
+      "sourceOccurrenceId": "occ-9ebdccf7cb340e19",
+      "targetOccurrenceId": "occ-7dbf8aaca2b3697d"
+    },
+    {
+      "sourceOccurrenceId": "occ-7dbf8aaca2b3697d",
+      "targetOccurrenceId": "occ-6ff7efa5769bde3d"
+    },
+    {
+      "sourceOccurrenceId": "occ-6ff7efa5769bde3d",
+      "targetOccurrenceId": "occ-ffd06139cfd8d752"
+    },
+    {
+      "sourceOccurrenceId": "occ-ffd06139cfd8d752",
+      "targetOccurrenceId": "occ-7108d24f15ffe66c"
+    },
+    {
+      "sourceOccurrenceId": "occ-7b367264afad7c15",
+      "targetOccurrenceId": "occ-79415c2c47c30301"
+    },
+    {
+      "sourceOccurrenceId": "occ-79415c2c47c30301",
+      "targetOccurrenceId": "occ-191cfbfe7e7d01d9"
+    },
+    {
+      "sourceOccurrenceId": "occ-191cfbfe7e7d01d9",
+      "targetOccurrenceId": "occ-fe3302c45c2e1b15"
+    },
+    {
+      "sourceOccurrenceId": "occ-fe3302c45c2e1b15",
+      "targetOccurrenceId": "occ-3b54c1ad347a763b"
+    },
+    {
+      "sourceOccurrenceId": "occ-3b54c1ad347a763b",
+      "targetOccurrenceId": "occ-75aa920e2785885d"
+    },
+    {
+      "sourceOccurrenceId": "occ-75aa920e2785885d",
+      "targetOccurrenceId": "occ-8a3b915d604d5403"
+    },
+    {
+      "sourceOccurrenceId": "occ-d10897875e44e59b",
+      "targetOccurrenceId": "occ-828d34dd90220088"
+    },
+    {
+      "sourceOccurrenceId": "occ-828d34dd90220088",
+      "targetOccurrenceId": "occ-8f867a23923fe752"
+    },
+    {
+      "sourceOccurrenceId": "occ-8f867a23923fe752",
+      "targetOccurrenceId": "occ-da1729ad0178e787"
+    },
+    {
+      "sourceOccurrenceId": "occ-da1729ad0178e787",
+      "targetOccurrenceId": "occ-40e4e824d7eaa81e"
+    },
+    {
+      "sourceOccurrenceId": "occ-40e4e824d7eaa81e",
+      "targetOccurrenceId": "occ-e183cdedadef1bf0"
+    },
+    {
+      "sourceOccurrenceId": "occ-e183cdedadef1bf0",
+      "targetOccurrenceId": "occ-65caf3375c92984c"
+    },
+    {
+      "sourceOccurrenceId": "occ-65caf3375c92984c",
+      "targetOccurrenceId": "occ-d6e94fa5dd427d26"
+    },
+    {
+      "sourceOccurrenceId": "occ-2ec900ca21098443",
+      "targetOccurrenceId": "occ-098b343ea6d64bd5"
+    },
+    {
+      "sourceOccurrenceId": "occ-098b343ea6d64bd5",
+      "targetOccurrenceId": "occ-e98487c361da0f1a"
+    },
+    {
+      "sourceOccurrenceId": "occ-e98487c361da0f1a",
+      "targetOccurrenceId": "occ-f7b8af2a834d288f"
+    },
+    {
+      "sourceOccurrenceId": "occ-f7b8af2a834d288f",
+      "targetOccurrenceId": "occ-63c6882f2a36737a"
+    },
+    {
+      "sourceOccurrenceId": "occ-39672723f3979502",
+      "targetOccurrenceId": "occ-3df389a83da4b1a6"
+    },
+    {
+      "sourceOccurrenceId": "occ-3df389a83da4b1a6",
+      "targetOccurrenceId": "occ-5844c88338924ed3"
+    },
+    {
+      "sourceOccurrenceId": "occ-5844c88338924ed3",
+      "targetOccurrenceId": "occ-a348e528205679e9"
+    },
+    {
+      "sourceOccurrenceId": "occ-a348e528205679e9",
+      "targetOccurrenceId": "occ-8e57e74a73537a36"
+    },
+    {
+      "sourceOccurrenceId": "occ-8e57e74a73537a36",
+      "targetOccurrenceId": "occ-80fd3ca4f20451b4"
+    },
+    {
+      "sourceOccurrenceId": "occ-80fd3ca4f20451b4",
+      "targetOccurrenceId": "occ-387cdce9c0bf5677"
+    },
+    {
+      "sourceOccurrenceId": "occ-387cdce9c0bf5677",
+      "targetOccurrenceId": "occ-efe95b9c393f7960"
+    },
+    {
+      "sourceOccurrenceId": "occ-efe95b9c393f7960",
+      "targetOccurrenceId": "occ-854ee946e516ebcc"
+    }
+  ],
+  "repeatedStateRelations": [
+    {
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-27e2be7f2bf706c6",
+        "occ-7b367264afad7c15",
+        "occ-d10897875e44e59b",
+        "occ-2ec900ca21098443",
+        "occ-39672723f3979502",
+        "occ-8e57e74a73537a36",
+        "occ-854ee946e516ebcc"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-1f6a34476710cf44",
+        "occ-79415c2c47c30301"
+      ]
+    },
+    {
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-9ebdccf7cb340e19"
+      ]
+    },
+    {
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-7dbf8aaca2b3697d"
+      ]
+    },
+    {
+      "stateKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-6ff7efa5769bde3d",
+        "occ-3b54c1ad347a763b"
+      ]
+    },
+    {
+      "stateKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-ffd06139cfd8d752",
+        "occ-75aa920e2785885d"
+      ]
+    },
+    {
+      "stateKey": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-7108d24f15ffe66c",
+        "occ-8a3b915d604d5403"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-191cfbfe7e7d01d9"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/4p3/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-fe3302c45c2e1b15"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-828d34dd90220088"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-8f867a23923fe752"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq -",
+      "occurrenceIds": [
+        "occ-da1729ad0178e787"
+      ]
+    },
+    {
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq -",
+      "occurrenceIds": [
+        "occ-40e4e824d7eaa81e"
+      ]
+    },
+    {
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq -",
+      "occurrenceIds": [
+        "occ-e183cdedadef1bf0"
+      ]
+    },
+    {
+      "stateKey": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq -",
+      "occurrenceIds": [
+        "occ-65caf3375c92984c"
+      ]
+    },
+    {
+      "stateKey": "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq -",
+      "occurrenceIds": [
+        "occ-d6e94fa5dd427d26"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/5P2/PPPPP1PP/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-098b343ea6d64bd5"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-e98487c361da0f1a"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-f7b8af2a834d288f"
+      ]
+    },
+    {
+      "stateKey": "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-63c6882f2a36737a"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq -",
+      "occurrenceIds": [
+        "occ-3df389a83da4b1a6",
+        "occ-80fd3ca4f20451b4"
+      ]
+    },
+    {
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq -",
+      "occurrenceIds": [
+        "occ-5844c88338924ed3",
+        "occ-387cdce9c0bf5677"
+      ]
+    },
+    {
+      "stateKey": "rnbqkb1r/pppppppp/5n2/8/8/8/PPPPPPPP/RNBQKBNR b KQkq -",
+      "occurrenceIds": [
+        "occ-a348e528205679e9",
+        "occ-efe95b9c393f7960"
+      ]
+    }
+  ],
+  "terminalAnchors": [
+    {
+      "anchorId": "terminal:white-win",
+      "wdlLabel": "W",
+      "outcomeClass": "white-win",
+      "occurrenceIds": [
+        "occ-d6e94fa5dd427d26"
+      ]
+    },
+    {
+      "anchorId": "terminal:black-win",
+      "wdlLabel": "L",
+      "outcomeClass": "black-win",
+      "occurrenceIds": [
+        "occ-63c6882f2a36737a"
+      ]
+    },
+    {
+      "anchorId": "terminal:draw",
+      "wdlLabel": "D",
+      "outcomeClass": "draw",
+      "occurrenceIds": [
+        "occ-854ee946e516ebcc"
+      ]
+    }
+  ],
+  "salienceConfig": {
+    "frequencyWeight": 0.25,
+    "terminalPullWeight": 0.6,
+    "centralityWeight": 0.15,
+    "normalization": "min-max",
+    "topKFrontier": 8
+  },
+  "embeddingConfig": {
+    "seed": 20260411,
+    "rootRingRadius": 0.08,
+    "maxRadius": 0.96,
+    "radialScale": 5.5,
+    "moveAngleScale": 0.42,
+    "moveAngleDecay": 0.72,
+    "repeatedStatePull": 0.35,
+    "phasePitch": 0.32,
+    "terminalPitch": 0.58
+  }
+}

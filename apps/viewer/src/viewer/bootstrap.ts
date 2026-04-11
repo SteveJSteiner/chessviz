@@ -1,15 +1,13 @@
-import type { SceneBootstrap } from './contracts';
+import type { SceneBootstrap, ViewerSceneManifest } from './contracts';
 
-export function createSmokeSceneBootstrap(): SceneBootstrap {
+export function createSceneBootstrap(
+  viewerSceneManifest: ViewerSceneManifest
+): SceneBootstrap {
   return {
-    sceneId: 'smoke-scene',
-    title: 'Viewer Smoke Scene',
-    summary: 'N00 placeholder scene bootstrap for the future graph object.',
-    accentColor: '#2f855a',
-    camera: {
-      position: [0, 0.35, 4.5],
-      lookAt: [0, 0, 0],
-      fov: 50
-    }
+    sceneId: viewerSceneManifest.sceneId,
+    title: viewerSceneManifest.title,
+    summary: viewerSceneManifest.summary,
+    accentColor: viewerSceneManifest.accentColor,
+    camera: viewerSceneManifest.camera
   };
 }
