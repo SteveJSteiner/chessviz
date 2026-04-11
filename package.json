@@ -1,0 +1,10 @@
+{
+  "name": "chessviz",
+  "private": true,
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "dev:viewer": "pnpm --filter viewer dev",
+    "build:viewer": "pnpm --filter viewer build",
+    "check:viewer": "pnpm --filter viewer check"
+  }
+}

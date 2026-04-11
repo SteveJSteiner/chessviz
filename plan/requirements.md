@@ -28,56 +28,67 @@ The system shall represent chess as a single continuous zoomable object in which
 - **R10.** The representation shall support both forward branching from the initial position and backward convergence toward terminal outcomes.
 - **R11.** Major regime changes, especially captures, shall be visually legible as strong departures in path behavior.
 
-## 5. Width versus depth
+## 5. Edge path semantics
 
-- **R12.** The visualization shall treat width and depth as distinct.
-- **R13.** Width shall arise from the large number of still-distinguishable alternatives at roughly similar stage, including both distinct piece sets and distinct configurations within a piece set.
-- **R14.** Game length shall not be treated as the primary source of visual complexity.
+- **R12.** Edge paths shall act as multiscale carriers of move information, not merely as adjacency routes.
+- **R13.** At least one coarse semantic band shall be encoded in edge geometry itself so that move-family distinctions remain legible at structure-level zoom.
+- **R14.** Finer semantic bands may be encoded through bounded geometric modulation, surface treatment, or both, but shall never overturn the coarse semantic reading established by the lower band.
+- **R15.** Zooming in shall reveal additional path information monotonically: closer views may add tactical or contextual residue, but shall not reverse or contradict the move-family reading available from farther views.
+- **R16.** Semantic families shall be assigned stable representational jobs by scale. Different scales shall not redundantly or arbitrarily encode the same feature family.
+- **R17.** Edge-path deviation from the global object grammar shall be bounded. Local move-specific encoding shall not destroy the continuity, global orientation, or one-object ontology of the visualization.
+- **R18.** The representation shall preserve a distinction between centerline geometry, local frame/twist orientation, and surface-level treatment.
+- **R19.** The implementation may use one or more of those channels, but shall keep their semantic jobs stable across the represented subset.
 
-## 6. Salience
+## 6. Width versus depth
 
-- **R15.** All legal positions may exist in the represented space, but visual mass shall not be allocated uniformly.
-- **R16.** More salient paths shall remain legible at coarser zoom levels.
-- **R17.** Less salient but still legal structure shall remain available at close zoom rather than dominating the large-scale view.
-- **R18.** Salience shall be able to affect thickness, persistence across zoom, brightness, or other optical weight without removing legality from the underlying object.
+- **R20.** The visualization shall treat width and depth as distinct.
+- **R21.** Width shall arise from the large number of still-distinguishable alternatives at roughly similar stage, including both distinct piece sets and distinct configurations within a piece set.
+- **R22.** Game length shall not be treated as the primary source of visual complexity.
 
-## 7. Coarse organization by region of chess
+## 7. Salience
 
-- **R19.** The visualization shall support an opening region in which named openings compress large amounts of otherwise irrelevant local noise.
-- **R20.** The visualization shall support a middlegame region in which organization can rely on piece set or material signature when opening names no longer organize the space well.
-- **R21.** The visualization shall support an endgame region in which terminal structure and piece-taking make large-scale routing especially legible.
+- **R23.** All legal positions may exist in the represented space, but visual mass shall not be allocated uniformly.
+- **R24.** More salient paths shall remain legible at coarser zoom levels.
+- **R25.** Less salient but still legal structure shall remain available at close zoom rather than dominating the large-scale view.
+- **R26.** Salience shall be able to affect thickness, persistence across zoom, brightness, or other optical weight without removing legality from the underlying object.
 
-## 8. Terminal structure
+## 8. Coarse organization by region of chess
 
-- **R22.** The endgame side shall support convergence toward three terminal outcome classes: White win, Draw, Black win.
-- **R23.** The path toward terminal outcomes shall be visually readable at coarse scale.
-- **R24.** Capture-driven simplification shall be able to produce coarse large-scale branching that remains visibly connected to fine-scale occurrence structure.
+- **R27.** The visualization shall support an opening region in which named openings compress large amounts of otherwise irrelevant local noise.
+- **R28.** The visualization shall support a middlegame region in which organization can rely on piece set or material signature when opening names no longer organize the space well.
+- **R29.** The visualization shall support an endgame region in which terminal structure and piece-taking make large-scale routing especially legible.
 
-## 9. Focused rendering
+## 9. Terminal structure
 
-- **R25.** The system need not render the entire space of chess as one always-legible picture.
-- **R26.** It shall be possible to render any chosen anchored view legibly.
-- **R27.** At minimum, anchored views shall include:
+- **R30.** The endgame side shall support convergence toward three terminal outcome classes: White win, Draw, Black win.
+- **R31.** The path toward terminal outcomes shall be visually readable at coarse scale.
+- **R32.** Capture-driven simplification shall be able to produce coarse large-scale branching that remains visibly connected to fine-scale occurrence structure.
+
+## 10. Focused rendering
+
+- **R33.** The system need not render the entire space of chess as one always-legible picture.
+- **R34.** It shall be possible to render any chosen anchored view legibly.
+- **R35.** At minimum, anchored views shall include:
   - an opening-focused view,
   - a middlegame/material-focused view,
   - an endgame/terminal-focused view.
-- **R28.** Any anchored view shall still behave as a view into the same underlying object rather than as an unrelated substitute graphic.
+- **R36.** Any anchored view shall still behave as a view into the same underlying object rather than as an unrelated substitute graphic.
 
-## 10. Camera behavior
+## 11. Camera behavior
 
-- **R29.** Camera movement shall afford navigation through the object rather than mere inspection of a static diagram.
-- **R30.** The camera shall be able to move so that detail comes into and out of focus continuously.
-- **R31.** The camera shall support reading entailed path direction toward later structure and terminal pull.
+- **R37.** Camera movement shall afford navigation through the object rather than mere inspection of a static diagram.
+- **R38.** The camera shall be able to move so that detail comes into and out of focus continuously.
+- **R39.** The camera shall support reading entailed path direction toward later structure and terminal pull.
 
-## 11. Spatial geometry
+## 12. Spatial geometry
 
-- **R32.** The visualization shall be three-dimensional.
-- **R33.** The visualization shall use some form of hyperbolic projection or hyperbolic-style embedding.
-- **R34.** The purpose of the hyperbolic projection shall be to keep the high branching factor, especially in the middlegame, legible under navigation and zoom.
-- **R35.** The geometry shall allow a single camera viewpoint to hold both local path detail and larger branching context simultaneously.
+- **R40.** The visualization shall be three-dimensional.
+- **R41.** The visualization shall use some form of hyperbolic projection or hyperbolic-style embedding.
+- **R42.** The purpose of the hyperbolic projection shall be to keep the high branching factor, especially in the middlegame, legible under navigation and zoom.
+- **R43.** The geometry shall allow a single camera viewpoint to hold both local path detail and larger branching context simultaneously.
 
-## 12. Non-requirements
+## 13. Non-requirements
 
-- **R36.** The visualization is not required to be a literal time spiral.
-- **R37.** The visualization is not required to use fractality to represent unbounded temporal length.
-- **R38.** The visualization is not required to force all state identity into a single collapsed node view.
+- **R44.** The visualization is not required to be a literal time spiral.
+- **R45.** The visualization is not required to use unconstrained self-similar fractal geometry as a primary encoding method.
+- **R46.** The visualization is not required to force all state identity into a single collapsed node view.
