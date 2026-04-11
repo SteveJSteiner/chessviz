@@ -10,3 +10,4 @@ One line per committed DAG frontier event.
 2026-04-11 | commit ebf2ead | settled N00 module skeletons and explicit viewer-builder boundaries
 2026-04-11 | commit ff855b4 | settled N01 acceptance corpus and salience declaration contract
 2026-04-11 | commit dff611e | settled N02a state-key and occurrence-identity layer with fixture checks
+2026-04-11 | commit 9a97f9b | settled N03 declared corpus ingestion into continuous occurrence paths

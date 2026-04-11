@@ -3,19 +3,19 @@
 This file states the current active node, why it is current, and what must be true to settle it and advance.
 
 ## Current active node
-- **Node:** N03
+- **Node:** N02b
 
 ## Why this is current
-- N02a was settled by commit dff611e, which separated canonical state keys from occurrence identity and verified both with transposition fixtures.
-- N03 is now the earliest unresolved node in topological order.
-- N02b, N04, N05, and N06 all depend on ingested occurrence paths, so declared corpus ingestion is the next gating step.
+- N03 was settled by commit 9a97f9b, which introduced a declared corpus fixture and verified continuous occurrence-path ingestion on it.
+- N02b is now the earliest unresolved node in topological order.
+- N04 and N13 both depend on repeated-state relations over ingested occurrences, so transposition indexing is the next gating step.
 
 ## Settle-and-advance conditions
-- A declared initial corpus fixture exists with source name, version, and location fields consistent with the N01 acceptance contract.
-- Corpus ingestion converts each declared game into a continuous directed occurrence path rooted at the initial position.
-- Fixture checks verify path continuity, predecessor-successor ordering, and expected occurrence counts on a small declared corpus sample.
-- Ingestion output is expressed only in terms of the N02a identity layer and remains free of later-node labeling, salience, or embedding concerns.
-- A commit records N03 settlement and updates both `plan/completion-log.md` and this file to the next active node or frontier.
+- A repeated-state relation index is built over ingested occurrences without collapsing distinct occurrence identities.
+- Fixture checks verify the declared corpus transposition example yields one shared state key with multiple occurrence ids.
+- Relation output distinguishes singleton states from repeated states and exposes the repeated-state groups through explicit builder interfaces.
+- The repeated-state index remains separate from later overlay, salience, labeling, and embedding concerns.
+- A commit records N02b settlement and updates both `plan/completion-log.md` and this file to the next active node or frontier.
 
 ## Advancement rule
 - No node advancement occurs without a commit that records the exact continuation state transition.
