@@ -1,18 +1,28 @@
-import { Canvas, useThree } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useEffect, useMemo, useRef } from 'react';
 import {
   CanvasTexture,
-  CatmullRomCurve3,
-  DoubleSide,
-  Vector3 as ThreeVector3
+  DoubleSide
 } from 'three';
+import { createCarrierRibbonGeometry } from './carrierRibbon.ts';
 import {
+  buildOccurrenceRadiusCaps,
   collectContextualResidueSamples,
   createCarrierPresentation,
   createOccurrencePresentation,
   scaleCoordinate
 } from './carrierPresentation.ts';
 import { formatGameName, formatTerminalOutcomeLabel } from './chessContext.ts';
+import {
+  advanceCameraOrbitState,
+  deriveCameraOrbitState,
+  resolveOrbitCameraPosition
+} from './cameraOrbit.ts';
+import {
+  selectCarrierLabelSelections,
+  selectOccurrenceLabelSelections
+} from './labelPolicy.ts';
+import type { ViewerRenderTuning } from './renderTuning.ts';
 import type {
   NavigationEntryPoint,
   RuntimeCarrierSurfaceSnapshot,
@@ -24,18 +34,27 @@ import type {
 } from './contracts';
 
 type SmokeCanvasProps = {
+  cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 };
 
 export function SmokeCanvas({
+  cameraDistance,
   carrierSurface,
+  renderTuning,
   sceneBootstrap,
   navigationEntryPoint,
   runtimeSnapshot
 }: SmokeCanvasProps) {
+  const occurrenceRadiusCaps = useMemo(
+    () => buildOccurrenceRadiusCaps(runtimeSnapshot.occurrences),
+    [runtimeSnapshot.occurrences]
+  );
+
   return (
     <Canvas
       camera={{
@@ -48,6 +67,7 @@ export function SmokeCanvas({
       gl={{ antialias: true }}
     >
       <CameraRig
+        cameraDistance={cameraDistance}
         navigationEntryPoint={navigationEntryPoint}
         sceneBootstrap={sceneBootstrap}
       />
@@ -56,79 +76,160 @@ export function SmokeCanvas({
       <hemisphereLight args={['#fff9ef', '#ddd3c2', 1.08]} />
       <directionalLight position={[2.4, 3.2, 3.8]} intensity={1.18} />
       <directionalLight position={[-2.8, 2.2, 1.4]} intensity={0.42} color="#f1dcc2" />
-      <NeighborhoodCarriers carrierSurface={carrierSurface} />
+      <NeighborhoodCarriers carrierSurface={carrierSurface} renderTuning={renderTuning} />
       {runtimeSnapshot.occurrences.map((occurrence) => (
         <NeighborhoodNode
           accentColor={sceneBootstrap.accentColor}
           key={occurrence.occurrenceId}
           occurrence={occurrence}
+          radiusCap={occurrenceRadiusCaps.get(occurrence.occurrenceId)}
+          renderTuning={renderTuning}
         />
       ))}
       <CarrierLabels
+        cameraDistance={cameraDistance}
         carrierSurface={carrierSurface}
         focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
-        refinementBudget={runtimeSnapshot.refinementBudget}
+        occurrences={runtimeSnapshot.occurrences}
+        renderTuning={renderTuning}
       />
       <OccurrenceDataLabels
+        cameraDistance={cameraDistance}
         carrierSurface={carrierSurface}
+        renderTuning={renderTuning}
         runtimeSnapshot={runtimeSnapshot}
       />
-      <mesh position={[0, -1.45, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.65, 2.2, 72]} />
-        <meshStandardMaterial color="#d9cfbe" opacity={0.82} roughness={0.8} transparent />
-      </mesh>
-      <mesh position={[0, -1.48, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[1.48, 72]} />
-        <meshStandardMaterial color="#f2eadb" opacity={0.9} roughness={0.92} transparent />
-      </mesh>
     </Canvas>
   );
 }
 
 function CameraRig({
+  cameraDistance,
   navigationEntryPoint,
   sceneBootstrap
 }: {
+  cameraDistance: number;
   navigationEntryPoint: NavigationEntryPoint;
   sceneBootstrap: SceneBootstrap;
 }) {
-  const { camera } = useThree();
+  const { camera, gl } = useThree();
   const scaledFocus = scaleCoordinate(navigationEntryPoint.focus);
+  const orbitStateRef = useRef(deriveCameraOrbitState(sceneBootstrap.camera.position));
+  const dragStateRef = useRef({ active: false, pointerId: null as number | null, x: 0, y: 0 });
 
   useEffect(() => {
-    camera.position.set(
-      scaledFocus[0] + sceneBootstrap.camera.position[0],
-      scaledFocus[1] + sceneBootstrap.camera.position[1],
-      scaledFocus[2] + navigationEntryPoint.distance
+    orbitStateRef.current = deriveCameraOrbitState(sceneBootstrap.camera.position);
+  }, [sceneBootstrap.camera.position]);
+
+  useEffect(() => {
+    const canvasElement = gl.domElement;
+    const previousTouchAction = canvasElement.style.touchAction;
+    const previousCursor = canvasElement.style.cursor;
+    canvasElement.style.touchAction = 'none';
+    canvasElement.style.cursor = 'grab';
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (event.button !== 0 && event.pointerType !== 'touch') {
+        return;
+      }
+
+      dragStateRef.current = {
+        active: true,
+        pointerId: event.pointerId,
+        x: event.clientX,
+        y: event.clientY
+      };
+      canvasElement.style.cursor = 'grabbing';
+      canvasElement.setPointerCapture(event.pointerId);
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const dragState = dragStateRef.current;
+      if (!dragState.active || dragState.pointerId !== event.pointerId) {
+        return;
+      }
+
+      orbitStateRef.current = advanceCameraOrbitState(
+        orbitStateRef.current,
+        event.clientX - dragState.x,
+        event.clientY - dragState.y
+      );
+      dragStateRef.current = {
+        ...dragState,
+        x: event.clientX,
+        y: event.clientY
+      };
+    };
+
+    const stopDragging = (event?: PointerEvent) => {
+      if (
+        event &&
+        dragStateRef.current.pointerId !== null &&
+        dragStateRef.current.pointerId !== event.pointerId
+      ) {
+        return;
+      }
+
+      dragStateRef.current = {
+        active: false,
+        pointerId: null,
+        x: 0,
+        y: 0
+      };
+      canvasElement.style.cursor = 'grab';
+    };
+
+    canvasElement.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', stopDragging);
+    window.addEventListener('pointercancel', stopDragging);
+
+    return () => {
+      canvasElement.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', stopDragging);
+      window.removeEventListener('pointercancel', stopDragging);
+      canvasElement.style.touchAction = previousTouchAction;
+      canvasElement.style.cursor = previousCursor;
+    };
+  }, [gl]);
+
+  useFrame(() => {
+    const cameraPosition = resolveOrbitCameraPosition(
+      scaledFocus,
+      cameraDistance,
+      orbitStateRef.current
     );
+
+    camera.position.set(...cameraPosition);
     camera.lookAt(...scaledFocus);
-  }, [camera, scaledFocus, sceneBootstrap]);
+  });
 
   return null;
 }
 
 function NeighborhoodNode({
   accentColor,
-  occurrence
+  occurrence,
+  radiusCap,
+  renderTuning
 }: {
   accentColor: string;
   occurrence: RuntimeNeighborhoodOccurrence;
+  radiusCap: number | undefined;
+  renderTuning: ViewerRenderTuning;
 }) {
   const position = scaleCoordinate(occurrence.embedding.coordinate);
-  const presentation = createOccurrencePresentation(occurrence, accentColor);
-  const radius = occurrence.isFocus ? presentation.radius * 1.18 : presentation.radius;
+  const presentation = createOccurrencePresentation(
+    occurrence,
+    accentColor,
+    radiusCap,
+    renderTuning.nodeRadiusScale
+  );
+  const radius = occurrence.isFocus ? presentation.radius * 1.06 : presentation.radius;
 
   return (
     <group position={position}>
-      <mesh>
-        <sphereGeometry args={[presentation.haloRadius, 18, 18]} />
-        <meshBasicMaterial
-          color={presentation.haloColor}
-          depthWrite={false}
-          opacity={occurrence.isFocus ? 0.44 : 0.2}
-          transparent
-        />
-      </mesh>
       <mesh>
         <sphereGeometry args={[radius, 20, 20]} />
         <meshStandardMaterial
@@ -139,11 +240,11 @@ function NeighborhoodNode({
         />
       </mesh>
       <mesh>
-        <ringGeometry args={[radius * 1.14, radius * 1.34, 32]} />
+        <ringGeometry args={[radius * 1.08, radius * 1.22, 32]} />
         <meshBasicMaterial
           color={presentation.ringColor}
           depthWrite={false}
-          opacity={occurrence.isFocus ? 0.92 : 0.54}
+          opacity={occurrence.isFocus ? 0.78 : 0.38}
           side={DoubleSide}
           transparent
         />
@@ -153,9 +254,11 @@ function NeighborhoodNode({
 }
 
 function NeighborhoodCarriers({
-  carrierSurface
+  carrierSurface,
+  renderTuning
 }: {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  renderTuning: ViewerRenderTuning;
 }) {
   return [...carrierSurface.carriers]
     .sort((left, right) => left.departureStrength - right.departureStrength)
@@ -163,69 +266,105 @@ function NeighborhoodCarriers({
       <NeighborhoodCarrier
         carrier={carrier}
         key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}`}
+        renderTuning={renderTuning}
       />
     ));
 }
 
 function NeighborhoodCarrier({
-  carrier
+  carrier,
+  renderTuning
 }: {
   carrier: RuntimeCarrierRecord;
+  renderTuning: ViewerRenderTuning;
 }) {
   const presentation = createCarrierPresentation(carrier);
-  const curve = new CatmullRomCurve3(
-    carrier.samples.map(
-      (sample) => new ThreeVector3(...scaleCoordinate(sample))
-    )
+  const thicknessScale = renderTuning.carrierThicknessScale;
+  const scaledSamples = useMemo(
+    () => carrier.samples.map((sample) => scaleCoordinate(sample)),
+    [carrier.samples]
   );
-  const tubularSegments = Math.max(30, carrier.samples.length * 6);
+  const haloRibbonGeometry = useMemo(
+    () =>
+      createCarrierRibbonGeometry({
+        samples: scaledSamples,
+        halfWidth: presentation.haloRadius * thicknessScale,
+        twist: carrier.twist,
+        surfaceOffset: -0.003
+      }),
+    [carrier.twist, presentation.haloRadius, scaledSamples, thicknessScale]
+  );
+  const structureRibbonGeometry = useMemo(
+    () =>
+      createCarrierRibbonGeometry({
+        samples: scaledSamples,
+        halfWidth: presentation.structureRadius * thicknessScale,
+        twist: carrier.twist
+      }),
+    [carrier.twist, presentation.structureRadius, scaledSamples, thicknessScale]
+  );
+  const tacticalRibbonGeometry = useMemo(
+    () =>
+      createCarrierRibbonGeometry({
+        samples: scaledSamples,
+        halfWidth: presentation.tacticalRadius * thicknessScale,
+        twist: carrier.twist,
+        surfaceOffset: 0.003
+      }),
+    [carrier.twist, presentation.tacticalRadius, scaledSamples, thicknessScale]
+  );
   const contextualResidueSamples = carrier.activeBands.includes('contextual')
     ? collectContextualResidueSamples(carrier)
     : [];
 
+  useEffect(
+    () => () => {
+      haloRibbonGeometry.dispose();
+      structureRibbonGeometry.dispose();
+      tacticalRibbonGeometry.dispose();
+    },
+    [haloRibbonGeometry, structureRibbonGeometry, tacticalRibbonGeometry]
+  );
+
   return (
     <group>
       <mesh renderOrder={1}>
-        <tubeGeometry
-          args={[curve, tubularSegments, presentation.haloRadius, 10, false]}
-        />
+        <primitive attach="geometry" object={haloRibbonGeometry} />
         <meshBasicMaterial
           color={presentation.haloColor}
           depthWrite={false}
-          opacity={0.24}
+          opacity={0.24 * renderTuning.carrierHaloOpacityScale}
           side={DoubleSide}
           transparent
         />
       </mesh>
       <mesh renderOrder={2}>
-        <tubeGeometry
-          args={[curve, tubularSegments, presentation.structureRadius, 12, false]}
-        />
+        <primitive attach="geometry" object={structureRibbonGeometry} />
         <meshStandardMaterial
           color={presentation.structureColor}
           emissive={presentation.structureColor}
           emissiveIntensity={presentation.emissiveIntensity}
           roughness={0.28}
+          side={DoubleSide}
         />
       </mesh>
       {carrier.activeBands.includes('tactical') ? (
         <mesh renderOrder={3}>
-          <tubeGeometry
-            args={[curve, tubularSegments, presentation.tacticalRadius, 8, false]}
-          />
+          <primitive attach="geometry" object={tacticalRibbonGeometry} />
           <meshStandardMaterial
             color={presentation.tacticalColor}
             emissive={presentation.tacticalColor}
-            emissiveIntensity={0.42}
-            opacity={0.92}
+            emissiveIntensity={0.28}
+            opacity={0.76}
             roughness={0.18}
+            side={DoubleSide}
             transparent
           />
         </mesh>
       ) : null}
       {contextualResidueSamples.map((sample, index) => (
         <mesh key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}:context:${index}`} position={scaleCoordinate(sample)} renderOrder={4}>
-          <sphereGeometry args={[presentation.contextualDotRadius, 10, 10]} />
+          <sphereGeometry args={[presentation.contextualDotRadius * thicknessScale, 10, 10]} />
           <meshStandardMaterial
             color={presentation.contextualColor}
             emissive={presentation.contextualColor}
@@ -239,23 +378,30 @@ function NeighborhoodCarrier({
 }
 
 function CarrierLabels({
+  cameraDistance,
   carrierSurface,
   focusOccurrenceId,
-  refinementBudget
+  renderTuning,
+  occurrences
 }: {
+  cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   focusOccurrenceId: string;
-  refinementBudget: number;
+  renderTuning: ViewerRenderTuning;
+  occurrences: RuntimeNeighborhoodOccurrence[];
 }) {
-  const labeledCarriers = useMemo(() => {
-    const maxLabels = refinementBudget <= 3 ? 3 : refinementBudget <= 6 ? 6 : Number.POSITIVE_INFINITY;
+  const labeledCarriers = useMemo(
+    () =>
+      selectCarrierLabelSelections({
+        cameraDistance,
+        carriers: carrierSurface.carriers,
+        focusOccurrenceId,
+        occurrences
+      }),
+    [cameraDistance, carrierSurface.carriers, focusOccurrenceId, occurrences]
+  );
 
-    return [...carrierSurface.carriers]
-      .sort((left, right) => scoreCarrierForLabel(right, focusOccurrenceId) - scoreCarrierForLabel(left, focusOccurrenceId))
-      .slice(0, maxLabels);
-  }, [carrierSurface.carriers, focusOccurrenceId, refinementBudget]);
-
-  return labeledCarriers.map((carrier) => {
+  return labeledCarriers.map(({ carrier, opacity, scale }) => {
     const centerSample =
       carrier.samples[Math.floor(carrier.samples.length * 0.5)] ?? carrier.samples[0];
     if (!centerSample) {
@@ -275,9 +421,9 @@ function CarrierLabels({
         backgroundColor={carrier.sourceOccurrenceId === focusOccurrenceId ? '#deebf4' : '#f7f1e6'}
         borderColor={carrier.sourceOccurrenceId === focusOccurrenceId ? '#3a6b87' : presentation.structureColor}
         key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}:label`}
-        opacity={carrier.sourceOccurrenceId === focusOccurrenceId || carrier.targetOccurrenceId === focusOccurrenceId ? 0.98 : refinementBudget >= 12 ? 0.84 : 0.72}
+        opacity={opacity}
         position={offsetLabelPosition(scaleCoordinate(centerSample), carrier.ply)}
-        scale={carrier.sourceOccurrenceId === focusOccurrenceId || carrier.targetOccurrenceId === focusOccurrenceId ? 0.54 : 0.46}
+        scale={scale * renderTuning.labelScale}
         text={label}
       />
     );
@@ -285,37 +431,51 @@ function CarrierLabels({
 }
 
 function OccurrenceDataLabels({
+  cameraDistance,
   carrierSurface,
+  renderTuning,
   runtimeSnapshot
 }: {
+  cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  renderTuning: ViewerRenderTuning;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 }) {
-  return runtimeSnapshot.occurrences.flatMap((occurrence) => {
+  const labelSelections = useMemo(
+    () =>
+      selectOccurrenceLabelSelections({
+        cameraDistance,
+        occurrences: runtimeSnapshot.occurrences
+      }),
+    [cameraDistance, runtimeSnapshot.occurrences]
+  );
+
+  return labelSelections.flatMap(({ kind, occurrence, opacity, scale }) => {
     const position = offsetNodeLabelPosition(scaleCoordinate(occurrence.embedding.coordinate));
 
-    if (occurrence.ply === 0) {
+    if (kind === 'root') {
       return [
         <LabelSprite
           backgroundColor="#f7f1e6"
           borderColor="#7a6a55"
           key={`${occurrence.occurrenceId}:root-label`}
-          opacity={0.88}
+          opacity={opacity}
           position={position}
-          scale={0.5}
+          scale={scale * renderTuning.labelScale}
           text={formatGameName(occurrence.embedding.rootGameId)}
         />
       ];
     }
 
-    if (!occurrence.terminal) {
+    const terminal = occurrence.terminal;
+    if (!terminal) {
       return [];
     }
 
     const incomingCarrier = carrierSurface.carriers.find(
       (carrier) => carrier.targetOccurrenceId === occurrence.occurrenceId
     );
-    const outcome = formatTerminalOutcomeLabel(occurrence.terminal.wdlLabel);
+    const outcome = formatTerminalOutcomeLabel(terminal.wdlLabel);
     const label = incomingCarrier?.san ? `${incomingCarrier.san} · ${outcome}` : outcome;
 
     return [
@@ -323,9 +483,9 @@ function OccurrenceDataLabels({
         backgroundColor="#eef7ee"
         borderColor="#2f6b38"
         key={`${occurrence.occurrenceId}:terminal-label`}
-        opacity={0.92}
+        opacity={opacity}
         position={position}
-        scale={0.5}
+        scale={scale * renderTuning.labelScale}
         text={label}
       />
     ];
@@ -367,9 +527,9 @@ function createLabelTextureData(
   borderColor: string
 ) {
   const pixelRatio = typeof window === 'undefined' ? 1 : Math.min(window.devicePixelRatio || 1, 2);
-  const fontSize = 34;
-  const paddingX = 20;
-  const paddingY = 12;
+  const fontSize = 22;
+  const paddingX = 8;
+  const paddingY = 6;
   const measureCanvas = document.createElement('canvas');
   const measureContext = measureCanvas.getContext('2d');
   if (!measureContext) {
@@ -438,15 +598,6 @@ function drawRoundedRect(
   context.fill();
   context.strokeStyle = strokeColor;
   context.stroke();
-}
-
-function scoreCarrierForLabel(carrier: RuntimeCarrierRecord, focusOccurrenceId: string) {
-  const focusAdjacencyBoost =
-    carrier.sourceOccurrenceId === focusOccurrenceId || carrier.targetOccurrenceId === focusOccurrenceId
-      ? 10
-      : 0;
-
-  return focusAdjacencyBoost + carrier.departureStrength;
 }
 
 function offsetLabelPosition(position: Vector3, ply: number): Vector3 {

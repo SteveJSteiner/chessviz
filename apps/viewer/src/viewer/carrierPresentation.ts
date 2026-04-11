@@ -12,6 +12,11 @@ export const N10B_REVIEW_BUDGETS = {
   contextual: 12
 } as const;
 
+const DEFAULT_OCCURRENCE_RADIUS_CAP = 0.094;
+const MIN_OCCURRENCE_RADIUS = 0.032;
+const OCCURRENCE_RADIUS_CLEARANCE_FACTOR = 0.21;
+const FOCUS_OCCURRENCE_RADIUS_CLEARANCE_FACTOR = 0.24;
+
 export interface CarrierPresentation {
   familyLabel: string;
   structureColor: string;
@@ -45,12 +50,12 @@ export function createCarrierPresentation(
   carrier: RuntimeCarrierRecord
 ): CarrierPresentation {
   const palette = selectCarrierPalette(carrier);
-  const captureBias = carrier.moveFamily.interactionClass === 'capture' ? 0.018 : 0;
+  const captureBias = carrier.moveFamily.interactionClass === 'capture' ? 0.008 : 0;
   const forcingBias =
     carrier.moveFamily.forcingClass === 'checkmate'
-      ? 0.012
+      ? 0.004
       : carrier.moveFamily.forcingClass === 'check'
-        ? 0.006
+        ? 0.002
         : 0;
   const structureRadius = roundNumber(
     0.042 + (carrier.departureStrength * 0.06) + captureBias + forcingBias
@@ -59,29 +64,97 @@ export function createCarrierPresentation(
   return {
     ...palette,
     structureRadius,
-    haloRadius: roundNumber(structureRadius * 1.72),
-    tacticalRadius: roundNumber(structureRadius * 0.42),
-    contextualDotRadius: roundNumber(Math.max(0.016, structureRadius * 0.22)),
+    haloRadius: roundNumber(structureRadius * 1.48),
+    tacticalRadius: roundNumber(structureRadius * 0.3),
+    contextualDotRadius: roundNumber(Math.max(0.012, structureRadius * 0.18)),
     emissiveIntensity: roundNumber(0.16 + (carrier.departureStrength * 0.26))
   };
 }
 
 export function createOccurrencePresentation(
   occurrence: RuntimeNeighborhoodOccurrence,
-  accentColor: string
+  accentColor: string,
+  radiusCap = Number.POSITIVE_INFINITY,
+  radiusScale = 1
 ): OccurrencePresentation {
   const fillColor = occurrence.terminal
     ? terminalColor(occurrence.terminal.wdlLabel)
     : phaseColor(occurrence.phase, accentColor);
-  const radius = roundNumber(0.07 + (occurrence.salience.normalizedScore * 0.12));
+  const uncappedRadius = roundNumber(0.042 + (occurrence.salience.normalizedScore * 0.074));
+  const cappedRadius = Math.min(uncappedRadius, radiusCap);
+  const radius = roundNumber(
+    radiusScale <= 1
+      ? cappedRadius * radiusScale
+      : Math.min(uncappedRadius * radiusScale, radiusCap)
+  );
 
   return {
     fillColor,
     haloColor: occurrence.isFocus ? '#fff5d6' : '#f6efe1',
     ringColor: occurrence.isFocus ? '#b7791f' : '#d8cbb3',
     radius,
-    haloRadius: roundNumber(radius * (occurrence.isFocus ? 1.65 : 1.32))
+    haloRadius: roundNumber(radius * (occurrence.isFocus ? 1.38 : 1.14))
   };
+}
+
+export function buildOccurrenceRadiusCaps(
+  occurrences: RuntimeNeighborhoodOccurrence[]
+): Map<string, number> {
+  if (occurrences.length <= 1) {
+    return new Map(
+      occurrences.map((occurrence) => [occurrence.occurrenceId, DEFAULT_OCCURRENCE_RADIUS_CAP])
+    );
+  }
+
+  const scaledCoordinates = new Map(
+    occurrences.map((occurrence) => [
+      occurrence.occurrenceId,
+      scaleCoordinate(occurrence.embedding.coordinate)
+    ])
+  );
+
+  return new Map(
+    occurrences.map((occurrence) => {
+      const source = scaledCoordinates.get(occurrence.occurrenceId);
+
+      if (!source) {
+        return [occurrence.occurrenceId, DEFAULT_OCCURRENCE_RADIUS_CAP] as const;
+      }
+
+      let nearestNeighborDistance = Number.POSITIVE_INFINITY;
+
+      for (const candidate of occurrences) {
+        if (candidate.occurrenceId === occurrence.occurrenceId) {
+          continue;
+        }
+
+        const target = scaledCoordinates.get(candidate.occurrenceId);
+        if (!target) {
+          continue;
+        }
+
+        nearestNeighborDistance = Math.min(
+          nearestNeighborDistance,
+          distanceBetween(source, target)
+        );
+      }
+
+      if (!Number.isFinite(nearestNeighborDistance)) {
+        return [occurrence.occurrenceId, DEFAULT_OCCURRENCE_RADIUS_CAP] as const;
+      }
+
+      const clearanceFactor = occurrence.isFocus
+        ? FOCUS_OCCURRENCE_RADIUS_CLEARANCE_FACTOR
+        : OCCURRENCE_RADIUS_CLEARANCE_FACTOR;
+
+      return [
+        occurrence.occurrenceId,
+        roundNumber(
+          Math.max(MIN_OCCURRENCE_RADIUS, nearestNeighborDistance * clearanceFactor)
+        )
+      ] as const;
+    })
+  );
 }
 
 export function collectContextualResidueSamples(
@@ -175,4 +248,12 @@ function terminalColor(wdlLabel: string) {
 
 function roundNumber(value: number) {
   return Math.round(value * 1_000_000) / 1_000_000;
+}
+
+function distanceBetween(left: Vector3, right: Vector3) {
+  return Math.hypot(
+    left[0] - right[0],
+    left[1] - right[1],
+    left[2] - right[2]
+  );
 }

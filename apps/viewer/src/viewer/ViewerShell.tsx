@@ -18,13 +18,20 @@ import {
   summarizeMoveSemantics
 } from './chessContext.ts';
 import { createCarrierPresentation } from './carrierPresentation.ts';
+import {
+  LIVE_VIEW_DISTANCE,
+  type LabelZoomBand
+} from './labelPolicy.ts';
+import type { ViewerRenderTuning } from './renderTuning.ts';
 import { SmokeCanvas } from './SmokeCanvas';
 
 type ViewerShellProps = {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  cameraDistance: number;
   focusLine: RuntimeOccurrenceLine | undefined;
   focusLinesByOccurrenceId: Map<string, RuntimeOccurrenceLine | undefined>;
   focusOptions: BuilderOccurrenceRecord[];
+  labelZoomBand: LabelZoomBand;
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
   transitionSurface: RuntimeTransitionSurfaceSnapshot;
@@ -32,10 +39,14 @@ type ViewerShellProps = {
   navigationEntryPoint: NavigationEntryPoint;
   workspaceBoundary: WorkspaceBoundary;
   neighborhoodRadius: number;
+  onRenderTuningChange: (partialTuning: Partial<ViewerRenderTuning>) => void;
+  onResetRenderTuning: () => void;
   refinementBudget: number;
+  onCameraDistanceChange: (distance: number) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onNeighborhoodRadiusChange: (radius: number) => void;
   onRefinementBudgetChange: (budget: number) => void;
+  renderTuning: ViewerRenderTuning;
 };
 
 const shellStyle = {
@@ -138,11 +149,23 @@ const detailsStyle = {
   marginTop: '1rem'
 } as const;
 
+const secondaryButtonStyle = {
+  padding: '0.55rem 0.75rem',
+  borderRadius: '0.7rem',
+  border: '1px solid rgba(31, 41, 51, 0.12)',
+  background: 'rgba(255, 255, 255, 0.9)',
+  color: '#1f2933',
+  cursor: 'pointer',
+  fontSize: '0.86rem'
+} as const;
+
 export function ViewerShell({
   carrierSurface,
+  cameraDistance,
   focusLine,
   focusLinesByOccurrenceId,
   focusOptions,
+  labelZoomBand,
   runtimeConfig,
   runtimeSnapshot,
   transitionSurface,
@@ -150,10 +173,14 @@ export function ViewerShell({
   navigationEntryPoint,
   workspaceBoundary,
   neighborhoodRadius,
+  onRenderTuningChange,
+  onResetRenderTuning,
   refinementBudget,
+  onCameraDistanceChange,
   onFocusOccurrenceChange,
   onNeighborhoodRadiusChange,
-  onRefinementBudgetChange
+  onRefinementBudgetChange,
+  renderTuning
 }: ViewerShellProps) {
   const focusOccurrence = runtimeSnapshot.occurrences.find(
     (occurrence) => occurrence.isFocus
@@ -234,6 +261,24 @@ export function ViewerShell({
           </label>
 
           <label style={controlLabelStyle}>
+            View distance: {cameraDistance.toFixed(1)}
+            <input
+              max={LIVE_VIEW_DISTANCE.max}
+              min={LIVE_VIEW_DISTANCE.min}
+              onChange={(event) =>
+                onCameraDistanceChange(Number(event.target.value))
+              }
+              step={0.1}
+              style={controlInputStyle}
+              type="range"
+              value={cameraDistance}
+            />
+            <span style={{ fontSize: '0.82rem', color: '#6c6254' }}>
+              Drag on the canvas to orbit around the focus node.
+            </span>
+          </label>
+
+          <label style={controlLabelStyle}>
             Refinement budget: {refinementBudget}
             <input
               max={runtimeConfig.maxRefinementBudget}
@@ -246,6 +291,85 @@ export function ViewerShell({
               value={refinementBudget}
             />
           </label>
+
+          <details style={detailsStyle}>
+            <summary style={{ cursor: 'pointer', fontWeight: 700 }}>
+              Render tuning
+            </summary>
+            <div style={sectionStackStyle}>
+              <label style={controlLabelStyle}>
+                Node size: {renderTuning.nodeRadiusScale.toFixed(2)}
+                <input
+                  max={1.4}
+                  min={0.65}
+                  onChange={(event) =>
+                    onRenderTuningChange({
+                      nodeRadiusScale: Number(event.target.value)
+                    })
+                  }
+                  step={0.05}
+                  style={controlInputStyle}
+                  type="range"
+                  value={renderTuning.nodeRadiusScale}
+                />
+              </label>
+
+              <label style={controlLabelStyle}>
+                Carrier width: {renderTuning.carrierThicknessScale.toFixed(2)}
+                <input
+                  max={0.8}
+                  min={0.08}
+                  onChange={(event) =>
+                    onRenderTuningChange({
+                      carrierThicknessScale: Number(event.target.value)
+                    })
+                  }
+                  step={0.02}
+                  style={controlInputStyle}
+                  type="range"
+                  value={renderTuning.carrierThicknessScale}
+                />
+              </label>
+
+              <label style={controlLabelStyle}>
+                Carrier glow: {renderTuning.carrierHaloOpacityScale.toFixed(2)}
+                <input
+                  max={1.5}
+                  min={0}
+                  onChange={(event) =>
+                    onRenderTuningChange({
+                      carrierHaloOpacityScale: Number(event.target.value)
+                    })
+                  }
+                  step={0.05}
+                  style={controlInputStyle}
+                  type="range"
+                  value={renderTuning.carrierHaloOpacityScale}
+                />
+              </label>
+
+              <label style={controlLabelStyle}>
+                Label size: {renderTuning.labelScale.toFixed(2)}
+                <input
+                  max={0.8}
+                  min={0.12}
+                  onChange={(event) =>
+                    onRenderTuningChange({
+                      labelScale: Number(event.target.value)
+                    })
+                  }
+                  step={0.02}
+                  style={controlInputStyle}
+                  type="range"
+                  value={renderTuning.labelScale}
+                />
+              </label>
+
+              <button onClick={onResetRenderTuning} style={secondaryButtonStyle} type="button">
+                Reset render tuning
+              </button>
+            </div>
+          </details>
         </div>
 
         <div style={statGridStyle}>
@@ -268,6 +392,14 @@ export function ViewerShell({
           <article style={statCardStyle}>
             <strong>{carrierSurface.carriers.length}</strong>
             <div>runtime carriers</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{labelZoomBand}</strong>
+            <div>label reveal band</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{cameraDistance.toFixed(1)}</strong>
+            <div>camera distance</div>
           </article>
         </div>
 
@@ -399,6 +531,9 @@ export function ViewerShell({
 {JSON.stringify(
   {
     graphObjectId: runtimeSnapshot.graphObjectId,
+    cameraDistance,
+    labelZoomBand,
+    renderTuning,
     repeatedStateRelations: runtimeSnapshot.repeatedStateRelations.length,
     terminalAnchors: runtimeSnapshot.terminalAnchors.map((anchor) => anchor.anchorId),
     priorityFrontierOccurrenceIds: runtimeSnapshot.priorityFrontierOccurrenceIds
@@ -466,8 +601,10 @@ export function ViewerShell({
 
       <section style={canvasStyle}>
         <SmokeCanvas
+          cameraDistance={cameraDistance}
           carrierSurface={carrierSurface}
           navigationEntryPoint={navigationEntryPoint}
+          renderTuning={renderTuning}
           runtimeSnapshot={runtimeSnapshot}
           sceneBootstrap={sceneBootstrap}
         />

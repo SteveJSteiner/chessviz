@@ -1,7 +1,16 @@
 import { startTransition, useDeferredValue, useEffect, useState } from 'react';
 import { createSceneBootstrap } from './viewer/bootstrap';
 import { builderBootstrapManifest, viewerSceneManifest } from './viewer/fixtureArtifacts';
+import {
+  LIVE_VIEW_DISTANCE,
+  clampLiveViewDistance,
+  resolveLabelZoomBand
+} from './viewer/labelPolicy';
 import { createRuntimeNavigationEntryPoint } from './viewer/navigation';
+import {
+  DEFAULT_VIEWER_RENDER_TUNING,
+  clampViewerRenderTuning
+} from './viewer/renderTuning';
 import { createRuntimeExplorationKernel } from './viewer/runtimeKernel';
 import { ViewerShell } from './viewer/ViewerShell';
 import { workspaceBoundary } from './viewer/workspaceBoundaries';
@@ -19,6 +28,10 @@ export default function App() {
   const [refinementBudget, setRefinementBudget] = useState(
     viewerSceneManifest.runtime.defaultRefinementBudget
   );
+  const [cameraDistance, setCameraDistance] = useState<number>(
+    LIVE_VIEW_DISTANCE.default
+  );
+  const [renderTuning, setRenderTuning] = useState(DEFAULT_VIEWER_RENDER_TUNING);
   const [runtimeSnapshot, setRuntimeSnapshot] = useState(() =>
     runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
       radius: neighborhoodRadius,
@@ -60,15 +73,31 @@ export default function App() {
   return (
     <ViewerShell
       carrierSurface={carrierSurface}
+      cameraDistance={cameraDistance}
       focusLine={focusLine}
       focusLinesByOccurrenceId={focusLinesByOccurrenceId}
       focusOptions={runtimeKernel.getFocusOptions()}
       navigationEntryPoint={createRuntimeNavigationEntryPoint(
-        deferredRuntimeSnapshot
+        deferredRuntimeSnapshot,
+        cameraDistance
       )}
+      labelZoomBand={resolveLabelZoomBand(cameraDistance)}
+      onCameraDistanceChange={(distance) =>
+        setCameraDistance(clampLiveViewDistance(distance))
+      }
+      onRenderTuningChange={(partialTuning) =>
+        setRenderTuning((currentTuning) =>
+          clampViewerRenderTuning({
+            ...currentTuning,
+            ...partialTuning
+          })
+        )
+      }
+      onResetRenderTuning={() => setRenderTuning(DEFAULT_VIEWER_RENDER_TUNING)}
       onFocusOccurrenceChange={setFocusOccurrenceId}
       onNeighborhoodRadiusChange={setNeighborhoodRadius}
       onRefinementBudgetChange={setRefinementBudget}
+      renderTuning={renderTuning}
       refinementBudget={refinementBudget}
       runtimeConfig={viewerSceneManifest.runtime}
       runtimeSnapshot={deferredRuntimeSnapshot}
