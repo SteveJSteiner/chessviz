@@ -16,7 +16,7 @@ This file contains only DAG-partitioned work nodes, dependencies, and settlement
 - **N07** (depends on: N04, N05, N06): Implement salience v1 scoring and runtime prioritization hints.
 - **N08** (depends on: N04, N05, N06): Implement canonical hyperbolic-style coarse embedding v1.
 - **N08a** (depends on: N07, N08): Implement runtime exploration kernel for neighborhood query, cache, and budgeted local refinement.
-- **N09** (depends on: N08): Add move-interaction departure geometry rules.
+- **N09** (depends on: N08): Export move-family transition facts and derive coarse move-interaction departure geometry rules.
 - **N10** (depends on: N07, N08, N08a, N09): Generate multiscale carrier rules and refinement operators (carrier form may vary).
 - **N11** (depends on: N08a, N10): Implement camera grammar v1 integrated with runtime refinement and zoom-monotone band reveal.
 - **N12** (depends on: N05, N06, N10, N11): Add anchored opening/middlegame/endgame entrypoints over one object instance.
@@ -47,7 +47,7 @@ Parallel branches allowed by dependencies:
 - **N07**: Salience normalization stable and runtime prioritization checks pass.
 - **N08**: Coarse embedding is deterministic for fixed seed/config and dataset declaration and usable as a navigation basis.
 - **N08a**: Runtime query/refinement loads previously unseen local neighborhoods under budget without ontology swap.
-- **N09**: Move-interaction departure rules are classifiable at coarse zoom with capture departures stronger than matched quiet-move controls.
+- **N09**: Builder-owned move-family transition facts are available across the runtime boundary, and departure rules are classifiable at coarse zoom with capture departures stronger than matched quiet-move controls.
 - **N10**: Multiscale carrier rules and refinement operators generate local geometry without topology errors under declared budgets.
 - **N11**: Camera-driven refinement preserves one object ontology and enforces zoom-monotone semantic band reveal.
 - **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only; object identity unchanged and local exploration remains available.
