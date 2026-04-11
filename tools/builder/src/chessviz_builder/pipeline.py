@@ -1,4 +1,4 @@
-"""Placeholder builder pipeline wiring for N00."""
+"""Placeholder builder pipeline wiring."""
 
 from __future__ import annotations
 
@@ -13,12 +13,14 @@ from .contracts import (
     EmbeddingArtifact,
     IngestedCorpus,
     OccurrenceRecord,
+    RepeatedStateQuerySurface,
 )
 from .corpus_ingest import DeclaredCorpusIngestor
 from .dag import PlaceholderDagBuilder
 from .embedding import PlaceholderEmbeddingBuilder
 from .labeling import PlaceholderOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
+from .repeated_state import RepeatedStateQuerySurfaceBuilder
 from .state_key import CanonicalStateKeyProvider
 
 
@@ -26,6 +28,7 @@ from .state_key import CanonicalStateKeyProvider
 class PipelineDryRun:
     ingested_corpus: IngestedCorpus
     occurrences: tuple[OccurrenceRecord, ...]
+    repeated_state_query_surface: RepeatedStateQuerySurface
     dag: DagArtifact
     labels: Mapping[str, str]
     embedding: EmbeddingArtifact
@@ -37,18 +40,23 @@ class BuilderPipeline:
     state_key_provider: CanonicalStateKeyProvider
     identity_provider: StableOccurrenceIdentity
     corpus_ingestor: DeclaredCorpusIngestor
+    repeated_state_query_builder: RepeatedStateQuerySurfaceBuilder
     dag_builder: PlaceholderDagBuilder
     labeler: PlaceholderOccurrenceLabeler
     embedding_builder: PlaceholderEmbeddingBuilder
 
     def dry_run(self, declaration: CorpusDeclaration) -> PipelineDryRun:
         ingested_corpus = self.corpus_ingestor.ingest(declaration)
+        repeated_state_query_surface = self.repeated_state_query_builder.build(
+            ingested_corpus
+        )
         dag = self.dag_builder.build(declaration, ingested_corpus)
         labels = self.labeler.label(dag)
         embedding = self.embedding_builder.build(dag)
         return PipelineDryRun(
             ingested_corpus=ingested_corpus,
             occurrences=ingested_corpus.occurrences,
+            repeated_state_query_surface=repeated_state_query_surface,
             dag=dag,
             labels=labels,
             embedding=embedding,
@@ -61,6 +69,7 @@ def create_placeholder_pipeline(
     resolved_workspace = workspace or load_builder_workspace()
     state_key_provider = CanonicalStateKeyProvider()
     identity_provider = StableOccurrenceIdentity()
+    repeated_state_query_builder = RepeatedStateQuerySurfaceBuilder()
     return BuilderPipeline(
         workspace=resolved_workspace,
         state_key_provider=state_key_provider,
@@ -70,6 +79,7 @@ def create_placeholder_pipeline(
             state_key_provider,
             identity_provider,
         ),
+        repeated_state_query_builder=repeated_state_query_builder,
         dag_builder=PlaceholderDagBuilder(),
         labeler=PlaceholderOccurrenceLabeler(),
         embedding_builder=PlaceholderEmbeddingBuilder(),

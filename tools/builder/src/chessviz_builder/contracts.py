@@ -87,6 +87,59 @@ class IngestedCorpus:
 
 
 @dataclass(frozen=True)
+class StateRelationRecord:
+    state_key: str
+    occurrences: tuple[OccurrenceRecord, ...]
+
+    @property
+    def occurrence_ids(self) -> tuple[str, ...]:
+        return tuple(occurrence.occurrence_id for occurrence in self.occurrences)
+
+    @property
+    def is_repeated(self) -> bool:
+        return len(self.occurrences) > 1
+
+
+@dataclass(frozen=True)
+class RepeatedStateQuerySurface:
+    relations: tuple[StateRelationRecord, ...]
+    _relations_by_state_key: Mapping[str, StateRelationRecord]
+    _relations_by_occurrence_id: Mapping[str, StateRelationRecord]
+
+    @classmethod
+    def from_relations(
+        cls,
+        relations: Sequence[StateRelationRecord],
+    ) -> "RepeatedStateQuerySurface":
+        ordered_relations = tuple(relations)
+        return cls(
+            relations=ordered_relations,
+            _relations_by_state_key={
+                relation.state_key: relation for relation in ordered_relations
+            },
+            _relations_by_occurrence_id={
+                occurrence.occurrence_id: relation
+                for relation in ordered_relations
+                for occurrence in relation.occurrences
+            },
+        )
+
+    @property
+    def repeated_relations(self) -> tuple[StateRelationRecord, ...]:
+        return tuple(relation for relation in self.relations if relation.is_repeated)
+
+    @property
+    def singleton_relations(self) -> tuple[StateRelationRecord, ...]:
+        return tuple(relation for relation in self.relations if not relation.is_repeated)
+
+    def by_state_key(self, state_key: str) -> StateRelationRecord | None:
+        return self._relations_by_state_key.get(state_key)
+
+    def by_occurrence_id(self, occurrence_id: str) -> StateRelationRecord | None:
+        return self._relations_by_occurrence_id.get(occurrence_id)
+
+
+@dataclass(frozen=True)
 class DagArtifact:
     nodes: tuple[OccurrenceRecord, ...]
     edges: tuple[tuple[str, str], ...]
@@ -124,6 +177,11 @@ class DagBuilder(Protocol):
         ingested_corpus: IngestedCorpus,
     ) -> DagArtifact:
         """Build a DAG artifact from ingested occurrence paths."""
+
+
+class RepeatedStateQueryBuilder(Protocol):
+    def build(self, ingested_corpus: IngestedCorpus) -> RepeatedStateQuerySurface:
+        """Build a repeated-state query surface from ingested occurrences."""
 
 
 class OccurrenceLabeler(Protocol):

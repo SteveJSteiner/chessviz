@@ -60,6 +60,11 @@ def run_env_check() -> int:
         f"{len(dry_run.labels)} label(s), "
         f"{len(dry_run.embedding.coordinates)} coordinate(s)"
     )
+    print(
+        "repeated-state surface: "
+        f"{len(dry_run.repeated_state_query_surface.repeated_relations)} repeated relation(s), "
+        f"{len(dry_run.repeated_state_query_surface.singleton_relations)} singleton relation(s)"
+    )
 
     print(
         "CHESSVIZ_STOCKFISH_BIN: "
