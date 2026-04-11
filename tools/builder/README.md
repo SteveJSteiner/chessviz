@@ -16,6 +16,7 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - Builder is responsible for canonical structure, relation indices, declarations, and coarse guides.
 - Runtime rendering is responsible for neighborhood query, cache behavior, and local refinement under camera motion.
 - Builder artifacts are therefore inputs to runtime exploration, not a fully baked final scene.
+- Repeated-state and transposition structures should be exposed as query surfaces for runtime use, not only as overlay exports.
 
 ## Declared corpus fixture
 

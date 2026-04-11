@@ -9,7 +9,7 @@ This file contains only DAG-partitioned work nodes, dependencies, and settlement
 - **N01** (depends on: N00): Declare data scope and computation stance artifacts for the initial represented subset.
 - **N02a** (depends on: N00): Implement state-key/occurrence identity layer (no corpus assumptions).
 - **N03** (depends on: N01, N02a): Ingest declared corpus into continuous occurrence paths.
-- **N02b** (depends on: N03): Build transposition relation index over ingested occurrences.
+- **N02b** (depends on: N03): Build repeated-state relation index and runtime query surface over ingested occurrences.
 - **N04** (depends on: N02b, N03): Build DAG and validate fan-out/fan-in preservation.
 - **N05** (depends on: N03): Add phase and material-signature labeling.
 - **N06** (depends on: N03): Add W/D/L terminal labeling and terminal anchors.
@@ -20,7 +20,7 @@ This file contains only DAG-partitioned work nodes, dependencies, and settlement
 - **N10** (depends on: N07, N08, N08a, N09): Generate multiscale carrier rules and refinement operators (carrier form may vary).
 - **N11** (depends on: N08a, N10): Implement camera grammar v1 integrated with runtime refinement and zoom-monotone band reveal.
 - **N12** (depends on: N05, N06, N10, N11): Add anchored opening/middlegame/endgame entrypoints over one object instance.
-- **N13** (depends on: N02b, N08a, N10): Add transposition relation overlay.
+- **N13** (depends on: N02b, N08a, N10): Add transposition relation rendering layer over the repeated-state query surface.
 - **N14** (depends on: N07, N08a, N10, N11, N12, N13): Execute operational acceptance suite and budgets.
 
 ## Sequence
@@ -40,7 +40,7 @@ Parallel branches allowed by dependencies:
 - **N01**: `plan/acceptance.md` includes declared corpus scope, salience-source declaration template, and budget section.
 - **N02a**: Distinct occurrence identity and stable state-key mapping verified on fixtures.
 - **N03**: Declared corpus ingests into continuous directed occurrence paths.
-- **N02b**: Repeated-state relation index verified from ingested corpus examples.
+- **N02b**: Repeated-state relation index and query surface verified from ingested corpus examples.
 - **N04**: DAG metrics confirm expected fan-out/fan-in and convergence.
 - **N05**: Phase/material labels exported and verified on fixtures.
 - **N06**: Terminal labels and anchors present for terminal occurrences.
@@ -51,5 +51,5 @@ Parallel branches allowed by dependencies:
 - **N10**: Multiscale carrier rules and refinement operators generate local geometry without topology errors under declared budgets.
 - **N11**: Camera-driven refinement preserves one object ontology and enforces zoom-monotone semantic band reveal.
 - **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only; object identity unchanged and local exploration remains available.
-- **N13**: Known transpositions show multiple occurrences plus visible relation.
+- **N13**: Known transpositions show multiple occurrences plus visible relation sourced from the repeated-state query surface.
 - **N14**: All operational acceptance checks pass within declared budgets.

@@ -6,6 +6,7 @@ This file contains design and process decisions only. It must not become a task 
 
 - **D1. Occurrence-first identity** — Board occurrences are the primary represented entities.
 - **D2. Non-collapse transposition semantics** — Shared board state is represented as a relation across occurrences; state equality does not force node merge.
+- **D2a. Repeated-state relations are query surfaces** — The repeated-state index is a canonical queryable relation surface for runtime exploration and later rendering layers; it is not defined only as a post-hoc overlay artifact.
 - **D3. Single-object continuity across zoom** — Zoom changes emphasis/legibility, never ontology.
 - **D4. DAG/path preservation** — Single games are continuous directed paths; multi-game space preserves fan-out and fan-in.
 - **D5. Width-first geometry stance** — The main structural difficulty is branching width, not path length.
