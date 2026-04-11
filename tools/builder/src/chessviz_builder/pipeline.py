@@ -12,6 +12,7 @@ from .dag import PlaceholderDagBuilder
 from .embedding import PlaceholderEmbeddingBuilder
 from .labeling import PlaceholderOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
+from .state_key import CanonicalStateKeyProvider
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,7 @@ class PipelineDryRun:
 @dataclass(frozen=True)
 class BuilderPipeline:
     workspace: BuilderWorkspace
+    state_key_provider: CanonicalStateKeyProvider
     identity_provider: StableOccurrenceIdentity
     corpus_ingestor: PlaceholderCorpusIngestor
     dag_builder: PlaceholderDagBuilder
@@ -48,11 +50,13 @@ def create_placeholder_pipeline(
     workspace: BuilderWorkspace | None = None,
 ) -> BuilderPipeline:
     resolved_workspace = workspace or load_builder_workspace()
+    state_key_provider = CanonicalStateKeyProvider()
     identity_provider = StableOccurrenceIdentity()
     return BuilderPipeline(
         workspace=resolved_workspace,
+        state_key_provider=state_key_provider,
         identity_provider=identity_provider,
-        corpus_ingestor=PlaceholderCorpusIngestor(identity_provider),
+        corpus_ingestor=PlaceholderCorpusIngestor(state_key_provider, identity_provider),
         dag_builder=PlaceholderDagBuilder(),
         labeler=PlaceholderOccurrenceLabeler(),
         embedding_builder=PlaceholderEmbeddingBuilder(),

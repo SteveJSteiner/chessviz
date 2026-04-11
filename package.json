@@ -6,7 +6,7 @@
     "dev:viewer": "pnpm --filter viewer dev",
     "build:viewer": "pnpm --filter viewer build",
     "check:viewer": "pnpm --filter viewer check",
-    "check:builder": "cd tools/builder && uv run chessviz-builder env-check",
+    "check:builder": "cd tools/builder && uv run python -m unittest discover -s tests && uv run chessviz-builder env-check",
     "check:workspace": "pnpm check:viewer && pnpm check:builder"
   }
 }

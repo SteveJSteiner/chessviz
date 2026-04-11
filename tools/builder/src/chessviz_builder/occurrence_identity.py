@@ -1,4 +1,4 @@
-"""Stable occurrence identity placeholder implementation."""
+"""Stable occurrence identity implementation."""
 
 from __future__ import annotations
 
@@ -9,6 +9,8 @@ from .contracts import OccurrenceRecord
 
 
 class StableOccurrenceIdentity:
+    """Keep occurrence identity separate from board-state identity."""
+
     def identify(self, state_key: str, path: Sequence[str]) -> OccurrenceRecord:
         canonical_path = tuple(path)
         digest = blake2s(

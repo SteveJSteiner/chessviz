@@ -7,6 +7,8 @@ import importlib
 import os
 import platform
 
+import chess
+
 from chessviz_builder.config import ARTIFACT_ROOT_ENV, load_builder_workspace
 from chessviz_builder.contracts import CorpusDeclaration
 from chessviz_builder.pipeline import create_placeholder_pipeline
@@ -47,6 +49,10 @@ def run_env_check() -> int:
     )
     print(f"builder manifest: {workspace.builder_manifest}")
     print(f"viewer manifest: {workspace.viewer_scene_manifest}")
+    print(
+        "sample start-state key: "
+        + pipeline.state_key_provider.key_for_board(chess.Board())
+    )
     print(
         "placeholder pipeline: "
         f"{len(dry_run.occurrences)} occurrence(s), "

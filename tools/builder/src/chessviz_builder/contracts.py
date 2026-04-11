@@ -1,10 +1,12 @@
-"""Shared builder interfaces for the N00 placeholder pipeline."""
+"""Shared builder interfaces for the placeholder builder pipeline."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping, Protocol, Sequence
+
+import chess
 
 Vector3 = tuple[float, float, float]
 
@@ -27,6 +29,20 @@ class CorpusDeclaration:
 
 
 @dataclass(frozen=True)
+class StateKeyComponents:
+    board_fen: str
+    turn: str
+    castling: str
+    legal_en_passant: str
+
+    @property
+    def canonical_key(self) -> str:
+        return " ".join(
+            (self.board_fen, self.turn, self.castling, self.legal_en_passant)
+        )
+
+
+@dataclass(frozen=True)
 class OccurrenceRecord:
     occurrence_id: str
     state_key: str
@@ -44,6 +60,14 @@ class DagArtifact:
 class EmbeddingArtifact:
     dag: DagArtifact
     coordinates: Mapping[str, Vector3]
+
+
+class StateKeyProvider(Protocol):
+    def components_for_board(self, board: chess.Board) -> StateKeyComponents:
+        """Build canonical state-key components from a board alone."""
+
+    def key_for_board(self, board: chess.Board) -> str:
+        """Build a stable canonical key from a board alone."""
 
 
 class OccurrenceIdentityProvider(Protocol):
