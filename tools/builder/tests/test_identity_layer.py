@@ -6,7 +6,7 @@ import unittest
 
 import chess
 
-from chessviz_builder.contracts import CorpusDeclaration
+from chessviz_builder.corpus_ingest import initial_corpus_declaration
 from chessviz_builder.occurrence_identity import StableOccurrenceIdentity
 from chessviz_builder.pipeline import create_placeholder_pipeline
 from chessviz_builder.state_key import CanonicalStateKeyProvider
@@ -52,12 +52,7 @@ class IdentityLayerTests(unittest.TestCase):
 
     def test_pipeline_exposes_identity_contract_to_ingestor(self) -> None:
         pipeline = create_placeholder_pipeline()
-        declaration = CorpusDeclaration(
-            source_name="Fixture Corpus",
-            version="N02a",
-            location="tests/test_identity_layer.py",
-        )
-        dry_run = pipeline.dry_run(declaration)
+        dry_run = pipeline.dry_run(initial_corpus_declaration())
 
         self.assertIs(pipeline.corpus_ingestor.state_key_provider, pipeline.state_key_provider)
         self.assertEqual(

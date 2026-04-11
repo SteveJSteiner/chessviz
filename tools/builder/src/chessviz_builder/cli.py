@@ -10,14 +10,14 @@ import platform
 import chess
 
 from chessviz_builder.config import ARTIFACT_ROOT_ENV, load_builder_workspace
-from chessviz_builder.contracts import CorpusDeclaration
+from chessviz_builder.corpus_ingest import initial_corpus_declaration
 from chessviz_builder.pipeline import create_placeholder_pipeline
 
 REQUIRED_IMPORTS = ("chess", "chess.pgn", "chess.engine")
 
 
 def run_env_check() -> int:
-    """Run environment checks for N00a bootstrap validation."""
+    """Run builder environment and fixture-ingestion checks."""
     print(f"Python version: {platform.python_version()}")
 
     failed_imports: list[str] = []
@@ -31,13 +31,8 @@ def run_env_check() -> int:
 
     workspace = load_builder_workspace()
     pipeline = create_placeholder_pipeline(workspace)
-    dry_run = pipeline.dry_run(
-        CorpusDeclaration(
-            source_name="bootstrap-placeholder",
-            version="N00",
-            location="artifacts/README.md",
-        )
-    )
+    declaration = initial_corpus_declaration()
+    dry_run = pipeline.dry_run(declaration)
 
     artifact_root = os.getenv(ARTIFACT_ROOT_ENV)
     stockfish_bin = os.getenv("CHESSVIZ_STOCKFISH_BIN")
@@ -50,13 +45,18 @@ def run_env_check() -> int:
     print(f"builder manifest: {workspace.builder_manifest}")
     print(f"viewer manifest: {workspace.viewer_scene_manifest}")
     print(
+        "declared corpus: "
+        f"{declaration.source_name} {declaration.version} @ {declaration.location}"
+    )
+    print(
         "sample start-state key: "
         + pipeline.state_key_provider.key_for_board(chess.Board())
     )
     print(
-        "placeholder pipeline: "
+        "fixture ingestion: "
+        f"{len(dry_run.ingested_corpus.games)} game(s), "
         f"{len(dry_run.occurrences)} occurrence(s), "
-        f"{len(dry_run.dag.edges)} edge(s), "
+        f"{len(dry_run.ingested_corpus.transitions)} transition(s), "
         f"{len(dry_run.labels)} label(s), "
         f"{len(dry_run.embedding.coordinates)} coordinate(s)"
     )

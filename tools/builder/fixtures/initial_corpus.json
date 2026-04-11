@@ -1,0 +1,15 @@
+{
+  "source_name": "initial-represented-subset",
+  "version": "2026-04-11-fixture-001",
+  "location": "tools/builder/fixtures/initial_corpus.json",
+  "games": [
+    {
+      "game_id": "qgd-bogo-a",
+      "moves_san": ["d4", "Nf6", "c4", "e6", "Nc3", "Bb4"]
+    },
+    {
+      "game_id": "qgd-bogo-b",
+      "moves_san": ["d4", "e6", "c4", "Nf6", "Nc3", "Bb4"]
+    }
+  ]
+}

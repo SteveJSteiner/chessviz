@@ -50,6 +50,43 @@ class OccurrenceRecord:
 
 
 @dataclass(frozen=True)
+class OccurrenceTransition:
+    parent_occurrence_id: str
+    child_occurrence_id: str
+    move_uci: str
+    ply: int
+
+
+@dataclass(frozen=True)
+class IngestedGame:
+    game_id: str
+    occurrences: tuple[OccurrenceRecord, ...]
+    transitions: tuple[OccurrenceTransition, ...]
+
+
+@dataclass(frozen=True)
+class IngestedCorpus:
+    declaration: CorpusDeclaration
+    games: tuple[IngestedGame, ...]
+
+    @property
+    def occurrences(self) -> tuple[OccurrenceRecord, ...]:
+        return tuple(
+            occurrence
+            for game in self.games
+            for occurrence in game.occurrences
+        )
+
+    @property
+    def transitions(self) -> tuple[OccurrenceTransition, ...]:
+        return tuple(
+            transition
+            for game in self.games
+            for transition in game.transitions
+        )
+
+
+@dataclass(frozen=True)
 class DagArtifact:
     nodes: tuple[OccurrenceRecord, ...]
     edges: tuple[tuple[str, str], ...]
@@ -76,17 +113,17 @@ class OccurrenceIdentityProvider(Protocol):
 
 
 class CorpusIngestor(Protocol):
-    def ingest(self, declaration: CorpusDeclaration) -> tuple[OccurrenceRecord, ...]:
-        """Convert a declared corpus slice into occurrence records."""
+    def ingest(self, declaration: CorpusDeclaration) -> IngestedCorpus:
+        """Convert a declared corpus slice into continuous occurrence paths."""
 
 
 class DagBuilder(Protocol):
     def build(
         self,
         declaration: CorpusDeclaration,
-        occurrences: Sequence[OccurrenceRecord],
+        ingested_corpus: IngestedCorpus,
     ) -> DagArtifact:
-        """Build a DAG artifact from occurrence records."""
+        """Build a DAG artifact from ingested occurrence paths."""
 
 
 class OccurrenceLabeler(Protocol):

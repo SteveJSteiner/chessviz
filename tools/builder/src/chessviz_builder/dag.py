@@ -2,19 +2,20 @@
 
 from __future__ import annotations
 
-from typing import Sequence
-
-from .contracts import CorpusDeclaration, DagArtifact, OccurrenceRecord
+from .contracts import CorpusDeclaration, DagArtifact, IngestedCorpus
 
 
 class PlaceholderDagBuilder:
     def build(
         self,
         declaration: CorpusDeclaration,
-        occurrences: Sequence[OccurrenceRecord],
+        ingested_corpus: IngestedCorpus,
     ) -> DagArtifact:
         return DagArtifact(
-            nodes=tuple(occurrences),
-            edges=tuple(),
+            nodes=ingested_corpus.occurrences,
+            edges=tuple(
+                (transition.parent_occurrence_id, transition.child_occurrence_id)
+                for transition in ingested_corpus.transitions
+            ),
             source_name=declaration.source_name,
         )
