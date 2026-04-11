@@ -17,25 +17,26 @@ This file contains only DAG-partitioned work nodes, dependencies, and settlement
 - **N08** (depends on: N04, N05, N06): Implement canonical hyperbolic-style coarse embedding v1.
 - **N08a** (depends on: N07, N08): Implement runtime exploration kernel for neighborhood query, cache, and budgeted local refinement.
 - **N09** (depends on: N08): Export move-family transition facts and derive coarse move-interaction departure geometry rules.
-- **N10** (depends on: N07, N08, N08a, N09): Generate multiscale carrier rules and refinement operators (carrier form may vary).
-- **N11** (depends on: N08a, N10): Implement camera grammar v1 integrated with runtime refinement and zoom-monotone band reveal.
-- **N12** (depends on: N05, N06, N10, N11): Add anchored opening/middlegame/endgame entrypoints over one object instance.
-- **N13** (depends on: N02b, N08a, N10): Add transposition relation rendering layer over the repeated-state query surface.
-- **N14** (depends on: N07, N08a, N10, N11, N12, N13): Execute operational acceptance suite and budgets.
+- **N10a** (depends on: N07, N08, N08a, N09): Generate multiscale carrier rules and refinement operators over the existing builder/runtime seam.
+- **N10b** (depends on: N10a): Iterate carrier legibility under recorded human render review.
+- **N11** (depends on: N08a, N10b): Implement camera grammar v1 integrated with runtime refinement and zoom-monotone band reveal.
+- **N12** (depends on: N05, N06, N10b, N11): Add anchored opening/middlegame/endgame entrypoints over one object instance.
+- **N13** (depends on: N02b, N08a, N10b): Add transposition relation rendering layer over the repeated-state query surface.
+- **N14** (depends on: N07, N08a, N10b, N11, N12, N13): Execute operational acceptance suite and budgets.
 
 ## Sequence
 
 Topological baseline:
-`N00a -> N00 -> N01 -> N02a -> N03 -> N02b -> N04 -> N05 -> N06 -> N07 -> N08 -> N08a -> N09 -> N10 -> N11 -> N12 -> N13 -> N14`
+`N00a -> N00 -> N01 -> N02a -> N03 -> N02b -> N04 -> N05 -> N06 -> N07 -> N08 -> N08a -> N09 -> N10a -> N10b -> N11 -> N12 -> N13 -> N14`
 
 Parallel branches allowed by dependencies:
 - `N05` and `N06` after `N03`.
 - `N09` after `N08`.
-- `N13` after `N02b`, `N08a`, and `N10`.
+- `N13` after `N02b`, `N08a`, and `N10b`.
 
 ## Visual review overlay
 
-- `N10` through `N14` are visually judged nodes and require recorded human render review in addition to automated assertions.
+- `N10b` through `N14` are visually judged nodes and require recorded human render review in addition to automated assertions.
 - These nodes may remain active across multiple visible-change commits; a commit may change the render without settling the node.
 
 ## Settlement criteria by node
@@ -53,7 +54,8 @@ Parallel branches allowed by dependencies:
 - **N08**: Coarse embedding is deterministic for fixed seed/config and dataset declaration and usable as a navigation basis.
 - **N08a**: Runtime query/refinement loads previously unseen local neighborhoods under budget without ontology swap.
 - **N09**: Builder-owned move-family transition facts are available across the runtime boundary, and departure rules are classifiable at coarse zoom with capture departures stronger than matched quiet-move controls.
-- **N10**: Multiscale carrier rules and refinement operators generate local geometry without topology errors under declared budgets, and recorded human review confirms coarse move-family readings remain legible at structure zoom.
+- **N10a**: Multiscale carrier rules and refinement operators generate local geometry without topology errors under declared budgets while preserving builder/runtime responsibility boundaries and coarse move-family semantics.
+- **N10b**: Recorded human review confirms structure-zoom carrier renders are visually readable, coarse move-family readings survive distance, and refinement-step views add detail without overturning the coarse reading.
 - **N11**: Camera-driven refinement preserves one object ontology and enforces zoom-monotone semantic band reveal, and recorded human review confirms those behaviors read correctly on screen.
 - **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only; object identity unchanged and local exploration remains available, and recorded human review confirms the views still read as one object.
 - **N13**: Known transpositions show multiple occurrences plus visible relation sourced from the repeated-state query surface, and recorded human review confirms the relation is legible without collapsing occurrence identity.

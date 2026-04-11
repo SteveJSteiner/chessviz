@@ -19,3 +19,4 @@ One line per committed DAG frontier event.
 2026-04-11 | commit d3f589e | settled N08 deterministic coarse embedding surface
 2026-04-11 | commit 34fa84d | settled N08a runtime neighborhood exploration kernel and manifest-backed viewer integration
 2026-04-11 | commit 17e7f9a | settled N09 transition move-fact export and departure-rule surface
+2026-04-11 | commit 7b7ab83 | split N10 into settled N10a carrier seam and active N10b human-reviewed carrier legibility loop
