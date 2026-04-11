@@ -18,6 +18,9 @@ This file contains design and process decisions only. It must not become a task 
 - **D12. Shell model compiles into bands** — Shell layers compile into scale-separated path behavior (shell 0/1 coarse departure, shell 2 tactical mid-band, shell 3 contextual residue).
 - **D13. Bounded perturbation over unrestricted fractal detail** — Use base curves plus bounded band-limited perturbations to preserve silhouette-level reading.
 - **D14. Zoom-monotone reveal is required** — Nearer views may add tactical/contextual residue but must not invalidate coarse readings.
+- **D14a. Render-time local exploration is first-class** — Camera motion and zoom may trigger local neighborhood acquisition and refinement at render time; this is part of the representation, not a fallback interface behavior.
+- **D14b. Builder/runtime responsibility split** — Builder outputs canonical occurrence structure, relation indices, declarations, and coarse guides; runtime owns neighborhood query, cache, and budgeted refinement.
+- **D14c. View-dependent realization is allowed** — Not all render geometry must be fully materialized ahead of time, provided runtime realization preserves object identity and zoom-monotone semantics.
 
 ## Carrier-form decisions (experimental, not locked)
 
@@ -53,3 +56,4 @@ This file contains design and process decisions only. It must not become a task 
 - **O5. Transposition reveal policy** — Reveal aggressiveness vs occurrence separation.
 - **O6. Middlegame partition features** — Material-only vs material + pawn/king/mobility factors.
 - **O7. Terminal color grammar** — Joint encoding of W/D/L, salience, and family cues.
+- **O8. Runtime refinement policy** — Query radius, cache eviction, and refinement triggers under camera motion.

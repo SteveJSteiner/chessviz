@@ -11,6 +11,12 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - `labeling.py` and `embedding.py` mark later-node extension points.
 - `pipeline.py` wires the placeholder modules together for env-check validation.
 
+## Builder versus runtime
+
+- Builder is responsible for canonical structure, relation indices, declarations, and coarse guides.
+- Runtime rendering is responsible for neighborhood query, cache behavior, and local refinement under camera motion.
+- Builder artifacts are therefore inputs to runtime exploration, not a fully baked final scene.
+
 ## Declared corpus fixture
 
 - The initial declared corpus fixture lives at `tools/builder/fixtures/initial_corpus.json`.

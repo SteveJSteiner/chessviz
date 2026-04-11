@@ -68,6 +68,7 @@ run_declaration:
 - **B2. Peak memory budget:** process RSS <= declared envelope for acceptance run.
 - **B3. Load budget:** initial scene build completes within declared acceptance timeout.
 - **B4. Zoom continuity budget:** no ontology swap events across full tested zoom range.
+- **B5. Local refinement budget:** entering a previously unseen local neighborhood reaches the declared refinement target within the acceptance-timeout envelope without blocking navigation continuity.
 
 ## Acceptance checks
 
@@ -82,8 +83,9 @@ run_declaration:
 - **A9. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
 - **A10. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
 - **A11. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
+- **A12. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family, object identity, or anchored-view regime.
 
 ## Recording protocol
 
-- Record pass/fail for A1-A11 and B1-B4 in commit artifacts tied to N14 settlement.
+- Record pass/fail for A1-A12 and B1-B5 in commit artifacts tied to N14 settlement.
 - Any budget change requires updating this file in the same commit as the decision update.
