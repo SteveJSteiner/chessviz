@@ -3,19 +3,19 @@
 This file states the current active node, why it is current, and what must be true to settle it and advance.
 
 ## Current active node
-- **Node:** N02b
+- **Node:** N04
 
 ## Why this is current
-- N03 was settled by commit 9a97f9b, which introduced a declared corpus fixture and verified continuous occurrence-path ingestion on it.
-- N02b is now the earliest unresolved node in topological order.
-- N04 and N13 both depend on a repeated-state query surface over ingested occurrences, so transposition indexing is the next gating step.
+- N02b was settled by commit 4910e46, which exposed repeated-state relations as a runtime-query surface over ingested occurrences.
+- N04 is now the earliest unresolved node in topological order.
+- N05 and N06 are also unlocked after N03, but the declared baseline order advances through N04 before parallelizing further frontier work.
 
 ## Settle-and-advance conditions
-- A repeated-state relation index and query surface are built over ingested occurrences without collapsing distinct occurrence identities.
-- Fixture checks verify the declared corpus transposition example yields one shared state key with multiple occurrence ids and that both occurrences are discoverable through relation queries.
-- Relation output distinguishes singleton states from repeated states and supports query by occurrence id or state key rather than assuming a pre-rendered overlay consumer.
-- The repeated-state query surface remains separate from later overlay, salience, labeling, and embedding concerns while remaining consumable by runtime exploration.
-- A commit records N02b settlement and updates both `plan/completion-log.md` and this file to the next active node or frontier.
+- A DAG artifact is built directly from the ingested occurrence paths and repeated-state query surface without collapsing path-distinct occurrences.
+- Fixture checks verify expected node count, edge count, fan-out, and fan-in on the declared corpus sample.
+- Convergence metrics confirm the transposition example preserves distinct occurrences while still exposing shared-state relations through N02b outputs.
+- DAG outputs remain free of later salience, labeling, embedding, and render-refinement concerns.
+- A commit records N04 settlement and updates both `plan/completion-log.md` and this file to the next active node or frontier.
 
 ## Advancement rule
 - No node advancement occurs without a commit that records the exact continuation state transition.
