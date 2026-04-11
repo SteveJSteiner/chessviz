@@ -47,6 +47,7 @@ class OccurrenceRecord:
     occurrence_id: str
     state_key: str
     path: tuple[str, ...]
+    ply: int = 0
 
 
 @dataclass(frozen=True)
@@ -348,6 +349,89 @@ class TerminalLabelQuerySurface:
 
 
 @dataclass(frozen=True)
+class SalienceConfig:
+    frequency_weight: float
+    terminal_pull_weight: float
+    centrality_weight: float
+    normalization: str
+    top_k_frontier: int
+
+
+@dataclass(frozen=True)
+class RuntimePriorityHintRecord:
+    occurrence_id: str
+    priority_rank: int
+    priority_band: str
+    retain_from_zoom: str
+
+
+@dataclass(frozen=True)
+class SalienceRecord:
+    occurrence_id: str
+    raw_score: float
+    normalized_score: float
+    frequency_signal: float
+    terminal_pull_signal: float
+    centrality_signal: float
+    priority_hint: RuntimePriorityHintRecord
+
+
+@dataclass(frozen=True)
+class SalienceQuerySurface:
+    records: tuple[SalienceRecord, ...]
+    config: SalienceConfig
+    _records_by_occurrence_id: Mapping[str, SalienceRecord]
+    _records_by_priority_band: Mapping[str, tuple[SalienceRecord, ...]]
+
+    @classmethod
+    def from_records(
+        cls,
+        records: Sequence[SalienceRecord],
+        config: SalienceConfig,
+    ) -> "SalienceQuerySurface":
+        ordered_records = tuple(records)
+        priority_buckets: dict[str, list[SalienceRecord]] = {}
+
+        for record in ordered_records:
+            priority_buckets.setdefault(
+                record.priority_hint.priority_band,
+                [],
+            ).append(record)
+
+        return cls(
+            records=ordered_records,
+            config=config,
+            _records_by_occurrence_id={
+                record.occurrence_id: record for record in ordered_records
+            },
+            _records_by_priority_band={
+                priority_band: tuple(priority_records)
+                for priority_band, priority_records in priority_buckets.items()
+            },
+        )
+
+    @property
+    def priority_bands(self) -> tuple[str, ...]:
+        return tuple(self._records_by_priority_band)
+
+    @property
+    def priority_frontier(self) -> tuple[SalienceRecord, ...]:
+        return self.top_k(self.config.top_k_frontier)
+
+    def __len__(self) -> int:
+        return len(self.records)
+
+    def by_occurrence_id(self, occurrence_id: str) -> SalienceRecord | None:
+        return self._records_by_occurrence_id.get(occurrence_id)
+
+    def top_k(self, count: int) -> tuple[SalienceRecord, ...]:
+        return self.records[:count]
+
+    def for_priority_band(self, priority_band: str) -> tuple[SalienceRecord, ...]:
+        return self._records_by_priority_band.get(priority_band, tuple())
+
+
+@dataclass(frozen=True)
 class DagMetrics:
     node_count: int
     edge_count: int
@@ -409,7 +493,12 @@ class StateKeyProvider(Protocol):
 
 
 class OccurrenceIdentityProvider(Protocol):
-    def identify(self, state_key: str, path: Sequence[str]) -> OccurrenceRecord:
+    def identify(
+        self,
+        state_key: str,
+        path: Sequence[str],
+        ply: int = 0,
+    ) -> OccurrenceRecord:
         """Create a stable occurrence id from a state key and path."""
 
 
@@ -441,6 +530,18 @@ class OccurrenceLabeler(Protocol):
 class TerminalLabeler(Protocol):
     def label(self, ingested_corpus: IngestedCorpus) -> TerminalLabelQuerySurface:
         """Attach W/D/L labels and terminal anchors to declared terminal occurrences."""
+
+
+class SalienceBuilder(Protocol):
+    def build(
+        self,
+        ingested_corpus: IngestedCorpus,
+        repeated_state_query_surface: RepeatedStateQuerySurface,
+        dag: DagArtifact,
+        labels: OccurrenceLabelQuerySurface,
+        terminal_labels: TerminalLabelQuerySurface,
+    ) -> SalienceQuerySurface:
+        """Build normalized salience scores and runtime priority hints."""
 
 
 class EmbeddingBuilder(Protocol):

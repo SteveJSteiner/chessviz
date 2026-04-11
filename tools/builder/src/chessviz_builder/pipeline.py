@@ -14,6 +14,7 @@ from .contracts import (
     OccurrenceLabelQuerySurface,
     OccurrenceRecord,
     RepeatedStateQuerySurface,
+    SalienceQuerySurface,
     TerminalLabelQuerySurface,
 )
 from .corpus_ingest import DeclaredCorpusIngestor
@@ -22,6 +23,7 @@ from .embedding import PlaceholderEmbeddingBuilder
 from .labeling import PhaseMaterialOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
 from .repeated_state import RepeatedStateQuerySurfaceBuilder
+from .salience import SalienceV1Builder
 from .state_key import CanonicalStateKeyProvider
 from .terminal_labeling import TerminalOutcomeLabeler
 
@@ -34,6 +36,7 @@ class PipelineDryRun:
     dag: DagArtifact
     labels: OccurrenceLabelQuerySurface
     terminal_labels: TerminalLabelQuerySurface
+    salience: SalienceQuerySurface
     embedding: EmbeddingArtifact
 
 
@@ -47,6 +50,7 @@ class BuilderPipeline:
     dag_builder: OccurrenceDagBuilder
     labeler: PhaseMaterialOccurrenceLabeler
     terminal_labeler: TerminalOutcomeLabeler
+    salience_builder: SalienceV1Builder
     embedding_builder: PlaceholderEmbeddingBuilder
 
     def dry_run(self, declaration: CorpusDeclaration) -> PipelineDryRun:
@@ -61,6 +65,13 @@ class BuilderPipeline:
         )
         labels = self.labeler.label(dag)
         terminal_labels = self.terminal_labeler.label(ingested_corpus)
+        salience = self.salience_builder.build(
+            ingested_corpus,
+            repeated_state_query_surface,
+            dag,
+            labels,
+            terminal_labels,
+        )
         embedding = self.embedding_builder.build(dag)
         return PipelineDryRun(
             ingested_corpus=ingested_corpus,
@@ -69,6 +80,7 @@ class BuilderPipeline:
             dag=dag,
             labels=labels,
             terminal_labels=terminal_labels,
+            salience=salience,
             embedding=embedding,
         )
 
@@ -93,5 +105,6 @@ def create_placeholder_pipeline(
         dag_builder=OccurrenceDagBuilder(),
         labeler=PhaseMaterialOccurrenceLabeler(),
         terminal_labeler=TerminalOutcomeLabeler(),
+        salience_builder=SalienceV1Builder(),
         embedding_builder=PlaceholderEmbeddingBuilder(),
     )

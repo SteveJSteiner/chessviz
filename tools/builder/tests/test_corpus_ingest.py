@@ -44,6 +44,7 @@ class CorpusIngestTests(unittest.TestCase):
 
         for game in ingested_corpus.games:
             self.assertEqual(game.occurrences[0].state_key, start_state_key)
+            self.assertEqual(game.occurrences[0].ply, 0)
             self.assertEqual(len(game.occurrences), len(game.transitions) + 1)
 
             for index, transition in enumerate(game.transitions):
@@ -52,6 +53,8 @@ class CorpusIngestTests(unittest.TestCase):
                 self.assertEqual(transition.parent_occurrence_id, parent.occurrence_id)
                 self.assertEqual(transition.child_occurrence_id, child.occurrence_id)
                 self.assertEqual(transition.ply, index + 1)
+                self.assertEqual(child.ply, transition.ply)
+                self.assertEqual(child.ply, parent.ply + 1)
                 self.assertEqual(child.path[:-1], parent.path)
                 self.assertEqual(len(child.path), len(parent.path) + 1)
 

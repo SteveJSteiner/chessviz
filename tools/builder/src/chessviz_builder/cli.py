@@ -62,6 +62,8 @@ def run_env_check() -> int:
         f"{len(dry_run.labels.material_signatures)} material signature(s), "
         f"{len(dry_run.terminal_labels.records)} terminal label(s), "
         f"{len(dry_run.terminal_labels.anchors)} terminal anchor(s), "
+        f"{len(dry_run.salience.records)} salience record(s), "
+        f"top_frontier={len(dry_run.salience.priority_frontier)}, "
         f"{len(dry_run.embedding.coordinates)} coordinate(s)"
     )
     print(

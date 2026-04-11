@@ -56,9 +56,8 @@ def _classify_phase(node: OccurrenceRecord) -> str:
         _BLACK_MINOR_START_SQUARES,
     )
     castled_side_count = _castled_side_count(board)
-    ply = len(node.path) - 1
 
-    if ply >= 6 and development_score + castled_side_count >= 3:
+    if node.ply >= 6 and development_score + castled_side_count >= 3:
         return MIDDLEGAME_PHASE
 
     return OPENING_PHASE

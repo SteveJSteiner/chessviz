@@ -12,6 +12,7 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - `dag.py` builds the occurrence DAG artifact and exposes adjacency plus fan-in/fan-out metrics.
 - `labeling.py` attaches coarse phase/material label records and query surfaces over occurrence ids without changing occurrence identity or DAG topology.
 - `terminal_labeling.py` attaches W/D/L labels and stable terminal anchor ids to declared terminal occurrences without collapsing occurrence identity.
+- `salience.py` attaches normalized salience scores and runtime priority hints over the occurrence graph using deterministic builder-side signals.
 - `embedding.py` remains a later-node extension point.
 - `pipeline.py` wires the placeholder modules together for env-check validation.
 

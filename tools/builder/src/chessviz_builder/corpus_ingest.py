@@ -66,6 +66,7 @@ class DeclaredCorpusIngestor:
         root_occurrence = self.identity_provider.identify(
             self.state_key_provider.key_for_board(board),
             root_path,
+            ply=0,
         )
 
         occurrences: list[OccurrenceRecord] = [root_occurrence]
@@ -81,6 +82,7 @@ class DeclaredCorpusIngestor:
             child_occurrence = self.identity_provider.identify(
                 self.state_key_provider.key_for_board(board),
                 current_path,
+                ply=ply,
             )
             occurrences.append(child_occurrence)
             transitions.append(

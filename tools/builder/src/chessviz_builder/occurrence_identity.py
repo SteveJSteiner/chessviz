@@ -11,7 +11,12 @@ from .contracts import OccurrenceRecord
 class StableOccurrenceIdentity:
     """Keep occurrence identity separate from board-state identity."""
 
-    def identify(self, state_key: str, path: Sequence[str]) -> OccurrenceRecord:
+    def identify(
+        self,
+        state_key: str,
+        path: Sequence[str],
+        ply: int = 0,
+    ) -> OccurrenceRecord:
         canonical_path = tuple(path)
         digest = blake2s(
             f"{state_key}|{'/'.join(canonical_path)}".encode("utf-8"),
@@ -21,4 +26,5 @@ class StableOccurrenceIdentity:
             occurrence_id=f"occ-{digest}",
             state_key=state_key,
             path=canonical_path,
+            ply=ply,
         )

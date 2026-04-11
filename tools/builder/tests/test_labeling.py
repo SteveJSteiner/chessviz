@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 import unittest
 
 from chessviz_builder.contracts import IngestedCorpus
@@ -13,6 +14,7 @@ from chessviz_builder.labeling import (
     FULL_MATERIAL_SIGNATURE,
     MIDDLEGAME_PHASE,
     OPENING_PHASE,
+    _classify_phase,
 )
 from chessviz_builder.pipeline import create_placeholder_pipeline
 
@@ -97,6 +99,27 @@ class OccurrenceLabelingTests(unittest.TestCase):
             ),
             1,
         )
+
+    def test_phase_classifier_uses_explicit_ply_not_path_length(self) -> None:
+        dry_run = self.pipeline.dry_run(self.declaration)
+        qgd_leaf = next(
+            game.final_occurrence
+            for game in dry_run.ingested_corpus.games
+            if game.game_id == "qgd-bogo-a"
+        )
+        synthetic_path_leaf = replace(
+            qgd_leaf,
+            path=(
+                "synthetic-anchor",
+                "synthetic-branch",
+                *qgd_leaf.path,
+            ),
+        )
+
+        self.assertEqual(qgd_leaf.ply, synthetic_path_leaf.ply)
+        self.assertNotEqual(len(qgd_leaf.path), len(synthetic_path_leaf.path))
+        self.assertEqual(_classify_phase(qgd_leaf), MIDDLEGAME_PHASE)
+        self.assertEqual(_classify_phase(synthetic_path_leaf), MIDDLEGAME_PHASE)
 
 
 if __name__ == "__main__":

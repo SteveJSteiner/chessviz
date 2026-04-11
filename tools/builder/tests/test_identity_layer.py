@@ -59,6 +59,7 @@ class IdentityLayerTests(unittest.TestCase):
             dry_run.occurrences[0].state_key,
             pipeline.state_key_provider.key_for_board(chess.Board()),
         )
+        self.assertEqual(dry_run.occurrences[0].ply, 0)
 
 
 if __name__ == "__main__":
