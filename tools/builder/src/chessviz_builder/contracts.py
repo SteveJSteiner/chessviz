@@ -77,6 +77,11 @@ class IngestedGame:
     game_id: str
     occurrences: tuple[OccurrenceRecord, ...]
     transitions: tuple[OccurrenceTransition, ...]
+    declared_terminal_outcome: str | None = None
+
+    @property
+    def final_occurrence(self) -> OccurrenceRecord:
+        return self.occurrences[-1]
 
 
 @dataclass(frozen=True)
@@ -245,6 +250,104 @@ class OccurrenceLabelQuerySurface:
 
 
 @dataclass(frozen=True)
+class TerminalLabelRecord:
+    occurrence_id: str
+    wdl_label: str
+    outcome_class: str
+    anchor_id: str
+
+
+@dataclass(frozen=True)
+class TerminalAnchorRecord:
+    anchor_id: str
+    wdl_label: str
+    outcome_class: str
+    occurrence_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class TerminalLabelQuerySurface:
+    records: tuple[TerminalLabelRecord, ...]
+    anchors: tuple[TerminalAnchorRecord, ...]
+    _records_by_occurrence_id: Mapping[str, TerminalLabelRecord]
+    _records_by_wdl_label: Mapping[str, tuple[TerminalLabelRecord, ...]]
+    _records_by_outcome_class: Mapping[str, tuple[TerminalLabelRecord, ...]]
+    _anchors_by_anchor_id: Mapping[str, TerminalAnchorRecord]
+
+    @classmethod
+    def from_records(
+        cls,
+        records: Sequence[TerminalLabelRecord],
+    ) -> "TerminalLabelQuerySurface":
+        ordered_records = tuple(records)
+        wdl_buckets: dict[str, list[TerminalLabelRecord]] = {}
+        outcome_buckets: dict[str, list[TerminalLabelRecord]] = {}
+        anchor_buckets: dict[str, list[TerminalLabelRecord]] = {}
+
+        for record in ordered_records:
+            wdl_buckets.setdefault(record.wdl_label, []).append(record)
+            outcome_buckets.setdefault(record.outcome_class, []).append(record)
+            anchor_buckets.setdefault(record.anchor_id, []).append(record)
+
+        anchors = tuple(
+            TerminalAnchorRecord(
+                anchor_id=anchor_id,
+                wdl_label=anchor_records[0].wdl_label,
+                outcome_class=anchor_records[0].outcome_class,
+                occurrence_ids=tuple(
+                    record.occurrence_id for record in anchor_records
+                ),
+            )
+            for anchor_id, anchor_records in anchor_buckets.items()
+        )
+
+        return cls(
+            records=ordered_records,
+            anchors=anchors,
+            _records_by_occurrence_id={
+                record.occurrence_id: record for record in ordered_records
+            },
+            _records_by_wdl_label={
+                wdl_label: tuple(wdl_records)
+                for wdl_label, wdl_records in wdl_buckets.items()
+            },
+            _records_by_outcome_class={
+                outcome_class: tuple(outcome_records)
+                for outcome_class, outcome_records in outcome_buckets.items()
+            },
+            _anchors_by_anchor_id={
+                anchor.anchor_id: anchor for anchor in anchors
+            },
+        )
+
+    @property
+    def wdl_labels(self) -> tuple[str, ...]:
+        return tuple(self._records_by_wdl_label)
+
+    @property
+    def outcome_classes(self) -> tuple[str, ...]:
+        return tuple(self._records_by_outcome_class)
+
+    def __len__(self) -> int:
+        return len(self.records)
+
+    def by_occurrence_id(self, occurrence_id: str) -> TerminalLabelRecord | None:
+        return self._records_by_occurrence_id.get(occurrence_id)
+
+    def for_wdl_label(self, wdl_label: str) -> tuple[TerminalLabelRecord, ...]:
+        return self._records_by_wdl_label.get(wdl_label, tuple())
+
+    def for_outcome_class(
+        self,
+        outcome_class: str,
+    ) -> tuple[TerminalLabelRecord, ...]:
+        return self._records_by_outcome_class.get(outcome_class, tuple())
+
+    def by_anchor_id(self, anchor_id: str) -> TerminalAnchorRecord | None:
+        return self._anchors_by_anchor_id.get(anchor_id)
+
+
+@dataclass(frozen=True)
 class DagMetrics:
     node_count: int
     edge_count: int
@@ -333,6 +436,11 @@ class RepeatedStateQueryBuilder(Protocol):
 class OccurrenceLabeler(Protocol):
     def label(self, dag: DagArtifact) -> OccurrenceLabelQuerySurface:
         """Attach coarse phase/material labels without changing DAG topology."""
+
+
+class TerminalLabeler(Protocol):
+    def label(self, ingested_corpus: IngestedCorpus) -> TerminalLabelQuerySurface:
+        """Attach W/D/L labels and terminal anchors to declared terminal occurrences."""
 
 
 class EmbeddingBuilder(Protocol):

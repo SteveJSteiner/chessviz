@@ -14,6 +14,7 @@ from .contracts import (
     OccurrenceLabelQuerySurface,
     OccurrenceRecord,
     RepeatedStateQuerySurface,
+    TerminalLabelQuerySurface,
 )
 from .corpus_ingest import DeclaredCorpusIngestor
 from .dag import OccurrenceDagBuilder
@@ -22,6 +23,7 @@ from .labeling import PhaseMaterialOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
 from .repeated_state import RepeatedStateQuerySurfaceBuilder
 from .state_key import CanonicalStateKeyProvider
+from .terminal_labeling import TerminalOutcomeLabeler
 
 
 @dataclass(frozen=True)
@@ -31,6 +33,7 @@ class PipelineDryRun:
     repeated_state_query_surface: RepeatedStateQuerySurface
     dag: DagArtifact
     labels: OccurrenceLabelQuerySurface
+    terminal_labels: TerminalLabelQuerySurface
     embedding: EmbeddingArtifact
 
 
@@ -43,6 +46,7 @@ class BuilderPipeline:
     repeated_state_query_builder: RepeatedStateQuerySurfaceBuilder
     dag_builder: OccurrenceDagBuilder
     labeler: PhaseMaterialOccurrenceLabeler
+    terminal_labeler: TerminalOutcomeLabeler
     embedding_builder: PlaceholderEmbeddingBuilder
 
     def dry_run(self, declaration: CorpusDeclaration) -> PipelineDryRun:
@@ -56,6 +60,7 @@ class BuilderPipeline:
             repeated_state_query_surface,
         )
         labels = self.labeler.label(dag)
+        terminal_labels = self.terminal_labeler.label(ingested_corpus)
         embedding = self.embedding_builder.build(dag)
         return PipelineDryRun(
             ingested_corpus=ingested_corpus,
@@ -63,6 +68,7 @@ class BuilderPipeline:
             repeated_state_query_surface=repeated_state_query_surface,
             dag=dag,
             labels=labels,
+            terminal_labels=terminal_labels,
             embedding=embedding,
         )
 
@@ -86,5 +92,6 @@ def create_placeholder_pipeline(
         repeated_state_query_builder=repeated_state_query_builder,
         dag_builder=OccurrenceDagBuilder(),
         labeler=PhaseMaterialOccurrenceLabeler(),
+        terminal_labeler=TerminalOutcomeLabeler(),
         embedding_builder=PlaceholderEmbeddingBuilder(),
     )

@@ -24,7 +24,19 @@ class CorpusIngestTests(unittest.TestCase):
         fixture = load_declared_corpus_fixture(declaration=self.declaration)
 
         self.assertEqual(fixture.declaration, self.declaration)
-        self.assertEqual(len(fixture.games), 2)
+        self.assertEqual(len(fixture.games), 5)
+        self.assertEqual(
+            {
+                game.game_id: game.terminal_outcome
+                for game in fixture.games
+                if game.terminal_outcome is not None
+            },
+            {
+                "scholars-mate-white": "white-win",
+                "fools-mate-black": "black-win",
+                "repetition-draw": "draw",
+            },
+        )
 
     def test_ingestion_produces_continuous_paths_rooted_at_initial_position(self) -> None:
         ingested_corpus = self.pipeline.corpus_ingestor.ingest(self.declaration)
@@ -46,11 +58,31 @@ class CorpusIngestTests(unittest.TestCase):
     def test_small_corpus_fixture_has_expected_occurrence_counts(self) -> None:
         ingested_corpus = self.pipeline.corpus_ingestor.ingest(self.declaration)
 
-        self.assertEqual(len(ingested_corpus.games), 2)
-        self.assertEqual(len(ingested_corpus.occurrences), 14)
-        self.assertEqual(len(ingested_corpus.transitions), 12)
-        self.assertEqual(len(ingested_corpus.games[0].occurrences), 7)
-        self.assertEqual(len(ingested_corpus.games[1].occurrences), 7)
+        self.assertEqual(len(ingested_corpus.games), 5)
+        self.assertEqual(len(ingested_corpus.occurrences), 36)
+        self.assertEqual(len(ingested_corpus.transitions), 31)
+        self.assertEqual(
+            {game.game_id: len(game.occurrences) for game in ingested_corpus.games},
+            {
+                "qgd-bogo-a": 7,
+                "qgd-bogo-b": 7,
+                "scholars-mate-white": 8,
+                "fools-mate-black": 5,
+                "repetition-draw": 9,
+            },
+        )
+        self.assertEqual(
+            {
+                game.game_id: game.declared_terminal_outcome
+                for game in ingested_corpus.games
+                if game.declared_terminal_outcome is not None
+            },
+            {
+                "scholars-mate-white": "white-win",
+                "fools-mate-black": "black-win",
+                "repetition-draw": "draw",
+            },
+        )
 
 
 if __name__ == "__main__":

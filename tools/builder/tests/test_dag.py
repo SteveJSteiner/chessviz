@@ -30,10 +30,10 @@ class DagArtifactTests(unittest.TestCase):
         dry_run = self.pipeline.dry_run(self.declaration)
         metrics = dry_run.dag.metrics
 
-        self.assertEqual(metrics.node_count, 14)
-        self.assertEqual(metrics.edge_count, 12)
-        self.assertEqual(metrics.root_count, 2)
-        self.assertEqual(metrics.leaf_count, 2)
+        self.assertEqual(metrics.node_count, 36)
+        self.assertEqual(metrics.edge_count, 31)
+        self.assertEqual(metrics.root_count, 5)
+        self.assertEqual(metrics.leaf_count, 5)
         self.assertEqual(metrics.max_out_degree, 1)
         self.assertEqual(metrics.max_in_degree, 1)
 
@@ -60,9 +60,9 @@ class DagArtifactTests(unittest.TestCase):
 
         self.assertIsNotNone(relation)
         assert relation is not None
-        self.assertEqual(dag.metrics.max_state_convergence, 2)
-        self.assertEqual(dag.metrics.repeated_state_group_count, 5)
-        self.assertEqual(dag.metrics.repeated_state_occurrence_count, 10)
+        self.assertEqual(dag.metrics.max_state_convergence, 7)
+        self.assertEqual(dag.metrics.repeated_state_group_count, 8)
+        self.assertEqual(dag.metrics.repeated_state_occurrence_count, 21)
         self.assertEqual(len(relation.occurrences), 2)
         self.assertNotEqual(
             relation.occurrences[0].occurrence_id,

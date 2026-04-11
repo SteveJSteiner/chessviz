@@ -22,15 +22,18 @@ from .contracts import (
 
 INITIAL_CORPUS_DECLARATION = CorpusDeclaration(
     source_name="initial-represented-subset",
-    version="2026-04-11-fixture-001",
+    version="2026-04-11-fixture-002",
     location="tools/builder/fixtures/initial_corpus.json",
 )
+
+TERMINAL_OUTCOME_CLASSES = frozenset(("white-win", "draw", "black-win"))
 
 
 @dataclass(frozen=True)
 class DeclaredGameFixture:
     game_id: str
     moves_san: tuple[str, ...]
+    terminal_outcome: str | None = None
 
 
 @dataclass(frozen=True)
@@ -94,6 +97,7 @@ class DeclaredCorpusIngestor:
             game_id=game.game_id,
             occurrences=tuple(occurrences),
             transitions=tuple(transitions),
+            declared_terminal_outcome=game.terminal_outcome,
         )
 
 
@@ -116,6 +120,7 @@ def load_declared_corpus_fixture(
         DeclaredGameFixture(
             game_id=str(game_payload["game_id"]),
             moves_san=tuple(str(move) for move in game_payload["moves_san"]),
+            terminal_outcome=_optional_terminal_outcome(game_payload),
         )
         for game_payload in payload["games"]
     )
@@ -141,6 +146,21 @@ def _validate_declaration(payload: dict[str, object], declaration: CorpusDeclara
                 f"declared corpus fixture mismatch for {key}: "
                 f"expected {expected_value!r}, got {actual_value!r}"
             )
+
+
+def _optional_terminal_outcome(game_payload: dict[str, object]) -> str | None:
+    raw_outcome = game_payload.get("terminal_outcome")
+    if raw_outcome is None:
+        return None
+
+    normalized_outcome = str(raw_outcome)
+    if normalized_outcome not in TERMINAL_OUTCOME_CLASSES:
+        raise ValueError(
+            "declared corpus fixture has unsupported terminal_outcome: "
+            f"{normalized_outcome!r}"
+        )
+
+    return normalized_outcome
 
 
 def build_move_facts(board: chess.Board, move: chess.Move) -> MoveFactRecord:

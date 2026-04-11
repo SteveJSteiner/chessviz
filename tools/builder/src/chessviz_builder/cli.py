@@ -60,6 +60,8 @@ def run_env_check() -> int:
         f"{len(dry_run.labels.records)} label record(s), "
         f"{len(dry_run.labels.phases)} phase band(s), "
         f"{len(dry_run.labels.material_signatures)} material signature(s), "
+        f"{len(dry_run.terminal_labels.records)} terminal label(s), "
+        f"{len(dry_run.terminal_labels.anchors)} terminal anchor(s), "
         f"{len(dry_run.embedding.coordinates)} coordinate(s)"
     )
     print(

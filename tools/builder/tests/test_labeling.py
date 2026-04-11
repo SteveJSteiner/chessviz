@@ -22,16 +22,19 @@ class OccurrenceLabelingTests(unittest.TestCase):
         self.pipeline = create_placeholder_pipeline()
         self.declaration = initial_corpus_declaration()
 
-    def test_declared_corpus_exposes_opening_and_middlegame_phase_groups(self) -> None:
+    def test_qgd_transposition_leaves_keep_middlegame_labels(self) -> None:
         dry_run = self.pipeline.dry_run(self.declaration)
         labels = dry_run.labels
+        qgd_games = tuple(
+            game
+            for game in dry_run.ingested_corpus.games
+            if game.game_id.startswith("qgd-bogo-")
+        )
 
         self.assertEqual(set(labels.phases), {OPENING_PHASE, MIDDLEGAME_PHASE})
-        self.assertEqual(len(labels.for_phase(MIDDLEGAME_PHASE)), 2)
-        self.assertEqual(len(labels.for_phase(OPENING_PHASE)), 12)
 
-        for leaf_occurrence_id in dry_run.dag.leaf_occurrence_ids:
-            label_record = labels.by_occurrence_id(leaf_occurrence_id)
+        for game in qgd_games:
+            label_record = labels.by_occurrence_id(game.final_occurrence.occurrence_id)
 
             self.assertIsNotNone(label_record)
             assert label_record is not None
@@ -50,11 +53,8 @@ class OccurrenceLabelingTests(unittest.TestCase):
             self.assertEqual(label_record.phase, OPENING_PHASE)
             self.assertEqual(label_record.material_signature, FULL_MATERIAL_SIGNATURE)
 
-        self.assertEqual(labels.material_signatures, (FULL_MATERIAL_SIGNATURE,))
-        self.assertEqual(
-            len(labels.for_material_signature(FULL_MATERIAL_SIGNATURE)),
-            len(dry_run.occurrences),
-        )
+        self.assertIn(FULL_MATERIAL_SIGNATURE, labels.material_signatures)
+        self.assertGreater(len(labels.material_signatures), 1)
 
     def test_material_signature_changes_after_capture_without_altering_query_surface(
         self,
