@@ -4,9 +4,63 @@ This file contains explicit, testable acceptance checks and performance/renderin
 
 ## Declared initial data scope
 
-- **Corpus profile:** Curated PGN subset + tagged opening lines + terminal-labeled outcomes.
+- **Primary corpus slices:** Curated PGN subset for continuous occurrence paths, tagged opening-line references for named early-branch anchors, and terminal-labeled outcomes for declared end states.
+- **Optional supplemental slices:** Engine-tree slices and tablebase slices are allowed only when a run declaration names them explicitly; otherwise they are absent from the represented subset.
 - **Represented-subset rule:** The object is built from the declared corpus subset, not exhaustive legal-state enumeration.
-- **Run declaration requirement:** Each acceptance run records corpus version/hash and salience-input declaration.
+- **Determinism rule:** Each acceptance run records the seed and config hash used to produce structural outputs.
+- **Run declaration requirement:** Each acceptance run records corpus version/hash, declared slices, and salience-input declaration.
+
+## Acceptance run declaration template
+
+- **Corpus declaration fields:** Every recorded run declares corpus profile, corpus version/date, content hash, and each included or omitted slice with its source and selection rule.
+- **Salience declaration fields:** Every recorded run declares frequency, eval, terminal pull, policy, and centrality inputs with a source plus weight, or marks the input as omitted.
+- **Determinism declaration fields:** Every recorded run declares the fixed seed, config hash, and any supplemental external-slice hashes used in the run.
+
+```yaml
+run_declaration:
+  corpus:
+    profile: initial-represented-subset
+    version_or_date:
+    content_hash:
+    slices:
+      - name: curated-pgn-subset
+        source:
+        selection_rule:
+      - name: tagged-opening-lines
+        source:
+        selection_rule:
+      - name: terminal-outcome-labels
+        source:
+        selection_rule:
+      - name: optional-engine-tree-slice
+        source: omitted
+        selection_rule: omitted
+      - name: optional-tablebase-slice
+        source: omitted
+        selection_rule: omitted
+  salience:
+    frequency:
+      source:
+      weight:
+    eval:
+      source:
+      weight:
+    terminal_pull:
+      source:
+      weight:
+    policy:
+      source:
+      weight:
+    centrality:
+      source:
+      weight:
+    normalization:
+    top_k_frontier:
+  determinism:
+    seed:
+    config_hash:
+    supplemental_hashes: []
+```
 
 ## Performance/rendering budgets
 
