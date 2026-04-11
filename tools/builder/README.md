@@ -13,7 +13,7 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - `labeling.py` attaches coarse phase/material label records and query surfaces over occurrence ids without changing occurrence identity or DAG topology.
 - `terminal_labeling.py` attaches W/D/L labels and stable terminal anchor ids to declared terminal occurrences without collapsing occurrence identity.
 - `salience.py` attaches normalized salience scores and runtime priority hints over the occurrence graph using deterministic builder-side signals.
-- `embedding.py` remains a later-node extension point.
+- `embedding.py` attaches deterministic hyperbolic-style coarse coordinates and queryable embedding records over the occurrence graph.
 - `pipeline.py` wires the placeholder modules together for env-check validation.
 
 ## Builder versus runtime

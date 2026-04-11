@@ -19,7 +19,7 @@ from .contracts import (
 )
 from .corpus_ingest import DeclaredCorpusIngestor
 from .dag import OccurrenceDagBuilder
-from .embedding import PlaceholderEmbeddingBuilder
+from .embedding import HyperbolicStyleEmbeddingBuilderV1
 from .labeling import PhaseMaterialOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
 from .repeated_state import RepeatedStateQuerySurfaceBuilder
@@ -51,7 +51,7 @@ class BuilderPipeline:
     labeler: PhaseMaterialOccurrenceLabeler
     terminal_labeler: TerminalOutcomeLabeler
     salience_builder: SalienceV1Builder
-    embedding_builder: PlaceholderEmbeddingBuilder
+    embedding_builder: HyperbolicStyleEmbeddingBuilderV1
 
     def dry_run(self, declaration: CorpusDeclaration) -> PipelineDryRun:
         ingested_corpus = self.corpus_ingestor.ingest(declaration)
@@ -72,7 +72,13 @@ class BuilderPipeline:
             labels,
             terminal_labels,
         )
-        embedding = self.embedding_builder.build(dag)
+        embedding = self.embedding_builder.build(
+            ingested_corpus,
+            repeated_state_query_surface,
+            dag,
+            labels,
+            terminal_labels,
+        )
         return PipelineDryRun(
             ingested_corpus=ingested_corpus,
             occurrences=ingested_corpus.occurrences,
@@ -106,5 +112,5 @@ def create_placeholder_pipeline(
         labeler=PhaseMaterialOccurrenceLabeler(),
         terminal_labeler=TerminalOutcomeLabeler(),
         salience_builder=SalienceV1Builder(),
-        embedding_builder=PlaceholderEmbeddingBuilder(),
+        embedding_builder=HyperbolicStyleEmbeddingBuilderV1(),
     )

@@ -81,6 +81,12 @@ def run_env_check() -> int:
         f"max_in={dry_run.dag.metrics.max_in_degree}, "
         f"max_state_convergence={dry_run.dag.metrics.max_state_convergence}"
     )
+    print(
+        "embedding config: "
+        f"seed={dry_run.embedding.config.seed}, "
+        f"max_radius={dry_run.embedding.config.max_radius}, "
+        f"radial_scale={dry_run.embedding.config.radial_scale}"
+    )
 
     print(
         "CHESSVIZ_STOCKFISH_BIN: "

@@ -432,6 +432,30 @@ class SalienceQuerySurface:
 
 
 @dataclass(frozen=True)
+class EmbeddingConfig:
+    seed: int
+    root_ring_radius: float
+    max_radius: float
+    radial_scale: float
+    move_angle_scale: float
+    move_angle_decay: float
+    repeated_state_pull: float
+    phase_pitch: float
+    terminal_pitch: float
+
+
+@dataclass(frozen=True)
+class EmbeddingRecord:
+    occurrence_id: str
+    coordinate: Vector3
+    ball_radius: float
+    azimuth: float
+    elevation: float
+    root_game_id: str
+    terminal_anchor_id: str | None
+
+
+@dataclass(frozen=True)
 class DagMetrics:
     node_count: int
     edge_count: int
@@ -481,7 +505,16 @@ class DagArtifact:
 @dataclass(frozen=True)
 class EmbeddingArtifact:
     dag: DagArtifact
+    config: EmbeddingConfig
+    records: tuple[EmbeddingRecord, ...]
     coordinates: Mapping[str, Vector3]
+    _records_by_occurrence_id: Mapping[str, EmbeddingRecord]
+
+    def __len__(self) -> int:
+        return len(self.records)
+
+    def by_occurrence_id(self, occurrence_id: str) -> EmbeddingRecord | None:
+        return self._records_by_occurrence_id.get(occurrence_id)
 
 
 class StateKeyProvider(Protocol):
@@ -545,5 +578,12 @@ class SalienceBuilder(Protocol):
 
 
 class EmbeddingBuilder(Protocol):
-    def build(self, dag: DagArtifact) -> EmbeddingArtifact:
-        """Build placeholder coordinates pending hyperbolic embedding work."""
+    def build(
+        self,
+        ingested_corpus: IngestedCorpus,
+        repeated_state_query_surface: RepeatedStateQuerySurface,
+        dag: DagArtifact,
+        labels: OccurrenceLabelQuerySurface,
+        terminal_labels: TerminalLabelQuerySurface,
+    ) -> EmbeddingArtifact:
+        """Build deterministic coarse coordinates usable as a navigation basis."""
