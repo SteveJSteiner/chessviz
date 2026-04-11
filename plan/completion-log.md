@@ -14,3 +14,4 @@ One line per committed DAG frontier event.
 2026-04-11 | commit 4910e46 | settled N02b repeated-state relation index and runtime query surface
 2026-04-11 | commit 995ac08 | settled N04 occurrence DAG metrics and convergence validation
 2026-04-11 | commit b2dca35 | settled N05 phase/material occurrence labeling and query surface
+2026-04-11 | commit 8c43135 | settled N06 terminal outcome labeling and terminal anchor surface
