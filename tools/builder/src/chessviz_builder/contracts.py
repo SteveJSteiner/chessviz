@@ -50,11 +50,26 @@ class OccurrenceRecord:
 
 
 @dataclass(frozen=True)
+class MoveFactRecord:
+    san: str
+    moving_piece: str
+    captured_piece: str | None
+    promotion_piece: str | None
+    is_capture: bool
+    is_check: bool
+    is_checkmate: bool
+    is_castle: bool
+    castle_side: str | None
+    is_en_passant: bool
+
+
+@dataclass(frozen=True)
 class OccurrenceTransition:
     parent_occurrence_id: str
     child_occurrence_id: str
     move_uci: str
     ply: int
+    move_facts: MoveFactRecord
 
 
 @dataclass(frozen=True)

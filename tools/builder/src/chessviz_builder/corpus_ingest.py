@@ -13,6 +13,7 @@ from .contracts import (
     CorpusDeclaration,
     IngestedCorpus,
     IngestedGame,
+    MoveFactRecord,
     OccurrenceIdentityProvider,
     OccurrenceRecord,
     OccurrenceTransition,
@@ -70,6 +71,7 @@ class DeclaredCorpusIngestor:
 
         for ply, san in enumerate(game.moves_san, start=1):
             move = board.parse_san(san)
+            move_facts = build_move_facts(board, move)
             parent_occurrence = occurrences[-1]
             board.push(move)
             current_path = (*current_path, f"{ply}:{move.uci()}")
@@ -84,6 +86,7 @@ class DeclaredCorpusIngestor:
                     child_occurrence_id=child_occurrence.occurrence_id,
                     move_uci=move.uci(),
                     ply=ply,
+                    move_facts=move_facts,
                 )
             )
 
@@ -138,3 +141,50 @@ def _validate_declaration(payload: dict[str, object], declaration: CorpusDeclara
                 f"declared corpus fixture mismatch for {key}: "
                 f"expected {expected_value!r}, got {actual_value!r}"
             )
+
+
+def build_move_facts(board: chess.Board, move: chess.Move) -> MoveFactRecord:
+    normalized_san = board.san(move)
+    moving_piece = _piece_name(board.piece_type_at(move.from_square))
+    captured_piece = _captured_piece_name(board, move)
+    promotion_piece = _piece_name(move.promotion)
+    is_capture = board.is_capture(move)
+    is_castle = board.is_castling(move)
+    is_en_passant = board.is_en_passant(move)
+
+    board_after = board.copy(stack=False)
+    board_after.push(move)
+
+    return MoveFactRecord(
+        san=normalized_san,
+        moving_piece=moving_piece,
+        captured_piece=captured_piece,
+        promotion_piece=promotion_piece,
+        is_capture=is_capture,
+        is_check=board_after.is_check(),
+        is_checkmate=board_after.is_checkmate(),
+        is_castle=is_castle,
+        castle_side=_castle_side(move) if is_castle else None,
+        is_en_passant=is_en_passant,
+    )
+
+
+def _captured_piece_name(board: chess.Board, move: chess.Move) -> str | None:
+    if not board.is_capture(move):
+        return None
+
+    if board.is_en_passant(move):
+        return chess.piece_name(chess.PAWN)
+
+    return _piece_name(board.piece_type_at(move.to_square))
+
+
+def _piece_name(piece_type: int | None) -> str | None:
+    if piece_type is None:
+        return None
+
+    return chess.piece_name(piece_type)
+
+
+def _castle_side(move: chess.Move) -> str:
+    return "kingside" if move.to_square > move.from_square else "queenside"
