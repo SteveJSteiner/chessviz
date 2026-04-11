@@ -22,6 +22,12 @@ This file contains design and process decisions only. It must not become a task 
 - **D14a. Render-time local exploration is first-class** — Camera motion and zoom may trigger local neighborhood acquisition and refinement at render time; this is part of the representation, not a fallback interface behavior.
 - **D14b. Builder/runtime responsibility split** — Builder outputs canonical occurrence structure, relation indices, declarations, and coarse guides; runtime owns neighborhood query, cache, and budgeted refinement.
 - **D14c. View-dependent realization is allowed** — Not all render geometry must be fully materialized ahead of time, provided runtime realization preserves object identity and zoom-monotone semantics.
+- **D14d. Visual design commitments are binding** — `plan/visual-design-commitments.md` is a locked rendering-constraint artifact with the same authority as the other `plan/` files.
+- **D14e. Labels stay on the object** — Move names live on carriers, game names on roots, and terminal outcomes on terminal nodes; side panels are reference only.
+- **D14f. No second chess representation** — The live viewer does not grow a move list, PGN tree, or parallel chess diagram beside the geometry; the board panel remains a single-position reference.
+- **D14g. Chrome must justify itself** — Non-data visual elements stay out of the live viewer unless they solve a named legibility problem.
+- **D14h. Live label-density control is mandatory** — Branch-heavy views require salience/proximity-aware label selection so the geometry does not become wallpaper.
+- **D14i. One visual channel, one semantic job** — Channel roles remain singular and stable; redundancy is allowed only as an accessibility backup.
 
 ## Carrier-form decisions (experimental, not locked)
 
@@ -60,3 +66,4 @@ This file contains design and process decisions only. It must not become a task 
 - **O6. Middlegame partition features** — Material-only vs material + pawn/king/mobility factors.
 - **O7. Terminal color grammar** — Joint encoding of W/D/L, salience, and family cues.
 - **O8. Runtime refinement policy** — Query radius, cache eviction, and refinement triggers under camera motion.
+- **O9. High-branch label selection policy** — Exact blend of top-k salience, proximity, hover, and fade rules in dense live neighborhoods.
