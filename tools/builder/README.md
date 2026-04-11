@@ -10,7 +10,8 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - `OccurrenceTransition` records now carry canonical move facts so later geometry rules do not need to reconstruct captures, castling, or check status from scratch.
 - `repeated_state.py` builds the repeated-state relation index and query surface over ingested occurrences.
 - `dag.py` builds the occurrence DAG artifact and exposes adjacency plus fan-in/fan-out metrics.
-- `labeling.py` and `embedding.py` mark later-node extension points.
+- `labeling.py` attaches coarse phase/material label records and query surfaces over occurrence ids without changing occurrence identity or DAG topology.
+- `embedding.py` remains a later-node extension point.
 - `pipeline.py` wires the placeholder modules together for env-check validation.
 
 ## Builder versus runtime

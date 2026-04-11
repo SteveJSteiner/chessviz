@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Mapping
 
 from .config import load_builder_workspace
 from .contracts import (
@@ -12,13 +11,14 @@ from .contracts import (
     DagArtifact,
     EmbeddingArtifact,
     IngestedCorpus,
+    OccurrenceLabelQuerySurface,
     OccurrenceRecord,
     RepeatedStateQuerySurface,
 )
 from .corpus_ingest import DeclaredCorpusIngestor
 from .dag import OccurrenceDagBuilder
 from .embedding import PlaceholderEmbeddingBuilder
-from .labeling import PlaceholderOccurrenceLabeler
+from .labeling import PhaseMaterialOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
 from .repeated_state import RepeatedStateQuerySurfaceBuilder
 from .state_key import CanonicalStateKeyProvider
@@ -30,7 +30,7 @@ class PipelineDryRun:
     occurrences: tuple[OccurrenceRecord, ...]
     repeated_state_query_surface: RepeatedStateQuerySurface
     dag: DagArtifact
-    labels: Mapping[str, str]
+    labels: OccurrenceLabelQuerySurface
     embedding: EmbeddingArtifact
 
 
@@ -42,7 +42,7 @@ class BuilderPipeline:
     corpus_ingestor: DeclaredCorpusIngestor
     repeated_state_query_builder: RepeatedStateQuerySurfaceBuilder
     dag_builder: OccurrenceDagBuilder
-    labeler: PlaceholderOccurrenceLabeler
+    labeler: PhaseMaterialOccurrenceLabeler
     embedding_builder: PlaceholderEmbeddingBuilder
 
     def dry_run(self, declaration: CorpusDeclaration) -> PipelineDryRun:
@@ -85,6 +85,6 @@ def create_placeholder_pipeline(
         ),
         repeated_state_query_builder=repeated_state_query_builder,
         dag_builder=OccurrenceDagBuilder(),
-        labeler=PlaceholderOccurrenceLabeler(),
+        labeler=PhaseMaterialOccurrenceLabeler(),
         embedding_builder=PlaceholderEmbeddingBuilder(),
     )

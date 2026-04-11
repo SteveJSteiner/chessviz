@@ -155,6 +155,96 @@ class RepeatedStateQuerySurface:
 
 
 @dataclass(frozen=True)
+class OccurrenceLabelRecord:
+    occurrence_id: str
+    phase: str
+    material_signature: str
+
+
+@dataclass(frozen=True)
+class OccurrenceLabelQuerySurface:
+    records: tuple[OccurrenceLabelRecord, ...]
+    _records_by_occurrence_id: Mapping[str, OccurrenceLabelRecord]
+    _records_by_phase: Mapping[str, tuple[OccurrenceLabelRecord, ...]]
+    _records_by_material_signature: Mapping[str, tuple[OccurrenceLabelRecord, ...]]
+    _records_by_phase_and_material_signature: Mapping[
+        tuple[str, str], tuple[OccurrenceLabelRecord, ...]
+    ]
+
+    @classmethod
+    def from_records(
+        cls,
+        records: Sequence[OccurrenceLabelRecord],
+    ) -> "OccurrenceLabelQuerySurface":
+        ordered_records = tuple(records)
+        phase_buckets: dict[str, list[OccurrenceLabelRecord]] = {}
+        material_buckets: dict[str, list[OccurrenceLabelRecord]] = {}
+        phase_material_buckets: dict[
+            tuple[str, str], list[OccurrenceLabelRecord]
+        ] = {}
+
+        for record in ordered_records:
+            phase_buckets.setdefault(record.phase, []).append(record)
+            material_buckets.setdefault(record.material_signature, []).append(record)
+            phase_material_buckets.setdefault(
+                (record.phase, record.material_signature),
+                [],
+            ).append(record)
+
+        return cls(
+            records=ordered_records,
+            _records_by_occurrence_id={
+                record.occurrence_id: record for record in ordered_records
+            },
+            _records_by_phase={
+                phase: tuple(phase_records)
+                for phase, phase_records in phase_buckets.items()
+            },
+            _records_by_material_signature={
+                material_signature: tuple(material_records)
+                for material_signature, material_records in material_buckets.items()
+            },
+            _records_by_phase_and_material_signature={
+                phase_and_material: tuple(label_records)
+                for phase_and_material, label_records in phase_material_buckets.items()
+            },
+        )
+
+    @property
+    def phases(self) -> tuple[str, ...]:
+        return tuple(self._records_by_phase)
+
+    @property
+    def material_signatures(self) -> tuple[str, ...]:
+        return tuple(self._records_by_material_signature)
+
+    def __len__(self) -> int:
+        return len(self.records)
+
+    def by_occurrence_id(self, occurrence_id: str) -> OccurrenceLabelRecord | None:
+        return self._records_by_occurrence_id.get(occurrence_id)
+
+    def for_phase(self, phase: str) -> tuple[OccurrenceLabelRecord, ...]:
+        return self._records_by_phase.get(phase, tuple())
+
+    def for_material_signature(
+        self,
+        material_signature: str,
+    ) -> tuple[OccurrenceLabelRecord, ...]:
+        return self._records_by_material_signature.get(material_signature, tuple())
+
+    def for_phase_and_material_signature(
+        self,
+        phase: str,
+        material_signature: str,
+    ) -> tuple[OccurrenceLabelRecord, ...]:
+        return self._records_by_phase_and_material_signature.get(
+            (phase, material_signature),
+            tuple(),
+        )
+
+
+@dataclass(frozen=True)
 class DagMetrics:
     node_count: int
     edge_count: int
@@ -241,8 +331,8 @@ class RepeatedStateQueryBuilder(Protocol):
 
 
 class OccurrenceLabeler(Protocol):
-    def label(self, dag: DagArtifact) -> Mapping[str, str]:
-        """Attach placeholder labels pending later roadmap nodes."""
+    def label(self, dag: DagArtifact) -> OccurrenceLabelQuerySurface:
+        """Attach coarse phase/material labels without changing DAG topology."""
 
 
 class EmbeddingBuilder(Protocol):
