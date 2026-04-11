@@ -41,9 +41,16 @@ export default function App() {
   const transitionSurface = runtimeKernel.inspectTransitionSurface(
     deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId)
   );
+  const carrierSurface = runtimeKernel.inspectCarrierSurface(
+    deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
+    {
+      refinementBudget: deferredRuntimeSnapshot.refinementBudget
+    }
+  );
 
   return (
     <ViewerShell
+      carrierSurface={carrierSurface}
       focusOptions={runtimeKernel.getFocusOptions()}
       navigationEntryPoint={createRuntimeNavigationEntryPoint(
         deferredRuntimeSnapshot

@@ -47,6 +47,8 @@ This file contains design and process decisions only. It must not become a task 
 - **D25. Frontier tracking** — `plan/completion-log.md` is concise, one line per committed frontier event.
 - **D26. Frontier plasticity** — DAG frontier may split; nodes may be inserted (e.g., `N02a`, `N02b`) when discovery requires it.
 - **D27. No estimates policy** — Planning artifacts contain nodes/dependencies only; no effort estimates.
+- **D28. Human visual review gate** — Visual-representation nodes are not settled by automated assertions alone; settlement requires a recorded human review of the rendered result against the node's visual legibility claims.
+- **D29. Incremental visual iteration** — Active visual nodes may span multiple visible-change commits before settlement; each commit may advance the render, but the node settles only after reviewed visual iteration converges.
 
 ## Open decision questions
 

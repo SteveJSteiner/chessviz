@@ -85,7 +85,14 @@ run_declaration:
 - **A11. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
 - **A12. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family, object identity, or anchored-view regime.
 
+## Visual evidence requirements
+
+- **V1. Human review gate:** Checks `A1` through `A6` and `A9` through `A12` require human-reviewed render evidence.
+- **V2. Evidence artifact:** Each reviewed run records at least one screenshot or screen capture for each exercised visual regime plus a short verdict of what did and did not read.
+- **V3. Automation role:** Automated assertions may support those checks but cannot produce a pass on their own.
+
 ## Recording protocol
 
 - Record pass/fail for A1-A12 and B1-B5 in commit artifacts tied to N14 settlement.
+- Record the human review artifacts required by V1-V3 in the same commit artifacts for any visual-node settlement claim.
 - Any budget change requires updating this file in the same commit as the decision update.

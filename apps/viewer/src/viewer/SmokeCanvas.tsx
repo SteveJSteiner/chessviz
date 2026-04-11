@@ -2,7 +2,7 @@ import { Canvas, useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import type {
   NavigationEntryPoint,
-  RuntimeNeighborhoodEdge,
+  RuntimeCarrierSurfaceSnapshot,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
   SceneBootstrap,
@@ -10,12 +10,14 @@ import type {
 } from './contracts';
 
 type SmokeCanvasProps = {
+  carrierSurface: RuntimeCarrierSurfaceSnapshot;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 };
 
 export function SmokeCanvas({
+  carrierSurface,
   sceneBootstrap,
   navigationEntryPoint,
   runtimeSnapshot
@@ -34,10 +36,7 @@ export function SmokeCanvas({
       <color attach="background" args={['#f7faf5']} />
       <ambientLight intensity={0.6} />
       <directionalLight position={[2, 3, 4]} intensity={1.1} />
-      <NeighborhoodEdges
-        edges={runtimeSnapshot.edges}
-        occurrences={runtimeSnapshot.occurrences}
-      />
+      <NeighborhoodCarriers carrierSurface={carrierSurface} />
       {runtimeSnapshot.occurrences.map((occurrence) => (
         <NeighborhoodNode
           accentColor={sceneBootstrap.accentColor}
@@ -100,36 +99,26 @@ function NeighborhoodNode({
   );
 }
 
-function NeighborhoodEdges({
-  edges,
-  occurrences
+function NeighborhoodCarriers({
+  carrierSurface
 }: {
-  edges: RuntimeNeighborhoodEdge[];
-  occurrences: RuntimeNeighborhoodOccurrence[];
+  carrierSurface: RuntimeCarrierSurfaceSnapshot;
 }) {
-  const occurrenceById = new Map(
-    occurrences.map((occurrence) => [occurrence.occurrenceId, occurrence])
-  );
-
-  return edges.map((edge) => {
-    const sourceOccurrence = occurrenceById.get(edge.sourceOccurrenceId);
-    const targetOccurrence = occurrenceById.get(edge.targetOccurrenceId);
-
-    if (!sourceOccurrence || !targetOccurrence) {
-      return null;
-    }
-
-    const positions = new Float32Array([
-      ...scaleCoordinate(sourceOccurrence.embedding.coordinate),
-      ...scaleCoordinate(targetOccurrence.embedding.coordinate)
-    ]);
+  return carrierSurface.carriers.map((carrier) => {
+    const positions = new Float32Array(
+      carrier.samples.flatMap((sample) => scaleCoordinate(sample))
+    );
 
     return (
-      <line key={`${edge.sourceOccurrenceId}:${edge.targetOccurrenceId}`}>
+      <line key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}`}>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         </bufferGeometry>
-        <lineBasicMaterial color="#94a3b8" opacity={0.7} transparent />
+        <lineBasicMaterial
+          color={carrierColor(carrier.san, carrier.moveFamily.interactionClass)}
+          opacity={0.55 + ((carrier.activeBands.length - 1) * 0.12)}
+          transparent
+        />
       </line>
     );
   });
@@ -159,6 +148,19 @@ function terminalColor(wdlLabel: string) {
     return '#b91c1c';
   }
   return '#475569';
+}
+
+function carrierColor(san: string, interactionClass: string) {
+  if (san.includes('#')) {
+    return '#9f1239';
+  }
+  if (interactionClass === 'capture') {
+    return '#b45309';
+  }
+  if (interactionClass === 'castle') {
+    return '#0f766e';
+  }
+  return '#64748b';
 }
 
 function scaleCoordinate(coordinate: Vector3): Vector3 {

@@ -5,6 +5,7 @@ import type {
   BuilderRepeatedStateRelationRecord,
   BuilderTerminalAnchorRecord,
   BuilderTransitionRecord,
+  RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationCacheStats,
   RuntimeNeighborhoodEdge,
   RuntimeNeighborhoodOccurrence,
@@ -12,6 +13,7 @@ import type {
   RuntimeTransitionSurfaceSnapshot,
   ViewerSceneManifest
 } from './contracts';
+import { buildRuntimeCarrierSurface } from './carrierSurface.ts';
 
 type NeighborhoodCacheEntry = {
   focusOccurrenceId: string;
@@ -25,6 +27,10 @@ type NeighborhoodRequest = {
   refinementBudget: number;
 };
 
+type CarrierSurfaceRequest = {
+  refinementBudget: number;
+};
+
 export type RuntimeExplorationKernel = {
   inspectNeighborhood: (
     focusOccurrenceId: string,
@@ -33,6 +39,10 @@ export type RuntimeExplorationKernel = {
   inspectTransitionSurface: (
     occurrenceIds: string[]
   ) => RuntimeTransitionSurfaceSnapshot;
+  inspectCarrierSurface: (
+    occurrenceIds: string[],
+    request: CarrierSurfaceRequest
+  ) => RuntimeCarrierSurfaceSnapshot;
   resolveOccurrence: (occurrenceId: string) => BuilderOccurrenceRecord | undefined;
   resolveTransition: (
     sourceOccurrenceId: string,
@@ -210,6 +220,25 @@ export function createRuntimeExplorationKernel(
             selectedOccurrenceIdSet.has(rule.targetOccurrenceId)
         )
       };
+    },
+    inspectCarrierSurface(occurrenceIds, request) {
+      const selectedOccurrenceIds = [...new Set(occurrenceIds)];
+      const selectedOccurrenceIdSet = new Set(selectedOccurrenceIds);
+      const refinementBudget = clamp(
+        request.refinementBudget,
+        1,
+        viewerSceneManifest.runtime.maxRefinementBudget
+      );
+
+      return buildRuntimeCarrierSurface({
+        builderBootstrapManifest,
+        occurrenceById,
+        transitionByKey,
+        selectedOccurrenceIds,
+        selectedOccurrenceIdSet,
+        refinementBudget,
+        maxRefinementBudget: viewerSceneManifest.runtime.maxRefinementBudget
+      });
     },
     resolveOccurrence(occurrenceId) {
       return occurrenceById.get(occurrenceId);

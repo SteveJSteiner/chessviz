@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import type {
   BuilderBootstrapManifest,
+  Vector3,
   ViewerSceneManifest
 } from './contracts.ts';
 import { createRuntimeExplorationKernel } from './runtimeKernel.ts';
@@ -156,3 +157,130 @@ test('surfaces builder-owned transition facts and departure rules without board 
   assert.ok(captureMateRule.departureStrength > quietRule.departureStrength);
   assert.equal(resolvedTransition.moveFacts.isCapture, true);
 });
+
+test('derives multiscale carriers with topology preservation and zoom-monotone band reveal', () => {
+  const kernel = createRuntimeExplorationKernel(
+    builderBootstrapManifest,
+    viewerSceneManifest
+  );
+  const occurrenceIds = builderBootstrapManifest.occurrences.map(
+    (occurrence) => occurrence.occurrenceId
+  );
+  const structureSurface = kernel.inspectCarrierSurface(occurrenceIds, {
+    refinementBudget: 3
+  });
+  const tacticalSurface = kernel.inspectCarrierSurface(occurrenceIds, {
+    refinementBudget: 6
+  });
+  const contextualSurface = kernel.inspectCarrierSurface(occurrenceIds, {
+    refinementBudget: 12
+  });
+
+  assert.equal(structureSurface.graphObjectId, builderBootstrapManifest.graphObjectId);
+  assert.equal(structureSurface.carriers.length, tacticalSurface.carriers.length);
+  assert.equal(structureSurface.carriers.length, contextualSurface.carriers.length);
+  assert.ok(structureSurface.carriers.length > 0);
+  assert.ok(
+    structureSurface.carriers.every(
+      (carrier) =>
+        carrier.validation.endpointLocked &&
+        carrier.validation.finiteCoordinates &&
+        carrier.validation.projectedProgressMonotone &&
+        carrier.validation.nonDegenerateSegments &&
+        carrier.validation.coarseDominant
+    )
+  );
+  assert.ok(
+    structureSurface.carriers.every(
+      (carrier) => carrier.activeBands.length === 1 && carrier.activeBands[0] === 'structure'
+    )
+  );
+  assert.ok(
+    tacticalSurface.carriers.some((carrier) => carrier.activeBands.includes('tactical'))
+  );
+  assert.ok(
+    contextualSurface.carriers.some((carrier) => carrier.activeBands.includes('contextual'))
+  );
+
+  const quietStructure = structureSurface.carriers.find((carrier) => carrier.san === 'd4');
+  const captureStructure = structureSurface.carriers.find(
+    (carrier) => carrier.san === 'Qxf7#'
+  );
+
+  assert.ok(quietStructure);
+  assert.ok(captureStructure);
+
+  if (!quietStructure || !captureStructure) {
+    throw new Error('expected quiet and capture-mate carriers in fixture surface');
+  }
+
+  const quietTactical = tacticalSurface.carriers.find(
+    (carrier) =>
+      carrier.sourceOccurrenceId === quietStructure.sourceOccurrenceId &&
+      carrier.targetOccurrenceId === quietStructure.targetOccurrenceId
+  );
+  const quietContextual = contextualSurface.carriers.find(
+    (carrier) =>
+      carrier.sourceOccurrenceId === quietStructure.sourceOccurrenceId &&
+      carrier.targetOccurrenceId === quietStructure.targetOccurrenceId
+  );
+
+  assert.ok(quietTactical);
+  assert.ok(quietContextual);
+
+  if (!quietTactical || !quietContextual) {
+    throw new Error('expected quiet carrier to survive across refinement levels');
+  }
+
+  assert.deepEqual(quietStructure.activeBands, ['structure']);
+  assert.deepEqual(quietTactical.activeBands, ['structure', 'tactical']);
+  assert.deepEqual(quietContextual.activeBands, [
+    'structure',
+    'tactical',
+    'contextual'
+  ]);
+  assert.ok(quietStructure.samples.length < quietContextual.samples.length);
+  assert.ok(
+    maxDeviationFromChord(captureStructure.samples) >
+      maxDeviationFromChord(quietStructure.samples)
+  );
+});
+
+function maxDeviationFromChord(samples: Vector3[]): number {
+  const source = samples[0];
+  const target = samples.at(-1);
+
+  if (!source || !target) {
+    return 0;
+  }
+
+  const chord = subtract(target, source);
+  const chordLength = magnitude(chord);
+  const tangent = chordLength === 0 ? ([1, 0, 0] as Vector3) : scale(chord, 1 / chordLength);
+
+  return samples.reduce((maximumDeviation, sample) => {
+    const projection = dot(subtract(sample, source), tangent);
+    const projectedPoint = add(source, scale(tangent, projection));
+    return Math.max(maximumDeviation, magnitude(subtract(sample, projectedPoint)));
+  }, 0);
+}
+
+function add(left: Vector3, right: Vector3): Vector3 {
+  return [left[0] + right[0], left[1] + right[1], left[2] + right[2]];
+}
+
+function subtract(left: Vector3, right: Vector3): Vector3 {
+  return [left[0] - right[0], left[1] - right[1], left[2] - right[2]];
+}
+
+function scale(vector: Vector3, scalar: number): Vector3 {
+  return [vector[0] * scalar, vector[1] * scalar, vector[2] * scalar];
+}
+
+function dot(left: Vector3, right: Vector3): number {
+  return (left[0] * right[0]) + (left[1] * right[1]) + (left[2] * right[2]);
+}
+
+function magnitude(vector: Vector3): number {
+  return Math.hypot(vector[0], vector[1], vector[2]);
+}

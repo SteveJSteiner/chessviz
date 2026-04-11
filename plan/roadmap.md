@@ -33,6 +33,11 @@ Parallel branches allowed by dependencies:
 - `N09` after `N08`.
 - `N13` after `N02b`, `N08a`, and `N10`.
 
+## Visual review overlay
+
+- `N10` through `N14` are visually judged nodes and require recorded human render review in addition to automated assertions.
+- These nodes may remain active across multiple visible-change commits; a commit may change the render without settling the node.
+
 ## Settlement criteria by node
 
 - **N00a**: Reproducible workspace boots on a clean machine; viewer smoke build passes; uv-managed Python builder package installs and runs an env-check CLI; external engine/tablebase paths are declarative and optional; lockfiles and setup instructions exist.
@@ -48,8 +53,8 @@ Parallel branches allowed by dependencies:
 - **N08**: Coarse embedding is deterministic for fixed seed/config and dataset declaration and usable as a navigation basis.
 - **N08a**: Runtime query/refinement loads previously unseen local neighborhoods under budget without ontology swap.
 - **N09**: Builder-owned move-family transition facts are available across the runtime boundary, and departure rules are classifiable at coarse zoom with capture departures stronger than matched quiet-move controls.
-- **N10**: Multiscale carrier rules and refinement operators generate local geometry without topology errors under declared budgets.
-- **N11**: Camera-driven refinement preserves one object ontology and enforces zoom-monotone semantic band reveal.
-- **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only; object identity unchanged and local exploration remains available.
-- **N13**: Known transpositions show multiple occurrences plus visible relation sourced from the repeated-state query surface.
-- **N14**: All operational acceptance checks pass within declared budgets.
+- **N10**: Multiscale carrier rules and refinement operators generate local geometry without topology errors under declared budgets, and recorded human review confirms coarse move-family readings remain legible at structure zoom.
+- **N11**: Camera-driven refinement preserves one object ontology and enforces zoom-monotone semantic band reveal, and recorded human review confirms those behaviors read correctly on screen.
+- **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only; object identity unchanged and local exploration remains available, and recorded human review confirms the views still read as one object.
+- **N13**: Known transpositions show multiple occurrences plus visible relation sourced from the repeated-state query surface, and recorded human review confirms the relation is legible without collapsing occurrence identity.
+- **N14**: All operational acceptance checks pass within declared budgets, with human-reviewed evidence attached for the visual-legibility checks.

@@ -1,6 +1,7 @@
 import type {
   BuilderOccurrenceRecord,
   NavigationEntryPoint,
+  RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationConfig,
   RuntimeNeighborhoodSnapshot,
   RuntimeTransitionSurfaceSnapshot,
@@ -10,6 +11,7 @@ import type {
 import { SmokeCanvas } from './SmokeCanvas';
 
 type ViewerShellProps = {
+  carrierSurface: RuntimeCarrierSurfaceSnapshot;
   focusOptions: BuilderOccurrenceRecord[];
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
@@ -99,6 +101,7 @@ const codeBlockStyle = {
 } as const;
 
 export function ViewerShell({
+  carrierSurface,
   focusOptions,
   runtimeConfig,
   runtimeSnapshot,
@@ -124,12 +127,21 @@ export function ViewerShell({
 
     return strongestRule;
   }, null);
+  const strongestCarrier = carrierSurface.carriers.reduce<
+    RuntimeCarrierSurfaceSnapshot['carriers'][number] | null
+  >((currentStrongest, carrier) => {
+    if (!currentStrongest || carrier.departureStrength > currentStrongest.departureStrength) {
+      return carrier;
+    }
+
+    return currentStrongest;
+  }, null);
 
   return (
     <main style={shellStyle}>
       <section style={panelStyle}>
         <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700 }}>
-          N09 Move Interaction Boundary
+          N10 Multiscale Carrier Boundary
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
@@ -197,8 +209,8 @@ export function ViewerShell({
             <div>frontier nodes</div>
           </article>
           <article style={statCardStyle}>
-            <strong>{transitionSurface.departureRules.length}</strong>
-            <div>departure rules</div>
+            <strong>{carrierSurface.carriers.length}</strong>
+            <div>runtime carriers</div>
           </article>
         </div>
 
@@ -257,6 +269,27 @@ export function ViewerShell({
 )}
         </pre>
 
+        <span style={metaLabelStyle}>Carrier Surface</span>
+        <pre style={codeBlockStyle}>
+{JSON.stringify(
+  {
+    carriers: carrierSurface.carriers.length,
+    activeBands: countCarrierBandUsage(carrierSurface),
+    profiles: countCarrierProfiles(carrierSurface),
+    strongestCarrier: strongestCarrier
+      ? {
+          san: strongestCarrier.san,
+          centerlineProfile: strongestCarrier.centerlineProfile,
+          activeBands: strongestCarrier.activeBands,
+          validation: strongestCarrier.validation
+        }
+      : null
+  },
+  null,
+  2
+)}
+        </pre>
+
         <span style={metaLabelStyle}>Builder Boundary</span>
         <p style={{ marginBottom: '0.35rem' }}>
           {workspaceBoundary.builderBootstrapManifest}
@@ -266,6 +299,7 @@ export function ViewerShell({
 
       <section style={canvasStyle}>
         <SmokeCanvas
+          carrierSurface={carrierSurface}
           navigationEntryPoint={navigationEntryPoint}
           runtimeSnapshot={runtimeSnapshot}
           sceneBootstrap={sceneBootstrap}
@@ -299,4 +333,21 @@ function countByForcingClass(
     },
     {}
   );
+}
+
+function countCarrierBandUsage(carrierSurface: RuntimeCarrierSurfaceSnapshot) {
+  return carrierSurface.carriers.reduce<Record<string, number>>((counts, carrier) => {
+    for (const bandId of carrier.activeBands) {
+      counts[bandId] = (counts[bandId] ?? 0) + 1;
+    }
+
+    return counts;
+  }, {});
+}
+
+function countCarrierProfiles(carrierSurface: RuntimeCarrierSurfaceSnapshot) {
+  return carrierSurface.carriers.reduce<Record<string, number>>((counts, carrier) => {
+    counts[carrier.centerlineProfile] = (counts[carrier.centerlineProfile] ?? 0) + 1;
+    return counts;
+  }, {});
 }

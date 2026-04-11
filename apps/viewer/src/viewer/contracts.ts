@@ -210,6 +210,38 @@ export interface RuntimeTransitionSurfaceSnapshot {
   departureRules: BuilderDepartureRuleRecord[];
 }
 
+export type RuntimeCarrierBandId = 'structure' | 'tactical' | 'contextual';
+
+export interface RuntimeCarrierBandState {
+  bandId: RuntimeCarrierBandId;
+  revealBudget: number;
+  amplitude: number;
+  active: boolean;
+}
+
+export interface RuntimeCarrierValidation {
+  endpointLocked: boolean;
+  finiteCoordinates: boolean;
+  projectedProgressMonotone: boolean;
+  nonDegenerateSegments: boolean;
+  coarseDominant: boolean;
+}
+
+export interface RuntimeCarrierRecord extends BuilderDepartureRuleRecord {
+  san: string;
+  activeBands: RuntimeCarrierBandId[];
+  bandStates: RuntimeCarrierBandState[];
+  samples: Vector3[];
+  validation: RuntimeCarrierValidation;
+}
+
+export interface RuntimeCarrierSurfaceSnapshot {
+  graphObjectId: string;
+  occurrenceIds: string[];
+  refinementBudget: number;
+  carriers: RuntimeCarrierRecord[];
+}
+
 export interface WorkspaceBoundary {
   artifactRoot: string;
   builderBootstrapManifest: string;
