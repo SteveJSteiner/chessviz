@@ -17,3 +17,4 @@ One line per committed DAG frontier event.
 2026-04-11 | commit 8c43135 | settled N06 terminal outcome labeling and terminal anchor surface
 2026-04-11 | commit 2f4783f | settled N07 salience normalization and runtime priority hints
 2026-04-11 | commit d3f589e | settled N08 deterministic coarse embedding surface
+2026-04-11 | commit 34fa84d | settled N08a runtime neighborhood exploration kernel and manifest-backed viewer integration
