@@ -4,14 +4,26 @@ import type {
   RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationConfig,
   RuntimeNeighborhoodSnapshot,
+  RuntimeOccurrenceLine,
   RuntimeTransitionSurfaceSnapshot,
   SceneBootstrap,
   WorkspaceBoundary
 } from './contracts';
+import { ChessBoard } from './ChessBoard.tsx';
+import {
+  formatFocusOptionLabel,
+  formatOccurrenceLine,
+  parseStateKey,
+  shortOccurrenceId,
+  summarizeMoveSemantics
+} from './chessContext.ts';
+import { createCarrierPresentation } from './carrierPresentation.ts';
 import { SmokeCanvas } from './SmokeCanvas';
 
 type ViewerShellProps = {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  focusLine: RuntimeOccurrenceLine | undefined;
+  focusLinesByOccurrenceId: Map<string, RuntimeOccurrenceLine | undefined>;
   focusOptions: BuilderOccurrenceRecord[];
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
@@ -30,7 +42,7 @@ const shellStyle = {
   width: '100vw',
   height: '100vh',
   display: 'grid',
-  gridTemplateColumns: 'minmax(19rem, 25rem) 1fr',
+  gridTemplateColumns: 'minmax(24rem, 32rem) 1fr',
   background: 'linear-gradient(135deg, #f5f7f0 0%, #e3ead9 100%)',
   color: '#1f2933'
 } as const;
@@ -100,8 +112,36 @@ const codeBlockStyle = {
   fontSize: '0.78rem'
 } as const;
 
+const sectionStackStyle = {
+  display: 'grid',
+  gap: '0.85rem',
+  marginTop: '1rem'
+} as const;
+
+const narrativeCardStyle = {
+  borderRadius: '1rem',
+  padding: '0.95rem 1rem',
+  background: 'rgba(247, 241, 230, 0.9)',
+  border: '1px solid rgba(53, 42, 30, 0.09)'
+} as const;
+
+const moveCardStyle = {
+  borderRadius: '0.9rem',
+  padding: '0.85rem',
+  background: 'rgba(255, 255, 255, 0.88)',
+  border: '1px solid rgba(31, 41, 51, 0.08)',
+  display: 'grid',
+  gap: '0.6rem'
+} as const;
+
+const detailsStyle = {
+  marginTop: '1rem'
+} as const;
+
 export function ViewerShell({
   carrierSurface,
+  focusLine,
+  focusLinesByOccurrenceId,
   focusOptions,
   runtimeConfig,
   runtimeSnapshot,
@@ -117,6 +157,12 @@ export function ViewerShell({
 }: ViewerShellProps) {
   const focusOccurrence = runtimeSnapshot.occurrences.find(
     (occurrence) => occurrence.isFocus
+  );
+  const focusParsedStateKey = focusOccurrence
+    ? parseStateKey(focusOccurrence.stateKey)
+    : null;
+  const occurrenceById = new Map(
+    runtimeSnapshot.occurrences.map((occurrence) => [occurrence.occurrenceId, occurrence])
   );
   const strongestDepartureRule = transitionSurface.departureRules.reduce<
     RuntimeTransitionSurfaceSnapshot['departureRules'][number] | null
@@ -136,6 +182,13 @@ export function ViewerShell({
 
     return currentStrongest;
   }, null);
+  const focusTransitions = transitionSurface.transitions
+    .filter(
+      (transition) =>
+        transition.sourceOccurrenceId === runtimeSnapshot.focusOccurrenceId ||
+        transition.targetOccurrenceId === runtimeSnapshot.focusOccurrenceId
+    )
+    .sort((left, right) => left.ply - right.ply);
 
   return (
     <main style={shellStyle}>
@@ -156,7 +209,11 @@ export function ViewerShell({
             >
               {focusOptions.map((occurrence) => (
                 <option key={occurrence.occurrenceId} value={occurrence.occurrenceId}>
-                  {occurrence.occurrenceId} · ply {occurrence.ply} · {occurrence.phase}
+                  {formatFocusOptionLabel(
+                    occurrence.embedding.rootGameId,
+                    focusLinesByOccurrenceId.get(occurrence.occurrenceId),
+                    occurrence.ply
+                  )}
                 </option>
               ))}
             </select>
@@ -218,23 +275,127 @@ export function ViewerShell({
         <p style={{ marginBottom: '0.35rem' }}>{navigationEntryPoint.label}</p>
         <p style={{ marginTop: 0 }}>{navigationEntryPoint.description}</p>
 
-        <span style={metaLabelStyle}>Focus Surface</span>
-        <p style={{ marginBottom: '0.35rem' }}>
-          {focusOccurrence?.occurrenceId ?? runtimeSnapshot.focusOccurrenceId}
-        </p>
-        <p style={{ marginTop: 0 }}>
-          phase {focusOccurrence?.phase ?? 'unknown'} · salience{' '}
-          {focusOccurrence?.salience.normalizedScore.toFixed(3) ?? '0.000'} · terminal{' '}
-          {focusOccurrence?.terminal?.wdlLabel ?? 'nonterminal'}
-        </p>
+        <span style={metaLabelStyle}>Chess Position</span>
+        <section style={sectionStackStyle}>
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>What this is</div>
+            <p style={{ margin: '0.4rem 0 0' }}>
+              You are looking at the position after{' '}
+              {focusLine ? formatOccurrenceLine(focusLine) : 'the selected line'}.
+            </p>
+            <p style={{ margin: '0.5rem 0 0' }}>
+              The canvas carries the move names on the ribbons themselves, so the geometry can stand on its own before you open any reference material.
+            </p>
+          </article>
+          {focusParsedStateKey && focusOccurrence ? (
+            <details style={detailsStyle}>
+              <summary style={{ cursor: 'pointer', fontWeight: 700 }}>Board reference</summary>
+              <div style={{ marginTop: '0.75rem' }}>
+                <ChessBoard
+                  parsedStateKey={focusParsedStateKey}
+                  subtitle={`Game ${focusOccurrence.embedding.rootGameId} · ${focusOccurrence.phase}`}
+                  title={`Focus position at ply ${focusOccurrence.ply}`}
+                />
+                <p style={{ margin: '0.6rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+                  Exact FEN: {focusOccurrence.stateKey}
+                </p>
+              </div>
+            </details>
+          ) : null}
+        </section>
 
-        <span style={metaLabelStyle}>Runtime Cache</span>
-        <pre style={codeBlockStyle}>
+        <span style={metaLabelStyle}>Move Line</span>
+        <article style={narrativeCardStyle}>
+          <div style={{ fontWeight: 700 }}>{focusOccurrence?.embedding.rootGameId}</div>
+          <p style={{ margin: '0.45rem 0 0' }}>
+            {focusLine ? formatOccurrenceLine(focusLine) : 'No line available for this occurrence.'}
+          </p>
+          <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+            Occurrence {shortOccurrenceId(runtimeSnapshot.focusOccurrenceId)} · salience{' '}
+            {focusOccurrence?.salience.normalizedScore.toFixed(3) ?? '0.000'}
+          </p>
+        </article>
+
+        <span style={metaLabelStyle}>Moves In This View</span>
+        <div style={sectionStackStyle}>
+          {focusTransitions.length > 0 ? (
+            focusTransitions.map((transition) => {
+              const isOutgoing =
+                transition.sourceOccurrenceId === runtimeSnapshot.focusOccurrenceId;
+              const neighborOccurrence = occurrenceById.get(
+                isOutgoing
+                  ? transition.targetOccurrenceId
+                  : transition.sourceOccurrenceId
+              );
+              const matchingCarrier = carrierSurface.carriers.find(
+                (carrier) =>
+                  carrier.sourceOccurrenceId === transition.sourceOccurrenceId &&
+                  carrier.targetOccurrenceId === transition.targetOccurrenceId
+              );
+              const carrierPresentation = matchingCarrier
+                ? createCarrierPresentation(matchingCarrier)
+                : null;
+
+              return (
+                <article key={`${transition.sourceOccurrenceId}:${transition.targetOccurrenceId}`} style={moveCardStyle}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '0.9rem',
+                        height: '0.9rem',
+                        borderRadius: '999px',
+                        background: carrierPresentation?.structureColor ?? '#64748b',
+                        display: 'inline-block'
+                      }}
+                    />
+                    <strong>
+                      {isOutgoing
+                        ? `Move from this position: ${transition.moveFacts.san}`
+                        : `Move that led here: ${transition.moveFacts.san}`}
+                    </strong>
+                  </div>
+                  <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
+                    {summarizeMoveSemantics(
+                      transition.moveFacts,
+                      transition.moveFamily
+                    )}{' '}
+                    · {transition.moveFacts.movingPiece} · {transition.moveUci}
+                  </div>
+                  <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
+                    {isOutgoing
+                      ? 'This ribbon is a candidate move out of the focus position.'
+                      : 'This ribbon is the move that arrives at the focus position.'}
+                  </div>
+                  {neighborOccurrence ? (
+                    <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
+                      {isOutgoing ? 'Resulting node' : 'Source node'} · ply {neighborOccurrence.ply} · {neighborOccurrence.phase}
+                    </div>
+                  ) : null}
+                </article>
+              );
+            })
+          ) : (
+            <article style={narrativeCardStyle}>
+              No local move ribbons are visible at the current radius/budget.
+            </article>
+          )}
+        </div>
+
+        <details style={detailsStyle}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700 }}>Diagnostics</summary>
+          <span style={metaLabelStyle}>Runtime Cache</span>
+          <pre style={codeBlockStyle}>
 {JSON.stringify(runtimeSnapshot.cacheStats, null, 2)}
-        </pre>
+          </pre>
 
-        <span style={metaLabelStyle}>Local Surface</span>
-        <pre style={codeBlockStyle}>
+          <span style={metaLabelStyle}>Local Surface</span>
+          <pre style={codeBlockStyle}>
 {JSON.stringify(
   {
     graphObjectId: runtimeSnapshot.graphObjectId,
@@ -245,10 +406,10 @@ export function ViewerShell({
   null,
   2
 )}
-        </pre>
+          </pre>
 
-        <span style={metaLabelStyle}>Transition Surface</span>
-        <pre style={codeBlockStyle}>
+          <span style={metaLabelStyle}>Transition Surface</span>
+          <pre style={codeBlockStyle}>
 {JSON.stringify(
   {
     transitions: transitionSurface.transitions.length,
@@ -267,10 +428,10 @@ export function ViewerShell({
   null,
   2
 )}
-        </pre>
+          </pre>
 
-        <span style={metaLabelStyle}>Carrier Surface</span>
-        <pre style={codeBlockStyle}>
+          <span style={metaLabelStyle}>Carrier Surface</span>
+          <pre style={codeBlockStyle}>
 {JSON.stringify(
   {
     carriers: carrierSurface.carriers.length,
@@ -288,13 +449,19 @@ export function ViewerShell({
   null,
   2
 )}
-        </pre>
+          </pre>
+        </details>
 
         <span style={metaLabelStyle}>Builder Boundary</span>
         <p style={{ marginBottom: '0.35rem' }}>
           {workspaceBoundary.builderBootstrapManifest}
         </p>
         <p style={{ marginTop: 0 }}>{workspaceBoundary.viewerSceneManifest}</p>
+
+        <span style={metaLabelStyle}>Review Artifacts</span>
+        <pre style={codeBlockStyle}>
+{'pnpm --filter viewer review:artifacts\n\nartifacts/viewer/review/structure-zoom.svg\nartifacts/viewer/review/refinement-steps.svg\nartifacts/viewer/review/review-notes-template.md'}
+        </pre>
       </section>
 
       <section style={canvasStyle}>

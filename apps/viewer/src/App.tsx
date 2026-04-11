@@ -47,10 +47,21 @@ export default function App() {
       refinementBudget: deferredRuntimeSnapshot.refinementBudget
     }
   );
+  const focusLine = runtimeKernel.describeOccurrenceLine(
+    deferredRuntimeSnapshot.focusOccurrenceId
+  );
+  const focusLinesByOccurrenceId = new Map(
+    runtimeKernel.getFocusOptions().map((occurrence) => [
+      occurrence.occurrenceId,
+      runtimeKernel.describeOccurrenceLine(occurrence.occurrenceId)
+    ])
+  );
 
   return (
     <ViewerShell
       carrierSurface={carrierSurface}
+      focusLine={focusLine}
+      focusLinesByOccurrenceId={focusLinesByOccurrenceId}
       focusOptions={runtimeKernel.getFocusOptions()}
       navigationEntryPoint={createRuntimeNavigationEntryPoint(
         deferredRuntimeSnapshot

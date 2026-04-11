@@ -18,8 +18,9 @@
   },
   "runtime": {
     "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
-    "initialFocusOccurrenceId": "occ-27e2be7f2bf706c6",
+    "initialFocusOccurrenceId": "occ-65caf3375c92984c",
     "focusCandidateOccurrenceIds": [
+      "occ-65caf3375c92984c",
       "occ-27e2be7f2bf706c6",
       "occ-7b367264afad7c15",
       "occ-d10897875e44e59b",
@@ -29,7 +30,6 @@
       "occ-efe95b9c393f7960",
       "occ-63c6882f2a36737a",
       "occ-d6e94fa5dd427d26",
-      "occ-65caf3375c92984c",
       "occ-8e57e74a73537a36",
       "occ-387cdce9c0bf5677",
       "occ-f7b8af2a834d288f"

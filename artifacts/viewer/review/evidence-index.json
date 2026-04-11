@@ -1,0 +1,73 @@
+{
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
+  "sceneId": "runtime-exploration-fixture",
+  "focusOccurrenceId": "occ-65caf3375c92984c",
+  "rootGameId": "scholars-mate-white",
+  "focusLine": "1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6",
+  "focusTurn": "White to move",
+  "neighborhoodRadius": 2,
+  "refinementBudgets": [
+    3,
+    6,
+    12
+  ],
+  "localMoves": [
+    {
+      "direction": "incoming",
+      "san": "Nf6",
+      "uci": "g8f6",
+      "semantics": "quiet move"
+    },
+    {
+      "direction": "outgoing",
+      "san": "Qxf7#",
+      "uci": "h5f7",
+      "semantics": "capture checkmate"
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "structure-zoom.svg",
+      "regime": "structure-zoom",
+      "refinementBudget": 3,
+      "expectedBands": [
+        "structure"
+      ],
+      "focusBoardIncluded": true,
+      "moveLabelsIncluded": true,
+      "rootLabelsIncluded": true,
+      "terminalLabelsIncluded": true
+    },
+    {
+      "file": "refinement-steps.svg",
+      "regime": "refinement-steps",
+      "refinementBudgets": [
+        3,
+        6,
+        12
+      ],
+      "expectedBands": [
+        [
+          "structure"
+        ],
+        [
+          "structure",
+          "tactical"
+        ],
+        [
+          "structure",
+          "tactical",
+          "contextual"
+        ]
+      ],
+      "focusBoardIncluded": false,
+      "moveLabelsIncluded": true,
+      "rootLabelsIncluded": true,
+      "terminalLabelsIncluded": true
+    },
+    {
+      "file": "review-notes-template.md",
+      "regime": "human-verdict-template"
+    }
+  ]
+}

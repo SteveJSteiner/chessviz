@@ -242,6 +242,20 @@ export interface RuntimeCarrierSurfaceSnapshot {
   carriers: RuntimeCarrierRecord[];
 }
 
+export interface RuntimeOccurrenceLineMove {
+  ply: number;
+  uci: string;
+  san: string | null;
+  sourceOccurrenceId: string | null;
+  targetOccurrenceId: string;
+}
+
+export interface RuntimeOccurrenceLine {
+  occurrenceId: string;
+  rootGameId: string;
+  moves: RuntimeOccurrenceLineMove[];
+}
+
 export interface WorkspaceBoundary {
   artifactRoot: string;
   builderBootstrapManifest: string;
