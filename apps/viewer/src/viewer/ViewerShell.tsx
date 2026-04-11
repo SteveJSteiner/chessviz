@@ -3,6 +3,7 @@ import type {
   NavigationEntryPoint,
   RuntimeExplorationConfig,
   RuntimeNeighborhoodSnapshot,
+  RuntimeTransitionSurfaceSnapshot,
   SceneBootstrap,
   WorkspaceBoundary
 } from './contracts';
@@ -12,6 +13,7 @@ type ViewerShellProps = {
   focusOptions: BuilderOccurrenceRecord[];
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
+  transitionSurface: RuntimeTransitionSurfaceSnapshot;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
   workspaceBoundary: WorkspaceBoundary;
@@ -100,6 +102,7 @@ export function ViewerShell({
   focusOptions,
   runtimeConfig,
   runtimeSnapshot,
+  transitionSurface,
   sceneBootstrap,
   navigationEntryPoint,
   workspaceBoundary,
@@ -112,12 +115,21 @@ export function ViewerShell({
   const focusOccurrence = runtimeSnapshot.occurrences.find(
     (occurrence) => occurrence.isFocus
   );
+  const strongestDepartureRule = transitionSurface.departureRules.reduce<
+    RuntimeTransitionSurfaceSnapshot['departureRules'][number] | null
+  >((strongestRule, rule) => {
+    if (!strongestRule || rule.departureStrength > strongestRule.departureStrength) {
+      return rule;
+    }
+
+    return strongestRule;
+  }, null);
 
   return (
     <main style={shellStyle}>
       <section style={panelStyle}>
         <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700 }}>
-          N08a Runtime Exploration
+          N09 Move Interaction Boundary
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
@@ -184,6 +196,10 @@ export function ViewerShell({
             <strong>{runtimeSnapshot.priorityFrontierOccurrenceIds.length}</strong>
             <div>frontier nodes</div>
           </article>
+          <article style={statCardStyle}>
+            <strong>{transitionSurface.departureRules.length}</strong>
+            <div>departure rules</div>
+          </article>
         </div>
 
         <span style={metaLabelStyle}>Navigation Entrypoint</span>
@@ -219,6 +235,28 @@ export function ViewerShell({
 )}
         </pre>
 
+        <span style={metaLabelStyle}>Transition Surface</span>
+        <pre style={codeBlockStyle}>
+{JSON.stringify(
+  {
+    transitions: transitionSurface.transitions.length,
+    interactionFamilies: countByInteractionClass(transitionSurface),
+    forcingFamilies: countByForcingClass(transitionSurface),
+    strongestDeparture: strongestDepartureRule
+      ? {
+          moveUci: strongestDepartureRule.moveUci,
+          interactionClass: strongestDepartureRule.moveFamily.interactionClass,
+          forcingClass: strongestDepartureRule.moveFamily.forcingClass,
+          centerlineProfile: strongestDepartureRule.centerlineProfile,
+          departureStrength: strongestDepartureRule.departureStrength
+        }
+      : null
+  },
+  null,
+  2
+)}
+        </pre>
+
         <span style={metaLabelStyle}>Builder Boundary</span>
         <p style={{ marginBottom: '0.35rem' }}>
           {workspaceBoundary.builderBootstrapManifest}
@@ -234,5 +272,31 @@ export function ViewerShell({
         />
       </section>
     </main>
+  );
+}
+
+function countByInteractionClass(
+  transitionSurface: RuntimeTransitionSurfaceSnapshot
+) {
+  return transitionSurface.departureRules.reduce<Record<string, number>>(
+    (counts, rule) => {
+      counts[rule.moveFamily.interactionClass] =
+        (counts[rule.moveFamily.interactionClass] ?? 0) + 1;
+      return counts;
+    },
+    {}
+  );
+}
+
+function countByForcingClass(
+  transitionSurface: RuntimeTransitionSurfaceSnapshot
+) {
+  return transitionSurface.departureRules.reduce<Record<string, number>>(
+    (counts, rule) => {
+      counts[rule.moveFamily.forcingClass] =
+        (counts[rule.moveFamily.forcingClass] ?? 0) + 1;
+      return counts;
+    },
+    {}
   );
 }

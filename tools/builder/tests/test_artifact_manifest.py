@@ -27,6 +27,14 @@ class ArtifactManifestTests(unittest.TestCase):
         self.assertEqual(len(manifest["occurrences"]), len(self.dry_run.occurrences))
         self.assertEqual(len(manifest["edges"]), len(self.dry_run.dag.edges))
         self.assertEqual(
+            len(manifest["transitions"]),
+            len(self.dry_run.ingested_corpus.transitions),
+        )
+        self.assertEqual(
+            len(manifest["departureRules"]),
+            len(self.dry_run.departure_rules.records),
+        )
+        self.assertEqual(
             len(manifest["priorityFrontierOccurrenceIds"]),
             self.dry_run.salience.config.top_k_frontier,
         )
@@ -37,6 +45,18 @@ class ArtifactManifestTests(unittest.TestCase):
         self.assertIn("embedding", first_occurrence)
         self.assertIn("phase", first_occurrence)
         self.assertEqual(len(first_occurrence["embedding"]["coordinate"]), 3)
+
+        first_transition = manifest["transitions"][0]
+        first_departure_rule = manifest["departureRules"][0]
+
+        self.assertEqual(first_transition["moveFacts"]["san"], "d4")
+        self.assertEqual(first_transition["moveFamily"]["interactionClass"], "quiet")
+        self.assertEqual(
+            first_transition["moveFamily"],
+            first_departure_rule["moveFamily"],
+        )
+        self.assertEqual(first_departure_rule["centerlineProfile"], "quiet-glide")
+        self.assertGreater(first_departure_rule["departureStrength"], 0.0)
 
     def test_viewer_scene_manifest_points_at_runtime_exploration_config(self) -> None:
         scene_manifest = build_viewer_scene_manifest(self.dry_run)

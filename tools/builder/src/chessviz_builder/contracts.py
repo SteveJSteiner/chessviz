@@ -65,12 +65,111 @@ class MoveFactRecord:
 
 
 @dataclass(frozen=True)
+class MoveFamilyClassification:
+    interaction_class: str
+    forcing_class: str
+    special_class: str
+
+
+@dataclass(frozen=True)
 class OccurrenceTransition:
     parent_occurrence_id: str
     child_occurrence_id: str
     move_uci: str
     ply: int
     move_facts: MoveFactRecord
+
+
+@dataclass(frozen=True)
+class TransitionDepartureRuleRecord:
+    parent_occurrence_id: str
+    child_occurrence_id: str
+    move_uci: str
+    ply: int
+    move_family: MoveFamilyClassification
+    centerline_profile: str
+    departure_strength: float
+    lateral_offset: float
+    vertical_lift: float
+    curvature: float
+    twist: float
+
+
+@dataclass(frozen=True)
+class TransitionDepartureQuerySurface:
+    records: tuple[TransitionDepartureRuleRecord, ...]
+    _records_by_edge: Mapping[tuple[str, str], TransitionDepartureRuleRecord]
+    _records_by_interaction_class: Mapping[
+        str, tuple[TransitionDepartureRuleRecord, ...]
+    ]
+    _records_by_centerline_profile: Mapping[
+        str, tuple[TransitionDepartureRuleRecord, ...]
+    ]
+
+    @classmethod
+    def from_records(
+        cls,
+        records: Sequence[TransitionDepartureRuleRecord],
+    ) -> "TransitionDepartureQuerySurface":
+        ordered_records = tuple(records)
+        interaction_buckets: dict[str, list[TransitionDepartureRuleRecord]] = {}
+        profile_buckets: dict[str, list[TransitionDepartureRuleRecord]] = {}
+
+        for record in ordered_records:
+            interaction_buckets.setdefault(
+                record.move_family.interaction_class,
+                [],
+            ).append(record)
+            profile_buckets.setdefault(record.centerline_profile, []).append(record)
+
+        return cls(
+            records=ordered_records,
+            _records_by_edge={
+                (record.parent_occurrence_id, record.child_occurrence_id): record
+                for record in ordered_records
+            },
+            _records_by_interaction_class={
+                interaction_class: tuple(interaction_records)
+                for interaction_class, interaction_records in interaction_buckets.items()
+            },
+            _records_by_centerline_profile={
+                centerline_profile: tuple(profile_records)
+                for centerline_profile, profile_records in profile_buckets.items()
+            },
+        )
+
+    @property
+    def interaction_classes(self) -> tuple[str, ...]:
+        return tuple(self._records_by_interaction_class)
+
+    @property
+    def centerline_profiles(self) -> tuple[str, ...]:
+        return tuple(self._records_by_centerline_profile)
+
+    def __len__(self) -> int:
+        return len(self.records)
+
+    def by_edge(
+        self,
+        parent_occurrence_id: str,
+        child_occurrence_id: str,
+    ) -> TransitionDepartureRuleRecord | None:
+        return self._records_by_edge.get((parent_occurrence_id, child_occurrence_id))
+
+    def for_interaction_class(
+        self,
+        interaction_class: str,
+    ) -> tuple[TransitionDepartureRuleRecord, ...]:
+        return self._records_by_interaction_class.get(interaction_class, tuple())
+
+    def for_centerline_profile(
+        self,
+        centerline_profile: str,
+    ) -> tuple[TransitionDepartureRuleRecord, ...]:
+        return self._records_by_centerline_profile.get(
+            centerline_profile,
+            tuple(),
+        )
 
 
 @dataclass(frozen=True)

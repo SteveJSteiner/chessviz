@@ -38,6 +38,10 @@ export default function App() {
     });
   }, [focusOccurrenceId, neighborhoodRadius, refinementBudget, runtimeKernel]);
 
+  const transitionSurface = runtimeKernel.inspectTransitionSurface(
+    deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId)
+  );
+
   return (
     <ViewerShell
       focusOptions={runtimeKernel.getFocusOptions()}
@@ -51,6 +55,7 @@ export default function App() {
       runtimeConfig={viewerSceneManifest.runtime}
       runtimeSnapshot={deferredRuntimeSnapshot}
       sceneBootstrap={createSceneBootstrap(viewerSceneManifest)}
+      transitionSurface={transitionSurface}
       workspaceBoundary={workspaceBoundary}
       neighborhoodRadius={neighborhoodRadius}
     />

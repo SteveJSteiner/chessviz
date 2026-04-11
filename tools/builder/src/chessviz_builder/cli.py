@@ -58,6 +58,7 @@ def run_env_check() -> int:
         f"{len(dry_run.ingested_corpus.games)} game(s), "
         f"{len(dry_run.occurrences)} occurrence(s), "
         f"{len(dry_run.ingested_corpus.transitions)} transition(s), "
+        f"{len(dry_run.departure_rules.records)} departure rule(s), "
         f"{len(dry_run.labels.records)} label record(s), "
         f"{len(dry_run.labels.phases)} phase band(s), "
         f"{len(dry_run.labels.material_signatures)} material signature(s), "

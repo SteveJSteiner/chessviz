@@ -16,6 +16,7 @@ from .contracts import (
     RepeatedStateQuerySurface,
     SalienceQuerySurface,
     TerminalLabelQuerySurface,
+    TransitionDepartureQuerySurface,
 )
 from .corpus_ingest import DeclaredCorpusIngestor
 from .dag import OccurrenceDagBuilder
@@ -26,6 +27,7 @@ from .repeated_state import RepeatedStateQuerySurfaceBuilder
 from .salience import SalienceV1Builder
 from .state_key import CanonicalStateKeyProvider
 from .terminal_labeling import TerminalOutcomeLabeler
+from .transition_departure import TransitionDepartureRuleBuilder
 
 
 @dataclass(frozen=True)
@@ -38,6 +40,7 @@ class PipelineDryRun:
     terminal_labels: TerminalLabelQuerySurface
     salience: SalienceQuerySurface
     embedding: EmbeddingArtifact
+    departure_rules: TransitionDepartureQuerySurface
 
 
 @dataclass(frozen=True)
@@ -52,6 +55,7 @@ class BuilderPipeline:
     terminal_labeler: TerminalOutcomeLabeler
     salience_builder: SalienceV1Builder
     embedding_builder: HyperbolicStyleEmbeddingBuilderV1
+    departure_rule_builder: TransitionDepartureRuleBuilder
 
     def dry_run(self, declaration: CorpusDeclaration) -> PipelineDryRun:
         ingested_corpus = self.corpus_ingestor.ingest(declaration)
@@ -79,6 +83,7 @@ class BuilderPipeline:
             labels,
             terminal_labels,
         )
+        departure_rules = self.departure_rule_builder.build(ingested_corpus)
         return PipelineDryRun(
             ingested_corpus=ingested_corpus,
             occurrences=ingested_corpus.occurrences,
@@ -88,6 +93,7 @@ class BuilderPipeline:
             terminal_labels=terminal_labels,
             salience=salience,
             embedding=embedding,
+            departure_rules=departure_rules,
         )
 
 
@@ -113,4 +119,5 @@ def create_placeholder_pipeline(
         terminal_labeler=TerminalOutcomeLabeler(),
         salience_builder=SalienceV1Builder(),
         embedding_builder=HyperbolicStyleEmbeddingBuilderV1(),
+        departure_rule_builder=TransitionDepartureRuleBuilder(),
     )

@@ -1,12 +1,15 @@
 import type {
   BuilderBootstrapManifest,
+  BuilderDepartureRuleRecord,
   BuilderOccurrenceRecord,
   BuilderRepeatedStateRelationRecord,
   BuilderTerminalAnchorRecord,
+  BuilderTransitionRecord,
   RuntimeExplorationCacheStats,
   RuntimeNeighborhoodEdge,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
+  RuntimeTransitionSurfaceSnapshot,
   ViewerSceneManifest
 } from './contracts';
 
@@ -27,7 +30,18 @@ export type RuntimeExplorationKernel = {
     focusOccurrenceId: string,
     request: NeighborhoodRequest
   ) => RuntimeNeighborhoodSnapshot;
+  inspectTransitionSurface: (
+    occurrenceIds: string[]
+  ) => RuntimeTransitionSurfaceSnapshot;
   resolveOccurrence: (occurrenceId: string) => BuilderOccurrenceRecord | undefined;
+  resolveTransition: (
+    sourceOccurrenceId: string,
+    targetOccurrenceId: string
+  ) => BuilderTransitionRecord | undefined;
+  resolveDepartureRule: (
+    sourceOccurrenceId: string,
+    targetOccurrenceId: string
+  ) => BuilderDepartureRuleRecord | undefined;
   getFocusOptions: () => BuilderOccurrenceRecord[];
   getCacheStats: () => RuntimeExplorationCacheStats;
 };
@@ -49,6 +63,18 @@ export function createRuntimeExplorationKernel(
     ])
   );
   const adjacencyByOccurrenceId = buildAdjacency(builderBootstrapManifest);
+  const transitionByKey = new Map(
+    builderBootstrapManifest.transitions.map((transition) => [
+      transitionKey(transition.sourceOccurrenceId, transition.targetOccurrenceId),
+      transition
+    ])
+  );
+  const departureRuleByKey = new Map(
+    builderBootstrapManifest.departureRules.map((rule) => [
+      transitionKey(rule.sourceOccurrenceId, rule.targetOccurrenceId),
+      rule
+    ])
+  );
   const repeatedStateRelations = builderBootstrapManifest.repeatedStateRelations;
   const terminalAnchors = builderBootstrapManifest.terminalAnchors;
   const cache = new Map<string, NeighborhoodCacheEntry>();
@@ -166,8 +192,35 @@ export function createRuntimeExplorationKernel(
           )
       };
     },
+    inspectTransitionSurface(occurrenceIds) {
+      const selectedOccurrenceIds = [...new Set(occurrenceIds)];
+      const selectedOccurrenceIdSet = new Set(selectedOccurrenceIds);
+
+      return {
+        graphObjectId: builderBootstrapManifest.graphObjectId,
+        occurrenceIds: selectedOccurrenceIds,
+        transitions: builderBootstrapManifest.transitions.filter(
+          (transition) =>
+            selectedOccurrenceIdSet.has(transition.sourceOccurrenceId) &&
+            selectedOccurrenceIdSet.has(transition.targetOccurrenceId)
+        ),
+        departureRules: builderBootstrapManifest.departureRules.filter(
+          (rule) =>
+            selectedOccurrenceIdSet.has(rule.sourceOccurrenceId) &&
+            selectedOccurrenceIdSet.has(rule.targetOccurrenceId)
+        )
+      };
+    },
     resolveOccurrence(occurrenceId) {
       return occurrenceById.get(occurrenceId);
+    },
+    resolveTransition(sourceOccurrenceId, targetOccurrenceId) {
+      return transitionByKey.get(transitionKey(sourceOccurrenceId, targetOccurrenceId));
+    },
+    resolveDepartureRule(sourceOccurrenceId, targetOccurrenceId) {
+      return departureRuleByKey.get(
+        transitionKey(sourceOccurrenceId, targetOccurrenceId)
+      );
     },
     getFocusOptions() {
       return viewerSceneManifest.runtime.focusCandidateOccurrenceIds
@@ -305,4 +358,8 @@ function selectTerminalAnchors(
 
 function clamp(value: number, lowerBound: number, upperBound: number) {
   return Math.max(lowerBound, Math.min(upperBound, Math.round(value)));
+}
+
+function transitionKey(sourceOccurrenceId: string, targetOccurrenceId: string) {
+  return `${sourceOccurrenceId}|${targetOccurrenceId}`;
 }

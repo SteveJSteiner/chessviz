@@ -14,6 +14,10 @@ DEFAULT_SCENE_ID = "runtime-exploration-fixture"
 
 def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     graph_object_id = _graph_object_id(dry_run)
+    departure_rule_by_edge = {
+        (rule.parent_occurrence_id, rule.child_occurrence_id): rule
+        for rule in dry_run.departure_rules.records
+    }
 
     return {
         "graphObjectId": graph_object_id,
@@ -84,6 +88,51 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
             }
             for source_occurrence_id, target_occurrence_id in dry_run.dag.edges
         ],
+        "transitions": [
+            {
+                "sourceOccurrenceId": transition.parent_occurrence_id,
+                "targetOccurrenceId": transition.child_occurrence_id,
+                "moveUci": transition.move_uci,
+                "ply": transition.ply,
+                "moveFacts": {
+                    "san": transition.move_facts.san,
+                    "movingPiece": transition.move_facts.moving_piece,
+                    "capturedPiece": transition.move_facts.captured_piece,
+                    "promotionPiece": transition.move_facts.promotion_piece,
+                    "isCapture": transition.move_facts.is_capture,
+                    "isCheck": transition.move_facts.is_check,
+                    "isCheckmate": transition.move_facts.is_checkmate,
+                    "isCastle": transition.move_facts.is_castle,
+                    "castleSide": transition.move_facts.castle_side,
+                    "isEnPassant": transition.move_facts.is_en_passant,
+                },
+                "moveFamily": _move_family_payload(
+                    departure_rule_by_edge[
+                        (
+                            transition.parent_occurrence_id,
+                            transition.child_occurrence_id,
+                        )
+                    ].move_family
+                ),
+            }
+            for transition in dry_run.ingested_corpus.transitions
+        ],
+        "departureRules": [
+            {
+                "sourceOccurrenceId": rule.parent_occurrence_id,
+                "targetOccurrenceId": rule.child_occurrence_id,
+                "moveUci": rule.move_uci,
+                "ply": rule.ply,
+                "moveFamily": _move_family_payload(rule.move_family),
+                "centerlineProfile": rule.centerline_profile,
+                "departureStrength": rule.departure_strength,
+                "lateralOffset": rule.lateral_offset,
+                "verticalLift": rule.vertical_lift,
+                "curvature": rule.curvature,
+                "twist": rule.twist,
+            }
+            for rule in dry_run.departure_rules.records
+        ],
         "repeatedStateRelations": [
             {
                 "stateKey": relation.state_key,
@@ -128,7 +177,7 @@ def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     return {
         "sceneId": DEFAULT_SCENE_ID,
         "title": "Runtime Exploration Fixture",
-        "summary": "N08a runtime neighborhood exploration over builder-owned canonical surfaces.",
+        "summary": "N08a runtime neighborhood exploration plus N09 move-interaction departure rules over builder-owned canonical surfaces.",
         "accentColor": "#0f766e",
         "camera": {
             "position": [0.0, 0.45, 4.2],
@@ -183,3 +232,11 @@ def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
         deduplicated_candidates.append(occurrence_id)
 
     return deduplicated_candidates
+
+
+def _move_family_payload(move_family: Any) -> dict[str, str]:
+    return {
+        "interactionClass": move_family.interaction_class,
+        "forcingClass": move_family.forcing_class,
+        "specialClass": move_family.special_class,
+    }

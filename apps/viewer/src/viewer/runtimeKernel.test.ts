@@ -105,3 +105,54 @@ test('surfaces local terminal anchors and repeated-state relations from builder 
   );
   assert.ok(drawSnapshot.repeatedStateRelations.length > 0);
 });
+
+test('surfaces builder-owned transition facts and departure rules without board reconstruction', () => {
+  const kernel = createRuntimeExplorationKernel(
+    builderBootstrapManifest,
+    viewerSceneManifest
+  );
+  const transitionSurface = kernel.inspectTransitionSurface(
+    builderBootstrapManifest.occurrences.map((occurrence) => occurrence.occurrenceId)
+  );
+  const quietTransition = transitionSurface.transitions.find(
+    (transition) => transition.moveFacts.san === 'd4'
+  );
+  const captureMateTransition = transitionSurface.transitions.find(
+    (transition) => transition.moveFacts.san === 'Qxf7#'
+  );
+
+  assert.ok(quietTransition);
+  assert.ok(captureMateTransition);
+
+  if (!quietTransition || !captureMateTransition) {
+    throw new Error('expected quiet and capture-mate transitions in fixture surface');
+  }
+
+  const quietRule = kernel.resolveDepartureRule(
+    quietTransition.sourceOccurrenceId,
+    quietTransition.targetOccurrenceId
+  );
+  const captureMateRule = kernel.resolveDepartureRule(
+    captureMateTransition.sourceOccurrenceId,
+    captureMateTransition.targetOccurrenceId
+  );
+  const resolvedTransition = kernel.resolveTransition(
+    captureMateTransition.sourceOccurrenceId,
+    captureMateTransition.targetOccurrenceId
+  );
+
+  assert.ok(quietRule);
+  assert.ok(captureMateRule);
+  assert.ok(resolvedTransition);
+
+  if (!quietRule || !captureMateRule || !resolvedTransition) {
+    throw new Error('expected transition surface lookup to resolve exported records');
+  }
+
+  assert.equal(quietTransition.moveFamily.interactionClass, 'quiet');
+  assert.equal(captureMateTransition.moveFamily.interactionClass, 'capture');
+  assert.equal(captureMateTransition.moveFamily.forcingClass, 'checkmate');
+  assert.equal(captureMateRule.centerlineProfile, 'terminal-snap');
+  assert.ok(captureMateRule.departureStrength > quietRule.departureStrength);
+  assert.equal(resolvedTransition.moveFacts.isCapture, true);
+});

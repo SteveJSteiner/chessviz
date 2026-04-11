@@ -25,7 +25,7 @@ Planning artifacts for a continuous, zoomable chess-space visualization represen
 - Viewer owns runtime exploration, camera-driven refinement, and anchored entrypoints over the shared object.
 - Viewer may consume coarse manifests and canonical guides from `artifacts/viewer/scene-manifest.json`, but it is not limited to fully baked scene geometry.
 - Builder occurrence identity, ingestion, DAG assembly, labeling seam, and embedding seam live under `tools/builder/src/chessviz_builder/`.
-- Builder owns canonical structure, relation, and coarse-guide artifacts under `artifacts/builder/bootstrap.json`; it does not define the final authoritative render at all zooms.
+- Builder owns canonical structure, relation, transition move-family, and coarse departure-guide artifacts under `artifacts/builder/bootstrap.json`; it does not define the final authoritative render at all zooms.
 
 ```bash
 ./setup_env.sh

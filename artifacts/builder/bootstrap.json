@@ -1542,6 +1542,1250 @@
       "targetOccurrenceId": "occ-854ee946e516ebcc"
     }
   ],
+  "transitions": [
+    {
+      "sourceOccurrenceId": "occ-27e2be7f2bf706c6",
+      "targetOccurrenceId": "occ-1f6a34476710cf44",
+      "moveUci": "d2d4",
+      "ply": 1,
+      "moveFacts": {
+        "san": "d4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-1f6a34476710cf44",
+      "targetOccurrenceId": "occ-9ebdccf7cb340e19",
+      "moveUci": "g8f6",
+      "ply": 2,
+      "moveFacts": {
+        "san": "Nf6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-9ebdccf7cb340e19",
+      "targetOccurrenceId": "occ-7dbf8aaca2b3697d",
+      "moveUci": "c2c4",
+      "ply": 3,
+      "moveFacts": {
+        "san": "c4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-7dbf8aaca2b3697d",
+      "targetOccurrenceId": "occ-6ff7efa5769bde3d",
+      "moveUci": "e7e6",
+      "ply": 4,
+      "moveFacts": {
+        "san": "e6",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-6ff7efa5769bde3d",
+      "targetOccurrenceId": "occ-ffd06139cfd8d752",
+      "moveUci": "b1c3",
+      "ply": 5,
+      "moveFacts": {
+        "san": "Nc3",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-ffd06139cfd8d752",
+      "targetOccurrenceId": "occ-7108d24f15ffe66c",
+      "moveUci": "f8b4",
+      "ply": 6,
+      "moveFacts": {
+        "san": "Bb4",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-7b367264afad7c15",
+      "targetOccurrenceId": "occ-79415c2c47c30301",
+      "moveUci": "d2d4",
+      "ply": 1,
+      "moveFacts": {
+        "san": "d4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-79415c2c47c30301",
+      "targetOccurrenceId": "occ-191cfbfe7e7d01d9",
+      "moveUci": "e7e6",
+      "ply": 2,
+      "moveFacts": {
+        "san": "e6",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-191cfbfe7e7d01d9",
+      "targetOccurrenceId": "occ-fe3302c45c2e1b15",
+      "moveUci": "c2c4",
+      "ply": 3,
+      "moveFacts": {
+        "san": "c4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-fe3302c45c2e1b15",
+      "targetOccurrenceId": "occ-3b54c1ad347a763b",
+      "moveUci": "g8f6",
+      "ply": 4,
+      "moveFacts": {
+        "san": "Nf6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-3b54c1ad347a763b",
+      "targetOccurrenceId": "occ-75aa920e2785885d",
+      "moveUci": "b1c3",
+      "ply": 5,
+      "moveFacts": {
+        "san": "Nc3",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-75aa920e2785885d",
+      "targetOccurrenceId": "occ-8a3b915d604d5403",
+      "moveUci": "f8b4",
+      "ply": 6,
+      "moveFacts": {
+        "san": "Bb4",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-d10897875e44e59b",
+      "targetOccurrenceId": "occ-828d34dd90220088",
+      "moveUci": "e2e4",
+      "ply": 1,
+      "moveFacts": {
+        "san": "e4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-828d34dd90220088",
+      "targetOccurrenceId": "occ-8f867a23923fe752",
+      "moveUci": "e7e5",
+      "ply": 2,
+      "moveFacts": {
+        "san": "e5",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-8f867a23923fe752",
+      "targetOccurrenceId": "occ-da1729ad0178e787",
+      "moveUci": "f1c4",
+      "ply": 3,
+      "moveFacts": {
+        "san": "Bc4",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-da1729ad0178e787",
+      "targetOccurrenceId": "occ-40e4e824d7eaa81e",
+      "moveUci": "b8c6",
+      "ply": 4,
+      "moveFacts": {
+        "san": "Nc6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-40e4e824d7eaa81e",
+      "targetOccurrenceId": "occ-e183cdedadef1bf0",
+      "moveUci": "d1h5",
+      "ply": 5,
+      "moveFacts": {
+        "san": "Qh5",
+        "movingPiece": "queen",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-e183cdedadef1bf0",
+      "targetOccurrenceId": "occ-65caf3375c92984c",
+      "moveUci": "g8f6",
+      "ply": 6,
+      "moveFacts": {
+        "san": "Nf6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-65caf3375c92984c",
+      "targetOccurrenceId": "occ-d6e94fa5dd427d26",
+      "moveUci": "h5f7",
+      "ply": 7,
+      "moveFacts": {
+        "san": "Qxf7#",
+        "movingPiece": "queen",
+        "capturedPiece": "pawn",
+        "promotionPiece": null,
+        "isCapture": true,
+        "isCheck": true,
+        "isCheckmate": true,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "checkmate",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-2ec900ca21098443",
+      "targetOccurrenceId": "occ-098b343ea6d64bd5",
+      "moveUci": "f2f3",
+      "ply": 1,
+      "moveFacts": {
+        "san": "f3",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-098b343ea6d64bd5",
+      "targetOccurrenceId": "occ-e98487c361da0f1a",
+      "moveUci": "e7e5",
+      "ply": 2,
+      "moveFacts": {
+        "san": "e5",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-e98487c361da0f1a",
+      "targetOccurrenceId": "occ-f7b8af2a834d288f",
+      "moveUci": "g2g4",
+      "ply": 3,
+      "moveFacts": {
+        "san": "g4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-f7b8af2a834d288f",
+      "targetOccurrenceId": "occ-63c6882f2a36737a",
+      "moveUci": "d8h4",
+      "ply": 4,
+      "moveFacts": {
+        "san": "Qh4#",
+        "movingPiece": "queen",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": true,
+        "isCheckmate": true,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "checkmate",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-39672723f3979502",
+      "targetOccurrenceId": "occ-3df389a83da4b1a6",
+      "moveUci": "g1f3",
+      "ply": 1,
+      "moveFacts": {
+        "san": "Nf3",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-3df389a83da4b1a6",
+      "targetOccurrenceId": "occ-5844c88338924ed3",
+      "moveUci": "g8f6",
+      "ply": 2,
+      "moveFacts": {
+        "san": "Nf6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-5844c88338924ed3",
+      "targetOccurrenceId": "occ-a348e528205679e9",
+      "moveUci": "f3g1",
+      "ply": 3,
+      "moveFacts": {
+        "san": "Ng1",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-a348e528205679e9",
+      "targetOccurrenceId": "occ-8e57e74a73537a36",
+      "moveUci": "f6g8",
+      "ply": 4,
+      "moveFacts": {
+        "san": "Ng8",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-8e57e74a73537a36",
+      "targetOccurrenceId": "occ-80fd3ca4f20451b4",
+      "moveUci": "g1f3",
+      "ply": 5,
+      "moveFacts": {
+        "san": "Nf3",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-80fd3ca4f20451b4",
+      "targetOccurrenceId": "occ-387cdce9c0bf5677",
+      "moveUci": "g8f6",
+      "ply": 6,
+      "moveFacts": {
+        "san": "Nf6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-387cdce9c0bf5677",
+      "targetOccurrenceId": "occ-efe95b9c393f7960",
+      "moveUci": "f3g1",
+      "ply": 7,
+      "moveFacts": {
+        "san": "Ng1",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-efe95b9c393f7960",
+      "targetOccurrenceId": "occ-854ee946e516ebcc",
+      "moveUci": "f6g8",
+      "ply": 8,
+      "moveFacts": {
+        "san": "Ng8",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    }
+  ],
+  "departureRules": [
+    {
+      "sourceOccurrenceId": "occ-27e2be7f2bf706c6",
+      "targetOccurrenceId": "occ-1f6a34476710cf44",
+      "moveUci": "d2d4",
+      "ply": 1,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-1f6a34476710cf44",
+      "targetOccurrenceId": "occ-9ebdccf7cb340e19",
+      "moveUci": "g8f6",
+      "ply": 2,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-9ebdccf7cb340e19",
+      "targetOccurrenceId": "occ-7dbf8aaca2b3697d",
+      "moveUci": "c2c4",
+      "ply": 3,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-7dbf8aaca2b3697d",
+      "targetOccurrenceId": "occ-6ff7efa5769bde3d",
+      "moveUci": "e7e6",
+      "ply": 4,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-6ff7efa5769bde3d",
+      "targetOccurrenceId": "occ-ffd06139cfd8d752",
+      "moveUci": "b1c3",
+      "ply": 5,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-ffd06139cfd8d752",
+      "targetOccurrenceId": "occ-7108d24f15ffe66c",
+      "moveUci": "f8b4",
+      "ply": 6,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-7b367264afad7c15",
+      "targetOccurrenceId": "occ-79415c2c47c30301",
+      "moveUci": "d2d4",
+      "ply": 1,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-79415c2c47c30301",
+      "targetOccurrenceId": "occ-191cfbfe7e7d01d9",
+      "moveUci": "e7e6",
+      "ply": 2,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-191cfbfe7e7d01d9",
+      "targetOccurrenceId": "occ-fe3302c45c2e1b15",
+      "moveUci": "c2c4",
+      "ply": 3,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-fe3302c45c2e1b15",
+      "targetOccurrenceId": "occ-3b54c1ad347a763b",
+      "moveUci": "g8f6",
+      "ply": 4,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-3b54c1ad347a763b",
+      "targetOccurrenceId": "occ-75aa920e2785885d",
+      "moveUci": "b1c3",
+      "ply": 5,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-75aa920e2785885d",
+      "targetOccurrenceId": "occ-8a3b915d604d5403",
+      "moveUci": "f8b4",
+      "ply": 6,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-d10897875e44e59b",
+      "targetOccurrenceId": "occ-828d34dd90220088",
+      "moveUci": "e2e4",
+      "ply": 1,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-828d34dd90220088",
+      "targetOccurrenceId": "occ-8f867a23923fe752",
+      "moveUci": "e7e5",
+      "ply": 2,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-8f867a23923fe752",
+      "targetOccurrenceId": "occ-da1729ad0178e787",
+      "moveUci": "f1c4",
+      "ply": 3,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-da1729ad0178e787",
+      "targetOccurrenceId": "occ-40e4e824d7eaa81e",
+      "moveUci": "b8c6",
+      "ply": 4,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-40e4e824d7eaa81e",
+      "targetOccurrenceId": "occ-e183cdedadef1bf0",
+      "moveUci": "d1h5",
+      "ply": 5,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.31,
+      "lateralOffset": 0.13,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-e183cdedadef1bf0",
+      "targetOccurrenceId": "occ-65caf3375c92984c",
+      "moveUci": "g8f6",
+      "ply": 6,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-65caf3375c92984c",
+      "targetOccurrenceId": "occ-d6e94fa5dd427d26",
+      "moveUci": "h5f7",
+      "ply": 7,
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "checkmate",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "terminal-snap",
+      "departureStrength": 0.87,
+      "lateralOffset": 0.18,
+      "verticalLift": 0.28,
+      "curvature": 0.4,
+      "twist": 0.15
+    },
+    {
+      "sourceOccurrenceId": "occ-2ec900ca21098443",
+      "targetOccurrenceId": "occ-098b343ea6d64bd5",
+      "moveUci": "f2f3",
+      "ply": 1,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-098b343ea6d64bd5",
+      "targetOccurrenceId": "occ-e98487c361da0f1a",
+      "moveUci": "e7e5",
+      "ply": 2,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-e98487c361da0f1a",
+      "targetOccurrenceId": "occ-f7b8af2a834d288f",
+      "moveUci": "g2g4",
+      "ply": 3,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-f7b8af2a834d288f",
+      "targetOccurrenceId": "occ-63c6882f2a36737a",
+      "moveUci": "d8h4",
+      "ply": 4,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "checkmate",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "terminal-snap",
+      "departureStrength": 0.55,
+      "lateralOffset": 0.13,
+      "verticalLift": 0.17,
+      "curvature": 0.22,
+      "twist": 0.1
+    },
+    {
+      "sourceOccurrenceId": "occ-39672723f3979502",
+      "targetOccurrenceId": "occ-3df389a83da4b1a6",
+      "moveUci": "g1f3",
+      "ply": 1,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-3df389a83da4b1a6",
+      "targetOccurrenceId": "occ-5844c88338924ed3",
+      "moveUci": "g8f6",
+      "ply": 2,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-5844c88338924ed3",
+      "targetOccurrenceId": "occ-a348e528205679e9",
+      "moveUci": "f3g1",
+      "ply": 3,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-a348e528205679e9",
+      "targetOccurrenceId": "occ-8e57e74a73537a36",
+      "moveUci": "f6g8",
+      "ply": 4,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-8e57e74a73537a36",
+      "targetOccurrenceId": "occ-80fd3ca4f20451b4",
+      "moveUci": "g1f3",
+      "ply": 5,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-80fd3ca4f20451b4",
+      "targetOccurrenceId": "occ-387cdce9c0bf5677",
+      "moveUci": "g8f6",
+      "ply": 6,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-387cdce9c0bf5677",
+      "targetOccurrenceId": "occ-efe95b9c393f7960",
+      "moveUci": "f3g1",
+      "ply": 7,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-efe95b9c393f7960",
+      "targetOccurrenceId": "occ-854ee946e516ebcc",
+      "moveUci": "f6g8",
+      "ply": 8,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    }
+  ],
   "repeatedStateRelations": [
     {
       "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",

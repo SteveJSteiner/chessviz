@@ -69,6 +69,44 @@ export interface BuilderEdgeRecord {
   targetOccurrenceId: string;
 }
 
+export interface BuilderMoveFactRecord {
+  san: string;
+  movingPiece: string;
+  capturedPiece: string | null;
+  promotionPiece: string | null;
+  isCapture: boolean;
+  isCheck: boolean;
+  isCheckmate: boolean;
+  isCastle: boolean;
+  castleSide: string | null;
+  isEnPassant: boolean;
+}
+
+export interface BuilderMoveFamilyRecord {
+  interactionClass: string;
+  forcingClass: string;
+  specialClass: string;
+}
+
+export interface BuilderTransitionRecord extends BuilderEdgeRecord {
+  moveUci: string;
+  ply: number;
+  moveFacts: BuilderMoveFactRecord;
+  moveFamily: BuilderMoveFamilyRecord;
+}
+
+export interface BuilderDepartureRuleRecord extends BuilderEdgeRecord {
+  moveUci: string;
+  ply: number;
+  moveFamily: BuilderMoveFamilyRecord;
+  centerlineProfile: string;
+  departureStrength: number;
+  lateralOffset: number;
+  verticalLift: number;
+  curvature: number;
+  twist: number;
+}
+
 export interface BuilderRepeatedStateRelationRecord {
   stateKey: string;
   occurrenceIds: string[];
@@ -90,6 +128,8 @@ export interface BuilderBootstrapManifest {
   priorityFrontierOccurrenceIds: string[];
   occurrences: BuilderOccurrenceRecord[];
   edges: BuilderEdgeRecord[];
+  transitions: BuilderTransitionRecord[];
+  departureRules: BuilderDepartureRuleRecord[];
   repeatedStateRelations: BuilderRepeatedStateRelationRecord[];
   terminalAnchors: BuilderTerminalAnchorRecord[];
   salienceConfig: {
@@ -161,6 +201,13 @@ export interface RuntimeNeighborhoodSnapshot {
   repeatedStateRelations: BuilderRepeatedStateRelationRecord[];
   terminalAnchors: BuilderTerminalAnchorRecord[];
   priorityFrontierOccurrenceIds: string[];
+}
+
+export interface RuntimeTransitionSurfaceSnapshot {
+  graphObjectId: string;
+  occurrenceIds: string[];
+  transitions: BuilderTransitionRecord[];
+  departureRules: BuilderDepartureRuleRecord[];
 }
 
 export interface WorkspaceBoundary {
