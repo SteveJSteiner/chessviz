@@ -3,20 +3,20 @@
 This file states the current active node, why it is current, and what must be true to settle it and advance.
 
 ## Current active node
-- **Node:** N09
+- **Node:** N10
 
 ## Why this is current
-- N08a was settled by commit 34fa84d, which exported builder-owned manifests and validated runtime neighborhood query, cache behavior, and budgeted local refinement in the viewer.
-- N09 is now the earliest unresolved node in topological order.
-- N10 remains blocked on N09 because multiscale carrier refinement still needs coarse-zoom move-interaction departure rules.
-- Builder-side occurrence transitions already carry canonical move facts, but the builder/viewer edge boundary does not yet export those facts or a coarse departure-rule surface for runtime consumption.
+- N09 was settled by commit 17e7f9a, which exported builder-owned transition move facts and coarse departure rules across the builder/viewer boundary and validated their runtime query surface.
+- N10 is now the earliest unresolved node in topological order.
+- N11 remains blocked on N10 because camera grammar depends on multiscale carrier rules and refinement operators before zoom-monotone reveal can be enforced.
+- The canonical departure-rule seam now exists, but multiscale carrier generation still needs to turn that seam into local geometry and refinement operators without topology errors.
 
 ## Settle-and-advance conditions
-- The builder/viewer edge boundary exports canonical move-family fields from occurrence transitions so the viewer/runtime seam does not reconstruct capture, check, or castling status from board state.
-- Move-interaction departure rules are derived from the exported move-fact surface without changing occurrence identity, repeated-state relations, runtime neighborhood query semantics, or coarse embedding coordinates.
-- Fixture checks verify capture departures are visually or numerically stronger than matched quiet-move departures at coarse zoom and that the rule surface remains classifiable from builder-owned data.
-- The departure-rule seam remains queryable and separate from later multiscale carrier generation, camera grammar, anchored entrypoint logic, and eventual curved-path realization.
-- A commit records N09 settlement and updates both `plan/completion-log.md` and this file to the next active node or frontier.
+- Multiscale carrier rules are generated from the existing canonical departure-rule seam and coarse embedding surface without reclassifying move families or shifting builder/runtime responsibility boundaries.
+- Refinement operators can realize local carrier geometry under declared budgets while preserving occurrence identity, repeated-state relations, runtime neighborhood query semantics, and coarse embedding coordinates.
+- Fixture checks verify carrier generation and refinement preserve topology, keep coarse move-family readings intact at structure zoom, and do not introduce zoom-level contradictions for later semantic bands.
+- The carrier-generation seam remains separable from later camera grammar, anchored entrypoint logic, transposition rendering policy, and final curved-path realization details.
+- A commit records N10 settlement and updates both `plan/completion-log.md` and this file to the next active node or frontier.
 
 ## Advancement rule
 - No node advancement occurs without a commit that records the exact continuation state transition.
