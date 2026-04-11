@@ -65,6 +65,16 @@ def run_env_check() -> int:
         f"{len(dry_run.repeated_state_query_surface.repeated_relations)} repeated relation(s), "
         f"{len(dry_run.repeated_state_query_surface.singleton_relations)} singleton relation(s)"
     )
+    print(
+        "dag metrics: "
+        f"{dry_run.dag.metrics.node_count} node(s), "
+        f"{dry_run.dag.metrics.edge_count} edge(s), "
+        f"roots={dry_run.dag.metrics.root_count}, "
+        f"leaves={dry_run.dag.metrics.leaf_count}, "
+        f"max_out={dry_run.dag.metrics.max_out_degree}, "
+        f"max_in={dry_run.dag.metrics.max_in_degree}, "
+        f"max_state_convergence={dry_run.dag.metrics.max_state_convergence}"
+    )
 
     print(
         "CHESSVIZ_STOCKFISH_BIN: "

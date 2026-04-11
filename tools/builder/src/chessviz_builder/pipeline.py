@@ -16,7 +16,7 @@ from .contracts import (
     RepeatedStateQuerySurface,
 )
 from .corpus_ingest import DeclaredCorpusIngestor
-from .dag import PlaceholderDagBuilder
+from .dag import OccurrenceDagBuilder
 from .embedding import PlaceholderEmbeddingBuilder
 from .labeling import PlaceholderOccurrenceLabeler
 from .occurrence_identity import StableOccurrenceIdentity
@@ -41,7 +41,7 @@ class BuilderPipeline:
     identity_provider: StableOccurrenceIdentity
     corpus_ingestor: DeclaredCorpusIngestor
     repeated_state_query_builder: RepeatedStateQuerySurfaceBuilder
-    dag_builder: PlaceholderDagBuilder
+    dag_builder: OccurrenceDagBuilder
     labeler: PlaceholderOccurrenceLabeler
     embedding_builder: PlaceholderEmbeddingBuilder
 
@@ -50,7 +50,11 @@ class BuilderPipeline:
         repeated_state_query_surface = self.repeated_state_query_builder.build(
             ingested_corpus
         )
-        dag = self.dag_builder.build(declaration, ingested_corpus)
+        dag = self.dag_builder.build(
+            declaration,
+            ingested_corpus,
+            repeated_state_query_surface,
+        )
         labels = self.labeler.label(dag)
         embedding = self.embedding_builder.build(dag)
         return PipelineDryRun(
@@ -80,7 +84,7 @@ def create_placeholder_pipeline(
             identity_provider,
         ),
         repeated_state_query_builder=repeated_state_query_builder,
-        dag_builder=PlaceholderDagBuilder(),
+        dag_builder=OccurrenceDagBuilder(),
         labeler=PlaceholderOccurrenceLabeler(),
         embedding_builder=PlaceholderEmbeddingBuilder(),
     )

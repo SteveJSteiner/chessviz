@@ -155,10 +155,50 @@ class RepeatedStateQuerySurface:
 
 
 @dataclass(frozen=True)
+class DagMetrics:
+    node_count: int
+    edge_count: int
+    root_count: int
+    leaf_count: int
+    max_out_degree: int
+    max_in_degree: int
+    repeated_state_group_count: int
+    repeated_state_occurrence_count: int
+    max_state_convergence: int
+
+
+@dataclass(frozen=True)
 class DagArtifact:
     nodes: tuple[OccurrenceRecord, ...]
     edges: tuple[tuple[str, str], ...]
     source_name: str
+    root_occurrence_ids: tuple[str, ...]
+    leaf_occurrence_ids: tuple[str, ...]
+    metrics: DagMetrics
+    _nodes_by_occurrence_id: Mapping[str, OccurrenceRecord]
+    _parents_by_occurrence_id: Mapping[str, tuple[str, ...]]
+    _children_by_occurrence_id: Mapping[str, tuple[str, ...]]
+
+    def by_occurrence_id(self, occurrence_id: str) -> OccurrenceRecord | None:
+        return self._nodes_by_occurrence_id.get(occurrence_id)
+
+    def parents_of(self, occurrence_id: str) -> tuple[OccurrenceRecord, ...]:
+        return tuple(
+            self._nodes_by_occurrence_id[parent_id]
+            for parent_id in self._parents_by_occurrence_id.get(occurrence_id, tuple())
+        )
+
+    def children_of(self, occurrence_id: str) -> tuple[OccurrenceRecord, ...]:
+        return tuple(
+            self._nodes_by_occurrence_id[child_id]
+            for child_id in self._children_by_occurrence_id.get(occurrence_id, tuple())
+        )
+
+    def in_degree(self, occurrence_id: str) -> int:
+        return len(self._parents_by_occurrence_id.get(occurrence_id, tuple()))
+
+    def out_degree(self, occurrence_id: str) -> int:
+        return len(self._children_by_occurrence_id.get(occurrence_id, tuple()))
 
 
 @dataclass(frozen=True)
@@ -190,6 +230,7 @@ class DagBuilder(Protocol):
         self,
         declaration: CorpusDeclaration,
         ingested_corpus: IngestedCorpus,
+        repeated_state_query_surface: RepeatedStateQuerySurface,
     ) -> DagArtifact:
         """Build a DAG artifact from ingested occurrence paths."""
 

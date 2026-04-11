@@ -9,7 +9,7 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - `corpus_ingest.py` loads a declared corpus fixture and converts each game into a continuous occurrence path.
 - `OccurrenceTransition` records now carry canonical move facts so later geometry rules do not need to reconstruct captures, castling, or check status from scratch.
 - `repeated_state.py` builds the repeated-state relation index and query surface over ingested occurrences.
-- `dag.py` defines the DAG assembly seam.
+- `dag.py` builds the occurrence DAG artifact and exposes adjacency plus fan-in/fan-out metrics.
 - `labeling.py` and `embedding.py` mark later-node extension points.
 - `pipeline.py` wires the placeholder modules together for env-check validation.
 
