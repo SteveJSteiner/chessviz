@@ -1,6 +1,6 @@
-import type { WorkspaceBoundary } from './contracts';
+import type { RuntimeArtifactBoundary } from './contracts';
 
-export const workspaceBoundary: WorkspaceBoundary = {
+export const runtimeArtifactBoundary: RuntimeArtifactBoundary = {
   artifactRoot: 'artifacts',
   builderBootstrapManifest: 'artifacts/builder/bootstrap.json',
   viewerSceneManifest: 'artifacts/viewer/scene-manifest.json',

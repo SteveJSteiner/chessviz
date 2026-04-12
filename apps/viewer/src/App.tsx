@@ -16,10 +16,10 @@ import {
   DEFAULT_VIEWER_RENDER_TUNING,
   clampViewerRenderTuning
 } from './viewer/renderTuning';
+import { runtimeArtifactBoundary } from './viewer/runtimeArtifactBoundary';
 import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
 import { createRuntimeExplorationKernel } from './viewer/runtimeKernel';
 import { ViewerShell } from './viewer/ViewerShell';
-import { workspaceBoundary } from './viewer/workspaceBoundaries';
 
 export default function App() {
   const [runtimeBootstrap] = useState(() =>
@@ -163,7 +163,7 @@ export default function App() {
       runtimeSnapshot={deferredRuntimeSnapshot}
       sceneBootstrap={runtimeBootstrap.sceneBootstrap}
       transitionSurface={transitionSurface}
-      workspaceBoundary={workspaceBoundary}
+      runtimeArtifactBoundary={runtimeArtifactBoundary}
       neighborhoodRadius={neighborhoodRadius}
     />
   );

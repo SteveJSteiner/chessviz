@@ -9,7 +9,7 @@ const runtimeArtifactBundle = loadRuntimeArtifactBundleFromImportMetaUrl(
   import.meta.url
 );
 
-test('builds deterministic N11 review artifacts from the fixture manifests', () => {
+test('builds deterministic N11 review artifacts from the published runtime artifacts', () => {
   const artifacts = buildViewerReviewArtifacts(runtimeArtifactBundle);
 
   assert.deepEqual(

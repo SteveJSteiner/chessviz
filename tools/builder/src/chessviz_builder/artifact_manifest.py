@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from .contracts import (
     BuilderWorkspace,
@@ -30,6 +30,11 @@ from .publication import relative_posix_path, write_json
 
 DEFAULT_SCENE_ID = "runtime-exploration-fixture"
 PUBLISHED_ASSET_SCHEMA_VERSION = "2026-04-12.n11d.v1"
+_ORDERED_REGIME_IDS: tuple[RegimeId, ...] = (
+    "opening-table",
+    "middlegame-procedural",
+    "endgame-table",
+)
 
 
 @dataclass(frozen=True)
@@ -46,7 +51,19 @@ class PublishedTableAssetSet:
     shard_count: int
 
 
-def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
+@dataclass(frozen=True)
+class PublishedRuntimeSurfaceSet:
+    coverage_metadata_payloads: tuple[dict[str, Any], ...]
+    resolver_input_payloads: tuple[dict[str, Any], ...]
+    regime_declaration_payloads: tuple[dict[str, Any], ...]
+    opening_position_keys: frozenset[str]
+    endgame_material_signatures_by_position_key: Mapping[str, frozenset[str]]
+
+
+def build_builder_bootstrap_manifest(
+    dry_run: PipelineDryRun,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> dict[str, Any]:
     graph_object_id = _graph_object_id(dry_run)
     identity_semantics = IdentitySemanticsRecord(
         occurrence_key_field="occurrenceId",
@@ -54,10 +71,34 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
         path_key_field="path",
         continuity_key_field="stateKey",
     )
-    coverage_metadata = _build_coverage_metadata_records(dry_run)
-    resolver_inputs = _build_resolver_input_records(coverage_metadata)
-    regime_declarations = _build_regime_declarations(dry_run, coverage_metadata, resolver_inputs)
-    anchors = _build_shared_anchor_records(dry_run)
+    if published_runtime_surfaces is None:
+        coverage_metadata = _build_coverage_metadata_records(dry_run)
+        resolver_inputs = _build_resolver_input_records(coverage_metadata)
+        regime_declarations = _build_regime_declarations(
+            dry_run,
+            coverage_metadata,
+            resolver_inputs,
+        )
+        coverage_metadata_payloads = [
+            _coverage_metadata_payload(record) for record in coverage_metadata
+        ]
+        resolver_input_payloads = [
+            _resolver_input_payload(record) for record in resolver_inputs
+        ]
+        regime_declaration_payloads = [
+            _regime_declaration_payload(record) for record in regime_declarations
+        ]
+    else:
+        coverage_metadata_payloads = list(
+            published_runtime_surfaces.coverage_metadata_payloads
+        )
+        resolver_input_payloads = list(
+            published_runtime_surfaces.resolver_input_payloads
+        )
+        regime_declaration_payloads = list(
+            published_runtime_surfaces.regime_declaration_payloads
+        )
+    anchors = _build_shared_anchor_records(dry_run, published_runtime_surfaces)
     occurrence_by_id = {
         occurrence.occurrence_id: occurrence for occurrence in dry_run.occurrences
     }
@@ -72,15 +113,9 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
         "sourceName": dry_run.ingested_corpus.declaration.source_name,
         "version": dry_run.ingested_corpus.declaration.version,
         "identitySemantics": _identity_semantics_payload(identity_semantics),
-        "coverageMetadata": [
-            _coverage_metadata_payload(record) for record in coverage_metadata
-        ],
-        "resolverInputs": [
-            _resolver_input_payload(record) for record in resolver_inputs
-        ],
-        "regimeDeclarations": [
-            _regime_declaration_payload(record) for record in regime_declarations
-        ],
+        "coverageMetadata": coverage_metadata_payloads,
+        "resolverInputs": resolver_input_payloads,
+        "regimeDeclarations": regime_declaration_payloads,
         "anchors": [_anchor_payload(record) for record in anchors],
         "rootOccurrenceIds": list(dry_run.dag.root_occurrence_ids),
         "leafOccurrenceIds": list(dry_run.dag.leaf_occurrence_ids),
@@ -95,6 +130,7 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
                 salience_record,
                 terminal_record,
                 embedding_record,
+                published_runtime_surfaces,
             )
             for occurrence in dry_run.occurrences
             for label_record in [dry_run.labels.by_occurrence_id(occurrence.occurrence_id)]
@@ -176,12 +212,19 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     }
 
 
-def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
+def build_viewer_scene_manifest(
+    dry_run: PipelineDryRun,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> dict[str, Any]:
     graph_object_id = _graph_object_id(dry_run)
-    initial_focus_occurrence_id = _navigation_anchor_occurrence_ids(dry_run)[
-        "middlegame"
-    ]
-    focus_candidate_occurrence_ids = _focus_candidate_occurrence_ids(dry_run)
+    initial_focus_occurrence_id = _navigation_anchor_occurrence_ids(
+        dry_run,
+        published_runtime_surfaces,
+    )["middlegame"]
+    focus_candidate_occurrence_ids = _focus_candidate_occurrence_ids(
+        dry_run,
+        published_runtime_surfaces,
+    )
 
     return {
         "sceneId": DEFAULT_SCENE_ID,
@@ -225,8 +268,15 @@ def write_fixture_artifacts(
     workspace: BuilderWorkspace,
     dry_run: PipelineDryRun,
 ) -> tuple[Path, Path]:
-    builder_manifest = build_builder_bootstrap_manifest(dry_run)
-    viewer_scene_manifest = build_viewer_scene_manifest(dry_run)
+    published_runtime_surfaces = _load_published_runtime_surfaces(workspace)
+    builder_manifest = build_builder_bootstrap_manifest(
+        dry_run,
+        published_runtime_surfaces,
+    )
+    viewer_scene_manifest = build_viewer_scene_manifest(
+        dry_run,
+        published_runtime_surfaces,
+    )
 
     _write_json(workspace.builder_manifest, builder_manifest)
     _write_json(workspace.viewer_scene_manifest, viewer_scene_manifest)
@@ -577,8 +627,14 @@ def _graph_object_id(dry_run: PipelineDryRun) -> str:
     return f"{declaration.source_name}:{declaration.version}"
 
 
-def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
-    ordered_candidates = _focus_candidate_seed_occurrence_ids(dry_run)
+def _focus_candidate_occurrence_ids(
+    dry_run: PipelineDryRun,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> list[str]:
+    ordered_candidates = _focus_candidate_seed_occurrence_ids(
+        dry_run,
+        published_runtime_surfaces,
+    )
     deduplicated_candidates: list[str] = []
 
     for occurrence_id in ordered_candidates:
@@ -589,15 +645,22 @@ def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
     return deduplicated_candidates
 
 
-def _focus_candidate_seed_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
-    middlegame_occurrences = [
-        occurrence
-        for occurrence in dry_run.occurrences
-        if _has_phase_label(dry_run, occurrence.occurrence_id, MIDDLEGAME_PHASE)
-    ]
+def _focus_candidate_seed_occurrence_ids(
+    dry_run: PipelineDryRun,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> list[str]:
+    middlegame_occurrences = _occurrences_for_regime(
+        dry_run,
+        "middlegame-procedural",
+        published_runtime_surfaces,
+    )
 
     return [
-        _select_middlegame_anchor_occurrence_id(dry_run, middlegame_occurrences),
+        _select_middlegame_anchor_occurrence_id(
+            dry_run,
+            middlegame_occurrences,
+            published_runtime_surfaces,
+        ),
         *dry_run.dag.root_occurrence_ids,
         *(record.occurrence_id for record in dry_run.salience.priority_frontier),
     ]
@@ -618,12 +681,18 @@ def _occurrence_payload(
     salience_record,
     terminal_record,
     embedding_record,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
 ) -> dict[str, Any]:
     annotations = OccurrenceAnnotationRecord(
         phase_label=label_record.phase,
         material_signature=label_record.material_signature,
     )
-    regime_id = _regime_id_for_phase(label_record.phase)
+    candidate_regime_ids = _candidate_regime_ids_for_occurrence(
+        occurrence,
+        label_record,
+        published_runtime_surfaces,
+    )
+    regime_id = _selected_regime_id(candidate_regime_ids)
     identity = OccurrenceIdentityRecord(
         occurrence_key=occurrence.occurrence_id,
         position_key=occurrence.state_key,
@@ -632,9 +701,13 @@ def _occurrence_payload(
     )
     regime = OccurrenceRegimeRecord(
         regime_id=regime_id,
-        candidate_regime_ids=(regime_id,),
+        candidate_regime_ids=candidate_regime_ids,
         resolver_input_id=_resolver_input_id(regime_id),
-        selection_rule="declared-regime-membership",
+        selection_rule=(
+            "declared-regime-membership"
+            if published_runtime_surfaces is None
+            else "published-regime-resolution"
+        ),
     )
     occurrence_provenance = RecordProvenance(
         source_kind="fixture-corpus",
@@ -881,14 +954,20 @@ def _build_regime_declarations(
     )
 
 
-def _build_shared_anchor_records(dry_run: PipelineDryRun) -> tuple[SharedAnchorRecord, ...]:
+def _build_shared_anchor_records(
+    dry_run: PipelineDryRun,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> tuple[SharedAnchorRecord, ...]:
     occurrence_by_id = {
         occurrence.occurrence_id: occurrence for occurrence in dry_run.occurrences
     }
     embedding_by_occurrence_id = {
         record.occurrence_id: record for record in dry_run.embedding.records
     }
-    navigation_anchor_ids = _navigation_anchor_occurrence_ids(dry_run)
+    navigation_anchor_ids = _navigation_anchor_occurrence_ids(
+        dry_run,
+        published_runtime_surfaces,
+    )
     navigation_anchors = []
 
     for entry_id, occurrence_id in navigation_anchor_ids.items():
@@ -897,7 +976,13 @@ def _build_shared_anchor_records(dry_run: PipelineDryRun) -> tuple[SharedAnchorR
         label_record = dry_run.labels.by_occurrence_id(occurrence_id)
         if label_record is None:
             continue
-        regime_id = _regime_id_for_phase(label_record.phase)
+        regime_id = _selected_regime_id(
+            _candidate_regime_ids_for_occurrence(
+                occurrence,
+                label_record,
+                published_runtime_surfaces,
+            )
+        )
         navigation_anchors.append(
             SharedAnchorRecord(
                 anchor_id=f"entry:{entry_id}",
@@ -912,7 +997,7 @@ def _build_shared_anchor_records(dry_run: PipelineDryRun) -> tuple[SharedAnchorR
                     source_location=dry_run.ingested_corpus.declaration.location,
                     detail=(
                         f"declared {entry_id} navigation anchor from {regime_id} "
-                        f"membership"
+                        f"runtime coverage"
                     ),
                 ),
                 entry_id=entry_id,
@@ -926,7 +1011,13 @@ def _build_shared_anchor_records(dry_run: PipelineDryRun) -> tuple[SharedAnchorR
         first_occurrence_id = anchor.occurrence_ids[0]
         first_label = dry_run.labels.by_occurrence_id(first_occurrence_id)
         regime_id = (
-            _regime_id_for_phase(first_label.phase)
+            _selected_regime_id(
+                _candidate_regime_ids_for_occurrence(
+                    occurrence_by_id[first_occurrence_id],
+                    first_label,
+                    published_runtime_surfaces,
+                )
+            )
             if first_label is not None
             else None
         )
@@ -955,23 +1046,29 @@ def _build_shared_anchor_records(dry_run: PipelineDryRun) -> tuple[SharedAnchorR
     return tuple((*navigation_anchors, *terminal_anchors))
 
 
-def _navigation_anchor_occurrence_ids(dry_run: PipelineDryRun) -> dict[str, str]:
+def _navigation_anchor_occurrence_ids(
+    dry_run: PipelineDryRun,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> dict[str, str]:
     opening_occurrences = [
         occurrence
-        for occurrence in dry_run.occurrences
-        if _has_phase_label(dry_run, occurrence.occurrence_id, OPENING_PHASE)
-        and occurrence.ply == 0
+        for occurrence in _occurrences_for_regime(
+            dry_run,
+            "opening-table",
+            published_runtime_surfaces,
+        )
+        if occurrence.ply == 0
     ]
-    middlegame_occurrences = [
-        occurrence
-        for occurrence in dry_run.occurrences
-        if _has_phase_label(dry_run, occurrence.occurrence_id, MIDDLEGAME_PHASE)
-    ]
-    endgame_occurrences = [
-        occurrence
-        for occurrence in dry_run.occurrences
-        if _has_phase_label(dry_run, occurrence.occurrence_id, ENDGAME_PHASE)
-    ]
+    middlegame_occurrences = _occurrences_for_regime(
+        dry_run,
+        "middlegame-procedural",
+        published_runtime_surfaces,
+    )
+    endgame_occurrences = _occurrences_for_regime(
+        dry_run,
+        "endgame-table",
+        published_runtime_surfaces,
+    )
 
     if not opening_occurrences or not middlegame_occurrences or not endgame_occurrences:
         raise ValueError("missing required declared regime anchor coverage")
@@ -982,7 +1079,10 @@ def _navigation_anchor_occurrence_ids(dry_run: PipelineDryRun) -> dict[str, str]
     preferred_opening_occurrence_id = next(
         (
             occurrence_id
-            for occurrence_id in _focus_candidate_seed_occurrence_ids(dry_run)
+            for occurrence_id in _focus_candidate_seed_occurrence_ids(
+                dry_run,
+                published_runtime_surfaces,
+            )
             if occurrence_id in opening_occurrence_ids
         ),
         None,
@@ -999,6 +1099,7 @@ def _navigation_anchor_occurrence_ids(dry_run: PipelineDryRun) -> dict[str, str]
         "middlegame": _select_middlegame_anchor_occurrence_id(
             dry_run,
             middlegame_occurrences,
+            published_runtime_surfaces,
         ),
         "endgame": sorted(endgame_occurrences, key=lambda occurrence: _endgame_anchor_key(dry_run, occurrence))[0].occurrence_id,
     }
@@ -1007,6 +1108,7 @@ def _navigation_anchor_occurrence_ids(dry_run: PipelineDryRun) -> dict[str, str]
 def _select_middlegame_anchor_occurrence_id(
     dry_run: PipelineDryRun,
     middlegame_occurrences,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
 ) -> str:
     best_occurrence_id = dry_run.dag.root_occurrence_ids[0]
     best_key = (-1, -1.0, -1, "")
@@ -1023,7 +1125,11 @@ def _select_middlegame_anchor_occurrence_id(
             best_occurrence_id = occurrence.occurrence_id
             best_key = candidate_key
 
-    if _has_phase_label(dry_run, best_occurrence_id, MIDDLEGAME_PHASE):
+    middlegame_occurrence_ids = {
+        occurrence.occurrence_id for occurrence in middlegame_occurrences
+    }
+
+    if best_occurrence_id in middlegame_occurrence_ids:
         return best_occurrence_id
 
     return sorted(
@@ -1068,6 +1174,70 @@ def _endgame_anchor_key(dry_run: PipelineDryRun, occurrence) -> tuple[int, float
         embedding_record.root_game_id if embedding_record is not None else "",
         occurrence.occurrence_id,
     )
+
+
+def _occurrences_for_regime(
+    dry_run: PipelineDryRun,
+    regime_id: RegimeId,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+):
+    occurrences = []
+
+    for occurrence in dry_run.occurrences:
+        label_record = dry_run.labels.by_occurrence_id(occurrence.occurrence_id)
+
+        if label_record is None:
+            continue
+
+        if (
+            _selected_regime_id(
+                _candidate_regime_ids_for_occurrence(
+                    occurrence,
+                    label_record,
+                    published_runtime_surfaces,
+                )
+            )
+            == regime_id
+        ):
+            occurrences.append(occurrence)
+
+    return occurrences
+
+
+def _candidate_regime_ids_for_occurrence(
+    occurrence,
+    label_record,
+    published_runtime_surfaces: PublishedRuntimeSurfaceSet | None = None,
+) -> tuple[RegimeId, ...]:
+    if published_runtime_surfaces is None:
+        return (_regime_id_for_phase(label_record.phase),)
+
+    candidate_regime_ids: list[RegimeId] = []
+
+    if occurrence.state_key in published_runtime_surfaces.opening_position_keys:
+        candidate_regime_ids.append("opening-table")
+
+    endgame_material_signatures = (
+        published_runtime_surfaces.endgame_material_signatures_by_position_key.get(
+            occurrence.state_key,
+            frozenset(),
+        )
+    )
+    if label_record.material_signature in endgame_material_signatures:
+        candidate_regime_ids.append("endgame-table")
+
+    if not candidate_regime_ids:
+        candidate_regime_ids.append("middlegame-procedural")
+
+    return tuple(candidate_regime_ids)
+
+
+def _selected_regime_id(candidate_regime_ids: tuple[RegimeId, ...]) -> RegimeId:
+    if "opening-table" in candidate_regime_ids:
+        return "opening-table"
+    if "endgame-table" in candidate_regime_ids:
+        return "endgame-table"
+    return "middlegame-procedural"
 
 
 def _has_phase_label(
@@ -1200,3 +1370,71 @@ def _provenance_payload(record: RecordProvenance) -> dict[str, str]:
         "sourceLocation": record.source_location,
         "detail": record.detail,
     }
+
+
+def _load_published_runtime_surfaces(
+    workspace: BuilderWorkspace,
+) -> PublishedRuntimeSurfaceSet:
+    required_paths = (
+        workspace.web_corpus_manifest,
+        workspace.opening_table_manifest,
+        workspace.endgame_table_manifest,
+    )
+    missing_paths = [path for path in required_paths if not path.exists()]
+
+    if missing_paths:
+        missing_summary = ", ".join(path.as_posix() for path in missing_paths)
+        raise ValueError(
+            "missing published runtime assets; build-web-corpus must run before "
+            f"export-fixture-artifacts ({missing_summary})"
+        )
+
+    web_corpus_payload = _read_json(workspace.web_corpus_manifest)
+
+    return PublishedRuntimeSurfaceSet(
+        coverage_metadata_payloads=tuple(web_corpus_payload["coverageMetadata"]),
+        resolver_input_payloads=tuple(web_corpus_payload["resolverInputs"]),
+        regime_declaration_payloads=tuple(web_corpus_payload["regimeDeclarations"]),
+        opening_position_keys=_load_opening_position_keys(
+            workspace.opening_table_manifest
+        ),
+        endgame_material_signatures_by_position_key=_load_endgame_material_signatures(
+            workspace.endgame_table_manifest
+        ),
+    )
+
+
+def _load_opening_position_keys(manifest_path: Path) -> frozenset[str]:
+    manifest_payload = _read_json(manifest_path)
+    position_keys: set[str] = set()
+
+    for descriptor in manifest_payload["shards"]:
+        shard_payload = _read_json(manifest_path.parent / descriptor["relativePath"])
+        for entry in shard_payload["entries"]:
+            position_keys.add(entry["positionKey"])
+
+    return frozenset(position_keys)
+
+
+def _load_endgame_material_signatures(
+    manifest_path: Path,
+) -> Mapping[str, frozenset[str]]:
+    manifest_payload = _read_json(manifest_path)
+    material_signatures_by_position_key: dict[str, set[str]] = {}
+
+    for descriptor in manifest_payload["shards"]:
+        shard_payload = _read_json(manifest_path.parent / descriptor["relativePath"])
+        for entry in shard_payload["entries"]:
+            material_signatures_by_position_key.setdefault(
+                entry["positionKey"],
+                set(),
+            ).add(entry["materialSignature"])
+
+    return {
+        position_key: frozenset(material_signatures)
+        for position_key, material_signatures in material_signatures_by_position_key.items()
+    }
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))

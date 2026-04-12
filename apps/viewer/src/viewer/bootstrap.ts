@@ -9,6 +9,11 @@ import {
   createRuntimeRegimeResolver,
   type RuntimeRegimeResolver
 } from './regimeResolver.ts';
+import {
+  createAnchoredNavigationEntryPoints,
+  resolveInitialNavigationEntryPointId
+} from './navigation.ts';
+import { createRuntimeExplorationKernel } from './runtimeKernel.ts';
 
 export type RuntimeBootstrapMaterialization = {
   builderBootstrapManifest: RuntimeArtifactBundle['builderBootstrapManifest'];
@@ -56,7 +61,7 @@ export function materializeRuntimeBootstrap(
     }
   } satisfies ViewerSceneManifest;
 
-  return {
+  const runtimeBootstrap = {
     builderBootstrapManifest: runtimeArtifactBundle.builderBootstrapManifest,
     viewerSceneManifest,
     sceneBootstrap: createSceneBootstrap(viewerSceneManifest),
@@ -65,6 +70,10 @@ export function materializeRuntimeBootstrap(
     focusCandidateOccurrenceIds,
     resolvedFocusCandidates
   };
+
+  validateRuntimeBootstrapIntegrity(runtimeBootstrap);
+
+  return runtimeBootstrap;
 }
 
 function materializeInitialFocusOccurrenceId(
@@ -121,6 +130,61 @@ function materializeFocusCandidates(
   }
 
   return resolvedFocusCandidates;
+}
+
+function validateRuntimeBootstrapIntegrity(
+  runtimeBootstrap: RuntimeBootstrapMaterialization
+) {
+  const navigationEntryPoints = createAnchoredNavigationEntryPoints(runtimeBootstrap);
+
+  if (
+    !runtimeBootstrap.focusCandidateOccurrenceIds.includes(
+      runtimeBootstrap.initialFocusOccurrenceId
+    )
+  ) {
+    throw new Error(
+      'runtime bootstrap fractures navigation continuity; initial focus is absent from resolver-backed focus candidates'
+    );
+  }
+
+  if (
+    resolveInitialNavigationEntryPointId(
+      navigationEntryPoints,
+      runtimeBootstrap.initialFocusOccurrenceId
+    ) !== 'middlegame'
+  ) {
+    throw new Error(
+      'runtime bootstrap fractures navigation continuity; initial focus no longer maps to the middlegame entrypoint'
+    );
+  }
+
+  const runtimeKernel = createRuntimeExplorationKernel(
+    runtimeBootstrap.builderBootstrapManifest,
+    runtimeBootstrap.viewerSceneManifest
+  );
+
+  for (const entryPoint of navigationEntryPoints) {
+    const occurrence = runtimeKernel.resolveOccurrence(entryPoint.focusOccurrenceId);
+    const occurrenceLine = runtimeKernel.describeOccurrenceLine(
+      entryPoint.focusOccurrenceId
+    );
+
+    if (!occurrence || !occurrenceLine) {
+      throw new Error(
+        `runtime bootstrap fractures query continuity for ${entryPoint.entryId} entrypoint`
+      );
+    }
+
+    if (
+      occurrence.embedding.rootGameId !== entryPoint.rootGameId ||
+      occurrence.ply !== entryPoint.anchorPly ||
+      occurrenceLine.rootGameId !== entryPoint.rootGameId
+    ) {
+      throw new Error(
+        `runtime bootstrap fractures identity, anchoring, or query continuity for ${entryPoint.entryId} entrypoint`
+      );
+    }
+  }
 }
 
 function requireNavigationEntryAnchor(

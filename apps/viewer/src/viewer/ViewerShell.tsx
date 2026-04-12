@@ -2,13 +2,13 @@ import type {
   BuilderOccurrenceRecord,
   NavigationEntryPoint,
   NavigationEntryPointId,
+  RuntimeArtifactBoundary,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationConfig,
   RuntimeNeighborhoodSnapshot,
   RuntimeOccurrenceLine,
   RuntimeTransitionSurfaceSnapshot,
-  SceneBootstrap,
-  WorkspaceBoundary
+  SceneBootstrap
 } from './contracts';
 import type { CameraGrammarState } from './cameraGrammar.ts';
 import { ChessBoard } from './ChessBoard.tsx';
@@ -41,7 +41,7 @@ type ViewerShellProps = {
   navigationEntryPoint: NavigationEntryPoint;
   onBoardReferenceOpenChange: (open: boolean) => void;
   onEntryPointChange: (entryId: NavigationEntryPointId) => void;
-  workspaceBoundary: WorkspaceBoundary;
+  runtimeArtifactBoundary: RuntimeArtifactBoundary;
   neighborhoodRadius: number;
   orbitResetKey: number;
   onRenderTuningChange: (partialTuning: Partial<ViewerRenderTuning>) => void;
@@ -202,7 +202,7 @@ export function ViewerShell({
   navigationEntryPoint,
   onBoardReferenceOpenChange,
   onEntryPointChange,
-  workspaceBoundary,
+  runtimeArtifactBoundary,
   neighborhoodRadius,
   orbitResetKey,
   onRenderTuningChange,
@@ -653,20 +653,20 @@ export function ViewerShell({
           </pre>
         </details>
 
-        <span style={metaLabelStyle}>Builder Boundary</span>
+        <span style={metaLabelStyle}>Runtime Asset Boundary</span>
         <p style={{ marginBottom: '0.35rem' }}>
-          {workspaceBoundary.builderBootstrapManifest}
+          {runtimeArtifactBoundary.builderBootstrapManifest}
         </p>
         <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
-          {workspaceBoundary.viewerSceneManifest}
+          {runtimeArtifactBoundary.viewerSceneManifest}
         </p>
         <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
-          {workspaceBoundary.webCorpusManifest}
+          {runtimeArtifactBoundary.webCorpusManifest}
         </p>
         <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
-          {workspaceBoundary.openingTableManifest}
+          {runtimeArtifactBoundary.openingTableManifest}
         </p>
-        <p style={{ marginTop: 0 }}>{workspaceBoundary.endgameTableManifest}</p>
+        <p style={{ marginTop: 0 }}>{runtimeArtifactBoundary.endgameTableManifest}</p>
 
         <span style={metaLabelStyle}>Review Artifacts</span>
         <pre style={codeBlockStyle}>

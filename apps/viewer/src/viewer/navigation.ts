@@ -213,6 +213,15 @@ function requireNavigationAnchor(
     );
   }
 
+  if (
+    anchor.rootGameId !== occurrence.embedding.rootGameId ||
+    anchor.anchorPly !== occurrence.ply
+  ) {
+    throw new Error(
+      `cannot derive ${entryId} entrypoint from ${builderBootstrapManifest.graphObjectId}; declared regime anchor fractures anchoring continuity`
+    );
+  }
+
   return {
     anchor,
     occurrence,

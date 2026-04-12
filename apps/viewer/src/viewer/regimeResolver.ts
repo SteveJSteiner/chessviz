@@ -191,6 +191,11 @@ export function createRuntimeRegimeResolver(
     );
   };
 
+  validateResolvedOccurrenceSelections(
+    bundle.builderBootstrapManifest.occurrences,
+    resolveOccurrence
+  );
+
   return {
     getCoverageMetadata(regimeId) {
       return requireCoverageMetadata(coverageMetadataByRegime, regimeId);
@@ -220,6 +225,10 @@ export function createRuntimeRegimeResolver(
 function validateRuntimeArtifactBundle(bundle: RuntimeArtifactBundle) {
   const graphObjectId = bundle.builderBootstrapManifest.graphObjectId;
   const representationSchemaVersion = bundle.builderBootstrapManifest.schemaVersion;
+  const orderedResolverInputs = [...bundle.webCorpusManifest.resolverInputs].sort(
+    (left, right) => left.priority - right.priority
+  );
+  const terminalResolverInput = orderedResolverInputs.at(-1);
 
   if (bundle.viewerSceneManifest.runtime.graphObjectId !== graphObjectId) {
     throw new Error('graph object mismatch between builder bootstrap and viewer manifest');
@@ -267,10 +276,55 @@ function validateRuntimeArtifactBundle(bundle: RuntimeArtifactBundle) {
     throw new Error('viewer bootstrap is not pointed at the published web corpus manifest');
   }
 
+  if (
+    !terminalResolverInput ||
+    terminalResolverInput.regimeId !== 'middlegame-procedural' ||
+    !terminalResolverInput.isFallback
+  ) {
+    throw new Error(
+      'middlegame procedural fallback must be the terminal runtime resolver input'
+    );
+  }
+
   validatePublishedTableReference(bundle, 'opening-table', bundle.openingTableManifest);
   validatePublishedTableReference(bundle, 'endgame-table', bundle.endgameTableManifest);
   validateShardPayloads(bundle.openingTableManifest, bundle.openingTableShardsByRelativePath);
   validateShardPayloads(bundle.endgameTableManifest, bundle.endgameTableShardsByRelativePath);
+}
+
+function validateResolvedOccurrenceSelections(
+  occurrences: BuilderOccurrenceRecord[],
+  resolveOccurrence: (occurrence: BuilderOccurrenceRecord) => RuntimeResolvedOccurrence
+) {
+  let middlegameResolutionCount = 0;
+
+  for (const occurrence of occurrences) {
+    const resolvedOccurrence = resolveOccurrence(occurrence);
+
+    if (
+      !occurrence.regime.candidateRegimeIds.includes(resolvedOccurrence.resolvedRegimeId)
+    ) {
+      throw new Error(
+        `runtime resolver selected undeclared regime ${resolvedOccurrence.resolvedRegimeId} for occurrence ${occurrence.occurrenceId}`
+      );
+    }
+
+    if (resolvedOccurrence.resolvedRegimeId !== occurrence.regime.regimeId) {
+      throw new Error(
+        `runtime resolver bypassed declared ${occurrence.regime.regimeId} surface for occurrence ${occurrence.occurrenceId}; resolved ${resolvedOccurrence.resolvedRegimeId}`
+      );
+    }
+
+    if (resolvedOccurrence.resolvedRegimeId === 'middlegame-procedural') {
+      middlegameResolutionCount += 1;
+    }
+  }
+
+  if (middlegameResolutionCount === 0) {
+    throw new Error(
+      'runtime resolver bypassed middlegame procedural fallback; no occurrence resolved through middlegame-procedural'
+    );
+  }
 }
 
 function validatePublishedTableReference(

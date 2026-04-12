@@ -553,7 +553,7 @@ export interface RuntimeOccurrenceLine {
   moves: RuntimeOccurrenceLineMove[];
 }
 
-export interface WorkspaceBoundary {
+export interface RuntimeArtifactBoundary {
   artifactRoot: string;
   builderBootstrapManifest: string;
   viewerSceneManifest: string;

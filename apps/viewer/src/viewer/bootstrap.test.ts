@@ -39,3 +39,25 @@ test('materializes initial focus and focus candidates from declared anchors plus
     runtimeArtifactBundle.viewerSceneManifest.runtime.focusCandidateOccurrenceIds
   );
 });
+
+
+test('fails fast when declared entrypoint metadata fractures runtime bootstrap continuity', () => {
+  assert.throws(
+    () =>
+      materializeRuntimeBootstrap({
+        ...runtimeArtifactBundle,
+        builderBootstrapManifest: {
+          ...runtimeArtifactBundle.builderBootstrapManifest,
+          anchors: runtimeArtifactBundle.builderBootstrapManifest.anchors.map((anchor) =>
+            anchor.anchorKind === 'navigation-entry' && anchor.entryId === 'endgame'
+              ? {
+                  ...anchor,
+                  rootGameId: 'broken-root-game'
+                }
+              : anchor
+          )
+        }
+      }),
+    /anchoring continuity/
+  );
+});

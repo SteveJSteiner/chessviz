@@ -39,6 +39,7 @@ test('derives opening, middlegame, and endgame entrypoints from declared regime 
   );
 });
 
+
 test('keeps entrypoint derivation stable when annotation phase labels drift', () => {
   const runtimeBootstrap = materializeRuntimeBootstrap({
     ...runtimeArtifactBundle,
@@ -95,5 +96,26 @@ test('fails fast when a required declared regime anchor cannot be derived', () =
         }
       }),
     /declared anchor is missing/
+  );
+});
+
+test('fails fast when declared anchor metadata fractures entrypoint continuity', () => {
+  assert.throws(
+    () =>
+      materializeRuntimeBootstrap({
+        ...runtimeArtifactBundle,
+        builderBootstrapManifest: {
+          ...runtimeArtifactBundle.builderBootstrapManifest,
+          anchors: runtimeArtifactBundle.builderBootstrapManifest.anchors.map((anchor) =>
+            anchor.anchorKind === 'navigation-entry' && anchor.entryId === 'opening'
+              ? {
+                  ...anchor,
+                  anchorPly: 2
+                }
+              : anchor
+          )
+        }
+      }),
+    /anchoring continuity/
   );
 });

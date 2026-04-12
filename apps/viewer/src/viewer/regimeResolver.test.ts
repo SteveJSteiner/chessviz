@@ -31,6 +31,7 @@ test('resolves the declared opening anchor through the published opening table s
   assert.equal(resolvedOccurrence.source.shardId, 'ply-000-003');
 });
 
+
 test('resolves middlegame occurrences through the procedural fallback policy', () => {
   const resolver = createRuntimeRegimeResolver(runtimeArtifactBundle);
   const resolvedOccurrence = resolver.resolveOccurrenceId('occ-25c32c2bc0227f68');
@@ -72,5 +73,38 @@ test('resolves the declared endgame anchor through the published endgame table s
   assert.equal(
     resolvedOccurrence.source.manifestPath,
     'builder/endgame-table/manifest.json'
+  );
+});
+
+test('fails fast when a required published table shard payload is missing', () => {
+  assert.throws(
+    () =>
+      createRuntimeRegimeResolver({
+        ...runtimeArtifactBundle,
+        endgameTableShardsByRelativePath: {}
+      }),
+    /table manifest shard is missing payload/
+  );
+});
+
+test('fails fast when middlegame fallback is allowed to preempt published table resolution', () => {
+  assert.throws(
+    () =>
+      createRuntimeRegimeResolver({
+        ...runtimeArtifactBundle,
+        webCorpusManifest: {
+          ...runtimeArtifactBundle.webCorpusManifest,
+          resolverInputs: runtimeArtifactBundle.webCorpusManifest.resolverInputs.map(
+            (resolverInput) =>
+              resolverInput.regimeId === 'middlegame-procedural'
+                ? {
+                    ...resolverInput,
+                    priority: 5
+                  }
+                : resolverInput
+          )
+        }
+      }),
+    /middlegame procedural fallback must be the terminal runtime resolver input/
   );
 });

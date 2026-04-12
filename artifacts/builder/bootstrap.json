@@ -11,30 +11,30 @@
   },
   "coverageMetadata": [
     {
-      "coverageMetadataId": "coverage:opening-table",
-      "regimeId": "opening-table",
       "coverageKind": "ply-window",
-      "summary": "Declared opening-table membership over the shared placeholder fixture contract.",
-      "occurrenceCount": 73,
-      "maxPly": 34,
+      "coverageMetadataId": "coverage:opening-table",
+      "maxPly": 5,
+      "occurrenceCount": 7,
+      "regimeId": "opening-table",
+      "summary": "Imported opening-table coverage published as project-owned continuation shards.",
       "supportedMaterialSignatures": []
     },
     {
-      "coverageMetadataId": "coverage:middlegame-procedural",
-      "regimeId": "middlegame-procedural",
       "coverageKind": "procedural-fallback",
-      "summary": "Declared middlegame procedural fallback over explicit shared occurrence membership.",
-      "occurrenceCount": 37,
+      "coverageMetadataId": "coverage:middlegame-procedural",
       "maxPly": null,
+      "occurrenceCount": 37,
+      "regimeId": "middlegame-procedural",
+      "summary": "Declared middlegame procedural fallback with no precomputed table asset publication in N11d.",
       "supportedMaterialSignatures": []
     },
     {
-      "coverageMetadataId": "coverage:endgame-table",
-      "regimeId": "endgame-table",
       "coverageKind": "material-signature-set",
-      "summary": "Declared endgame-table membership over observed terminal-material signatures.",
-      "occurrenceCount": 8,
+      "coverageMetadataId": "coverage:endgame-table",
       "maxPly": null,
+      "occurrenceCount": 4,
+      "regimeId": "endgame-table",
+      "summary": "Imported endgame-table coverage published as project-owned terminal evaluation shards.",
       "supportedMaterialSignatures": [
         "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]"
       ]
@@ -42,75 +42,75 @@
   ],
   "resolverInputs": [
     {
-      "resolverInputId": "resolver:opening-table",
-      "regimeId": "opening-table",
-      "priority": 10,
-      "selector": "declared-opening-coverage",
       "coverageMetadataId": "coverage:opening-table",
-      "isFallback": false
+      "isFallback": false,
+      "priority": 10,
+      "regimeId": "opening-table",
+      "resolverInputId": "resolver:opening-table",
+      "selector": "declared-opening-coverage"
     },
     {
-      "resolverInputId": "resolver:endgame-table",
-      "regimeId": "endgame-table",
-      "priority": 20,
-      "selector": "declared-endgame-coverage",
       "coverageMetadataId": "coverage:endgame-table",
-      "isFallback": false
+      "isFallback": false,
+      "priority": 20,
+      "regimeId": "endgame-table",
+      "resolverInputId": "resolver:endgame-table",
+      "selector": "declared-endgame-coverage"
     },
     {
-      "resolverInputId": "resolver:middlegame-procedural",
-      "regimeId": "middlegame-procedural",
-      "priority": 30,
-      "selector": "declared-middlegame-fallback",
       "coverageMetadataId": "coverage:middlegame-procedural",
-      "isFallback": true
+      "isFallback": true,
+      "priority": 30,
+      "regimeId": "middlegame-procedural",
+      "resolverInputId": "resolver:middlegame-procedural",
+      "selector": "declared-middlegame-fallback"
     }
   ],
   "regimeDeclarations": [
     {
-      "regimeId": "opening-table",
-      "label": "Opening Table",
       "backingKind": "table",
-      "schemaVersion": "2026-04-12.n11c.v1",
       "coverageMetadataId": "coverage:opening-table",
+      "label": "Opening Table",
+      "provenance": {
+        "detail": "declared opening-table project-owned asset surface from builder/opening-table/manifest.json",
+        "sourceKind": "builder-regime-declaration",
+        "sourceLocation": "builder/opening-table/manifest.json",
+        "sourceName": "opening-table:fixture-opening-slice:2026-04-12.n11d.test",
+        "sourceVersion": "2026-04-12.n11d.v1"
+      },
+      "regimeId": "opening-table",
       "resolverInputId": "resolver:opening-table",
-      "provenance": {
-        "sourceKind": "builder-regime-declaration",
-        "sourceName": "initial-represented-subset",
-        "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "declared opening-table contract over placeholder fixture-owned coverage for N11c"
-      }
+      "schemaVersion": "2026-04-12.n11c.v1"
     },
     {
-      "regimeId": "middlegame-procedural",
-      "label": "Middlegame Procedural",
       "backingKind": "procedural",
-      "schemaVersion": "2026-04-12.n11c.v1",
       "coverageMetadataId": "coverage:middlegame-procedural",
-      "resolverInputId": "resolver:middlegame-procedural",
+      "label": "Middlegame Procedural",
       "provenance": {
+        "detail": "declared middlegame-procedural fallback alongside published opening/endgame table assets for N11d",
         "sourceKind": "builder-regime-declaration",
-        "sourceName": "initial-represented-subset",
-        "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "declared middlegame-procedural contract over placeholder fixture-owned coverage for N11c"
-      }
+        "sourceName": "initial-represented-subset",
+        "sourceVersion": "2026-04-11-fixture-004"
+      },
+      "regimeId": "middlegame-procedural",
+      "resolverInputId": "resolver:middlegame-procedural",
+      "schemaVersion": "2026-04-12.n11c.v1"
     },
     {
-      "regimeId": "endgame-table",
-      "label": "Endgame Table",
       "backingKind": "table",
-      "schemaVersion": "2026-04-12.n11c.v1",
       "coverageMetadataId": "coverage:endgame-table",
-      "resolverInputId": "resolver:endgame-table",
+      "label": "Endgame Table",
       "provenance": {
+        "detail": "declared endgame-table project-owned asset surface from builder/endgame-table/manifest.json",
         "sourceKind": "builder-regime-declaration",
-        "sourceName": "initial-represented-subset",
-        "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "declared endgame-table contract over placeholder fixture-owned coverage for N11c"
-      }
+        "sourceLocation": "builder/endgame-table/manifest.json",
+        "sourceName": "endgame-table:fixture-endgame-slice:2026-04-12.n11d.test",
+        "sourceVersion": "2026-04-12.n11d.v1"
+      },
+      "regimeId": "endgame-table",
+      "resolverInputId": "resolver:endgame-table",
+      "schemaVersion": "2026-04-12.n11c.v1"
     }
   ],
   "anchors": [
@@ -127,7 +127,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "declared opening navigation anchor from opening-table membership"
+        "detail": "declared opening navigation anchor from opening-table runtime coverage"
       },
       "entryId": "opening",
       "wdlLabel": null,
@@ -148,7 +148,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "declared middlegame navigation anchor from middlegame-procedural membership"
+        "detail": "declared middlegame navigation anchor from middlegame-procedural runtime coverage"
       },
       "entryId": "middlegame",
       "wdlLabel": null,
@@ -169,7 +169,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "declared endgame navigation anchor from endgame-table membership"
+        "detail": "declared endgame navigation anchor from endgame-table runtime coverage"
       },
       "entryId": "endgame",
       "wdlLabel": null,
@@ -205,7 +205,7 @@
       "occurrenceIds": [
         "occ-63c6882f2a36737a"
       ],
-      "regimeId": "opening-table",
+      "regimeId": "middlegame-procedural",
       "provenance": {
         "sourceKind": "terminal-labeler",
         "sourceName": "initial-represented-subset",
@@ -298,7 +298,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -364,7 +364,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -431,7 +431,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -499,7 +499,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -568,7 +568,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -638,7 +638,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -709,7 +709,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -774,7 +774,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -840,7 +840,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -907,7 +907,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -970,12 +970,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1044,7 +1044,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1114,7 +1114,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1185,7 +1185,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1250,7 +1250,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1311,12 +1311,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1378,12 +1378,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1446,12 +1446,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1515,12 +1515,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1585,12 +1585,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1661,7 +1661,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1733,7 +1733,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1809,7 +1809,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1870,12 +1870,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -1937,12 +1937,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2005,12 +2005,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2074,12 +2074,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2155,7 +2155,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2216,12 +2216,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2283,12 +2283,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2351,12 +2351,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2425,7 +2425,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2490,12 +2490,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2561,12 +2561,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2633,12 +2633,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2711,7 +2711,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2787,7 +2787,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2848,12 +2848,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2915,12 +2915,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -2983,12 +2983,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3052,12 +3052,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3122,12 +3122,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3198,7 +3198,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3270,7 +3270,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3343,7 +3343,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3417,7 +3417,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3492,7 +3492,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3568,7 +3568,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3645,7 +3645,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3723,7 +3723,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3797,7 +3797,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3872,7 +3872,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -3948,7 +3948,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4025,7 +4025,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4103,7 +4103,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4177,7 +4177,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4252,7 +4252,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4328,7 +4328,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4405,7 +4405,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4483,7 +4483,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4557,7 +4557,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4632,7 +4632,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4708,7 +4708,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4785,7 +4785,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4863,7 +4863,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -4937,7 +4937,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5012,7 +5012,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5088,7 +5088,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5165,7 +5165,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5243,7 +5243,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5317,7 +5317,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5392,7 +5392,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5468,7 +5468,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5545,7 +5545,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5623,7 +5623,7 @@
           "middlegame-procedural"
         ],
         "resolverInputId": "resolver:middlegame-procedural",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5688,7 +5688,7 @@
           "opening-table"
         ],
         "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5749,12 +5749,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5816,12 +5816,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5884,12 +5884,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -5953,12 +5953,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6023,12 +6023,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6094,12 +6094,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6166,12 +6166,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6239,12 +6239,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6313,12 +6313,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N1,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6388,12 +6388,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N1,P8]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6464,12 +6464,12 @@
         "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N1,P7]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6541,12 +6541,12 @@
         "materialSignature": "white[Q1,R2,B1,N2,P8]|black[Q1,R2,B2,N1,P7]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6619,12 +6619,12 @@
         "materialSignature": "white[Q1,R2,B1,N2,P8]|black[Q1,R2,B2,N1,P7]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6698,12 +6698,12 @@
         "materialSignature": "white[Q1,R2,B1,N2,P8]|black[Q1,R2,B2,N1,P7]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6778,12 +6778,12 @@
         "materialSignature": "white[Q1,R2,B1,N2,P8]|black[Q1,R2,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6859,12 +6859,12 @@
         "materialSignature": "white[Q0,R2,B1,N2,P8]|black[Q1,R2,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -6941,12 +6941,12 @@
         "materialSignature": "white[Q0,R2,B1,N2,P8]|black[Q1,R2,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7024,12 +7024,12 @@
         "materialSignature": "white[Q0,R2,B1,N2,P7]|black[Q1,R2,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7108,12 +7108,12 @@
         "materialSignature": "white[Q0,R2,B1,N2,P7]|black[Q1,R1,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7193,12 +7193,12 @@
         "materialSignature": "white[Q0,R2,B1,N2,P7]|black[Q1,R1,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7279,12 +7279,12 @@
         "materialSignature": "white[Q0,R2,B1,N2,P7]|black[Q1,R1,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7366,12 +7366,12 @@
         "materialSignature": "white[Q0,R1,B1,N2,P7]|black[Q1,R1,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7454,12 +7454,12 @@
         "materialSignature": "white[Q0,R1,B1,N2,P7]|black[Q1,R1,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7543,12 +7543,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P7]|black[Q1,R1,B2,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7633,12 +7633,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P7]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7724,12 +7724,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P7]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7816,12 +7816,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P7]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -7909,12 +7909,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P7]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8003,12 +8003,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P7]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8098,12 +8098,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P6]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8194,12 +8194,12 @@
         "materialSignature": "white[Q0,R1,B1,N1,P6]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8291,12 +8291,12 @@
         "materialSignature": "white[Q0,R1,B0,N1,P6]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8389,12 +8389,12 @@
         "materialSignature": "white[Q0,R1,B0,N1,P6]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8488,12 +8488,12 @@
         "materialSignature": "white[Q0,R1,B0,N0,P6]|black[Q1,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "opening-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "opening-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:opening-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8593,7 +8593,7 @@
           "endgame-table"
         ],
         "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8694,7 +8694,7 @@
           "endgame-table"
         ],
         "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8796,7 +8796,7 @@
           "endgame-table"
         ],
         "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8899,7 +8899,7 @@
           "endgame-table"
         ],
         "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -8998,12 +8998,12 @@
         "materialSignature": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "endgame-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "endgame-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -9103,12 +9103,12 @@
         "materialSignature": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "endgame-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "endgame-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -9209,12 +9209,12 @@
         "materialSignature": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "endgame-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "endgame-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
@@ -9316,12 +9316,12 @@
         "materialSignature": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]"
       },
       "regime": {
-        "regimeId": "endgame-table",
+        "regimeId": "middlegame-procedural",
         "candidateRegimeIds": [
-          "endgame-table"
+          "middlegame-procedural"
         ],
-        "resolverInputId": "resolver:endgame-table",
-        "selectionRule": "declared-regime-membership"
+        "resolverInputId": "resolver:middlegame-procedural",
+        "selectionRule": "published-regime-resolution"
       },
       "provenance": {
         "sourceKind": "fixture-corpus",
