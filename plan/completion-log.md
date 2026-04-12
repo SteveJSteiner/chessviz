@@ -29,3 +29,4 @@ One line per committed DAG frontier event.
 2026-04-12 | commit 577a4f3 | settled N11c shared regime declaration contract and advanced frontier to N11d
 2026-04-12 | commit a9af5cc | settled N11d opening/endgame table publication and advanced frontier to N11e
 2026-04-12 | commit 5b2e8d4 | settled N11e regime-backed runtime resolution/bootstrap and advanced frontier to N11f
+2026-04-12 | commit 8170cf0 | settled N11f runtime artifact boundary and hard-fail integrity and advanced frontier to N12
