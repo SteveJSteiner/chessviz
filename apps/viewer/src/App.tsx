@@ -6,10 +6,13 @@ import {
 } from './viewer/cameraGrammar';
 import { builderBootstrapManifest, viewerSceneManifest } from './viewer/fixtureArtifacts';
 import {
-  LIVE_VIEW_DISTANCE,
   clampLiveViewDistance
 } from './viewer/labelPolicy';
-import { createRuntimeNavigationEntryPoint } from './viewer/navigation';
+import {
+  createAnchoredNavigationEntryPoints,
+  resolveInitialNavigationEntryPointId,
+  resolveNavigationEntryPoint
+} from './viewer/navigation';
 import {
   DEFAULT_VIEWER_RENDER_TUNING,
   clampViewerRenderTuning
@@ -22,15 +25,33 @@ export default function App() {
   const [runtimeKernel] = useState(() =>
     createRuntimeExplorationKernel(builderBootstrapManifest, viewerSceneManifest)
   );
+  const [navigationEntryPoints] = useState(() =>
+    createAnchoredNavigationEntryPoints(
+      builderBootstrapManifest,
+      viewerSceneManifest
+    )
+  );
+  const [activeEntryPointId, setActiveEntryPointId] = useState(() =>
+    resolveInitialNavigationEntryPointId(
+      navigationEntryPoints,
+      viewerSceneManifest.runtime.initialFocusOccurrenceId
+    )
+  );
+  const activeNavigationEntryPoint = resolveNavigationEntryPoint(
+    navigationEntryPoints,
+    activeEntryPointId
+  );
   const [focusOccurrenceId, setFocusOccurrenceId] = useState(
-    viewerSceneManifest.runtime.initialFocusOccurrenceId
+    activeNavigationEntryPoint.focusOccurrenceId
   );
   const [neighborhoodRadius, setNeighborhoodRadius] = useState(
-    viewerSceneManifest.runtime.defaultNeighborhoodRadius
+    activeNavigationEntryPoint.neighborhoodRadius
   );
   const [cameraDistance, setCameraDistance] = useState<number>(
-    LIVE_VIEW_DISTANCE.default
+    activeNavigationEntryPoint.distance
   );
+  const [boardReferenceOpen, setBoardReferenceOpen] = useState(false);
+  const [orbitResetKey, setOrbitResetKey] = useState(0);
   const [renderTuning, setRenderTuning] = useState(DEFAULT_VIEWER_RENDER_TUNING);
   const refinementBudget = resolveCameraGrammarRefinementBudget(
     cameraDistance,
@@ -89,21 +110,39 @@ export default function App() {
     runtimeSnapshot: deferredRuntimeSnapshot
   });
 
+  const handleEntryPointChange = (entryId: typeof activeEntryPointId) => {
+    const entryPoint = resolveNavigationEntryPoint(navigationEntryPoints, entryId);
+
+    setActiveEntryPointId(entryId);
+    setFocusOccurrenceId(entryPoint.focusOccurrenceId);
+    setNeighborhoodRadius(entryPoint.neighborhoodRadius);
+    setCameraDistance(entryPoint.distance);
+    setBoardReferenceOpen(true);
+    setOrbitResetKey((currentKey) => currentKey + 1);
+  };
+
+  const handleFocusOccurrenceChange = (occurrenceId: string) => {
+    setFocusOccurrenceId(occurrenceId);
+    setBoardReferenceOpen(true);
+  };
+
   return (
     <ViewerShell
+      activeEntryPointId={activeEntryPointId}
+      boardReferenceOpen={boardReferenceOpen}
       cameraGrammar={cameraGrammar}
       carrierSurface={carrierSurface}
       cameraDistance={cameraDistance}
       focusLine={focusLine}
       focusLinesByOccurrenceId={focusLinesByOccurrenceId}
       focusOptions={focusOptions}
-      navigationEntryPoint={createRuntimeNavigationEntryPoint(
-        deferredRuntimeSnapshot,
-        cameraDistance
-      )}
+      entryPoints={navigationEntryPoints}
+      navigationEntryPoint={activeNavigationEntryPoint}
       onCameraDistanceChange={(distance) =>
         setCameraDistance(clampLiveViewDistance(distance))
       }
+      onBoardReferenceOpenChange={setBoardReferenceOpen}
+      onEntryPointChange={handleEntryPointChange}
       onRenderTuningChange={(partialTuning) =>
         setRenderTuning((currentTuning) =>
           clampViewerRenderTuning({
@@ -113,8 +152,9 @@ export default function App() {
         )
       }
       onResetRenderTuning={() => setRenderTuning(DEFAULT_VIEWER_RENDER_TUNING)}
-      onFocusOccurrenceChange={setFocusOccurrenceId}
+      onFocusOccurrenceChange={handleFocusOccurrenceChange}
       onNeighborhoodRadiusChange={setNeighborhoodRadius}
+      orbitResetKey={orbitResetKey}
       renderTuning={renderTuning}
       runtimeConfig={viewerSceneManifest.runtime}
       runtimeSnapshot={deferredRuntimeSnapshot}

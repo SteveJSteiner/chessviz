@@ -14,12 +14,24 @@ export interface SceneBootstrap {
   camera: CameraBootstrap;
 }
 
+export type NavigationEntryPointId = 'opening' | 'middlegame' | 'endgame';
+
+export interface CameraOrbitPreset {
+  azimuth: number;
+  elevation: number;
+}
+
 export interface NavigationEntryPoint {
-  entryId: string;
+  entryId: NavigationEntryPointId;
   label: string;
   description: string;
+  focusOccurrenceId: string;
   focus: Vector3;
   distance: number;
+  neighborhoodRadius: number;
+  orbit: CameraOrbitPreset;
+  rootGameId: string;
+  anchorPly: number;
 }
 
 export interface BuilderOccurrencePriorityHint {

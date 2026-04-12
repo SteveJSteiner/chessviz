@@ -16,7 +16,6 @@ import {
 import { formatGameName, formatTerminalOutcomeLabel } from './chessContext.ts';
 import {
   advanceCameraOrbitState,
-  deriveCameraOrbitState,
   resolveOrbitCameraPosition
 } from './cameraOrbit.ts';
 import {
@@ -26,6 +25,7 @@ import {
 } from './labelPolicy.ts';
 import type { ViewerRenderTuning } from './renderTuning.ts';
 import type {
+  CameraOrbitPreset,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeCarrierRecord,
   RuntimeNeighborhoodOccurrence,
@@ -39,6 +39,9 @@ type SmokeCanvasProps = {
   cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   onCameraDistanceChange: (distance: number) => void;
+  onFocusOccurrenceChange: (occurrenceId: string) => void;
+  orbitPreset: CameraOrbitPreset;
+  orbitResetKey: number;
   renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
@@ -49,6 +52,9 @@ export function SmokeCanvas({
   cameraDistance,
   carrierSurface,
   onCameraDistanceChange,
+  onFocusOccurrenceChange,
+  orbitPreset,
+  orbitResetKey,
   renderTuning,
   sceneBootstrap,
   runtimeSnapshot
@@ -73,7 +79,8 @@ export function SmokeCanvas({
         cameraFocus={cameraGrammar.lookAt}
         cameraDistance={cameraDistance}
         onCameraDistanceChange={onCameraDistanceChange}
-        sceneBootstrap={sceneBootstrap}
+        orbitPreset={orbitPreset}
+        orbitResetKey={orbitResetKey}
       />
       <color attach="background" args={['#f5f1e8']} />
       <ambientLight intensity={0.72} />
@@ -85,6 +92,7 @@ export function SmokeCanvas({
         <NeighborhoodNode
           accentColor={sceneBootstrap.accentColor}
           key={occurrence.occurrenceId}
+          onFocusOccurrenceChange={onFocusOccurrenceChange}
           occurrence={occurrence}
           radiusCap={occurrenceRadiusCaps.get(occurrence.occurrenceId)}
           renderTuning={renderTuning}
@@ -111,16 +119,18 @@ function CameraRig({
   cameraFocus,
   cameraDistance,
   onCameraDistanceChange,
-  sceneBootstrap
+  orbitPreset,
+  orbitResetKey
 }: {
   cameraFocus: Vector3;
   cameraDistance: number;
   onCameraDistanceChange: (distance: number) => void;
-  sceneBootstrap: SceneBootstrap;
+  orbitPreset: CameraOrbitPreset;
+  orbitResetKey: number;
 }) {
   const { camera, gl } = useThree();
   const scaledFocus = scaleCoordinate(cameraFocus);
-  const orbitStateRef = useRef(deriveCameraOrbitState(sceneBootstrap.camera.position));
+  const orbitStateRef = useRef(orbitPreset);
   const dragStateRef = useRef({ active: false, pointerId: null as number | null, x: 0, y: 0 });
   const cameraDistanceRef = useRef(cameraDistance);
 
@@ -129,8 +139,8 @@ function CameraRig({
   }, [cameraDistance]);
 
   useEffect(() => {
-    orbitStateRef.current = deriveCameraOrbitState(sceneBootstrap.camera.position);
-  }, [sceneBootstrap.camera.position]);
+    orbitStateRef.current = orbitPreset;
+  }, [orbitPreset, orbitResetKey]);
 
   useEffect(() => {
     const canvasElement = gl.domElement;
@@ -230,11 +240,13 @@ function CameraRig({
 
 function NeighborhoodNode({
   accentColor,
+  onFocusOccurrenceChange,
   occurrence,
   radiusCap,
   renderTuning
 }: {
   accentColor: string;
+  onFocusOccurrenceChange: (occurrenceId: string) => void;
   occurrence: RuntimeNeighborhoodOccurrence;
   radiusCap: number | undefined;
   renderTuning: ViewerRenderTuning;
@@ -249,7 +261,13 @@ function NeighborhoodNode({
   const radius = occurrence.isFocus ? presentation.radius * 1.06 : presentation.radius;
 
   return (
-    <group position={position}>
+    <group
+      onClick={(event) => {
+        event.stopPropagation();
+        onFocusOccurrenceChange(occurrence.occurrenceId);
+      }}
+      position={position}
+    >
       <mesh>
         <sphereGeometry args={[radius, 20, 20]} />
         <meshStandardMaterial

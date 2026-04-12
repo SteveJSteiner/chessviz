@@ -1,6 +1,7 @@
 import type {
   BuilderOccurrenceRecord,
   NavigationEntryPoint,
+  NavigationEntryPointId,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationConfig,
   RuntimeNeighborhoodSnapshot,
@@ -24,9 +25,12 @@ import type { ViewerRenderTuning } from './renderTuning.ts';
 import { SmokeCanvas } from './SmokeCanvas';
 
 type ViewerShellProps = {
+  activeEntryPointId: NavigationEntryPointId;
+  boardReferenceOpen: boolean;
   cameraGrammar: CameraGrammarState;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   cameraDistance: number;
+  entryPoints: NavigationEntryPoint[];
   focusLine: RuntimeOccurrenceLine | undefined;
   focusLinesByOccurrenceId: Map<string, RuntimeOccurrenceLine | undefined>;
   focusOptions: BuilderOccurrenceRecord[];
@@ -35,8 +39,11 @@ type ViewerShellProps = {
   transitionSurface: RuntimeTransitionSurfaceSnapshot;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
+  onBoardReferenceOpenChange: (open: boolean) => void;
+  onEntryPointChange: (entryId: NavigationEntryPointId) => void;
   workspaceBoundary: WorkspaceBoundary;
   neighborhoodRadius: number;
+  orbitResetKey: number;
   onRenderTuningChange: (partialTuning: Partial<ViewerRenderTuning>) => void;
   onResetRenderTuning: () => void;
   onCameraDistanceChange: (distance: number) => void;
@@ -85,6 +92,12 @@ const controlStackStyle = {
   display: 'grid',
   gap: '0.85rem',
   marginTop: '1rem'
+} as const;
+
+const entryPointGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+  gap: '0.55rem'
 } as const;
 
 const controlLabelStyle = {
@@ -162,10 +175,23 @@ const inlineButtonStyle = {
   justifySelf: 'start'
 } as const;
 
+function resolveEntryPointButtonStyle(isActive: boolean) {
+  return {
+    ...secondaryButtonStyle,
+    borderColor: isActive ? 'rgba(15, 118, 110, 0.65)' : 'rgba(31, 41, 51, 0.12)',
+    background: isActive ? 'rgba(15, 118, 110, 0.14)' : 'rgba(255, 255, 255, 0.9)',
+    color: isActive ? '#0f5d57' : '#1f2933',
+    fontWeight: isActive ? 700 : 500
+  };
+}
+
 export function ViewerShell({
+  activeEntryPointId,
+  boardReferenceOpen,
   cameraGrammar,
   carrierSurface,
   cameraDistance,
+  entryPoints,
   focusLine,
   focusLinesByOccurrenceId,
   focusOptions,
@@ -174,8 +200,11 @@ export function ViewerShell({
   transitionSurface,
   sceneBootstrap,
   navigationEntryPoint,
+  onBoardReferenceOpenChange,
+  onEntryPointChange,
   workspaceBoundary,
   neighborhoodRadius,
+  orbitResetKey,
   onRenderTuningChange,
   onResetRenderTuning,
   onCameraDistanceChange,
@@ -222,12 +251,35 @@ export function ViewerShell({
     <main style={shellStyle}>
       <section style={panelStyle}>
         <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700 }}>
-          N11 Camera Grammar
+          N12 Anchored Entrypoints
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
 
         <div style={controlStackStyle}>
+          <div style={entryPointGridStyle}>
+            {entryPoints.map((entryPoint) => (
+              <button
+                key={entryPoint.entryId}
+                onClick={() => onEntryPointChange(entryPoint.entryId)}
+                style={resolveEntryPointButtonStyle(
+                  entryPoint.entryId === activeEntryPointId
+                )}
+                type="button"
+              >
+                {entryPoint.label}
+              </button>
+            ))}
+          </div>
+
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>{navigationEntryPoint.label} entrypoint</div>
+            <p style={{ margin: '0.45rem 0 0' }}>{navigationEntryPoint.description}</p>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+              Anchor ply {navigationEntryPoint.anchorPly} · radius {navigationEntryPoint.neighborhoodRadius} · preset distance {navigationEntryPoint.distance.toFixed(1)}
+            </p>
+          </article>
+
           <label style={controlLabelStyle}>
             Focus occurrence
             <select
@@ -419,7 +471,13 @@ export function ViewerShell({
             </p>
           </article>
           {focusParsedStateKey && focusOccurrence ? (
-            <details style={detailsStyle}>
+            <details
+              onToggle={(event) =>
+                onBoardReferenceOpenChange(event.currentTarget.open)
+              }
+              open={boardReferenceOpen}
+              style={detailsStyle}
+            >
               <summary style={{ cursor: 'pointer', fontWeight: 700 }}>Board reference</summary>
               <div style={{ marginTop: '0.75rem' }}>
                 <ChessBoard
@@ -603,7 +661,7 @@ export function ViewerShell({
 
         <span style={metaLabelStyle}>Review Artifacts</span>
         <pre style={codeBlockStyle}>
-      {'pnpm --filter viewer review:artifacts\n\nartifacts/viewer/review/structure-zoom.svg\nartifacts/viewer/review/refinement-steps.svg\nartifacts/viewer/review/camera-grammar.svg\nartifacts/viewer/review/review-notes-template.md'}
+      {'pnpm --filter viewer review:artifacts\n\nartifacts/viewer/review/anchored-entrypoints.svg\nartifacts/viewer/review/structure-zoom.svg\nartifacts/viewer/review/refinement-steps.svg\nartifacts/viewer/review/camera-grammar.svg\nartifacts/viewer/review/review-notes-template.md'}
         </pre>
       </section>
 
@@ -613,6 +671,9 @@ export function ViewerShell({
           cameraDistance={cameraDistance}
           carrierSurface={carrierSurface}
           onCameraDistanceChange={onCameraDistanceChange}
+          onFocusOccurrenceChange={onFocusOccurrenceChange}
+          orbitPreset={navigationEntryPoint.orbit}
+          orbitResetKey={orbitResetKey}
           renderTuning={renderTuning}
           runtimeSnapshot={runtimeSnapshot}
           sceneBootstrap={sceneBootstrap}

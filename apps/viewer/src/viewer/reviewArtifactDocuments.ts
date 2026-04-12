@@ -7,7 +7,6 @@ import {
   type CameraGrammarState
 } from './cameraGrammar.ts';
 import {
-  deriveCameraOrbitState,
   resolveOrbitCameraPosition
 } from './cameraOrbit.ts';
 import {
@@ -46,7 +45,10 @@ import {
   selectCarrierLabelSelections,
   selectOccurrenceLabelSelections
 } from './labelPolicy.ts';
-import { createRuntimeNavigationEntryPoint } from './navigation.ts';
+import {
+  createAnchoredNavigationEntryPoints,
+  resolveNavigationEntryPoint
+} from './navigation.ts';
 import { createRuntimeExplorationKernel } from './runtimeKernel.ts';
 
 type ReviewScene = {
@@ -89,7 +91,10 @@ type ReviewFocusContext = {
   localTransitions: ReviewLocalTransition[];
 };
 
-const REVIEW_ARTIFACT_NEIGHBORHOOD_RADIUS = 2;
+type EntryPointReviewScene = {
+  reviewScene: ReviewScene;
+  focusContext: ReviewFocusContext;
+};
 
 export function buildViewerReviewArtifacts(
   builderBootstrapManifest: BuilderBootstrapManifest,
@@ -100,8 +105,16 @@ export function buildViewerReviewArtifacts(
     viewerSceneManifest
   );
   const sceneBootstrap = createSceneBootstrap(viewerSceneManifest);
-  const focusOccurrenceId = viewerSceneManifest.runtime.initialFocusOccurrenceId;
-  const neighborhoodRadius = REVIEW_ARTIFACT_NEIGHBORHOOD_RADIUS;
+  const navigationEntryPoints = createAnchoredNavigationEntryPoints(
+    builderBootstrapManifest,
+    viewerSceneManifest
+  );
+  const middlegameEntryPoint = resolveNavigationEntryPoint(
+    navigationEntryPoints,
+    'middlegame'
+  );
+  const focusOccurrenceId = middlegameEntryPoint.focusOccurrenceId;
+  const neighborhoodRadius = middlegameEntryPoint.neighborhoodRadius;
   const reviewDistances = [
     CAMERA_GRAMMAR_REVIEW_DISTANCES.structure,
     CAMERA_GRAMMAR_REVIEW_DISTANCES.tactical,
@@ -112,23 +125,41 @@ export function buildViewerReviewArtifacts(
       kernel,
       sceneBootstrap,
       runtimeConfig: viewerSceneManifest.runtime,
-      cameraDistance,
-      focusOccurrenceId,
-      neighborhoodRadius
+      navigationEntryPoint: {
+        ...middlegameEntryPoint,
+        distance: cameraDistance
+      }
+    })
+  );
+  const entryPointReviewScenes = navigationEntryPoints.map((navigationEntryPoint) =>
+    buildEntryPointReviewScene({
+      builderBootstrapManifest,
+      kernel,
+      sceneBootstrap,
+      runtimeConfig: viewerSceneManifest.runtime,
+      navigationEntryPoint
     })
   );
   const refinementBudgets = reviewScenes.map(
     (reviewScene) => reviewScene.runtimeSnapshot.refinementBudget
   );
-  const focusContext = buildReviewFocusContext(
-    builderBootstrapManifest,
-    kernel,
-    focusOccurrenceId
-  );
+  const focusContext = entryPointReviewScenes.find(
+    (entryPointReviewScene) =>
+      entryPointReviewScene.reviewScene.navigationEntryPoint.entryId === 'middlegame'
+  )?.focusContext;
+
+  if (!focusContext) {
+    throw new Error('expected middlegame entrypoint review context');
+  }
+
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
   const focusLineText = formatOccurrenceLine(focusContext.focusLine);
 
   return [
+    {
+      fileName: 'review/anchored-entrypoints.svg',
+      content: renderAnchoredEntryPointsDocument(entryPointReviewScenes)
+    },
     {
       fileName: 'review/structure-zoom.svg',
       content: renderStructureZoomDocument(
@@ -160,6 +191,14 @@ export function buildViewerReviewArtifacts(
           graphObjectId: builderBootstrapManifest.graphObjectId,
           sceneId: viewerSceneManifest.sceneId,
           focusOccurrenceId,
+          navigationEntryPoints: navigationEntryPoints.map((entryPoint) => ({
+            entryId: entryPoint.entryId,
+            focusOccurrenceId: entryPoint.focusOccurrenceId,
+            rootGameId: entryPoint.rootGameId,
+            anchorPly: entryPoint.anchorPly,
+            neighborhoodRadius: entryPoint.neighborhoodRadius,
+            distance: roundNumber(entryPoint.distance)
+          })),
           rootGameId:
             focusContext.focusLine?.rootGameId ??
             focusContext.focusOccurrence.embedding.rootGameId,
@@ -180,6 +219,16 @@ export function buildViewerReviewArtifacts(
             )
           })),
           artifacts: [
+            {
+              file: 'anchored-entrypoints.svg',
+              regime: 'anchored-entrypoints',
+              entryIds: navigationEntryPoints.map((entryPoint) => entryPoint.entryId),
+              graphObjectId: builderBootstrapManifest.graphObjectId,
+              focusBoardIncluded: false,
+              moveLabelsIncluded: true,
+              rootLabelsIncluded: true,
+              terminalLabelsIncluded: true
+            },
             {
               file: 'structure-zoom.svg',
               regime: 'structure-zoom',
@@ -233,57 +282,135 @@ export function buildViewerReviewArtifacts(
       content: renderReviewNotesTemplate(
         builderBootstrapManifest.graphObjectId,
         viewerSceneManifest.sceneId,
-        focusOccurrenceId,
-        neighborhoodRadius,
+        navigationEntryPoints,
         focusContext
       )
     }
   ];
 }
 
+function buildEntryPointReviewScene({
+  builderBootstrapManifest,
+  kernel,
+  sceneBootstrap,
+  runtimeConfig,
+  navigationEntryPoint
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  kernel: ReturnType<typeof createRuntimeExplorationKernel>;
+  sceneBootstrap: SceneBootstrap;
+  runtimeConfig: ViewerSceneManifest['runtime'];
+  navigationEntryPoint: NavigationEntryPoint;
+}): EntryPointReviewScene {
+  return {
+    reviewScene: buildReviewScene({
+      kernel,
+      sceneBootstrap,
+      runtimeConfig,
+      navigationEntryPoint
+    }),
+    focusContext: buildReviewFocusContext(
+      builderBootstrapManifest,
+      kernel,
+      navigationEntryPoint.focusOccurrenceId
+    )
+  };
+}
+
 function buildReviewScene({
   kernel,
   sceneBootstrap,
   runtimeConfig,
-  cameraDistance,
-  focusOccurrenceId,
-  neighborhoodRadius
+  navigationEntryPoint
 }: {
   kernel: ReturnType<typeof createRuntimeExplorationKernel>;
   sceneBootstrap: SceneBootstrap;
   runtimeConfig: ViewerSceneManifest['runtime'];
-  cameraDistance: number;
-  focusOccurrenceId: string;
-  neighborhoodRadius: number;
+  navigationEntryPoint: NavigationEntryPoint;
 }): ReviewScene {
   const refinementBudget = resolveCameraGrammarRefinementBudget(
-    cameraDistance,
+    navigationEntryPoint.distance,
     runtimeConfig
   );
-  const runtimeSnapshot = kernel.inspectNeighborhood(focusOccurrenceId, {
-    radius: neighborhoodRadius,
-    refinementBudget
-  });
+  const runtimeSnapshot = kernel.inspectNeighborhood(
+    navigationEntryPoint.focusOccurrenceId,
+    {
+      radius: navigationEntryPoint.neighborhoodRadius,
+      refinementBudget
+    }
+  );
   const carrierSurface = kernel.inspectCarrierSurface(
     runtimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
     { refinementBudget }
   );
 
   return {
-    cameraDistance,
+    cameraDistance: navigationEntryPoint.distance,
     cameraGrammar: createCameraGrammarState({
-      cameraDistance,
+      cameraDistance: navigationEntryPoint.distance,
       runtimeConfig,
       runtimeSnapshot
     }),
     sceneBootstrap,
-    navigationEntryPoint: createRuntimeNavigationEntryPoint(
-      runtimeSnapshot,
-      cameraDistance
-    ),
+    navigationEntryPoint,
     runtimeSnapshot,
     carrierSurface
   };
+}
+
+function renderAnchoredEntryPointsDocument(
+  entryPointReviewScenes: EntryPointReviewScene[]
+) {
+  const width = 1700;
+  const height = 980;
+  const viewports = [
+    { x: 40, y: 176, width: 516, height: 620 },
+    { x: 592, y: 176, width: 516, height: 620 },
+    { x: 1144, y: 176, width: 516, height: 620 }
+  ] as const;
+  const graphObjectId = entryPointReviewScenes[0]?.reviewScene.runtimeSnapshot.graphObjectId;
+
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    renderSvgStyleBlock(),
+    '<rect width="100%" height="100%" fill="#ece6d8" />',
+    '<rect x="24" y="24" width="1652" height="932" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
+    '<text x="40" y="62" class="eyebrow">N12 anchored entrypoints review</text>',
+    '<text x="40" y="96" class="title">Opening, middlegame, and endgame over one object</text>',
+    `<text x="40" y="124" class="subtitle">${escapeXml(graphObjectId ?? 'unknown graph object')} · switching presets should move the camera and anchor without swapping scene families</text>`,
+    ...entryPointReviewScenes.map((entryPointReviewScene, index) =>
+      renderScenePanel(
+        entryPointReviewScene.reviewScene,
+        entryPointReviewScene.focusContext,
+        viewports[index]!,
+        `anchored-entrypoint-panel-${index}`
+      )
+    ),
+    ...entryPointReviewScenes.map((entryPointReviewScene, index) =>
+      renderAnchoredEntryPointCaption(
+        viewports[index]!,
+        entryPointReviewScene.reviewScene
+      )
+    ),
+    '<text x="40" y="850" class="section">Expected read</text>',
+    renderWrappedTextBlock(
+      40,
+      878,
+      'Each panel is the same graph object under a different anchor and camera stance. Opening should read as full-material branching, middlegame as branch-rich local complexity, and endgame as simplified routing without turning into a different diagram family.',
+      118,
+      20,
+      'copy'
+    ),
+    renderBandLegendRow(
+      40,
+      930,
+      '#566574',
+      '#87a9c8',
+      '#dcecff',
+      'Entrypoints change anchor and emphasis only. Carrier semantics and label grammar stay continuous across all three views.'
+    ),
+    '</svg>'
+  ].join('');
 }
 
 function buildReviewFocusContext(
@@ -514,26 +641,25 @@ function renderCameraGrammarDocument(
 function renderReviewNotesTemplate(
   graphObjectId: string,
   sceneId: string,
-  focusOccurrenceId: string,
-  neighborhoodRadius: number,
+  navigationEntryPoints: NavigationEntryPoint[],
   focusContext: ReviewFocusContext
 ) {
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
 
   return [
-    '# N11 Review Notes',
+    '# N12 Review Notes',
     '',
-    'Use this file as the human verdict record for the generated N11 review artifacts.',
+    'Use this file as the human verdict record for the generated N12 review artifacts.',
     '',
     '## Run context',
     `- graphObjectId: ${graphObjectId}`,
     `- sceneId: ${sceneId}`,
-    `- focusOccurrenceId: ${focusOccurrenceId}`,
-    `- rootGameId: ${focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId}`,
-    `- rootGameName: ${formatGameName(focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId)}`,
-    `- focusLine: ${formatOccurrenceLine(focusContext.focusLine)}`,
-    `- focusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
-    `- neighborhoodRadius: ${neighborhoodRadius}`,
+    ...navigationEntryPoints.map(
+      (entryPoint) =>
+        `- ${entryPoint.entryId} anchor: ${entryPoint.focusOccurrenceId} · ${formatGameName(entryPoint.rootGameId)} · ply ${entryPoint.anchorPly} · radius ${entryPoint.neighborhoodRadius} · distance ${entryPoint.distance.toFixed(1)}`
+    ),
+    `- middlegame focusLine: ${formatOccurrenceLine(focusContext.focusLine)}`,
+    `- middlegame focusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
     `- structureDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.structure.toFixed(1)}`,
     `- tacticalDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.tactical.toFixed(1)}`,
     `- contextualDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.contextual.toFixed(1)}`,
@@ -542,6 +668,7 @@ function renderReviewNotesTemplate(
     `- contextualBudget: ${N10B_REVIEW_BUDGETS.contextual}`,
     '',
     '## Reviewed artifacts',
+    '- review/anchored-entrypoints.svg',
     '- review/structure-zoom.svg',
     '- review/refinement-steps.svg',
     '- review/camera-grammar.svg',
@@ -550,23 +677,23 @@ function renderReviewNotesTemplate(
     '- name:',
     '- date:',
     '',
-    '## Structure read verdict',
-    '- did the far view keep the coarse move-family reading legible before closer detail appeared:',
-    '- did roots and terminals remain secondary labels on the same object rather than a separate explanation layer:',
-    '- did the board reference help verify the focus position without competing with the geometry:',
+    '## Anchored entrypoint verdict',
+    '- opening, middlegame, and endgame read as one object rather than three substitute diagrams:',
+    '- switching presets changed anchor, emphasis, and camera stance without changing graph identity:',
+    '- local exploration still felt available after switching presets:',
+    '- the board reference stayed secondary and confirmatory rather than becoming the primary interface:',
     '',
-    '## Camera grammar verdict',
-    '- orbiting kept the focus position legible while preserving some surrounding branch context:',
-    '- zooming closer added tactical/contextual detail on the same carriers rather than swapping representations:',
-    '- zooming back out restored the coarse reading without contradictory emphasis:',
-    '- the detail and label density changes felt predictable under interaction:',
+    '## Camera grammar carryover',
+    '- orbiting still kept the focused position legible while preserving surrounding branch context:',
+    '- zooming closer still added tactical/contextual detail on the same carriers rather than swapping representations:',
+    '- zooming back out still restored the coarse reading without contradictory emphasis:',
     '- what still needs iteration:',
     '',
     '## Settlement note',
-    '- N11 settled: no / yes',
+    '- N12 settled: no / yes',
     '- if yes, reference the commit that updates plan/completion-log.md and plan/continuation.md',
     '',
-    'Do not mark N11 settled without recorded human review.'
+    'Do not mark N12 settled without recorded human review.'
   ].join('\n');
 }
 
@@ -823,11 +950,10 @@ function renderOccurrenceMarkup(
 
 function createProjector(reviewScene: ReviewScene, viewport: Viewport) {
   const scaledFocus = scaleCoordinate(reviewScene.cameraGrammar.lookAt);
-  const orbitState = deriveCameraOrbitState(reviewScene.sceneBootstrap.camera.position);
   const cameraPosition = resolveOrbitCameraPosition(
     scaledFocus,
     reviewScene.cameraDistance,
-    orbitState
+    reviewScene.navigationEntryPoint.orbit
   );
   const upHint: Vector3 = [0, 1, 0];
   const forward = normalize(subtract(scaledFocus, cameraPosition), [0, 0, -1]);
@@ -1146,6 +1272,25 @@ function renderPanelCaption(viewport: Viewport, refinementBudget: number) {
   return [
     `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">Budget ${refinementBudget}</text>`,
     `<text x="${viewport.x}" y="${viewport.y + viewport.height + 28}" class="copy">${escapeXml(bandCaption(refinementBudget))}</text>`
+  ].join('');
+}
+
+function renderAnchoredEntryPointCaption(
+  viewport: Viewport,
+  reviewScene: ReviewScene
+) {
+  const entryPoint = reviewScene.navigationEntryPoint;
+
+  return [
+    `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">${escapeXml(`${entryPoint.label} · ply ${entryPoint.anchorPly}`)}</text>`,
+    renderWrappedTextBlock(
+      viewport.x,
+      viewport.y + viewport.height + 28,
+      `${formatGameName(entryPoint.rootGameId)} · radius ${reviewScene.runtimeSnapshot.radius} · distance ${reviewScene.cameraDistance.toFixed(1)}. ${entryPoint.description}`,
+      54,
+      20,
+      'copy'
+    )
   ].join('');
 }
 

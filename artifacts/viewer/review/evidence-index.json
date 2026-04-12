@@ -1,7 +1,33 @@
 {
-  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-003",
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
   "sceneId": "runtime-exploration-fixture",
   "focusOccurrenceId": "occ-25c32c2bc0227f68",
+  "navigationEntryPoints": [
+    {
+      "entryId": "opening",
+      "focusOccurrenceId": "occ-27e2be7f2bf706c6",
+      "rootGameId": "qgd-bogo-a",
+      "anchorPly": 0,
+      "neighborhoodRadius": 3,
+      "distance": 5
+    },
+    {
+      "entryId": "middlegame",
+      "focusOccurrenceId": "occ-25c32c2bc0227f68",
+      "rootGameId": "italian-branch-lab",
+      "anchorPly": 8,
+      "neighborhoodRadius": 2,
+      "distance": 4.2
+    },
+    {
+      "entryId": "endgame",
+      "focusOccurrenceId": "occ-50c5276a269f4c53",
+      "rootGameId": "endgame-simplification-lab",
+      "anchorPly": 35,
+      "neighborhoodRadius": 3,
+      "distance": 3.35
+    }
+  ],
   "rootGameId": "italian-branch-lab",
   "focusLine": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6",
   "focusTurn": "White to move",
@@ -61,6 +87,20 @@
     }
   ],
   "artifacts": [
+    {
+      "file": "anchored-entrypoints.svg",
+      "regime": "anchored-entrypoints",
+      "entryIds": [
+        "opening",
+        "middlegame",
+        "endgame"
+      ],
+      "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
+      "focusBoardIncluded": false,
+      "moveLabelsIncluded": true,
+      "rootLabelsIncluded": true,
+      "terminalLabelsIncluded": true
+    },
     {
       "file": "structure-zoom.svg",
       "regime": "structure-zoom",
@@ -125,21 +165,6 @@
         "contextual"
       ],
       "liveLabelPolicyApplied": true
-    },
-    {
-      "file": "n11-live-review-notes.md",
-      "regime": "live-review-notes",
-      "reviewedCommit": "5c0978a",
-      "continuityVerified": true,
-      "reproduction": {
-        "focusFixture": "QCD Bogo-Indian A",
-        "focusOccurrence": "initial position",
-        "neighborhoodRadius": 4,
-        "cameraDistances": [
-          4.6,
-          4.7
-        ]
-      }
     },
     {
       "file": "review-notes-template.md",
