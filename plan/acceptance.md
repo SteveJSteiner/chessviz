@@ -4,11 +4,15 @@ This file contains explicit, testable acceptance checks and performance/renderin
 
 ## Declared initial data scope
 
-- **Primary corpus slices:** Curated PGN subset for continuous occurrence paths, tagged opening-line references for named early-branch anchors, and terminal-labeled outcomes for declared end states.
-- **Optional supplemental slices:** Engine-tree slices and tablebase slices are allowed only when a run declaration names them explicitly; otherwise they are absent from the represented subset.
-- **Represented-subset rule:** The object is built from the declared corpus subset, not exhaustive legal-state enumeration.
-- **Determinism rule:** Each acceptance run records the seed and config hash used to produce structural outputs.
-- **Run declaration requirement:** Each acceptance run records corpus version/hash, declared slices, and salience-input declaration.
+- **Opening-table surface:** Acceptance runs use declared project-owned opening-table assets emitted as deterministic web shards plus manifest metadata for opening coverage.
+- **Middlegame surface:** Acceptance runs use live procedural expansion from the current position under a declared expansion, scoring, and pruning policy; no precomputed full-middlegame lookup corpus is allowed.
+- **Endgame-table surface:** Acceptance runs use declared project-owned endgame-table assets emitted as deterministic web shards plus manifest metadata for supported material classes.
+- **Fixture rule:** The builder fixture is test-only and is excluded from runtime corpus, bootstrap truth, and settlement review.
+- **Truth-surface rule:** Reviewed and settled runtime data comes from project-owned web assets and live procedural outputs, not foreign binary layouts.
+- **Bootstrap rule:** Any bootstrap or seeded scene used for acceptance is derived from regime surfaces rather than from fixture data.
+- **Represented-subset rule:** The object is built from the declared regime surfaces, not exhaustive legal-state enumeration.
+- **Determinism rule:** Each acceptance run records the seed, config hash, and regime-surface hashes or policy hashes used to produce structural outputs.
+- **Run declaration requirement:** Each acceptance run records regime surface metadata, any builder-time import inputs, and the salience-input declaration.
 
 ## Acceptance run declaration template
 
@@ -18,26 +22,32 @@ This file contains explicit, testable acceptance checks and performance/renderin
 
 ```yaml
 run_declaration:
-  corpus:
-    profile: initial-represented-subset
-    version_or_date:
-    content_hash:
-    slices:
-      - name: curated-pgn-subset
-        source:
-        selection_rule:
-      - name: tagged-opening-lines
-        source:
-        selection_rule:
-      - name: terminal-outcome-labels
-        source:
-        selection_rule:
-      - name: optional-engine-tree-slice
-        source: omitted
-        selection_rule: omitted
-      - name: optional-tablebase-slice
-        source: omitted
-        selection_rule: omitted
+  representation:
+    graph_object_id:
+    schema_version:
+  regimes:
+    opening_table:
+      asset_set:
+      manifest_hash:
+      coverage_cutoff:
+      schema_version:
+    middlegame_procedural:
+      expansion_policy:
+      pruning_policy:
+      scoring_policy:
+      runtime_config_hash:
+    endgame_table:
+      asset_set:
+      manifest_hash:
+      supported_material_classes: []
+      schema_version:
+  ingestion_inputs:
+    opening_import:
+      source: omitted
+      source_hash: omitted
+    endgame_import:
+      source: omitted
+      source_hash: omitted
   salience:
     frequency:
       source:
@@ -59,7 +69,7 @@ run_declaration:
   determinism:
     seed:
     config_hash:
-    supplemental_hashes: []
+    regime_hashes: []
 ```
 
 ## Performance/rendering budgets
@@ -74,28 +84,33 @@ run_declaration:
 
 - **A1. Occurrence distinction + transposition relation:** A known transposition case renders as multiple occurrences with a visible relation.
 - **A2. Ontology continuity across zoom:** Zoom changes legibility/emphasis only; object identity remains constant.
-- **A3. Anchored-view unity:** Opening, middlegame, and endgame presets reference the same underlying graph/object id.
-- **A4. Mixed-scale single frame:** One camera frame can show local board-detail proxy and distal branching context together.
-- **A5. Move-interaction departure salience:** Move-interaction departures remain classifiable at coarse zoom, with captures still showing stronger departure than matched quiet-move controls.
-- **A6. Coarse salience preservation:** At coarse zoom, configured top-k salient frontier remains legible.
-- **A7. Branching preservation:** Fan-out and fan-in metrics match fixture expectations.
-- **A8. Deterministic reproducibility:** For fixed seed/config/corpus declaration, structural outputs are reproducible.
-- **A9. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
-- **A10. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
-- **A11. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
-- **A12. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family, object identity, or anchored-view regime.
-- **A13. On-object labeling primacy:** Move, root, and terminal labels remain readable on the geometry itself without requiring a sidebar or legend lookup.
-- **A14. Reference-view subordination:** The focused board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry.
-- **A15. Branch-aware label density:** In declared high-branch fixtures, label selection or fade keeps the geometry readable without simultaneous all-edge text saturation.
+- **A3. Anchored-view unity plus regime continuity:** Opening, middlegame, and endgame entrypoints reference the same underlying object id, and shared positions preserve stable identity when navigation crosses regime boundaries.
+- **A4. Internal regime resolution correctness:** Declared opening-covered positions resolve to opening-table, declared supported terminal-material positions resolve to endgame-table, and all other declared positions resolve to middlegame-procedural.
+- **A5. Cross-regime navigation continuity:** Traversals that cross opening-table to middlegame-procedural or middlegame-procedural to endgame-table preserve object identity, anchor semantics, navigation continuity, and query semantics.
+- **A6. Mixed-scale single frame:** One camera frame can show local board-detail proxy and distal branching context together.
+- **A7. Move-interaction departure salience:** Move-interaction departures remain classifiable at coarse zoom, with captures still showing stronger departure than matched quiet-move controls.
+- **A8. Coarse salience preservation:** At coarse zoom, configured top-k salient frontier remains legible.
+- **A9. Branching preservation:** Fan-out and fan-in metrics match declared regime-surface expectations for the acceptance run.
+- **A10. Deterministic reproducibility:** For fixed seed/config/regime declaration, structural outputs are reproducible.
+- **A11. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
+- **A12. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
+- **A13. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
+- **A14. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family and without bypassing the procedural middlegame path when middlegame resolution is required.
+- **A15. On-object labeling primacy:** Move, root, and terminal labels remain readable on the geometry itself without requiring a sidebar or legend lookup.
+- **A16. Reference-view subordination:** The focused board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry.
+- **A17. Branch-aware label density:** In declared high-branch runs, label selection or fade keeps the geometry readable without simultaneous all-edge text saturation.
+- **A18. Project-owned truth surface only:** Acceptance runs and browser/runtime fetch paths use only declared opening/endgame web assets plus live procedural middlegame outputs; fixture data is absent.
+- **A19. Runtime asset boundary:** No foreign binary opening-book or tablebase formats are committed as runtime truth artifacts or loaded by the web runtime.
+- **A20. Hard-fail integrity:** Acceptance fails when required opening/endgame assets are missing, middlegame procedural expansion is bypassed by canned coverage, or regime transitions fracture identity, anchoring, navigation, or query continuity.
 
 ## Visual evidence requirements
 
-- **V1. Human review gate:** Checks `A1` through `A6` and `A9` through `A15` require human-reviewed render evidence.
+- **V1. Human review gate:** Checks `A1` through `A8` and `A11` through `A17` require human-reviewed render evidence.
 - **V2. Evidence artifact:** Each reviewed run records at least one screenshot or screen capture for each exercised visual regime plus a short verdict of what did and did not read.
 - **V3. Automation role:** Automated assertions may support those checks but cannot produce a pass on their own.
 
 ## Recording protocol
 
-- Record pass/fail for A1-A15 and B1-B5 in commit artifacts tied to N14 settlement.
+- Record pass/fail for A1-A20 and B1-B5 in commit artifacts tied to N14 settlement.
 - Record the human review artifacts required by V1-V3 in the same commit artifacts for any visual-node settlement claim.
 - Any budget change requires updating this file in the same commit as the decision update.

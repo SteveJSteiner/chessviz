@@ -87,8 +87,24 @@ The system shall represent chess as a single continuous zoomable object in which
 - **R42.** The purpose of the hyperbolic projection shall be to keep the high branching factor, especially in the middlegame, legible under navigation and zoom.
 - **R43.** The geometry shall allow a single camera viewpoint to hold both local path detail and larger branching context simultaneously.
 
-## 13. Non-requirements
+## 13. Unified regime representation
 
-- **R44.** The visualization is not required to be a literal time spiral.
-- **R45.** The visualization is not required to use unconstrained self-similar fractal geometry as a primary encoding method.
-- **R46.** The visualization is not required to force all state identity into a single collapsed node view.
+- **R44.** The visualization shall represent opening, middlegame, and endgame as one continuous represented object rather than three substitute objects.
+- **R45.** Distinct backing regimes shall normalize into a common representation contract for occurrence, transition, anchor, salience, and provenance so they inhabit the same represented structure.
+- **R46.** Crossing regime boundaries shall preserve occurrence identity, anchored-path continuity, navigation semantics, and query semantics.
+- **R47.** Regime selection shall remain an internal substrate mechanism and shall not require the user to switch visualizer, object instance, mode, or mental model.
+- **R48.** When the same position or anchored path is encountered across regime boundaries, the system shall preserve stable identity and continuity semantics rather than reintroducing it as a new unrelated object.
+- **R49.** The represented subset shall distinguish three internal backing regimes: opening-table, middlegame-procedural, and endgame-table.
+- **R50.** Positions inside declared opening coverage shall be served from opening-table assets.
+- **R51.** Positions inside declared supported terminal-material coverage shall be served from endgame-table assets.
+- **R52.** Positions outside opening-table and endgame-table coverage shall be expanded live by a middlegame-procedural path rather than by a precomputed middlegame lookup corpus.
+- **R53.** Opening-table and endgame-table support shall come from project-owned, inspectable, web-ready assets rather than from foreign binary formats at runtime.
+- **R54.** External binary opening-book or tablebase formats may exist as ingestion inputs, but they shall not be the browser/runtime truth surface.
+- **R55.** The builder fixture shall remain a test-only input and shall not act as the runtime corpus, bootstrap source, or settlement review surface.
+- **R56.** Acceptance of regime-spanning navigation shall verify continuity of the represented object when exploration crosses opening, middlegame, and endgame boundaries.
+
+## 14. Non-requirements
+
+- **R57.** The visualization is not required to be a literal time spiral.
+- **R58.** The visualization is not required to use unconstrained self-similar fractal geometry as a primary encoding method.
+- **R59.** The visualization is not required to force all state identity into a single collapsed node view.

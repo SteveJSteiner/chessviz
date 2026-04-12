@@ -36,10 +36,25 @@ This file contains design and process decisions only. It must not become a task 
 
 ## Data and computation stance (locked)
 
-- **D17. Represented subset** — The rendered object is a represented subset of chess sourced from declared corpora; it is not a literal enumeration of all legal positions.
-- **D18. Data-source declaration required** — Each run must declare corpus composition (e.g., PGN corpus, opening book, tablebase slice, engine tree slice).
+- **D17. Represented subset** — The rendered object is a represented subset of chess sourced from declared regime surfaces; it is not a literal enumeration of all legal positions.
+- **D18. Per-regime declaration required** — Each run declares opening-table assets and coverage metadata, middlegame-procedural expansion and pruning policy, and endgame-table assets plus supported material classes.
 - **D19. Salience-source declaration required** — Each run must declare salience inputs and weights (frequency, eval, terminal pull, policy, centrality).
 - **D20. Determinism policy** — For a fixed dataset and seed, structural outputs used for acceptance must be reproducible.
+
+## Regime substrate decisions (locked)
+
+- **D20a. One represented object, three backing regimes** — Opening-table, middlegame-procedural, and endgame-table are explicit substrate regimes beneath one represented object.
+- **D20b. Explicit regime resolution** — Runtime regime selection is a typed internal dispatch surface, not a user-facing mode switch.
+- **D20c. Phase labels are annotations, not substrate selectors** — Opening/middlegame/endgame labels may remain useful annotations, but they do not define the runtime backing regime on their own.
+- **D20d. Shared representation contract** — Every regime emits compatible occurrence, transition, anchor, salience, and provenance records with stable identities so cross-regime continuity is representable without object swaps.
+- **D20e. Stable identity across regime boundaries** — Re-encountering the same position, occurrence, or anchored path across regime boundaries preserves identity/continuity semantics instead of minting unrelated objects.
+- **D20f. Project-owned tabular truth surfaces** — Opening-table and endgame-table data live in project-owned, textual, inspectable formats that carry schema version, position key, continuation or terminal payload, weight/frequency/score fields, and provenance.
+- **D20g. Imported and procedural outputs converge** — Imported opening/endgame records and live middlegame procedural outputs normalize into the same representation schema and review surface.
+- **D20h. Builder-only external ingestion boundary** — Foreign opening-book or tablebase formats may be read only by explicit builder commands such as `import-opening-book`, `import-endgame-table`, and `build-web-corpus`; they are never runtime truth surfaces.
+- **D20i. Middlegame remains live procedural** — The middlegame path is generated from live legal-move expansion plus declared scoring/prioritization/pruning policy rather than from a precomputed middlegame table.
+- **D20j. Bootstrap derives from regime surfaces** — Any bootstrap artifact is materialized from opening-table assets, live middlegame procedural expansion, and endgame-table assets, never from the builder fixture.
+- **D20k. Fixture demotion is binding** — The existing fixture remains a unit-test-only input for identity, transposition, and DAG assembly checks and is excluded from runtime corpus, bootstrap truth, and settlement review.
+- **D20l. Settlement hard-fails on bypass or fracture** — Missing required opening/endgame assets, bypassing the middlegame procedural path, or fracturing identity/anchoring/navigation/query semantics at regime boundaries is a hard failure.
 
 ## Performance/rendering budget stance (locked)
 
@@ -67,3 +82,9 @@ This file contains design and process decisions only. It must not become a task 
 - **O7. Terminal color grammar** — Joint encoding of W/D/L, salience, and family cues.
 - **O8. Runtime refinement policy** — Query radius, cache eviction, and refinement triggers under camera motion.
 - **O9. High-branch label selection policy** — Exact blend of top-k salience, proximity, hover, and fade rules in dense live neighborhoods.
+- **O10. Opening-table serialization and sharding** — Exact textual schema and shard map for opening coverage.
+- **O11. Endgame-table serialization and sharding** — Exact textual schema and material-class partition for endgame assets.
+- **O12. Regime coverage cutoff metadata** — Exact opening-coverage cutoff and resolver precedence details when multiple regimes might claim the same position.
+- **O13. Middlegame procedural policy** — Expansion horizon, pruning thresholds, and prioritization blend for live middlegame generation.
+- **O14. Cross-regime provenance exposure** — Which provenance fields stay runtime-visible versus review-only once all regimes emit the shared contract.
+- **O15. Bootstrap materialization granularity** — How much of the unified object is pre-seeded versus fetched or expanded on demand once regime surfaces replace the fixture.

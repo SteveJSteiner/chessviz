@@ -21,23 +21,25 @@ This file contains only DAG-partitioned work nodes, dependencies, and settlement
 - **N10b** (depends on: N10a): Land direct-label carrier labeling, secondary board reference, and deterministic review-artifact scaffolding for human legibility review.
 - **N10c** (depends on: N10b): Validate live carrier legibility and branch-aware label density under recorded human render review.
 - **N11** (depends on: N08a, N10c): Implement camera grammar v1 integrated with runtime refinement and zoom-monotone band reveal.
-- **N12** (depends on: N05, N06, N10c, N11): Add anchored opening/middlegame/endgame entrypoints over one object instance.
-- **N13** (depends on: N02b, N08a, N10c): Add transposition relation rendering layer over the repeated-state query surface.
-- **N14** (depends on: N07, N08a, N10c, N11, N12, N13): Execute operational acceptance suite and budgets.
+- **N11a** (depends on: N11): Re-plan the unified regime substrate, shared representation contract, project-owned truth surfaces, and fixture demotion required before anchored entrypoints can honestly resume.
+- **N11b** (depends on: N11a): Finalize the concrete builder/runtime/module partition for regime substrate work, insert any further prerequisite nodes discovery demands, and reopen N12 only after that prerequisite surface is explicit.
+- **N12** (depends on: N10c, N11, N11b): Add anchored opening/middlegame/endgame entrypoints over one regime-backed object instance.
+- **N13** (depends on: N02b, N08a, N10c, N11b): Add transposition relation rendering layer over the repeated-state query surface without violating the shared regime contract.
+- **N14** (depends on: N07, N08a, N10c, N11, N11b, N12, N13): Execute operational acceptance suite and budgets over the real regime surfaces.
 
 ## Sequence
 
 Topological baseline:
-`N00a -> N00 -> N01 -> N02a -> N03 -> N02b -> N04 -> N05 -> N06 -> N07 -> N08 -> N08a -> N09 -> N10a -> N10b -> N10c -> N11 -> N12 -> N13 -> N14`
+`N00a -> N00 -> N01 -> N02a -> N03 -> N02b -> N04 -> N05 -> N06 -> N07 -> N08 -> N08a -> N09 -> N10a -> N10b -> N10c -> N11 -> N11a -> N11b -> N12 -> N13 -> N14`
 
 Parallel branches allowed by dependencies:
 - `N05` and `N06` after `N03`.
 - `N09` after `N08`.
-- `N13` after `N02b`, `N08a`, and `N10c`.
+- `N12` and `N13` after `N11b`.
 
 ## Visual review overlay
 
-- `N10c` through `N14` are visually judged nodes and require recorded human render review in addition to automated assertions.
+- `N10c`, `N11`, `N12`, `N13`, and `N14` are visually judged nodes and require recorded human render review in addition to automated assertions.
 - These nodes may remain active across multiple visible-change commits; a commit may change the render without settling the node.
 
 ## Settlement criteria by node
@@ -59,6 +61,8 @@ Parallel branches allowed by dependencies:
 - **N10b**: Direct move/root/terminal labels are anchored on the geometry, the focused board reference remains collapsible secondary material, deterministic structure-zoom and refinement-step review artifacts plus a verdict template generate from fixture manifests, and fixture checks pass without shifting builder/runtime responsibility boundaries.
 - **N10c**: Recorded human review confirms structure-zoom carrier renders are visually readable, coarse move-family readings survive distance, refinement-step views add detail without overturning the coarse reading, and the live viewer uses a branch-aware label-density policy that keeps geometry primary under higher branching.
 - **N11**: Camera-driven refinement preserves one object ontology and enforces zoom-monotone semantic band reveal, and recorded human review confirms those behaviors read correctly on screen.
-- **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only; object identity unchanged and local exploration remains available, and recorded human review confirms the views still read as one object.
-- **N13**: Known transpositions show multiple occurrences plus visible relation sourced from the repeated-state query surface, and recorded human review confirms the relation is legible without collapsing occurrence identity.
-- **N14**: All operational acceptance checks pass within declared budgets, with human-reviewed evidence attached for the visual-legibility checks.
+- **N11a**: Requirements, decisions, roadmap, and acceptance all declare one represented object over explicit opening-table, middlegame-procedural, and endgame-table substrates; project-owned truth surfaces and builder-only foreign-format ingestion boundaries are explicit; the fixture is demoted to test-only; and N12/N14 are no longer framed as settleable from fixture-backed phase coverage.
+- **N11b**: The concrete builder/runtime/module partition for the shared representation contract, regime declarations, resolver, bootstrap rebuild, fixture demotion, and hard-fail acceptance paths is explicit enough to scope implementation honestly; any newly discovered prerequisite nodes are inserted before N12 rather than deferred into N12 itself.
+- **N12**: Anchored entrypoints switch viewpoint/emphasis/anchor only over one regime-backed object; opening anchors come from opening-table coverage, middlegame anchors from live procedural expansion, and endgame anchors from endgame-table coverage; crossing regime boundaries preserves identity, anchoring, navigation, and query continuity; and recorded human review confirms the views still read as one object without a regime seam.
+- **N13**: Known transpositions show multiple occurrences plus visible relation sourced from the repeated-state query surface, and recorded human review confirms the relation remains legible without collapsing occurrence identity or fracturing the shared regime contract.
+- **N14**: All operational acceptance checks pass within declared budgets against project-owned opening/endgame assets plus live procedural middlegame surfaces, with human-reviewed evidence attached for the visual-legibility and cross-regime continuity checks.
