@@ -657,7 +657,16 @@ export function ViewerShell({
         <p style={{ marginBottom: '0.35rem' }}>
           {workspaceBoundary.builderBootstrapManifest}
         </p>
-        <p style={{ marginTop: 0 }}>{workspaceBoundary.viewerSceneManifest}</p>
+        <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
+          {workspaceBoundary.viewerSceneManifest}
+        </p>
+        <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
+          {workspaceBoundary.webCorpusManifest}
+        </p>
+        <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
+          {workspaceBoundary.openingTableManifest}
+        </p>
+        <p style={{ marginTop: 0 }}>{workspaceBoundary.endgameTableManifest}</p>
 
         <span style={metaLabelStyle}>Review Artifacts</span>
         <pre style={codeBlockStyle}>

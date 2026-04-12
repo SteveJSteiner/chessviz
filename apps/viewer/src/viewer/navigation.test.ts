@@ -1,30 +1,21 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import type { BuilderBootstrapManifest, ViewerSceneManifest } from './contracts.ts';
+import { materializeRuntimeBootstrap } from './bootstrap.ts';
 import {
   createAnchoredNavigationEntryPoints,
   resolveInitialNavigationEntryPointId
 } from './navigation.ts';
+import {
+  loadRuntimeArtifactBundleFromImportMetaUrl
+} from './runtimeArtifactFiles.ts';
 
-const builderBootstrapManifest = JSON.parse(
-  readFileSync(
-    new URL('../../../../artifacts/builder/bootstrap.json', import.meta.url),
-    'utf8'
-  )
-) as BuilderBootstrapManifest;
-const viewerSceneManifest = JSON.parse(
-  readFileSync(
-    new URL('../../../../artifacts/viewer/scene-manifest.json', import.meta.url),
-    'utf8'
-  )
-) as ViewerSceneManifest;
+const runtimeArtifactBundle = loadRuntimeArtifactBundleFromImportMetaUrl(
+  import.meta.url
+);
 
 test('derives opening, middlegame, and endgame entrypoints from declared regime anchors', () => {
-  const entryPoints = createAnchoredNavigationEntryPoints(
-    builderBootstrapManifest,
-    viewerSceneManifest
-  );
+  const runtimeBootstrap = materializeRuntimeBootstrap(runtimeArtifactBundle);
+  const entryPoints = createAnchoredNavigationEntryPoints(runtimeBootstrap);
 
   assert.deepEqual(
     entryPoints.map((entryPoint) => entryPoint.entryId),
@@ -36,12 +27,12 @@ test('derives opening, middlegame, and endgame entrypoints from declared regime 
   assert.equal(entryPoints[0]?.regimeId, 'opening-table');
   assert.equal(
     entryPoints[1]?.focusOccurrenceId,
-    viewerSceneManifest.runtime.initialFocusOccurrenceId
+    runtimeBootstrap.initialFocusOccurrenceId
   );
   assert.equal(entryPoints[2]?.focusOccurrenceId, 'occ-50c5276a269f4c53');
   assert.equal(entryPoints[2]?.rootGameId, 'endgame-simplification-lab');
   assert.equal(
-    viewerSceneManifest.runtime.focusCandidateOccurrenceIds.includes(
+    runtimeArtifactBundle.viewerSceneManifest.runtime.focusCandidateOccurrenceIds.includes(
       entryPoints[2]?.focusOccurrenceId ?? ''
     ),
     false
@@ -49,25 +40,25 @@ test('derives opening, middlegame, and endgame entrypoints from declared regime 
 });
 
 test('keeps entrypoint derivation stable when annotation phase labels drift', () => {
-  const manifestWithMislabeledEndgame = {
-    ...builderBootstrapManifest,
-    occurrences: builderBootstrapManifest.occurrences.map((occurrence) =>
-      occurrence.occurrenceId === 'occ-50c5276a269f4c53'
-        ? {
-            ...occurrence,
-            annotations: {
-              ...occurrence.annotations,
-              phaseLabel: 'opening'
-            }
-          }
-        : occurrence
-    )
-  } satisfies BuilderBootstrapManifest;
-
-  const entryPoints = createAnchoredNavigationEntryPoints(
-    manifestWithMislabeledEndgame,
-    viewerSceneManifest
-  );
+  const runtimeBootstrap = materializeRuntimeBootstrap({
+    ...runtimeArtifactBundle,
+    builderBootstrapManifest: {
+      ...runtimeArtifactBundle.builderBootstrapManifest,
+      occurrences: runtimeArtifactBundle.builderBootstrapManifest.occurrences.map(
+        (occurrence) =>
+          occurrence.occurrenceId === 'occ-50c5276a269f4c53'
+            ? {
+                ...occurrence,
+                annotations: {
+                  ...occurrence.annotations,
+                  phaseLabel: 'opening'
+                }
+              }
+            : occurrence
+      )
+    }
+  });
+  const entryPoints = createAnchoredNavigationEntryPoints(runtimeBootstrap);
 
   assert.equal(entryPoints[2]?.entryId, 'endgame');
   assert.equal(entryPoints[2]?.focusOccurrenceId, 'occ-50c5276a269f4c53');
@@ -75,34 +66,34 @@ test('keeps entrypoint derivation stable when annotation phase labels drift', ()
 });
 
 test('maps the declared initial focus to the middlegame entrypoint', () => {
-  const entryPoints = createAnchoredNavigationEntryPoints(
-    builderBootstrapManifest,
-    viewerSceneManifest
-  );
+  const runtimeBootstrap = materializeRuntimeBootstrap(runtimeArtifactBundle);
+  const entryPoints = createAnchoredNavigationEntryPoints(runtimeBootstrap);
 
   assert.equal(
     resolveInitialNavigationEntryPointId(
       entryPoints,
-      viewerSceneManifest.runtime.initialFocusOccurrenceId
+      runtimeBootstrap.initialFocusOccurrenceId
     ),
     'middlegame'
   );
 });
 
 test('fails fast when a required declared regime anchor cannot be derived', () => {
-  const manifestWithoutEndgameAnchor = {
-    ...builderBootstrapManifest,
-    anchors: builderBootstrapManifest.anchors.filter(
-      (anchor) => !(anchor.anchorKind === 'navigation-entry' && anchor.entryId === 'endgame')
-    )
-  } satisfies BuilderBootstrapManifest;
-
   assert.throws(
     () =>
-      createAnchoredNavigationEntryPoints(
-        manifestWithoutEndgameAnchor,
-        viewerSceneManifest
-      ),
-    /required declared regime anchor is missing/
+      materializeRuntimeBootstrap({
+        ...runtimeArtifactBundle,
+        builderBootstrapManifest: {
+          ...runtimeArtifactBundle.builderBootstrapManifest,
+          anchors: runtimeArtifactBundle.builderBootstrapManifest.anchors.filter(
+            (anchor) =>
+              !(
+                anchor.anchorKind === 'navigation-entry' &&
+                anchor.entryId === 'endgame'
+              )
+          )
+        }
+      }),
+    /declared anchor is missing/
   );
 });

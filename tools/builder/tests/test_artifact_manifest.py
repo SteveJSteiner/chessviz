@@ -98,8 +98,32 @@ class ArtifactManifestTests(unittest.TestCase):
             "2026-04-12.n11c.v1",
         )
         self.assertEqual(
+            scene_manifest["runtime"]["bootstrap"]["seedSurface"],
+            "runtime-bootstrap-materializer:web-corpus+builder-bootstrap",
+        )
+        self.assertEqual(
+            scene_manifest["runtime"]["bootstrap"]["focusCandidatesSource"],
+            "runtime-bootstrap-materializer:declared-anchors-roots-priority-frontier",
+        )
+        self.assertEqual(
             scene_manifest["runtime"]["bootstrap"]["entrypointDerivation"],
-            "builder-bootstrap-manifest:anchors[navigation-entry]",
+            "runtime-regime-resolver:navigation-entry-anchors",
+        )
+        self.assertEqual(
+            scene_manifest["runtime"]["bootstrap"]["webCorpusManifest"],
+            "builder/web-corpus.json",
+        )
+        self.assertEqual(
+            scene_manifest["runtime"]["bootstrap"]["openingTableManifest"],
+            "builder/opening-table/manifest.json",
+        )
+        self.assertEqual(
+            scene_manifest["runtime"]["bootstrap"]["endgameTableManifest"],
+            "builder/endgame-table/manifest.json",
+        )
+        self.assertEqual(
+            scene_manifest["runtime"]["bootstrap"]["middlegameProceduralPolicy"],
+            "adjacency-neighborhood+salience-priority-frontier+radius-refinement-pruning",
         )
         self.assertEqual(scene_manifest["runtime"]["defaultNeighborhoodRadius"], 2)
         self.assertEqual(scene_manifest["runtime"]["maxNeighborhoodRadius"], 4)

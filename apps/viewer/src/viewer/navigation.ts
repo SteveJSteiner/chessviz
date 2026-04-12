@@ -1,10 +1,10 @@
 import type {
   BuilderAnchorRecord,
-  BuilderBootstrapManifest,
+  BuilderRegimeId,
   NavigationEntryPoint,
-  NavigationEntryPointId,
-  ViewerSceneManifest
+  NavigationEntryPointId
 } from './contracts';
+import type { RuntimeBootstrapMaterialization } from './bootstrap.ts';
 import {
   CAMERA_ORBIT_LIMITS,
   deriveCameraOrbitState
@@ -13,9 +13,9 @@ import { formatGameName } from './chessContext.ts';
 import { LIVE_VIEW_DISTANCE, clampLiveViewDistance } from './labelPolicy.ts';
 
 export function createAnchoredNavigationEntryPoints(
-  builderBootstrapManifest: BuilderBootstrapManifest,
-  viewerSceneManifest: ViewerSceneManifest
+  runtimeBootstrap: RuntimeBootstrapMaterialization
 ): NavigationEntryPoint[] {
+  const { builderBootstrapManifest, viewerSceneManifest } = runtimeBootstrap;
   const occurrenceById = new Map(
     builderBootstrapManifest.occurrences.map((occurrence) => [
       occurrence.occurrenceId,
@@ -24,19 +24,22 @@ export function createAnchoredNavigationEntryPoints(
   );
   const baseOrbit = deriveCameraOrbitState(viewerSceneManifest.camera.position);
   const openingAnchor = resolveNavigationAnchor(
-    builderBootstrapManifest,
+    runtimeBootstrap,
     occurrenceById,
-    'opening'
+    'opening',
+    'opening-table'
   );
   const middlegameAnchor = resolveNavigationAnchor(
-    builderBootstrapManifest,
+    runtimeBootstrap,
     occurrenceById,
-    'middlegame'
+    'middlegame',
+    'middlegame-procedural'
   );
   const endgameAnchor = resolveNavigationAnchor(
-    builderBootstrapManifest,
+    runtimeBootstrap,
     occurrenceById,
-    'endgame'
+    'endgame',
+    'endgame-table'
   );
 
   return [
@@ -45,7 +48,7 @@ export function createAnchoredNavigationEntryPoints(
       label: 'Opening',
       description: `${formatGameName(openingAnchor.occurrence.embedding.rootGameId)} at full material. The farther stance keeps early branch identity readable without leaving the same object.`,
       anchor: openingAnchor.anchor,
-      occurrence: openingAnchor.occurrence,
+      resolvedOccurrence: openingAnchor.resolvedOccurrence,
       distance: LIVE_VIEW_DISTANCE.structureThreshold + 0.3,
       neighborhoodRadius: clampNeighborhoodRadius(
         Math.max(viewerSceneManifest.runtime.defaultNeighborhoodRadius, 3),
@@ -58,7 +61,7 @@ export function createAnchoredNavigationEntryPoints(
       label: 'Middlegame',
       description: `${formatGameName(middlegameAnchor.occurrence.embedding.rootGameId)} at the branch-rich middle. This keeps the current camera grammar baseline while preserving local exploration.`,
       anchor: middlegameAnchor.anchor,
-      occurrence: middlegameAnchor.occurrence,
+      resolvedOccurrence: middlegameAnchor.resolvedOccurrence,
       distance: LIVE_VIEW_DISTANCE.default,
       neighborhoodRadius: clampNeighborhoodRadius(
         viewerSceneManifest.runtime.defaultNeighborhoodRadius,
@@ -71,7 +74,7 @@ export function createAnchoredNavigationEntryPoints(
       label: 'Endgame',
       description: `${formatGameName(endgameAnchor.occurrence.embedding.rootGameId)} in the simplified region. The closer stance tightens on terminal-facing structure without changing graph identity.`,
       anchor: endgameAnchor.anchor,
-      occurrence: endgameAnchor.occurrence,
+      resolvedOccurrence: endgameAnchor.resolvedOccurrence,
       distance: LIVE_VIEW_DISTANCE.tacticalThreshold - 0.2,
       neighborhoodRadius: clampNeighborhoodRadius(
         viewerSceneManifest.runtime.defaultNeighborhoodRadius + 1,
@@ -113,7 +116,7 @@ function buildEntryPoint({
   label,
   description,
   anchor,
-  occurrence,
+  resolvedOccurrence,
   distance,
   neighborhoodRadius,
   orbit
@@ -122,17 +125,21 @@ function buildEntryPoint({
   label: string;
   description: string;
   anchor: BuilderAnchorRecord;
-  occurrence: BuilderBootstrapManifest['occurrences'][number];
+  resolvedOccurrence: ReturnType<
+    RuntimeBootstrapMaterialization['regimeResolver']['resolveOccurrence']
+  >;
   distance: number;
   neighborhoodRadius: number;
   orbit: NavigationEntryPoint['orbit'];
 }): NavigationEntryPoint {
+  const occurrence = resolvedOccurrence.occurrence;
+
   return {
     anchorId: anchor.anchorId,
     entryId,
     label,
     description,
-    regimeId: requireAnchorRegimeId(anchor, entryId),
+    regimeId: resolvedOccurrence.resolvedRegimeId,
     focusOccurrenceId: occurrence.occurrenceId,
     focus: occurrence.embedding.coordinate,
     distance: clampLiveViewDistance(distance),
@@ -144,61 +151,73 @@ function buildEntryPoint({
 }
 
 function resolveNavigationAnchor(
-  builderBootstrapManifest: BuilderBootstrapManifest,
-  occurrenceById: Map<string, BuilderBootstrapManifest['occurrences'][number]>,
-  entryId: NavigationEntryPointId
+  runtimeBootstrap: RuntimeBootstrapMaterialization,
+  occurrenceById: Map<
+    string,
+    RuntimeBootstrapMaterialization['builderBootstrapManifest']['occurrences'][number]
+  >,
+  entryId: NavigationEntryPointId,
+  expectedRegimeId: BuilderRegimeId
 ) {
+  const { builderBootstrapManifest, regimeResolver } = runtimeBootstrap;
   const anchor = builderBootstrapManifest.anchors.find(
     (candidate) =>
       candidate.anchorKind === 'navigation-entry' && candidate.entryId === entryId
   );
   const occurrenceId = anchor?.occurrenceIds[0];
   const occurrence = occurrenceId ? occurrenceById.get(occurrenceId) : undefined;
+  const resolvedOccurrence = occurrenceId
+    ? regimeResolver.resolveOccurrenceId(occurrenceId)
+    : undefined;
 
   return requireNavigationAnchor(
     builderBootstrapManifest,
     entryId,
+    expectedRegimeId,
     anchor,
-    occurrence
+    occurrence,
+    resolvedOccurrence
   );
 }
 
 function requireNavigationAnchor(
-  builderBootstrapManifest: BuilderBootstrapManifest,
+  builderBootstrapManifest: RuntimeBootstrapMaterialization['builderBootstrapManifest'],
   entryId: NavigationEntryPointId,
+  expectedRegimeId: BuilderRegimeId,
   anchor: BuilderAnchorRecord | undefined,
-  occurrence: BuilderBootstrapManifest['occurrences'][number] | undefined
+  occurrence:
+    | RuntimeBootstrapMaterialization['builderBootstrapManifest']['occurrences'][number]
+    | undefined,
+  resolvedOccurrence:
+    | ReturnType<RuntimeBootstrapMaterialization['regimeResolver']['resolveOccurrence']>
+    | undefined
 ) {
   if (
     !anchor ||
     !occurrence ||
+    !resolvedOccurrence ||
     anchor.anchorKind !== 'navigation-entry' ||
     anchor.entryId !== entryId ||
     anchor.occurrenceIds.length !== 1 ||
     anchor.anchorPly === null ||
-    anchor.rootGameId === null ||
-    anchor.regimeId === null
+    anchor.rootGameId === null
   ) {
     throw new Error(
       `cannot derive ${entryId} entrypoint from ${builderBootstrapManifest.graphObjectId}; required declared regime anchor is missing`
     );
   }
 
-  return {
-    anchor,
-    occurrence
-  };
-}
-
-function requireAnchorRegimeId(
-  anchor: BuilderAnchorRecord,
-  entryId: NavigationEntryPointId
-) {
-  if (anchor.regimeId === null) {
-    throw new Error(`declared ${entryId} anchor is missing a regime id`);
+  if (resolvedOccurrence.resolvedRegimeId !== expectedRegimeId) {
+    throw new Error(
+      `cannot derive ${entryId} entrypoint from ${builderBootstrapManifest.graphObjectId}; declared regime anchor resolves to ${resolvedOccurrence.resolvedRegimeId}`
+    );
   }
 
-  return anchor.regimeId;
+  return {
+    anchor,
+    occurrence,
+    resolvedOccurrence
+  };
 }
 
 function shiftOrbit(

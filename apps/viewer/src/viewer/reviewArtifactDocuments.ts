@@ -1,4 +1,5 @@
-import { createSceneBootstrap } from './bootstrap.ts';
+import { materializeRuntimeBootstrap } from './bootstrap.ts';
+import type { RuntimeBootstrapMaterialization } from './bootstrap.ts';
 import {
   CAMERA_GRAMMAR_REVIEW_DISTANCES,
   createCameraGrammarState,
@@ -32,6 +33,7 @@ import type {
   BuilderOccurrenceRecord,
   BuilderTransitionRecord,
   NavigationEntryPoint,
+  RuntimeArtifactBundle,
   RuntimeCarrierRecord,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeNeighborhoodOccurrence,
@@ -97,18 +99,16 @@ type EntryPointReviewScene = {
 };
 
 export function buildViewerReviewArtifacts(
-  builderBootstrapManifest: BuilderBootstrapManifest,
-  viewerSceneManifest: ViewerSceneManifest
+  runtimeArtifactBundle: RuntimeArtifactBundle
 ): ViewerReviewArtifact[] {
+  const runtimeBootstrap = materializeRuntimeBootstrap(runtimeArtifactBundle);
+  const { builderBootstrapManifest, viewerSceneManifest } = runtimeBootstrap;
   const kernel = createRuntimeExplorationKernel(
-    builderBootstrapManifest,
-    viewerSceneManifest
+    runtimeBootstrap.builderBootstrapManifest,
+    runtimeBootstrap.viewerSceneManifest
   );
-  const sceneBootstrap = createSceneBootstrap(viewerSceneManifest);
-  const navigationEntryPoints = createAnchoredNavigationEntryPoints(
-    builderBootstrapManifest,
-    viewerSceneManifest
-  );
+  const sceneBootstrap = runtimeBootstrap.sceneBootstrap;
+  const navigationEntryPoints = createAnchoredNavigationEntryPoints(runtimeBootstrap);
   const middlegameEntryPoint = resolveNavigationEntryPoint(
     navigationEntryPoints,
     'middlegame'
@@ -133,7 +133,7 @@ export function buildViewerReviewArtifacts(
   );
   const entryPointReviewScenes = navigationEntryPoints.map((navigationEntryPoint) =>
     buildEntryPointReviewScene({
-      builderBootstrapManifest,
+      runtimeBootstrap,
       kernel,
       sceneBootstrap,
       runtimeConfig: viewerSceneManifest.runtime,
@@ -290,13 +290,13 @@ export function buildViewerReviewArtifacts(
 }
 
 function buildEntryPointReviewScene({
-  builderBootstrapManifest,
+  runtimeBootstrap,
   kernel,
   sceneBootstrap,
   runtimeConfig,
   navigationEntryPoint
 }: {
-  builderBootstrapManifest: BuilderBootstrapManifest;
+  runtimeBootstrap: RuntimeBootstrapMaterialization;
   kernel: ReturnType<typeof createRuntimeExplorationKernel>;
   sceneBootstrap: SceneBootstrap;
   runtimeConfig: ViewerSceneManifest['runtime'];
@@ -310,7 +310,7 @@ function buildEntryPointReviewScene({
       navigationEntryPoint
     }),
     focusContext: buildReviewFocusContext(
-      builderBootstrapManifest,
+      runtimeBootstrap.builderBootstrapManifest,
       kernel,
       navigationEntryPoint.focusOccurrenceId
     )

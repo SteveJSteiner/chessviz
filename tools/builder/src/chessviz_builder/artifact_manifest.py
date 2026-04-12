@@ -197,9 +197,18 @@ def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
             "graphObjectId": graph_object_id,
             "bootstrap": {
                 "representationSchemaVersion": REPRESENTATION_SCHEMA_VERSION,
-                "seedSurface": "builder-bootstrap-manifest",
-                "focusCandidatesSource": "builder-bootstrap-manifest:focusCandidateOccurrenceIds",
-                "entrypointDerivation": "builder-bootstrap-manifest:anchors[navigation-entry]",
+                "seedSurface": "runtime-bootstrap-materializer:web-corpus+builder-bootstrap",
+                "focusCandidatesSource": (
+                    "runtime-bootstrap-materializer:declared-anchors-roots-priority-frontier"
+                ),
+                "entrypointDerivation": "runtime-regime-resolver:navigation-entry-anchors",
+                "webCorpusManifest": "builder/web-corpus.json",
+                "openingTableManifest": "builder/opening-table/manifest.json",
+                "endgameTableManifest": "builder/endgame-table/manifest.json",
+                "middlegameProceduralPolicy": (
+                    "adjacency-neighborhood+salience-priority-frontier+"
+                    "radius-refinement-pruning"
+                ),
             },
             "initialFocusOccurrenceId": initial_focus_occurrence_id,
             "focusCandidateOccurrenceIds": focus_candidate_occurrence_ids,

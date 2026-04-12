@@ -20,9 +20,13 @@
     "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
     "bootstrap": {
       "representationSchemaVersion": "2026-04-12.n11c.v1",
-      "seedSurface": "builder-bootstrap-manifest",
-      "focusCandidatesSource": "builder-bootstrap-manifest:focusCandidateOccurrenceIds",
-      "entrypointDerivation": "builder-bootstrap-manifest:anchors[navigation-entry]"
+      "seedSurface": "runtime-bootstrap-materializer:web-corpus+builder-bootstrap",
+      "focusCandidatesSource": "runtime-bootstrap-materializer:declared-anchors-roots-priority-frontier",
+      "entrypointDerivation": "runtime-regime-resolver:navigation-entry-anchors",
+      "webCorpusManifest": "builder/web-corpus.json",
+      "openingTableManifest": "builder/opening-table/manifest.json",
+      "endgameTableManifest": "builder/endgame-table/manifest.json",
+      "middlegameProceduralPolicy": "adjacency-neighborhood+salience-priority-frontier+radius-refinement-pruning"
     },
     "initialFocusOccurrenceId": "occ-25c32c2bc0227f68",
     "focusCandidateOccurrenceIds": [

@@ -1,0 +1,123 @@
+{
+  "assetSetId": "opening-table:fixture-opening-slice:2026-04-12.n11d.test",
+  "contentKind": "opening-continuations",
+  "entries": [
+    {
+      "maxCoveragePly": 3,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+          "frequency": 1.0,
+          "moveSan": "e6",
+          "moveUci": "e7e6",
+          "weight": 43
+        }
+      ],
+      "positionKey": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "provenance": {
+        "detail": "normalized 1 imported opening continuation(s) for rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 11
+    },
+    {
+      "maxCoveragePly": 2,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+          "frequency": 1.0,
+          "moveSan": "c4",
+          "moveUci": "c2c4",
+          "weight": 42
+        }
+      ],
+      "positionKey": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "provenance": {
+        "detail": "normalized 1 imported opening continuation(s) for rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 10
+    },
+    {
+      "maxCoveragePly": 2,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqkbnr/pppp1ppp/4p3/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+          "frequency": 1.0,
+          "moveSan": "c4",
+          "moveUci": "c2c4",
+          "weight": 47
+        }
+      ],
+      "positionKey": "rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "provenance": {
+        "detail": "normalized 1 imported opening continuation(s) for rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 15
+    },
+    {
+      "maxCoveragePly": 1,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+          "frequency": 0.608696,
+          "moveSan": "e6",
+          "moveUci": "e7e6",
+          "weight": 46
+        },
+        {
+          "continuationPositionKey": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+          "frequency": 0.391304,
+          "moveSan": "Nf6",
+          "moveUci": "g8f6",
+          "weight": 41
+        }
+      ],
+      "positionKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "provenance": {
+        "detail": "normalized 2 imported opening continuation(s) for rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 23
+    },
+    {
+      "maxCoveragePly": 0,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+          "frequency": 1.0,
+          "moveSan": "d4",
+          "moveUci": "d2d4",
+          "weight": 40
+        }
+      ],
+      "positionKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "provenance": {
+        "detail": "normalized 1 imported opening continuation(s) for rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 8
+    }
+  ],
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
+  "regimeId": "opening-table",
+  "representationSchemaVersion": "2026-04-12.n11c.v1",
+  "schemaVersion": "2026-04-12.n11d.v1",
+  "shardId": "ply-000-003"
+}

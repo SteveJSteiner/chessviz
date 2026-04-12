@@ -1,0 +1,80 @@
+{
+  "source_name": "fixture-opening-slice",
+  "source_version": "2026-04-12.n11d.test",
+  "source_location": "imports/opening/fixture-opening-slice.json",
+  "source_format": "foreign-opening-book-json",
+  "records": [
+    {
+      "board_state": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "reply_uci": "d2d4",
+      "reply_san": "d4",
+      "book_weight": 40,
+      "sample_count": 8,
+      "next_board_state": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "coverage_ply": 0
+    },
+    {
+      "board_state": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "reply_uci": "g8f6",
+      "reply_san": "Nf6",
+      "book_weight": 41,
+      "sample_count": 9,
+      "next_board_state": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "coverage_ply": 1
+    },
+    {
+      "board_state": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "reply_uci": "c2c4",
+      "reply_san": "c4",
+      "book_weight": 42,
+      "sample_count": 10,
+      "next_board_state": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "coverage_ply": 2
+    },
+    {
+      "board_state": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "reply_uci": "e7e6",
+      "reply_san": "e6",
+      "book_weight": 43,
+      "sample_count": 11,
+      "next_board_state": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+      "coverage_ply": 3
+    },
+    {
+      "board_state": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+      "reply_uci": "b1c3",
+      "reply_san": "Nc3",
+      "book_weight": 44,
+      "sample_count": 12,
+      "next_board_state": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+      "coverage_ply": 4
+    },
+    {
+      "board_state": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+      "reply_uci": "f8b4",
+      "reply_san": "Bb4",
+      "book_weight": 45,
+      "sample_count": 13,
+      "next_board_state": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+      "coverage_ply": 5
+    },
+    {
+      "board_state": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+      "reply_uci": "e7e6",
+      "reply_san": "e6",
+      "book_weight": 46,
+      "sample_count": 14,
+      "next_board_state": "rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "coverage_ply": 1
+    },
+    {
+      "board_state": "rnbqkbnr/pppp1ppp/4p3/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+      "reply_uci": "c2c4",
+      "reply_san": "c4",
+      "book_weight": 47,
+      "sample_count": 15,
+      "next_board_state": "rnbqkbnr/pppp1ppp/4p3/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+      "coverage_ply": 2
+    }
+  ]
+}

@@ -1,10 +1,9 @@
 import { startTransition, useDeferredValue, useEffect, useState } from 'react';
-import { createSceneBootstrap } from './viewer/bootstrap';
+import { materializeRuntimeBootstrap } from './viewer/bootstrap';
 import {
   createCameraGrammarState,
   resolveCameraGrammarRefinementBudget
 } from './viewer/cameraGrammar';
-import { builderBootstrapManifest, viewerSceneManifest } from './viewer/fixtureArtifacts';
 import {
   clampLiveViewDistance
 } from './viewer/labelPolicy';
@@ -17,24 +16,28 @@ import {
   DEFAULT_VIEWER_RENDER_TUNING,
   clampViewerRenderTuning
 } from './viewer/renderTuning';
+import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
 import { createRuntimeExplorationKernel } from './viewer/runtimeKernel';
 import { ViewerShell } from './viewer/ViewerShell';
 import { workspaceBoundary } from './viewer/workspaceBoundaries';
 
 export default function App() {
+  const [runtimeBootstrap] = useState(() =>
+    materializeRuntimeBootstrap(runtimeArtifactBundle)
+  );
   const [runtimeKernel] = useState(() =>
-    createRuntimeExplorationKernel(builderBootstrapManifest, viewerSceneManifest)
+    createRuntimeExplorationKernel(
+      runtimeBootstrap.builderBootstrapManifest,
+      runtimeBootstrap.viewerSceneManifest
+    )
   );
   const [navigationEntryPoints] = useState(() =>
-    createAnchoredNavigationEntryPoints(
-      builderBootstrapManifest,
-      viewerSceneManifest
-    )
+    createAnchoredNavigationEntryPoints(runtimeBootstrap)
   );
   const [activeEntryPointId, setActiveEntryPointId] = useState(() =>
     resolveInitialNavigationEntryPointId(
       navigationEntryPoints,
-      viewerSceneManifest.runtime.initialFocusOccurrenceId
+      runtimeBootstrap.initialFocusOccurrenceId
     )
   );
   const activeNavigationEntryPoint = resolveNavigationEntryPoint(
@@ -55,7 +58,7 @@ export default function App() {
   const [renderTuning, setRenderTuning] = useState(DEFAULT_VIEWER_RENDER_TUNING);
   const refinementBudget = resolveCameraGrammarRefinementBudget(
     cameraDistance,
-    viewerSceneManifest.runtime
+    runtimeBootstrap.viewerSceneManifest.runtime
   );
   const [runtimeSnapshot, setRuntimeSnapshot] = useState(() =>
     runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
@@ -106,7 +109,7 @@ export default function App() {
   );
   const cameraGrammar = createCameraGrammarState({
     cameraDistance,
-    runtimeConfig: viewerSceneManifest.runtime,
+    runtimeConfig: runtimeBootstrap.viewerSceneManifest.runtime,
     runtimeSnapshot: deferredRuntimeSnapshot
   });
 
@@ -156,9 +159,9 @@ export default function App() {
       onNeighborhoodRadiusChange={setNeighborhoodRadius}
       orbitResetKey={orbitResetKey}
       renderTuning={renderTuning}
-      runtimeConfig={viewerSceneManifest.runtime}
+      runtimeConfig={runtimeBootstrap.viewerSceneManifest.runtime}
       runtimeSnapshot={deferredRuntimeSnapshot}
-      sceneBootstrap={createSceneBootstrap(viewerSceneManifest)}
+      sceneBootstrap={runtimeBootstrap.sceneBootstrap}
       transitionSurface={transitionSurface}
       workspaceBoundary={workspaceBoundary}
       neighborhoodRadius={neighborhoodRadius}

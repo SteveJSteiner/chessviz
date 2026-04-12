@@ -1,27 +1,16 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import type { BuilderBootstrapManifest, ViewerSceneManifest } from './contracts.ts';
 import { buildViewerReviewArtifacts } from './reviewArtifactDocuments.ts';
+import {
+  loadRuntimeArtifactBundleFromImportMetaUrl
+} from './runtimeArtifactFiles.ts';
 
-const builderBootstrapManifest = JSON.parse(
-  readFileSync(
-    new URL('../../../../artifacts/builder/bootstrap.json', import.meta.url),
-    'utf8'
-  )
-) as BuilderBootstrapManifest;
-const viewerSceneManifest = JSON.parse(
-  readFileSync(
-    new URL('../../../../artifacts/viewer/scene-manifest.json', import.meta.url),
-    'utf8'
-  )
-) as ViewerSceneManifest;
+const runtimeArtifactBundle = loadRuntimeArtifactBundleFromImportMetaUrl(
+  import.meta.url
+);
 
 test('builds deterministic N11 review artifacts from the fixture manifests', () => {
-  const artifacts = buildViewerReviewArtifacts(
-    builderBootstrapManifest,
-    viewerSceneManifest
-  );
+  const artifacts = buildViewerReviewArtifacts(runtimeArtifactBundle);
 
   assert.deepEqual(
     artifacts.map((artifact) => artifact.fileName),
@@ -89,8 +78,14 @@ test('builds deterministic N11 review artifacts from the fixture manifests', () 
   assert.match(reviewNotes!, /Anchored entrypoint verdict/);
 
   const parsedEvidenceIndex = JSON.parse(evidenceIndex!);
-  assert.equal(parsedEvidenceIndex.graphObjectId, builderBootstrapManifest.graphObjectId);
-  assert.equal(parsedEvidenceIndex.sceneId, viewerSceneManifest.sceneId);
+  assert.equal(
+    parsedEvidenceIndex.graphObjectId,
+    runtimeArtifactBundle.builderBootstrapManifest.graphObjectId
+  );
+  assert.equal(
+    parsedEvidenceIndex.sceneId,
+    runtimeArtifactBundle.viewerSceneManifest.sceneId
+  );
   assert.deepEqual(
     parsedEvidenceIndex.navigationEntryPoints.map(
       (entryPoint: { entryId: string }) => entryPoint.entryId

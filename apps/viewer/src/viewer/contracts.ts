@@ -19,6 +19,10 @@ export type BuilderRegimeId =
   | 'opening-table'
   | 'middlegame-procedural'
   | 'endgame-table';
+export type PublishedTableRegimeId = Exclude<
+  BuilderRegimeId,
+  'middlegame-procedural'
+>;
 
 export interface CameraOrbitPreset {
   azimuth: number;
@@ -259,11 +263,189 @@ export interface BuilderBootstrapManifest {
   };
 }
 
+export interface PublishedTableAssetReference {
+  regimeId: PublishedTableRegimeId;
+  assetSetId: string;
+  manifestPath: string;
+  manifestHash: string;
+  coverageMetadataId: string;
+  positionCount: number;
+  shardCount: number;
+  sourceProvenance: BuilderRecordProvenance;
+  sourceHash: string;
+}
+
+export interface WebCorpusIngestionInputRecord {
+  sourceKind: string;
+  sourceName: string;
+  sourceVersion: string;
+  sourceLocation: string;
+  sourceHash: string;
+}
+
+export interface WebCorpusManifest {
+  schemaVersion: string;
+  representationSchemaVersion: string;
+  graphObjectId: string;
+  identitySemantics: BuilderIdentitySemantics;
+  coverageMetadata: BuilderCoverageMetadataRecord[];
+  resolverInputs: BuilderResolverInputRecord[];
+  regimeDeclarations: BuilderRegimeDeclaration[];
+  publishedTableAssets: PublishedTableAssetReference[];
+  ingestionInputs: {
+    openingImport: WebCorpusIngestionInputRecord;
+    endgameImport: WebCorpusIngestionInputRecord;
+  };
+}
+
+export interface TableAssetShardDescriptor {
+  shardId: string;
+  relativePath: string;
+  entryCount: number;
+  sha256: string;
+}
+
+export interface TableAssetManifest {
+  schemaVersion: string;
+  representationSchemaVersion: string;
+  graphObjectId: string;
+  regimeId: PublishedTableRegimeId;
+  assetSetId: string;
+  contentKind: string;
+  coverageMetadata: BuilderCoverageMetadataRecord;
+  sourceProvenance: BuilderRecordProvenance;
+  sourceHash: string;
+  positionCount: number;
+  shardCount: number;
+  shards: TableAssetShardDescriptor[];
+}
+
+export interface OpeningTableMoveRecord {
+  moveUci: string;
+  moveSan: string;
+  continuationPositionKey: string;
+  weight: number;
+  frequency: number;
+}
+
+export interface OpeningTablePositionRecord {
+  positionKey: string;
+  maxCoveragePly: number;
+  totalSampleCount: number;
+  moves: OpeningTableMoveRecord[];
+  provenance: BuilderRecordProvenance;
+}
+
+export interface OpeningTableShard {
+  schemaVersion: string;
+  representationSchemaVersion: string;
+  graphObjectId: string;
+  regimeId: 'opening-table';
+  assetSetId: string;
+  contentKind: string;
+  shardId: string;
+  entries: OpeningTablePositionRecord[];
+}
+
+export interface EndgameTerminalPayload {
+  wdlLabel: string;
+  outcomeClass: string;
+  distanceToZeroing: number;
+}
+
+export interface EndgameTablePositionRecord {
+  positionKey: string;
+  materialSignature: string;
+  terminalPayload: EndgameTerminalPayload;
+  score: number;
+  provenance: BuilderRecordProvenance;
+}
+
+export interface EndgameTableShard {
+  schemaVersion: string;
+  representationSchemaVersion: string;
+  graphObjectId: string;
+  regimeId: 'endgame-table';
+  assetSetId: string;
+  contentKind: string;
+  shardId: string;
+  entries: EndgameTablePositionRecord[];
+}
+
+export interface RuntimeArtifactBundle {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  viewerSceneManifest: ViewerSceneManifest;
+  webCorpusManifest: WebCorpusManifest;
+  openingTableManifest: TableAssetManifest;
+  openingTableShardsByRelativePath: Record<string, OpeningTableShard>;
+  endgameTableManifest: TableAssetManifest;
+  endgameTableShardsByRelativePath: Record<string, EndgameTableShard>;
+}
+
+export interface MiddlegameProceduralPolicy {
+  policyId: string;
+  expansionMode: string;
+  scoringMode: string;
+  pruningMode: string;
+  detail: string;
+}
+
+export interface RuntimeProceduralResolution {
+  occurrenceId: string;
+  policy: MiddlegameProceduralPolicy;
+  defaultNeighborhoodRadius: number;
+  defaultRefinementBudget: number;
+}
+
+export interface RuntimeOpeningTableResolutionSource {
+  kind: 'opening-table';
+  assetSetId: string;
+  manifestPath: string;
+  relativePath: string;
+  shardId: string;
+  entry: OpeningTablePositionRecord;
+}
+
+export interface RuntimeEndgameTableResolutionSource {
+  kind: 'endgame-table';
+  assetSetId: string;
+  manifestPath: string;
+  relativePath: string;
+  shardId: string;
+  entry: EndgameTablePositionRecord;
+}
+
+export interface RuntimeMiddlegameProceduralResolutionSource {
+  kind: 'middlegame-procedural';
+  policy: MiddlegameProceduralPolicy;
+  occurrenceId: string;
+  defaultNeighborhoodRadius: number;
+  defaultRefinementBudget: number;
+}
+
+export type RuntimeResolutionSource =
+  | RuntimeOpeningTableResolutionSource
+  | RuntimeEndgameTableResolutionSource
+  | RuntimeMiddlegameProceduralResolutionSource;
+
+export interface RuntimeResolvedOccurrence {
+  occurrence: BuilderOccurrenceRecord;
+  resolvedRegimeId: BuilderRegimeId;
+  resolverInput: BuilderResolverInputRecord;
+  coverageMetadata: BuilderCoverageMetadataRecord;
+  regimeDeclaration: BuilderRegimeDeclaration;
+  source: RuntimeResolutionSource;
+}
+
 export interface RuntimeBootstrapContract {
   representationSchemaVersion: string;
   seedSurface: string;
   focusCandidatesSource: string;
   entrypointDerivation: string;
+  webCorpusManifest: string;
+  openingTableManifest: string;
+  endgameTableManifest: string;
+  middlegameProceduralPolicy: string;
 }
 
 export interface RuntimeExplorationConfig {
@@ -375,4 +557,7 @@ export interface WorkspaceBoundary {
   artifactRoot: string;
   builderBootstrapManifest: string;
   viewerSceneManifest: string;
+  webCorpusManifest: string;
+  openingTableManifest: string;
+  endgameTableManifest: string;
 }

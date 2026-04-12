@@ -1,0 +1,36 @@
+{
+  "source_name": "fixture-endgame-slice",
+  "source_version": "2026-04-12.n11d.test",
+  "source_location": "imports/endgame/fixture-endgame-slice.json",
+  "source_format": "foreign-endgame-table-json",
+  "records": [
+    {
+      "board_state": "rn3b2/ppp1pp2/3k3p/8/7P/3PP3/PP3PK1/1R6 b - -",
+      "material_class": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]",
+      "wdl_code": "white-win",
+      "table_score": 1.0,
+      "dtz": 1
+    },
+    {
+      "board_state": "rn6/ppp1ppb1/3k3p/8/7P/3PP3/PP3PK1/1R6 w - -",
+      "material_class": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]",
+      "wdl_code": "draw",
+      "table_score": 0.0,
+      "dtz": 2
+    },
+    {
+      "board_state": "rn6/ppp1ppb1/3k3p/8/1P5P/3PP3/P4PK1/1R6 b - -",
+      "material_class": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]",
+      "wdl_code": "black-win",
+      "table_score": -1.0,
+      "dtz": 3
+    },
+    {
+      "board_state": "r7/ppp1ppb1/2nk3p/8/1P5P/3PP3/P4PK1/1R6 w - -",
+      "material_class": "white[Q0,R1,B0,N0,P6]|black[Q0,R1,B1,N1,P6]",
+      "wdl_code": "draw",
+      "table_score": 0.25,
+      "dtz": 4
+    }
+  ]
+}

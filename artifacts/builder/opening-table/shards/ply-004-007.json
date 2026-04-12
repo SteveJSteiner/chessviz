@@ -1,0 +1,53 @@
+{
+  "assetSetId": "opening-table:fixture-opening-slice:2026-04-12.n11d.test",
+  "contentKind": "opening-continuations",
+  "entries": [
+    {
+      "maxCoveragePly": 5,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+          "frequency": 1.0,
+          "moveSan": "Bb4",
+          "moveUci": "f8b4",
+          "weight": 45
+        }
+      ],
+      "positionKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+      "provenance": {
+        "detail": "normalized 1 imported opening continuation(s) for rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 13
+    },
+    {
+      "maxCoveragePly": 4,
+      "moves": [
+        {
+          "continuationPositionKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+          "frequency": 1.0,
+          "moveSan": "Nc3",
+          "moveUci": "b1c3",
+          "weight": 44
+        }
+      ],
+      "positionKey": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+      "provenance": {
+        "detail": "normalized 1 imported opening continuation(s) for rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+        "sourceKind": "opening-table-import",
+        "sourceLocation": "imports/opening/fixture-opening-slice.json",
+        "sourceName": "fixture-opening-slice",
+        "sourceVersion": "2026-04-12.n11d.test"
+      },
+      "totalSampleCount": 12
+    }
+  ],
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
+  "regimeId": "opening-table",
+  "representationSchemaVersion": "2026-04-12.n11c.v1",
+  "schemaVersion": "2026-04-12.n11d.v1",
+  "shardId": "ply-004-007"
+}
