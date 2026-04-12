@@ -25,4 +25,5 @@ One line per committed DAG frontier event.
 2026-04-11 | commit 5c0978a | settled N11 camera grammar continuity after recorded live review and advanced frontier to N12
 2026-04-12 | commit 92b1e3b | reset frontier from N12 to N11a/N11b to re-plan unified regime substrate prerequisites
 2026-04-12 | commit 1e434e4 | settled N11a unified regime substrate replan and advanced frontier to N11b
-2026-04-12 | commit pending | settled N11b concrete regime module partition and advanced frontier to N11c
+2026-04-12 | commit 33c5f8c | settled N11b concrete regime module partition and advanced frontier to N11c
+2026-04-12 | commit 577a4f3 | settled N11c shared regime declaration contract and advanced frontier to N11d
