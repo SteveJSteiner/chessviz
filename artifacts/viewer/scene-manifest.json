@@ -1,7 +1,7 @@
 {
   "sceneId": "runtime-exploration-fixture",
   "title": "Runtime Exploration Fixture",
-  "summary": "N10 runtime multiscale carrier refinement over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
+  "summary": "N11 runtime camera grammar over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
   "accentColor": "#0f766e",
   "camera": {
     "position": [

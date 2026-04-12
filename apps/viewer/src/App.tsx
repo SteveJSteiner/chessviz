@@ -1,10 +1,13 @@
 import { startTransition, useDeferredValue, useEffect, useState } from 'react';
 import { createSceneBootstrap } from './viewer/bootstrap';
+import {
+  createCameraGrammarState,
+  resolveCameraGrammarRefinementBudget
+} from './viewer/cameraGrammar';
 import { builderBootstrapManifest, viewerSceneManifest } from './viewer/fixtureArtifacts';
 import {
   LIVE_VIEW_DISTANCE,
-  clampLiveViewDistance,
-  resolveLabelZoomBand
+  clampLiveViewDistance
 } from './viewer/labelPolicy';
 import { createRuntimeNavigationEntryPoint } from './viewer/navigation';
 import {
@@ -25,13 +28,14 @@ export default function App() {
   const [neighborhoodRadius, setNeighborhoodRadius] = useState(
     viewerSceneManifest.runtime.defaultNeighborhoodRadius
   );
-  const [refinementBudget, setRefinementBudget] = useState(
-    viewerSceneManifest.runtime.defaultRefinementBudget
-  );
   const [cameraDistance, setCameraDistance] = useState<number>(
     LIVE_VIEW_DISTANCE.default
   );
   const [renderTuning, setRenderTuning] = useState(DEFAULT_VIEWER_RENDER_TUNING);
+  const refinementBudget = resolveCameraGrammarRefinementBudget(
+    cameraDistance,
+    viewerSceneManifest.runtime
+  );
   const [runtimeSnapshot, setRuntimeSnapshot] = useState(() =>
     runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
       radius: neighborhoodRadius,
@@ -79,9 +83,15 @@ export default function App() {
       runtimeKernel.describeOccurrenceLine(occurrence.occurrenceId)
     ])
   );
+  const cameraGrammar = createCameraGrammarState({
+    cameraDistance,
+    runtimeConfig: viewerSceneManifest.runtime,
+    runtimeSnapshot: deferredRuntimeSnapshot
+  });
 
   return (
     <ViewerShell
+      cameraGrammar={cameraGrammar}
       carrierSurface={carrierSurface}
       cameraDistance={cameraDistance}
       focusLine={focusLine}
@@ -91,7 +101,6 @@ export default function App() {
         deferredRuntimeSnapshot,
         cameraDistance
       )}
-      labelZoomBand={resolveLabelZoomBand(cameraDistance)}
       onCameraDistanceChange={(distance) =>
         setCameraDistance(clampLiveViewDistance(distance))
       }
@@ -106,9 +115,7 @@ export default function App() {
       onResetRenderTuning={() => setRenderTuning(DEFAULT_VIEWER_RENDER_TUNING)}
       onFocusOccurrenceChange={setFocusOccurrenceId}
       onNeighborhoodRadiusChange={setNeighborhoodRadius}
-      onRefinementBudgetChange={setRefinementBudget}
       renderTuning={renderTuning}
-      refinementBudget={refinementBudget}
       runtimeConfig={viewerSceneManifest.runtime}
       runtimeSnapshot={deferredRuntimeSnapshot}
       sceneBootstrap={createSceneBootstrap(viewerSceneManifest)}

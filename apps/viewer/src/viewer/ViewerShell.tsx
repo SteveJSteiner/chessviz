@@ -9,6 +9,7 @@ import type {
   SceneBootstrap,
   WorkspaceBoundary
 } from './contracts';
+import type { CameraGrammarState } from './cameraGrammar.ts';
 import { ChessBoard } from './ChessBoard.tsx';
 import {
   formatFocusOptionLabel,
@@ -18,20 +19,17 @@ import {
   summarizeMoveSemantics
 } from './chessContext.ts';
 import { createCarrierPresentation } from './carrierPresentation.ts';
-import {
-  LIVE_VIEW_DISTANCE,
-  type LabelZoomBand
-} from './labelPolicy.ts';
+import { LIVE_VIEW_DISTANCE } from './labelPolicy.ts';
 import type { ViewerRenderTuning } from './renderTuning.ts';
 import { SmokeCanvas } from './SmokeCanvas';
 
 type ViewerShellProps = {
+  cameraGrammar: CameraGrammarState;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   cameraDistance: number;
   focusLine: RuntimeOccurrenceLine | undefined;
   focusLinesByOccurrenceId: Map<string, RuntimeOccurrenceLine | undefined>;
   focusOptions: BuilderOccurrenceRecord[];
-  labelZoomBand: LabelZoomBand;
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
   transitionSurface: RuntimeTransitionSurfaceSnapshot;
@@ -41,11 +39,9 @@ type ViewerShellProps = {
   neighborhoodRadius: number;
   onRenderTuningChange: (partialTuning: Partial<ViewerRenderTuning>) => void;
   onResetRenderTuning: () => void;
-  refinementBudget: number;
   onCameraDistanceChange: (distance: number) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onNeighborhoodRadiusChange: (radius: number) => void;
-  onRefinementBudgetChange: (budget: number) => void;
   renderTuning: ViewerRenderTuning;
 };
 
@@ -167,12 +163,12 @@ const inlineButtonStyle = {
 } as const;
 
 export function ViewerShell({
+  cameraGrammar,
   carrierSurface,
   cameraDistance,
   focusLine,
   focusLinesByOccurrenceId,
   focusOptions,
-  labelZoomBand,
   runtimeConfig,
   runtimeSnapshot,
   transitionSurface,
@@ -182,11 +178,9 @@ export function ViewerShell({
   neighborhoodRadius,
   onRenderTuningChange,
   onResetRenderTuning,
-  refinementBudget,
   onCameraDistanceChange,
   onFocusOccurrenceChange,
   onNeighborhoodRadiusChange,
-  onRefinementBudgetChange,
   renderTuning
 }: ViewerShellProps) {
   const focusOccurrence = runtimeSnapshot.occurrences.find(
@@ -228,7 +222,7 @@ export function ViewerShell({
     <main style={shellStyle}>
       <section style={panelStyle}>
         <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700 }}>
-          N10 Multiscale Carrier Boundary
+          N11 Camera Grammar
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
@@ -281,23 +275,17 @@ export function ViewerShell({
               value={cameraDistance}
             />
             <span style={{ fontSize: '0.82rem', color: '#6c6254' }}>
-              Drag on the canvas to orbit around the focus node.
+              Drag on the canvas to orbit. Scroll on the canvas or use this slider to zoom; distance now drives refinement and label reveal.
             </span>
           </label>
 
-          <label style={controlLabelStyle}>
-            Refinement budget: {refinementBudget}
-            <input
-              max={runtimeConfig.maxRefinementBudget}
-              min={1}
-              onChange={(event) =>
-                onRefinementBudgetChange(Number(event.target.value))
-              }
-              style={controlInputStyle}
-              type="range"
-              value={refinementBudget}
-            />
-          </label>
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>{cameraGrammar.stageLabel}</div>
+            <p style={{ margin: '0.45rem 0 0' }}>{cameraGrammar.stageDescription}</p>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+              Runtime refinement budget {cameraGrammar.refinementBudget} · label band {cameraGrammar.band}
+            </p>
+          </article>
 
           <details style={detailsStyle}>
             <summary style={{ cursor: 'pointer', fontWeight: 700 }}>
@@ -401,12 +389,16 @@ export function ViewerShell({
             <div>runtime carriers</div>
           </article>
           <article style={statCardStyle}>
-            <strong>{labelZoomBand}</strong>
+            <strong>{cameraGrammar.band}</strong>
             <div>label reveal band</div>
           </article>
           <article style={statCardStyle}>
             <strong>{cameraDistance.toFixed(1)}</strong>
             <div>camera distance</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{cameraGrammar.refinementBudget}</strong>
+            <div>refinement budget</div>
           </article>
         </div>
 
@@ -548,7 +540,7 @@ export function ViewerShell({
   {
     graphObjectId: runtimeSnapshot.graphObjectId,
     cameraDistance,
-    labelZoomBand,
+    cameraGrammar,
     renderTuning,
     repeatedStateRelations: runtimeSnapshot.repeatedStateRelations.length,
     terminalAnchors: runtimeSnapshot.terminalAnchors.map((anchor) => anchor.anchorId),
@@ -611,15 +603,16 @@ export function ViewerShell({
 
         <span style={metaLabelStyle}>Review Artifacts</span>
         <pre style={codeBlockStyle}>
-{'pnpm --filter viewer review:artifacts\n\nartifacts/viewer/review/structure-zoom.svg\nartifacts/viewer/review/refinement-steps.svg\nartifacts/viewer/review/review-notes-template.md'}
+      {'pnpm --filter viewer review:artifacts\n\nartifacts/viewer/review/structure-zoom.svg\nartifacts/viewer/review/refinement-steps.svg\nartifacts/viewer/review/camera-grammar.svg\nartifacts/viewer/review/review-notes-template.md'}
         </pre>
       </section>
 
       <section style={canvasStyle}>
         <SmokeCanvas
+          cameraGrammar={cameraGrammar}
           cameraDistance={cameraDistance}
           carrierSurface={carrierSurface}
-          navigationEntryPoint={navigationEntryPoint}
+          onCameraDistanceChange={onCameraDistanceChange}
           renderTuning={renderTuning}
           runtimeSnapshot={runtimeSnapshot}
           sceneBootstrap={sceneBootstrap}

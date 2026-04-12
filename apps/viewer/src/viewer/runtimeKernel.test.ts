@@ -6,6 +6,7 @@ import type {
   Vector3,
   ViewerSceneManifest
 } from './contracts.ts';
+import { resolveCameraGrammarRefinementBudget } from './cameraGrammar.ts';
 import { createRuntimeExplorationKernel } from './runtimeKernel.ts';
 
 const builderBootstrapManifest = JSON.parse(
@@ -21,7 +22,7 @@ const viewerSceneManifest = JSON.parse(
   )
 ) as ViewerSceneManifest;
 
-test('loads stable neighborhoods and refines locally without ontology swap', () => {
+test('keeps neighborhood topology stable across refinement budgets', () => {
   const kernel = createRuntimeExplorationKernel(
     builderBootstrapManifest,
     viewerSceneManifest
@@ -45,13 +46,60 @@ test('loads stable neighborhoods and refines locally without ontology swap', () 
   assert.equal(refinedSnapshot.graphObjectId, builderBootstrapManifest.graphObjectId);
   assert.equal(firstSnapshot.objectIdentityStable, true);
   assert.equal(refinedSnapshot.objectIdentityStable, true);
+  assert.equal(firstSnapshot.refinementBudget, 3);
+  assert.equal(refinedSnapshot.refinementBudget, 6);
   assert.equal(firstSnapshot.cacheState, 'miss');
   assert.equal(refinedSnapshot.cacheState, 'hit');
   assert.deepEqual(
-    refinedSnapshot.occurrences
-      .slice(0, firstSnapshot.occurrences.length)
-      .map((occurrence) => occurrence.occurrenceId),
+    refinedSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
     firstSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId)
+  );
+  assert.deepEqual(
+    refinedSnapshot.edges.map((edge) => edgeKey(edge.sourceOccurrenceId, edge.targetOccurrenceId)),
+    firstSnapshot.edges.map((edge) => edgeKey(edge.sourceOccurrenceId, edge.targetOccurrenceId))
+  );
+});
+
+test('preserves the qgd-bogo-a root neighborhood across the 4.6 to 4.7 zoom threshold', () => {
+  const kernel = createRuntimeExplorationKernel(
+    builderBootstrapManifest,
+    viewerSceneManifest
+  );
+  const focusOccurrenceId = builderBootstrapManifest.occurrences.find(
+    (occurrence) =>
+      occurrence.embedding.rootGameId === 'qgd-bogo-a' && occurrence.ply === 0
+  )?.occurrenceId;
+
+  if (!focusOccurrenceId) {
+    throw new Error('expected qgd-bogo-a root occurrence in builder fixture');
+  }
+
+  const fartherBudget = resolveCameraGrammarRefinementBudget(
+    4.7,
+    viewerSceneManifest.runtime
+  );
+  const closerBudget = resolveCameraGrammarRefinementBudget(
+    4.6,
+    viewerSceneManifest.runtime
+  );
+  const fartherSnapshot = kernel.inspectNeighborhood(focusOccurrenceId, {
+    radius: 4,
+    refinementBudget: fartherBudget
+  });
+  const closerSnapshot = kernel.inspectNeighborhood(focusOccurrenceId, {
+    radius: 4,
+    refinementBudget: closerBudget
+  });
+
+  assert.equal(fartherBudget, 3);
+  assert.equal(closerBudget, 6);
+  assert.deepEqual(
+    closerSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
+    fartherSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId)
+  );
+  assert.deepEqual(
+    closerSnapshot.edges.map((edge) => edgeKey(edge.sourceOccurrenceId, edge.targetOccurrenceId)),
+    fartherSnapshot.edges.map((edge) => edgeKey(edge.sourceOccurrenceId, edge.targetOccurrenceId))
   );
 });
 
@@ -304,4 +352,8 @@ function dot(left: Vector3, right: Vector3): number {
 
 function magnitude(vector: Vector3): number {
   return Math.hypot(vector[0], vector[1], vector[2]);
+}
+
+function edgeKey(sourceOccurrenceId: string, targetOccurrenceId: string) {
+  return `${sourceOccurrenceId}->${targetOccurrenceId}`;
 }

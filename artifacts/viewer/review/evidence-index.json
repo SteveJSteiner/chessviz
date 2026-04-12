@@ -6,6 +6,11 @@
   "focusLine": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6",
   "focusTurn": "White to move",
   "neighborhoodRadius": 2,
+  "cameraDistances": [
+    5,
+    3.85,
+    2.8
+  ],
   "refinementBudgets": [
     3,
     6,
@@ -59,6 +64,7 @@
     {
       "file": "structure-zoom.svg",
       "regime": "structure-zoom",
+      "cameraDistance": 5,
       "refinementBudget": 3,
       "expectedBands": [
         "structure"
@@ -71,6 +77,11 @@
     {
       "file": "refinement-steps.svg",
       "regime": "refinement-steps",
+      "cameraDistances": [
+        5,
+        3.85,
+        2.8
+      ],
       "refinementBudgets": [
         3,
         6,
@@ -94,6 +105,26 @@
       "moveLabelsIncluded": true,
       "rootLabelsIncluded": true,
       "terminalLabelsIncluded": true
+    },
+    {
+      "file": "camera-grammar.svg",
+      "regime": "camera-grammar",
+      "cameraDistances": [
+        5,
+        3.85,
+        2.8
+      ],
+      "refinementBudgets": [
+        3,
+        6,
+        12
+      ],
+      "expectedBands": [
+        "structure",
+        "tactical",
+        "contextual"
+      ],
+      "liveLabelPolicyApplied": true
     },
     {
       "file": "review-notes-template.md",

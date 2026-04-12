@@ -1,5 +1,16 @@
 import { createSceneBootstrap } from './bootstrap.ts';
 import {
+  CAMERA_GRAMMAR_REVIEW_DISTANCES,
+  createCameraGrammarState,
+  describeCameraGrammarBand,
+  resolveCameraGrammarRefinementBudget,
+  type CameraGrammarState
+} from './cameraGrammar.ts';
+import {
+  deriveCameraOrbitState,
+  resolveOrbitCameraPosition
+} from './cameraOrbit.ts';
+import {
   formatCastlingRights,
   formatGameName,
   formatOccurrenceLine,
@@ -31,10 +42,16 @@ import type {
   Vector3,
   ViewerSceneManifest
 } from './contracts.ts';
+import {
+  selectCarrierLabelSelections,
+  selectOccurrenceLabelSelections
+} from './labelPolicy.ts';
 import { createRuntimeNavigationEntryPoint } from './navigation.ts';
 import { createRuntimeExplorationKernel } from './runtimeKernel.ts';
 
 type ReviewScene = {
+  cameraDistance: number;
+  cameraGrammar: CameraGrammarState;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
@@ -85,19 +102,23 @@ export function buildViewerReviewArtifacts(
   const sceneBootstrap = createSceneBootstrap(viewerSceneManifest);
   const focusOccurrenceId = viewerSceneManifest.runtime.initialFocusOccurrenceId;
   const neighborhoodRadius = REVIEW_ARTIFACT_NEIGHBORHOOD_RADIUS;
-  const refinementBudgets = [
-    N10B_REVIEW_BUDGETS.structure,
-    N10B_REVIEW_BUDGETS.tactical,
-    N10B_REVIEW_BUDGETS.contextual
+  const reviewDistances = [
+    CAMERA_GRAMMAR_REVIEW_DISTANCES.structure,
+    CAMERA_GRAMMAR_REVIEW_DISTANCES.tactical,
+    CAMERA_GRAMMAR_REVIEW_DISTANCES.contextual
   ];
-  const reviewScenes = refinementBudgets.map((refinementBudget) =>
+  const reviewScenes = reviewDistances.map((cameraDistance) =>
     buildReviewScene({
       kernel,
       sceneBootstrap,
+      runtimeConfig: viewerSceneManifest.runtime,
+      cameraDistance,
       focusOccurrenceId,
-      neighborhoodRadius,
-      refinementBudget
+      neighborhoodRadius
     })
+  );
+  const refinementBudgets = reviewScenes.map(
+    (reviewScene) => reviewScene.runtimeSnapshot.refinementBudget
   );
   const focusContext = buildReviewFocusContext(
     builderBootstrapManifest,
@@ -125,6 +146,14 @@ export function buildViewerReviewArtifacts(
       )
     },
     {
+      fileName: 'review/camera-grammar.svg',
+      content: renderCameraGrammarDocument(
+        reviewScenes,
+        focusContext,
+        neighborhoodRadius
+      )
+    },
+    {
       fileName: 'review/evidence-index.json',
       content: JSON.stringify(
         {
@@ -137,6 +166,9 @@ export function buildViewerReviewArtifacts(
           focusLine: focusLineText,
           focusTurn: formatTurnLabel(focusPosition.activeColor),
           neighborhoodRadius,
+          cameraDistances: reviewScenes.map((reviewScene) =>
+            roundNumber(reviewScene.cameraDistance)
+          ),
           refinementBudgets,
           localMoves: focusContext.localTransitions.map((entry) => ({
             direction: entry.direction,
@@ -151,7 +183,8 @@ export function buildViewerReviewArtifacts(
             {
               file: 'structure-zoom.svg',
               regime: 'structure-zoom',
-              refinementBudget: N10B_REVIEW_BUDGETS.structure,
+              cameraDistance: roundNumber(reviewScenes[0]?.cameraDistance ?? 0),
+              refinementBudget: reviewScenes[0]?.runtimeSnapshot.refinementBudget,
               expectedBands: ['structure'],
               focusBoardIncluded: true,
               moveLabelsIncluded: true,
@@ -161,6 +194,9 @@ export function buildViewerReviewArtifacts(
             {
               file: 'refinement-steps.svg',
               regime: 'refinement-steps',
+              cameraDistances: reviewScenes.map((reviewScene) =>
+                roundNumber(reviewScene.cameraDistance)
+              ),
               refinementBudgets,
               expectedBands: [
                 ['structure'],
@@ -171,6 +207,16 @@ export function buildViewerReviewArtifacts(
               moveLabelsIncluded: true,
               rootLabelsIncluded: true,
               terminalLabelsIncluded: true
+            },
+            {
+              file: 'camera-grammar.svg',
+              regime: 'camera-grammar',
+              cameraDistances: reviewScenes.map((reviewScene) =>
+                roundNumber(reviewScene.cameraDistance)
+              ),
+              refinementBudgets,
+              expectedBands: reviewScenes.map((reviewScene) => reviewScene.cameraGrammar.band),
+              liveLabelPolicyApplied: true
             },
             {
               file: 'review-notes-template.md',
@@ -198,16 +244,22 @@ export function buildViewerReviewArtifacts(
 function buildReviewScene({
   kernel,
   sceneBootstrap,
+  runtimeConfig,
+  cameraDistance,
   focusOccurrenceId,
-  neighborhoodRadius,
-  refinementBudget
+  neighborhoodRadius
 }: {
   kernel: ReturnType<typeof createRuntimeExplorationKernel>;
   sceneBootstrap: SceneBootstrap;
+  runtimeConfig: ViewerSceneManifest['runtime'];
+  cameraDistance: number;
   focusOccurrenceId: string;
   neighborhoodRadius: number;
-  refinementBudget: number;
 }): ReviewScene {
+  const refinementBudget = resolveCameraGrammarRefinementBudget(
+    cameraDistance,
+    runtimeConfig
+  );
   const runtimeSnapshot = kernel.inspectNeighborhood(focusOccurrenceId, {
     radius: neighborhoodRadius,
     refinementBudget
@@ -218,8 +270,17 @@ function buildReviewScene({
   );
 
   return {
+    cameraDistance,
+    cameraGrammar: createCameraGrammarState({
+      cameraDistance,
+      runtimeConfig,
+      runtimeSnapshot
+    }),
     sceneBootstrap,
-    navigationEntryPoint: createRuntimeNavigationEntryPoint(runtimeSnapshot),
+    navigationEntryPoint: createRuntimeNavigationEntryPoint(
+      runtimeSnapshot,
+      cameraDistance
+    ),
     runtimeSnapshot,
     carrierSurface
   };
@@ -299,9 +360,9 @@ function renderStructureZoomDocument(
     renderSvgStyleBlock(),
     '<rect width="100%" height="100%" fill="#f2ecdf" />',
     '<rect x="24" y="24" width="1452" height="932" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
-    '<text x="48" y="62" class="eyebrow">N10b review artifact</text>',
+    '<text x="48" y="62" class="eyebrow">Viewer review artifact</text>',
     `<text x="48" y="96" class="title">${escapeXml(buildStructureZoomTitle(focusContext))}</text>`,
-    `<text x="48" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius} · budget ${reviewScene.runtimeSnapshot.refinementBudget}</text>`,
+    `<text x="48" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius} · distance ${reviewScene.cameraDistance.toFixed(1)} · budget ${reviewScene.runtimeSnapshot.refinementBudget}</text>`,
     renderScenePanel(reviewScene, focusContext, viewport, 'structure-panel'),
     '<rect x="1012" y="158" width="428" height="790" rx="26" fill="#fdfaf3" stroke="#dcd3c4" />',
     '<text x="1036" y="188" class="section">Reference check</text>',
@@ -359,7 +420,7 @@ function renderRefinementStepsDocument(
     renderSvgStyleBlock(),
     '<rect width="100%" height="100%" fill="#ece4d7" />',
     '<rect x="24" y="24" width="1652" height="872" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
-    '<text x="40" y="62" class="eyebrow">N10b refinement review</text>',
+    '<text x="40" y="62" class="eyebrow">Viewer refinement review</text>',
     `<text x="40" y="96" class="title">${escapeXml(buildRefinementTitle(focusContext))}</text>`,
     `<text x="40" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · fixed radius ${neighborhoodRadius}</text>`,
     ...reviewScenes.map((reviewScene, index) =>
@@ -377,7 +438,7 @@ function renderRefinementStepsDocument(
     renderWrappedTextBlock(
       40,
       878,
-      'The same move labels stay attached to the same carriers while additional ribbons join the neighborhood as the budget rises.',
+      'The same move labels stay attached to the same carriers while additional ribbons and labels join the neighborhood as the camera moves closer.',
       118,
       20,
       'copy'
@@ -394,6 +455,62 @@ function renderRefinementStepsDocument(
   ].join('');
 }
 
+function renderCameraGrammarDocument(
+  reviewScenes: ReviewScene[],
+  focusContext: ReviewFocusContext,
+  neighborhoodRadius: number
+) {
+  const width = 1700;
+  const height = 980;
+  const viewports = [
+    { x: 40, y: 176, width: 516, height: 620 },
+    { x: 592, y: 176, width: 516, height: 620 },
+    { x: 1144, y: 176, width: 516, height: 620 }
+  ] as const;
+  const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
+  const rootGameId =
+    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    renderSvgStyleBlock(),
+    '<rect width="100%" height="100%" fill="#eee7db" />',
+    '<rect x="24" y="24" width="1652" height="932" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
+    '<text x="40" y="62" class="eyebrow">N11 camera grammar review</text>',
+    `<text x="40" y="96" class="title">${escapeXml(buildCameraGrammarTitle(focusContext))}</text>`,
+    `<text x="40" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius}</text>`,
+    ...reviewScenes.map((reviewScene, index) =>
+      renderScenePanel(
+        reviewScene,
+        focusContext,
+        viewports[index]!,
+        `camera-grammar-panel-${index}`
+      )
+    ),
+    ...reviewScenes.map((reviewScene, index) =>
+      renderCameraGrammarCaption(viewports[index]!, reviewScene)
+    ),
+    '<text x="40" y="850" class="section">Expected live read</text>',
+    renderWrappedTextBlock(
+      40,
+      878,
+      'Zooming closer should add tactical and contextual detail on the same carriers, while zooming back out should return to the coarse structure read without changing the move-family interpretation.',
+      118,
+      20,
+      'copy'
+    ),
+    renderBandLegendRow(
+      40,
+      930,
+      '#566574',
+      '#87a9c8',
+      '#dcecff',
+      'One camera grammar, one object: context at distance, tighter focus up close, and monotone band reveal throughout.'
+    ),
+    '</svg>'
+  ].join('');
+}
+
 function renderReviewNotesTemplate(
   graphObjectId: string,
   sceneId: string,
@@ -404,9 +521,9 @@ function renderReviewNotesTemplate(
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
 
   return [
-    '# N10b Review Notes',
+    '# N11 Review Notes',
     '',
-    'Use this file as the human verdict record for the generated N10b review artifacts.',
+    'Use this file as the human verdict record for the generated N11 review artifacts.',
     '',
     '## Run context',
     `- graphObjectId: ${graphObjectId}`,
@@ -417,6 +534,9 @@ function renderReviewNotesTemplate(
     `- focusLine: ${formatOccurrenceLine(focusContext.focusLine)}`,
     `- focusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
     `- neighborhoodRadius: ${neighborhoodRadius}`,
+    `- structureDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.structure.toFixed(1)}`,
+    `- tacticalDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.tactical.toFixed(1)}`,
+    `- contextualDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.contextual.toFixed(1)}`,
     `- structureBudget: ${N10B_REVIEW_BUDGETS.structure}`,
     `- tacticalBudget: ${N10B_REVIEW_BUDGETS.tactical}`,
     `- contextualBudget: ${N10B_REVIEW_BUDGETS.contextual}`,
@@ -424,27 +544,29 @@ function renderReviewNotesTemplate(
     '## Reviewed artifacts',
     '- review/structure-zoom.svg',
     '- review/refinement-steps.svg',
+    '- review/camera-grammar.svg',
     '',
     '## Reviewer',
     '- name:',
     '- date:',
     '',
-    '## Direct-label verdict',
-    '- did the SAN labels on the carriers make the move identities readable without a legend lookup:',
-    '- when roots or terminals were visible, did their labels explain the arm identity and outcome directly on the object:',
-    '- did the static board reference help verify the focus position without competing with the geometry:',
-    '- what still felt abstract or contextless:',
+    '## Structure read verdict',
+    '- did the far view keep the coarse move-family reading legible before closer detail appeared:',
+    '- did roots and terminals remain secondary labels on the same object rather than a separate explanation layer:',
+    '- did the board reference help verify the focus position without competing with the geometry:',
     '',
-    '## Refinement-step verdict',
-    '- the same focus position stayed recognizable across all three budgets:',
-    '- added tactical/contextual residue clarified the picture instead of overturning it:',
+    '## Camera grammar verdict',
+    '- orbiting kept the focus position legible while preserving some surrounding branch context:',
+    '- zooming closer added tactical/contextual detail on the same carriers rather than swapping representations:',
+    '- zooming back out restored the coarse reading without contradictory emphasis:',
+    '- the detail and label density changes felt predictable under interaction:',
     '- what still needs iteration:',
     '',
     '## Settlement note',
-    '- N10b settled: no / yes',
+    '- N11 settled: no / yes',
     '- if yes, reference the commit that updates plan/completion-log.md and plan/continuation.md',
     '',
-    'Do not mark N10b settled without recorded human review.'
+    'Do not mark N11 settled without recorded human review.'
   ].join('\n');
 }
 
@@ -455,6 +577,16 @@ function renderScenePanel(
   panelId: string
 ) {
   const projector = createProjector(reviewScene, viewport);
+  const carrierLabelSelections = selectCarrierLabelSelections({
+    cameraDistance: reviewScene.cameraDistance,
+    carriers: reviewScene.carrierSurface.carriers,
+    focusOccurrenceId: reviewScene.runtimeSnapshot.focusOccurrenceId,
+    occurrences: reviewScene.runtimeSnapshot.occurrences
+  });
+  const occurrenceLabelSelections = selectOccurrenceLabelSelections({
+    cameraDistance: reviewScene.cameraDistance,
+    occurrences: reviewScene.runtimeSnapshot.occurrences
+  });
   const carrierMarkup = reviewScene.carrierSurface.carriers
     .map((carrier) => renderCarrierMarkup(carrier, projector))
     .filter((carrier): carrier is { depth: number; markup: string } => carrier !== null)
@@ -467,22 +599,32 @@ function renderScenePanel(
     .sort((left, right) => right.depth - left.depth)
     .map((occurrence) => occurrence.markup)
     .join('');
-  const carrierLabelMarkup = reviewScene.carrierSurface.carriers
-    .map((carrier) =>
+  const carrierLabelMarkup = carrierLabelSelections
+    .map((selection) =>
       renderCarrierLabelMarkup(
-        carrier,
+        selection.carrier,
         focusContext,
         projector,
-        viewport
+        viewport,
+        selection.opacity,
+        selection.scale
       )
     )
     .filter((label): label is { depth: number; markup: string } => label !== null)
     .sort((left, right) => right.depth - left.depth)
     .map((label) => label.markup)
     .join('');
-  const occurrenceLabelMarkup = reviewScene.runtimeSnapshot.occurrences
-    .map((occurrence) =>
-      renderOccurrenceDataLabelMarkup(occurrence, reviewScene, projector, viewport)
+  const occurrenceLabelMarkup = occurrenceLabelSelections
+    .map((selection) =>
+      renderOccurrenceDataLabelMarkup(
+        selection.kind,
+        selection.occurrence,
+        reviewScene,
+        projector,
+        viewport,
+        selection.opacity,
+        selection.scale
+      )
     )
     .filter((label): label is { depth: number; markup: string } => label !== null)
     .sort((left, right) => right.depth - left.depth)
@@ -552,7 +694,9 @@ function renderCarrierLabelMarkup(
   carrier: RuntimeCarrierRecord,
   focusContext: ReviewFocusContext,
   projector: ReturnType<typeof createProjector>,
-  viewport: Viewport
+  viewport: Viewport,
+  opacity: number,
+  scale: number
 ) {
   const centerSample =
     carrier.samples[Math.floor(carrier.samples.length * 0.5)] ?? carrier.samples[0];
@@ -567,7 +711,9 @@ function renderCarrierLabelMarkup(
 
   const presentation = createCarrierPresentation(carrier);
   const label = formatCarrierLabel(carrier, focusContext);
-  const labelWidth = Math.max(78, (label.length * 7.2) + 16);
+  const labelScale = Math.max(scale, 0.8);
+  const labelWidth = Math.max(78, ((label.length * 7.2) + 16) * labelScale);
+  const labelHeight = 22 * labelScale;
   const focusOccurrenceId = focusContext.focusOccurrence.occurrenceId;
   const isOutgoing = carrier.sourceOccurrenceId === focusOccurrenceId;
   const isFocusAdjacent =
@@ -591,35 +737,40 @@ function renderCarrierLabelMarkup(
   const labelY = clampNumber(
     projected.y + ((carrier.ply % 2) === 0 ? -28 : 12),
     viewport.y + 8,
-    viewport.y + viewport.height - 28
+    viewport.y + viewport.height - labelHeight - 8
   );
 
   return {
     depth: projected.depth,
     markup: [
-      `<rect x="${roundNumber(labelX)}" y="${roundNumber(labelY)}" width="${roundNumber(labelWidth)}" height="22" rx="11" fill="${fillColor}" stroke="${strokeColor}" opacity="0.96" />`,
-      `<text x="${roundNumber(labelX + 9)}" y="${roundNumber(labelY + 15)}" class="move-label">${escapeXml(label)}</text>`
+      `<rect x="${roundNumber(labelX)}" y="${roundNumber(labelY)}" width="${roundNumber(labelWidth)}" height="${roundNumber(labelHeight)}" rx="${roundNumber(labelHeight * 0.5)}" fill="${fillColor}" stroke="${strokeColor}" opacity="${roundNumber(opacity)}" />`,
+      `<text x="${roundNumber(labelX + (9 * labelScale))}" y="${roundNumber(labelY + (15 * labelScale))}" class="move-label" style="font-size:${roundNumber(12 * labelScale)}px">${escapeXml(label)}</text>`
     ].join('')
   };
 }
 
 function renderOccurrenceDataLabelMarkup(
+  kind: 'root' | 'terminal',
   occurrence: RuntimeNeighborhoodOccurrence,
   reviewScene: ReviewScene,
   projector: ReturnType<typeof createProjector>,
-  viewport: Viewport
+  viewport: Viewport,
+  opacity: number,
+  scale: number
 ) {
   const projected = projector.project(scaleCoordinate(occurrence.embedding.coordinate));
   if (!projected.visible) {
     return null;
   }
 
-  const label = buildOccurrenceDataLabel(occurrence, reviewScene);
+  const label = buildOccurrenceDataLabel(kind, occurrence, reviewScene);
   if (!label) {
     return null;
   }
 
-  const labelWidth = Math.max(92, (label.text.length * 7.4) + 18);
+  const labelScale = Math.max(scale, 0.8);
+  const labelWidth = Math.max(92, ((label.text.length * 7.4) + 18) * labelScale);
+  const labelHeight = 22 * labelScale;
   const labelX = clampNumber(
     occurrence.terminal ? projected.x + 16 : projected.x - (labelWidth * 0.5),
     viewport.x + 8,
@@ -628,20 +779,20 @@ function renderOccurrenceDataLabelMarkup(
   const labelY = clampNumber(
     occurrence.terminal ? projected.y - 18 : projected.y - 34,
     viewport.y + 8,
-    viewport.y + viewport.height - 28
+    viewport.y + viewport.height - labelHeight - 8
   );
   const labelAnchorX = labelX > projected.x ? labelX : labelX + labelWidth;
-  const labelAnchorY = labelY + 11;
+  const labelAnchorY = labelY + (labelHeight * 0.5);
   const leader = occurrence.terminal
-    ? `<line x1="${roundNumber(projected.x)}" y1="${roundNumber(projected.y)}" x2="${roundNumber(labelAnchorX)}" y2="${roundNumber(labelAnchorY)}" stroke="${label.strokeColor}" stroke-width="1.5" opacity="0.8" />`
+    ? `<line x1="${roundNumber(projected.x)}" y1="${roundNumber(projected.y)}" x2="${roundNumber(labelAnchorX)}" y2="${roundNumber(labelAnchorY)}" stroke="${label.strokeColor}" stroke-width="1.5" opacity="${roundNumber(Math.min(opacity + 0.08, 1))}" />`
     : '';
 
   return {
     depth: projected.depth + 0.01,
     markup: [
       leader,
-      `<rect x="${roundNumber(labelX)}" y="${roundNumber(labelY)}" width="${roundNumber(labelWidth)}" height="22" rx="11" fill="${label.fillColor}" stroke="${label.strokeColor}" opacity="0.96" />`,
-      `<text x="${roundNumber(labelX + 9)}" y="${roundNumber(labelY + 15)}" class="move-label">${escapeXml(label.text)}</text>`
+      `<rect x="${roundNumber(labelX)}" y="${roundNumber(labelY)}" width="${roundNumber(labelWidth)}" height="${roundNumber(labelHeight)}" rx="${roundNumber(labelHeight * 0.5)}" fill="${label.fillColor}" stroke="${label.strokeColor}" opacity="${roundNumber(opacity)}" />`,
+      `<text x="${roundNumber(labelX + (9 * labelScale))}" y="${roundNumber(labelY + (15 * labelScale))}" class="move-label" style="font-size:${roundNumber(12 * labelScale)}px">${escapeXml(label.text)}</text>`
     ].join('')
   };
 }
@@ -671,12 +822,13 @@ function renderOccurrenceMarkup(
 }
 
 function createProjector(reviewScene: ReviewScene, viewport: Viewport) {
-  const scaledFocus = scaleCoordinate(reviewScene.navigationEntryPoint.focus);
-  const cameraPosition: Vector3 = [
-    scaledFocus[0] + reviewScene.sceneBootstrap.camera.position[0],
-    scaledFocus[1] + reviewScene.sceneBootstrap.camera.position[1],
-    scaledFocus[2] + reviewScene.navigationEntryPoint.distance
-  ];
+  const scaledFocus = scaleCoordinate(reviewScene.cameraGrammar.lookAt);
+  const orbitState = deriveCameraOrbitState(reviewScene.sceneBootstrap.camera.position);
+  const cameraPosition = resolveOrbitCameraPosition(
+    scaledFocus,
+    reviewScene.cameraDistance,
+    orbitState
+  );
   const upHint: Vector3 = [0, 1, 0];
   const forward = normalize(subtract(scaledFocus, cameraPosition), [0, 0, -1]);
   const right = normalize(cross(forward, upHint), [1, 0, 0]);
@@ -751,6 +903,13 @@ function buildRefinementTitle(focusContext: ReviewFocusContext) {
   return `${formatGameName(rootGameId)}: refinement steps`;
 }
 
+function buildCameraGrammarTitle(focusContext: ReviewFocusContext) {
+  const rootGameId =
+    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+
+  return `${formatGameName(rootGameId)}: camera grammar pass`;
+}
+
 function formatCarrierLabel(
   carrier: RuntimeCarrierRecord,
   focusContext: ReviewFocusContext
@@ -785,10 +944,11 @@ function isLineTransition(
 }
 
 function buildOccurrenceDataLabel(
+  kind: 'root' | 'terminal',
   occurrence: RuntimeNeighborhoodOccurrence,
   reviewScene: ReviewScene
 ) {
-  if (occurrence.ply === 0) {
+  if (kind === 'root') {
     return {
       text: formatGameName(occurrence.embedding.rootGameId),
       fillColor: '#f7f1e6',
@@ -796,7 +956,7 @@ function buildOccurrenceDataLabel(
     };
   }
 
-  if (!occurrence.terminal) {
+  if (kind !== 'terminal' || !occurrence.terminal) {
     return null;
   }
 
@@ -986,6 +1146,15 @@ function renderPanelCaption(viewport: Viewport, refinementBudget: number) {
   return [
     `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">Budget ${refinementBudget}</text>`,
     `<text x="${viewport.x}" y="${viewport.y + viewport.height + 28}" class="copy">${escapeXml(bandCaption(refinementBudget))}</text>`
+  ].join('');
+}
+
+function renderCameraGrammarCaption(viewport: Viewport, reviewScene: ReviewScene) {
+  const stage = describeCameraGrammarBand(reviewScene.cameraGrammar.band);
+
+  return [
+    `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">${escapeXml(stage.label)}</text>`,
+    `<text x="${viewport.x}" y="${viewport.y + viewport.height + 28}" class="copy">${escapeXml(`Distance ${reviewScene.cameraDistance.toFixed(1)} · budget ${reviewScene.runtimeSnapshot.refinementBudget} · ${stage.description}`)}</text>`
   ].join('');
 }
 

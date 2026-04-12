@@ -1,6 +1,6 @@
-# N10b Review Notes
+# N11 Review Notes
 
-Use this file as the human verdict record for the generated N10b review artifacts.
+Use this file as the human verdict record for the generated N11 review artifacts.
 
 ## Run context
 - graphObjectId: initial-represented-subset:2026-04-11-fixture-003
@@ -11,6 +11,9 @@ Use this file as the human verdict record for the generated N10b review artifact
 - focusLine: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6
 - focusTurn: White to move
 - neighborhoodRadius: 2
+- structureDistance: 5.0
+- tacticalDistance: 3.8
+- contextualDistance: 2.8
 - structureBudget: 3
 - tacticalBudget: 6
 - contextualBudget: 12
@@ -18,24 +21,26 @@ Use this file as the human verdict record for the generated N10b review artifact
 ## Reviewed artifacts
 - review/structure-zoom.svg
 - review/refinement-steps.svg
+- review/camera-grammar.svg
 
 ## Reviewer
 - name:
 - date:
 
-## Direct-label verdict
-- did the SAN labels on the carriers make the move identities readable without a legend lookup:
-- when roots or terminals were visible, did their labels explain the arm identity and outcome directly on the object:
-- did the static board reference help verify the focus position without competing with the geometry:
-- what still felt abstract or contextless:
+## Structure read verdict
+- did the far view keep the coarse move-family reading legible before closer detail appeared:
+- did roots and terminals remain secondary labels on the same object rather than a separate explanation layer:
+- did the board reference help verify the focus position without competing with the geometry:
 
-## Refinement-step verdict
-- the same focus position stayed recognizable across all three budgets:
-- added tactical/contextual residue clarified the picture instead of overturning it:
+## Camera grammar verdict
+- orbiting kept the focus position legible while preserving some surrounding branch context:
+- zooming closer added tactical/contextual detail on the same carriers rather than swapping representations:
+- zooming back out restored the coarse reading without contradictory emphasis:
+- the detail and label density changes felt predictable under interaction:
 - what still needs iteration:
 
 ## Settlement note
-- N10b settled: no / yes
+- N11 settled: no / yes
 - if yes, reference the commit that updates plan/completion-log.md and plan/continuation.md
 
-Do not mark N10b settled without recorded human review.
+Do not mark N11 settled without recorded human review.

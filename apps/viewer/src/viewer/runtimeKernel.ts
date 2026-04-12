@@ -148,10 +148,8 @@ export function createRuntimeExplorationKernel(
         }
       }
 
-      const selectedOccurrenceIds = cacheEntry.orderedOccurrenceIds.slice(
-        0,
-        refinementBudget
-      );
+      // Zoom/refinement budget changes presentation detail, not neighborhood ontology.
+      const selectedOccurrenceIds = cacheEntry.orderedOccurrenceIds;
       const selectedOccurrenceIdSet = new Set(selectedOccurrenceIds);
 
       return {

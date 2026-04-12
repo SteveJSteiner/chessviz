@@ -4,6 +4,7 @@ import {
   CanvasTexture,
   DoubleSide
 } from 'three';
+import type { CameraGrammarState } from './cameraGrammar.ts';
 import { createCarrierRibbonGeometry } from './carrierRibbon.ts';
 import {
   buildOccurrenceRadiusCaps,
@@ -19,12 +20,12 @@ import {
   resolveOrbitCameraPosition
 } from './cameraOrbit.ts';
 import {
+  clampLiveViewDistance,
   selectCarrierLabelSelections,
   selectOccurrenceLabelSelections
 } from './labelPolicy.ts';
 import type { ViewerRenderTuning } from './renderTuning.ts';
 import type {
-  NavigationEntryPoint,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeCarrierRecord,
   RuntimeNeighborhoodOccurrence,
@@ -34,20 +35,22 @@ import type {
 } from './contracts';
 
 type SmokeCanvasProps = {
+  cameraGrammar: CameraGrammarState;
   cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  onCameraDistanceChange: (distance: number) => void;
   renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
-  navigationEntryPoint: NavigationEntryPoint;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 };
 
 export function SmokeCanvas({
+  cameraGrammar,
   cameraDistance,
   carrierSurface,
+  onCameraDistanceChange,
   renderTuning,
   sceneBootstrap,
-  navigationEntryPoint,
   runtimeSnapshot
 }: SmokeCanvasProps) {
   const occurrenceRadiusCaps = useMemo(
@@ -67,8 +70,9 @@ export function SmokeCanvas({
       gl={{ antialias: true }}
     >
       <CameraRig
+        cameraFocus={cameraGrammar.lookAt}
         cameraDistance={cameraDistance}
-        navigationEntryPoint={navigationEntryPoint}
+        onCameraDistanceChange={onCameraDistanceChange}
         sceneBootstrap={sceneBootstrap}
       />
       <color attach="background" args={['#f5f1e8']} />
@@ -104,18 +108,25 @@ export function SmokeCanvas({
 }
 
 function CameraRig({
+  cameraFocus,
   cameraDistance,
-  navigationEntryPoint,
+  onCameraDistanceChange,
   sceneBootstrap
 }: {
+  cameraFocus: Vector3;
   cameraDistance: number;
-  navigationEntryPoint: NavigationEntryPoint;
+  onCameraDistanceChange: (distance: number) => void;
   sceneBootstrap: SceneBootstrap;
 }) {
   const { camera, gl } = useThree();
-  const scaledFocus = scaleCoordinate(navigationEntryPoint.focus);
+  const scaledFocus = scaleCoordinate(cameraFocus);
   const orbitStateRef = useRef(deriveCameraOrbitState(sceneBootstrap.camera.position));
   const dragStateRef = useRef({ active: false, pointerId: null as number | null, x: 0, y: 0 });
+  const cameraDistanceRef = useRef(cameraDistance);
+
+  useEffect(() => {
+    cameraDistanceRef.current = cameraDistance;
+  }, [cameraDistance]);
 
   useEffect(() => {
     orbitStateRef.current = deriveCameraOrbitState(sceneBootstrap.camera.position);
@@ -179,20 +190,29 @@ function CameraRig({
       canvasElement.style.cursor = 'grab';
     };
 
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      onCameraDistanceChange(
+        clampLiveViewDistance(cameraDistanceRef.current + (event.deltaY * 0.0025))
+      );
+    };
+
     canvasElement.addEventListener('pointerdown', handlePointerDown);
+    canvasElement.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', stopDragging);
     window.addEventListener('pointercancel', stopDragging);
 
     return () => {
       canvasElement.removeEventListener('pointerdown', handlePointerDown);
+      canvasElement.removeEventListener('wheel', handleWheel);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', stopDragging);
       window.removeEventListener('pointercancel', stopDragging);
       canvasElement.style.touchAction = previousTouchAction;
       canvasElement.style.cursor = previousCursor;
     };
-  }, [gl]);
+  }, [gl, onCameraDistanceChange]);
 
   useFrame(() => {
     const cameraPosition = resolveOrbitCameraPosition(

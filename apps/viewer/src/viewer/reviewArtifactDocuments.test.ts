@@ -17,7 +17,7 @@ const viewerSceneManifest = JSON.parse(
   )
 ) as ViewerSceneManifest;
 
-test('builds deterministic N10b review artifacts from the fixture manifests', () => {
+test('builds deterministic N11 review artifacts from the fixture manifests', () => {
   const artifacts = buildViewerReviewArtifacts(
     builderBootstrapManifest,
     viewerSceneManifest
@@ -28,6 +28,7 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
     [
       'review/structure-zoom.svg',
       'review/refinement-steps.svg',
+      'review/camera-grammar.svg',
       'review/evidence-index.json',
       'review/review-notes-template.md'
     ]
@@ -39,6 +40,9 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
   const refinementSteps = artifacts.find(
     (artifact) => artifact.fileName === 'review/refinement-steps.svg'
   )?.content;
+  const cameraGrammar = artifacts.find(
+    (artifact) => artifact.fileName === 'review/camera-grammar.svg'
+  )?.content;
   const evidenceIndex = artifacts.find(
     (artifact) => artifact.fileName === 'review/evidence-index.json'
   )?.content;
@@ -48,6 +52,7 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
 
   assert.ok(structureZoom);
   assert.ok(refinementSteps);
+  assert.ok(cameraGrammar);
   assert.ok(evidenceIndex);
   assert.ok(reviewNotes);
 
@@ -57,7 +62,8 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
   );
   assert.match(structureZoom!, /Focus board/);
   assert.match(structureZoom!, /Owning line/);
-  assert.match(structureZoom!, /out Ng5/);
+  assert.match(structureZoom!, /in Nf6/);
+  assert.match(structureZoom!, /out [^<]+/);
   assert.match(
     refinementSteps!,
     /Italian Branch Lab: refinement toward b4, d3, d4, h3, Ng5, O-O/i
@@ -66,15 +72,19 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
   assert.match(refinementSteps!, /Budget 6/);
   assert.match(refinementSteps!, /Budget 12/);
   assert.equal(/Focus board/.test(refinementSteps!), false);
-  assert.match(reviewNotes!, /Do not mark N10b settled without recorded human review/);
-  assert.match(reviewNotes!, /Direct-label verdict/);
+  assert.match(cameraGrammar!, /N11 camera grammar review/);
+  assert.match(cameraGrammar!, /Context-Preserving Structure View/);
+  assert.match(reviewNotes!, /Do not mark N11 settled without recorded human review/);
+  assert.match(reviewNotes!, /Camera grammar verdict/);
 
   const parsedEvidenceIndex = JSON.parse(evidenceIndex!);
   assert.equal(parsedEvidenceIndex.graphObjectId, builderBootstrapManifest.graphObjectId);
   assert.equal(parsedEvidenceIndex.sceneId, viewerSceneManifest.sceneId);
   assert.equal(parsedEvidenceIndex.focusLine, '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6');
   assert.equal(parsedEvidenceIndex.focusTurn, 'White to move');
+  assert.deepEqual(parsedEvidenceIndex.cameraDistances, [5, 3.85, 2.8]);
   assert.deepEqual(parsedEvidenceIndex.refinementBudgets, [3, 6, 12]);
   assert.equal(parsedEvidenceIndex.artifacts[0].rootLabelsIncluded, true);
   assert.equal(parsedEvidenceIndex.artifacts[1].focusBoardIncluded, false);
+  assert.equal(parsedEvidenceIndex.artifacts[2].regime, 'camera-grammar');
 });
