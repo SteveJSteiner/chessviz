@@ -118,6 +118,9 @@ class BuilderWorkspace:
     artifact_root: Path
     builder_manifest: Path
     viewer_scene_manifest: Path
+    opening_table_manifest: Path
+    endgame_table_manifest: Path
+    web_corpus_manifest: Path
     stockfish_bin: Path | None
     syzygy_dir: Path | None
 

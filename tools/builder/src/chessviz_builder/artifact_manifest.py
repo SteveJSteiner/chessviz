@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import Any
@@ -21,10 +22,28 @@ from .contracts import (
     SharedAnchorRecord,
     TransitionIdentityRecord,
 )
+from .endgame_table import import_endgame_table, shard_endgame_table_records
 from .labeling import ENDGAME_PHASE, MIDDLEGAME_PHASE, OPENING_PHASE
+from .opening_table import import_opening_table, shard_opening_table_records
 from .pipeline import PipelineDryRun
+from .publication import relative_posix_path, write_json
 
 DEFAULT_SCENE_ID = "runtime-exploration-fixture"
+PUBLISHED_ASSET_SCHEMA_VERSION = "2026-04-12.n11d.v1"
+
+
+@dataclass(frozen=True)
+class PublishedTableAssetSet:
+    regime_id: RegimeId
+    asset_set_id: str
+    manifest_path: Path
+    manifest_hash: str
+    relative_manifest_path: str
+    source_hash: str
+    source_provenance: RecordProvenance
+    coverage_metadata: CoverageMetadataRecord
+    position_count: int
+    shard_count: int
 
 
 def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
@@ -203,6 +222,340 @@ def write_fixture_artifacts(
     _write_json(workspace.builder_manifest, builder_manifest)
     _write_json(workspace.viewer_scene_manifest, viewer_scene_manifest)
     return workspace.builder_manifest, workspace.viewer_scene_manifest
+
+
+def write_opening_table_assets(
+    workspace: BuilderWorkspace,
+    dry_run: PipelineDryRun,
+    source_path: Path,
+) -> PublishedTableAssetSet:
+    publication = import_opening_table(source_path, dry_run)
+    return _write_table_asset_publication(
+        workspace=workspace,
+        manifest_path=workspace.opening_table_manifest,
+        dry_run=dry_run,
+        regime_id="opening-table",
+        asset_set_id=publication.asset_set_id,
+        source_hash=publication.source_hash,
+        source_provenance=publication.source_provenance,
+        coverage_metadata=publication.coverage_metadata,
+        content_kind="opening-continuations",
+        shard_groups=shard_opening_table_records(publication),
+    )
+
+
+def write_endgame_table_assets(
+    workspace: BuilderWorkspace,
+    dry_run: PipelineDryRun,
+    source_path: Path,
+) -> PublishedTableAssetSet:
+    publication = import_endgame_table(source_path, dry_run)
+    return _write_table_asset_publication(
+        workspace=workspace,
+        manifest_path=workspace.endgame_table_manifest,
+        dry_run=dry_run,
+        regime_id="endgame-table",
+        asset_set_id=publication.asset_set_id,
+        source_hash=publication.source_hash,
+        source_provenance=publication.source_provenance,
+        coverage_metadata=publication.coverage_metadata,
+        content_kind="endgame-evaluations",
+        shard_groups=shard_endgame_table_records(publication),
+    )
+
+
+def write_web_corpus_artifacts(
+    workspace: BuilderWorkspace,
+    dry_run: PipelineDryRun,
+    opening_source_path: Path,
+    endgame_source_path: Path,
+) -> tuple[PublishedTableAssetSet, PublishedTableAssetSet, Path, str]:
+    opening_assets = write_opening_table_assets(
+        workspace,
+        dry_run,
+        opening_source_path,
+    )
+    endgame_assets = write_endgame_table_assets(
+        workspace,
+        dry_run,
+        endgame_source_path,
+    )
+    web_corpus_manifest = build_web_corpus_manifest(
+        dry_run,
+        opening_assets,
+        endgame_assets,
+    )
+    web_corpus_hash = write_json(workspace.web_corpus_manifest, web_corpus_manifest)
+    return (
+        opening_assets,
+        endgame_assets,
+        workspace.web_corpus_manifest,
+        web_corpus_hash,
+    )
+
+
+def build_web_corpus_manifest(
+    dry_run: PipelineDryRun,
+    opening_assets: PublishedTableAssetSet,
+    endgame_assets: PublishedTableAssetSet,
+) -> dict[str, Any]:
+    identity_semantics = IdentitySemanticsRecord(
+        occurrence_key_field="occurrenceId",
+        position_key_field="stateKey",
+        path_key_field="path",
+        continuity_key_field="stateKey",
+    )
+    coverage_metadata = _build_web_corpus_coverage_metadata_records(
+        dry_run,
+        opening_assets.coverage_metadata,
+        endgame_assets.coverage_metadata,
+    )
+    resolver_inputs = _build_resolver_input_records(coverage_metadata)
+    regime_declarations = _build_web_corpus_regime_declarations(
+        dry_run,
+        coverage_metadata,
+        resolver_inputs,
+        opening_assets,
+        endgame_assets,
+    )
+
+    return {
+        "schemaVersion": PUBLISHED_ASSET_SCHEMA_VERSION,
+        "representationSchemaVersion": REPRESENTATION_SCHEMA_VERSION,
+        "graphObjectId": _graph_object_id(dry_run),
+        "identitySemantics": _identity_semantics_payload(identity_semantics),
+        "coverageMetadata": [
+            _coverage_metadata_payload(record) for record in coverage_metadata
+        ],
+        "resolverInputs": [
+            _resolver_input_payload(record) for record in resolver_inputs
+        ],
+        "regimeDeclarations": [
+            _regime_declaration_payload(record) for record in regime_declarations
+        ],
+        "publishedTableAssets": [
+            _published_table_asset_payload(opening_assets),
+            _published_table_asset_payload(endgame_assets),
+        ],
+        "ingestionInputs": {
+            "openingImport": _ingestion_input_payload(opening_assets),
+            "endgameImport": _ingestion_input_payload(endgame_assets),
+        },
+    }
+
+
+def _write_table_asset_publication(
+    workspace: BuilderWorkspace,
+    manifest_path: Path,
+    dry_run: PipelineDryRun,
+    regime_id: RegimeId,
+    asset_set_id: str,
+    source_hash: str,
+    source_provenance: RecordProvenance,
+    coverage_metadata: CoverageMetadataRecord,
+    content_kind: str,
+    shard_groups: tuple[tuple[str, tuple[dict[str, Any], ...]], ...],
+) -> PublishedTableAssetSet:
+    graph_object_id = _graph_object_id(dry_run)
+    shard_payloads = []
+    position_count = 0
+
+    for shard_id, entries in shard_groups:
+        shard_relative_path = Path("shards") / f"{shard_id}.json"
+        shard_path = manifest_path.parent / shard_relative_path
+        shard_payload = {
+            "schemaVersion": PUBLISHED_ASSET_SCHEMA_VERSION,
+            "representationSchemaVersion": REPRESENTATION_SCHEMA_VERSION,
+            "graphObjectId": graph_object_id,
+            "regimeId": regime_id,
+            "assetSetId": asset_set_id,
+            "contentKind": content_kind,
+            "shardId": shard_id,
+            "entries": list(entries),
+        }
+        shard_hash = write_json(shard_path, shard_payload)
+        position_count += len(entries)
+        shard_payloads.append(
+            {
+                "shardId": shard_id,
+                "relativePath": shard_relative_path.as_posix(),
+                "entryCount": len(entries),
+                "sha256": shard_hash,
+            }
+        )
+
+    manifest_payload = {
+        "schemaVersion": PUBLISHED_ASSET_SCHEMA_VERSION,
+        "representationSchemaVersion": REPRESENTATION_SCHEMA_VERSION,
+        "graphObjectId": graph_object_id,
+        "regimeId": regime_id,
+        "assetSetId": asset_set_id,
+        "contentKind": content_kind,
+        "coverageMetadata": _coverage_metadata_payload(coverage_metadata),
+        "sourceProvenance": _provenance_payload(source_provenance),
+        "sourceHash": source_hash,
+        "positionCount": position_count,
+        "shardCount": len(shard_payloads),
+        "shards": shard_payloads,
+    }
+    manifest_hash = write_json(manifest_path, manifest_payload)
+
+    return PublishedTableAssetSet(
+        regime_id=regime_id,
+        asset_set_id=asset_set_id,
+        manifest_path=manifest_path,
+        manifest_hash=manifest_hash,
+        relative_manifest_path=relative_posix_path(manifest_path, workspace.artifact_root),
+        source_hash=source_hash,
+        source_provenance=source_provenance,
+        coverage_metadata=coverage_metadata,
+        position_count=position_count,
+        shard_count=len(shard_payloads),
+    )
+
+
+def _build_web_corpus_coverage_metadata_records(
+    dry_run: PipelineDryRun,
+    opening_coverage_metadata: CoverageMetadataRecord,
+    endgame_coverage_metadata: CoverageMetadataRecord,
+) -> tuple[CoverageMetadataRecord, ...]:
+    base_coverage_metadata = _build_coverage_metadata_records(dry_run)
+    middlegame_coverage = next(
+        record
+        for record in base_coverage_metadata
+        if record.regime_id == "middlegame-procedural"
+    )
+
+    return (
+        opening_coverage_metadata,
+        CoverageMetadataRecord(
+            coverage_metadata_id=middlegame_coverage.coverage_metadata_id,
+            regime_id=middlegame_coverage.regime_id,
+            coverage_kind=middlegame_coverage.coverage_kind,
+            summary=(
+                "Declared middlegame procedural fallback with no precomputed table "
+                "asset publication in N11d."
+            ),
+            occurrence_count=middlegame_coverage.occurrence_count,
+        ),
+        endgame_coverage_metadata,
+    )
+
+
+def _build_web_corpus_regime_declarations(
+    dry_run: PipelineDryRun,
+    coverage_metadata_records: tuple[CoverageMetadataRecord, ...],
+    resolver_input_records: tuple[ResolverInputRecord, ...],
+    opening_assets: PublishedTableAssetSet,
+    endgame_assets: PublishedTableAssetSet,
+) -> tuple[RegimeDeclaration, ...]:
+    coverage_by_regime = {
+        record.regime_id: record for record in coverage_metadata_records
+    }
+    resolver_by_regime = {
+        record.regime_id: record for record in resolver_input_records
+    }
+
+    declarations: list[RegimeDeclaration] = []
+    for regime_id, label, backing_kind in (
+        ("opening-table", "Opening Table", "table"),
+        ("middlegame-procedural", "Middlegame Procedural", "procedural"),
+        ("endgame-table", "Endgame Table", "table"),
+    ):
+        if regime_id == "opening-table":
+            declarations.append(
+                RegimeDeclaration(
+                    regime_id=regime_id,
+                    label=label,
+                    backing_kind=backing_kind,
+                    schema_version=REPRESENTATION_SCHEMA_VERSION,
+                    coverage_metadata_id=coverage_by_regime[regime_id].coverage_metadata_id,
+                    resolver_input_id=resolver_by_regime[regime_id].resolver_input_id,
+                    provenance=RecordProvenance(
+                        source_kind="builder-regime-declaration",
+                        source_name=opening_assets.asset_set_id,
+                        source_version=PUBLISHED_ASSET_SCHEMA_VERSION,
+                        source_location=opening_assets.relative_manifest_path,
+                        detail=(
+                            "declared opening-table project-owned asset surface from "
+                            f"{opening_assets.relative_manifest_path}"
+                        ),
+                    ),
+                )
+            )
+            continue
+
+        if regime_id == "endgame-table":
+            declarations.append(
+                RegimeDeclaration(
+                    regime_id=regime_id,
+                    label=label,
+                    backing_kind=backing_kind,
+                    schema_version=REPRESENTATION_SCHEMA_VERSION,
+                    coverage_metadata_id=coverage_by_regime[regime_id].coverage_metadata_id,
+                    resolver_input_id=resolver_by_regime[regime_id].resolver_input_id,
+                    provenance=RecordProvenance(
+                        source_kind="builder-regime-declaration",
+                        source_name=endgame_assets.asset_set_id,
+                        source_version=PUBLISHED_ASSET_SCHEMA_VERSION,
+                        source_location=endgame_assets.relative_manifest_path,
+                        detail=(
+                            "declared endgame-table project-owned asset surface from "
+                            f"{endgame_assets.relative_manifest_path}"
+                        ),
+                    ),
+                )
+            )
+            continue
+
+        declarations.append(
+            RegimeDeclaration(
+                regime_id=regime_id,
+                label=label,
+                backing_kind=backing_kind,
+                schema_version=REPRESENTATION_SCHEMA_VERSION,
+                coverage_metadata_id=coverage_by_regime[regime_id].coverage_metadata_id,
+                resolver_input_id=resolver_by_regime[regime_id].resolver_input_id,
+                provenance=RecordProvenance(
+                    source_kind="builder-regime-declaration",
+                    source_name=dry_run.ingested_corpus.declaration.source_name,
+                    source_version=dry_run.ingested_corpus.declaration.version,
+                    source_location=dry_run.ingested_corpus.declaration.location,
+                    detail=(
+                        "declared middlegame-procedural fallback alongside published "
+                        "opening/endgame table assets for N11d"
+                    ),
+                ),
+            )
+        )
+
+    return tuple(declarations)
+
+
+def _published_table_asset_payload(
+    asset: PublishedTableAssetSet,
+) -> dict[str, Any]:
+    return {
+        "regimeId": asset.regime_id,
+        "assetSetId": asset.asset_set_id,
+        "manifestPath": asset.relative_manifest_path,
+        "manifestHash": asset.manifest_hash,
+        "coverageMetadataId": asset.coverage_metadata.coverage_metadata_id,
+        "positionCount": asset.position_count,
+        "shardCount": asset.shard_count,
+        "sourceProvenance": _provenance_payload(asset.source_provenance),
+        "sourceHash": asset.source_hash,
+    }
+
+
+def _ingestion_input_payload(asset: PublishedTableAssetSet) -> dict[str, Any]:
+    return {
+        "sourceKind": asset.source_provenance.source_kind,
+        "sourceName": asset.source_provenance.source_name,
+        "sourceVersion": asset.source_provenance.source_version,
+        "sourceLocation": asset.source_provenance.source_location,
+        "sourceHash": asset.source_hash,
+    }
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:

@@ -14,6 +14,9 @@ Minimal uv-managed Python project for environment validation during roadmap node
 - `terminal_labeling.py` attaches W/D/L labels and stable terminal anchor ids to declared terminal occurrences without collapsing occurrence identity.
 - `salience.py` attaches normalized salience scores and runtime priority hints over the occurrence graph using deterministic builder-side signals.
 - `embedding.py` attaches deterministic hyperbolic-style coarse coordinates and queryable embedding records over the occurrence graph.
+- `opening_table.py` normalizes builder-only opening import sources into project-owned continuation shards and coverage manifests.
+- `endgame_table.py` normalizes builder-only endgame import sources into project-owned terminal-evaluation shards and coverage manifests.
+- `publication.py` owns canonical JSON hashing/writing so published table assets remain deterministic.
 - `pipeline.py` wires the placeholder modules together for env-check validation.
 
 ## Builder versus runtime
@@ -33,6 +36,7 @@ Minimal uv-managed Python project for environment validation during roadmap node
 ```bash
 uv run python -m unittest discover -s tests
 uv run chessviz-builder export-fixture-artifacts
+uv run chessviz-builder build-web-corpus --opening-source /path/to/opening-import.json --endgame-source /path/to/endgame-import.json
 ```
 
 ## Usage
@@ -41,4 +45,9 @@ uv run chessviz-builder export-fixture-artifacts
 uv sync
 uv run chessviz-builder env-check
 uv run chessviz-builder export-fixture-artifacts
+uv run chessviz-builder import-opening-book --source /path/to/opening-import.json
+uv run chessviz-builder import-endgame-table --source /path/to/endgame-import.json
+uv run chessviz-builder build-web-corpus --opening-source /path/to/opening-import.json --endgame-source /path/to/endgame-import.json
 ```
+
+`CHESSVIZ_ARTIFACT_ROOT` now scopes fixture bootstrap output and the N11d opening/endgame/web-corpus publication surfaces together.

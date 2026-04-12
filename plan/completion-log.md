@@ -27,3 +27,4 @@ One line per committed DAG frontier event.
 2026-04-12 | commit 1e434e4 | settled N11a unified regime substrate replan and advanced frontier to N11b
 2026-04-12 | commit 33c5f8c | settled N11b concrete regime module partition and advanced frontier to N11c
 2026-04-12 | commit 577a4f3 | settled N11c shared regime declaration contract and advanced frontier to N11d
+2026-04-12 | commit pending | settled N11d opening/endgame table publication and advanced frontier to N11e
