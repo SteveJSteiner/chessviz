@@ -127,6 +127,21 @@
       "liveLabelPolicyApplied": true
     },
     {
+      "file": "n11-live-review-notes.md",
+      "regime": "live-review-notes",
+      "reviewedCommit": "5c0978a",
+      "continuityVerified": true,
+      "reproduction": {
+        "focusFixture": "QCD Bogo-Indian A",
+        "focusOccurrence": "initial position",
+        "neighborhoodRadius": 4,
+        "cameraDistances": [
+          4.6,
+          4.7
+        ]
+      }
+    },
+    {
       "file": "review-notes-template.md",
       "regime": "human-verdict-template"
     }
