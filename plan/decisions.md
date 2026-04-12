@@ -55,6 +55,12 @@ This file contains design and process decisions only. It must not become a task 
 - **D20j. Bootstrap derives from regime surfaces** — Any bootstrap artifact is materialized from opening-table assets, live middlegame procedural expansion, and endgame-table assets, never from the builder fixture.
 - **D20k. Fixture demotion is binding** — The existing fixture remains a unit-test-only input for identity, transposition, and DAG assembly checks and is excluded from runtime corpus, bootstrap truth, and settlement review.
 - **D20l. Settlement hard-fails on bypass or fracture** — Missing required opening/endgame assets, bypassing the middlegame procedural path, or fracturing identity/anchoring/navigation/query semantics at regime boundaries is a hard failure.
+- **D20m. Versioned regime declarations are the runtime contract** — Builder emits versioned regime declarations and shared representation records as project-owned web assets, and runtime mirrors those schemas rather than inferring shape from fixture-specific manifests.
+- **D20n. Builder owns table-asset publication** — Opening-table and endgame-table import adapters, validation, sharding, provenance capture, and coverage metadata are builder responsibilities.
+- **D20o. Runtime owns resolution and exploration over declared surfaces** — Runtime resolves positions against declared opening/endgame coverage and the live middlegame procedural path, loads assets, caches neighborhoods, and never substitutes phase-label inference for regime resolution.
+- **D20p. Bootstrap is a seed surface, not a corpus truth surface** — Runtime bootstrap artifacts carry scene defaults, object identity, and anchor hints only; they do not embed fixture corpus truth or stand in for regime declarations.
+- **D20q. Anchored entrypoints are regime-backed** — Opening/middlegame/endgame entrypoints are derived from declared regime anchors and stable occurrence identity with provenance, not directly from phase annotations over fixture bootstrap data.
+- **D20r. Fixture artifact quarantine** — The current fixture bootstrap and scene manifests remain test/review scaffolds until replaced by regime-backed assets and may not be extended as N12/N14 runtime truth surfaces.
 
 ## Performance/rendering budget stance (locked)
 

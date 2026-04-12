@@ -23,4 +23,5 @@ One line per committed DAG frontier event.
 2026-04-11 | commit c9c8232 | settled N10b direct-label/reference surface and opened N10c live-review label-density loop
 2026-04-11 | commit 43cfc85 | settled N10c live carrier legibility and advanced frontier to N11
 2026-04-11 | commit 5c0978a | settled N11 camera grammar continuity after recorded live review and advanced frontier to N12
-2026-04-12 | commit pending | reset frontier from N12 to N11a/N11b to re-plan unified regime substrate prerequisites
+2026-04-12 | commit 92b1e3b | reset frontier from N12 to N11a/N11b to re-plan unified regime substrate prerequisites
+2026-04-12 | commit pending | settled N11a unified regime substrate replan and advanced frontier to N11b

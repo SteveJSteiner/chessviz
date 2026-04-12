@@ -10,6 +10,7 @@ This file contains explicit, testable acceptance checks and performance/renderin
 - **Fixture rule:** The builder fixture is test-only and is excluded from runtime corpus, bootstrap truth, and settlement review.
 - **Truth-surface rule:** Reviewed and settled runtime data comes from project-owned web assets and live procedural outputs, not foreign binary layouts.
 - **Bootstrap rule:** Any bootstrap or seeded scene used for acceptance is derived from regime surfaces rather than from fixture data.
+- **Entrypoint rule:** Runtime bootstrap and anchored entrypoint derivation use regime declarations and resolver outputs, not phase labels embedded in fixture artifacts.
 - **Represented-subset rule:** The object is built from the declared regime surfaces, not exhaustive legal-state enumeration.
 - **Determinism rule:** Each acceptance run records the seed, config hash, and regime-surface hashes or policy hashes used to produce structural outputs.
 - **Run declaration requirement:** Each acceptance run records regime surface metadata, any builder-time import inputs, and the salience-input declaration.
@@ -18,6 +19,7 @@ This file contains explicit, testable acceptance checks and performance/renderin
 
 - **Corpus declaration fields:** Every recorded run declares corpus profile, corpus version/date, content hash, and each included or omitted slice with its source and selection rule.
 - **Salience declaration fields:** Every recorded run declares frequency, eval, terminal pull, policy, and centrality inputs with a source plus weight, or marks the input as omitted.
+- **Bootstrap declaration fields:** Every recorded run declares the bootstrap seed surface, focus-candidate source, and anchored-entrypoint derivation surface.
 - **Determinism declaration fields:** Every recorded run declares the fixed seed, config hash, and any supplemental external-slice hashes used in the run.
 
 ```yaml
@@ -25,6 +27,10 @@ run_declaration:
   representation:
     graph_object_id:
     schema_version:
+  bootstrap:
+    seed_surface:
+    focus_candidates_source:
+    entrypoint_derivation:
   regimes:
     opening_table:
       asset_set:
@@ -102,6 +108,7 @@ run_declaration:
 - **A18. Project-owned truth surface only:** Acceptance runs and browser/runtime fetch paths use only declared opening/endgame web assets plus live procedural middlegame outputs; fixture data is absent.
 - **A19. Runtime asset boundary:** No foreign binary opening-book or tablebase formats are committed as runtime truth artifacts or loaded by the web runtime.
 - **A20. Hard-fail integrity:** Acceptance fails when required opening/endgame assets are missing, middlegame procedural expansion is bypassed by canned coverage, or regime transitions fracture identity, anchoring, navigation, or query continuity.
+- **A21. Entrypoint derivation boundary:** Opening/middlegame/endgame entrypoints and bootstrap focus candidates are derived from declared regime anchors or resolver outputs rather than from phase labels embedded in fixture manifests.
 
 ## Visual evidence requirements
 
@@ -111,6 +118,6 @@ run_declaration:
 
 ## Recording protocol
 
-- Record pass/fail for A1-A20 and B1-B5 in commit artifacts tied to N14 settlement.
+- Record pass/fail for A1-A21 and B1-B5 in commit artifacts tied to N14 settlement.
 - Record the human review artifacts required by V1-V3 in the same commit artifacts for any visual-node settlement claim.
 - Any budget change requires updating this file in the same commit as the decision update.

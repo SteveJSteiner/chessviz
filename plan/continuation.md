@@ -3,22 +3,22 @@
 This file states the current active node, why it is current, and what must be true to settle it and advance.
 
 ## Current active node
-- **Node:** N11a
+- **Node:** N11b
 
 ## Why this is current
-- N11 is treated as settled on the roadmap criteria: camera grammar now controls viewpoint, refinement, and semantic-band reveal over the existing one-object carrier, and recorded live review confirms the QCD Bogo-Indian A initial-position reproduction no longer jumps when view distance crosses 4.6 -> 4.7 at neighborhood radius 4.
-- Commit 5c0978a landed the N11 camera-grammar seam, the runtime continuity correction, and the updated review artifacts that now back the recorded live verification.
-- The previous N12 premise is no longer acceptable under the revised planning constraints: the current opening/middlegame/endgame entrypoints are phase-derived over fixture-backed bootstrap data rather than explicit opening-table, middlegame-procedural, and endgame-table regime surfaces.
-- N11a is now the earliest unresolved node because the planning artifacts must first be reset around one represented object with three internal regimes, project-owned truth surfaces, builder-only external ingestion boundaries, and explicit fixture demotion before anchored entrypoints can honestly resume.
-- N11b follows N11a as a second interstitial node whose sole purpose is to finalize the concrete builder/runtime/module partition for the regime substrate work and to split the frontier further if the implementation surface proves larger than currently known.
-- N12 may reopen only after N11a and N11b have made the prerequisite regime substrate explicit enough that anchored entrypoints no longer rely on fixture-backed phase coverage as a stand-in for cross-regime continuity.
+- N11 is already settled on the roadmap criteria: camera grammar controls viewpoint, refinement, and semantic-band reveal over the existing one-object carrier, and recorded live review confirmed the QCD Bogo-Indian A initial-position reproduction no longer jumps when view distance crosses 4.6 -> 4.7 at neighborhood radius 4.
+- Commit 92b1e3b reset the frontier from N12 back to N11a/N11b because the old anchored-entrypoint premise depended on phase-derived fixture bootstrap data instead of explicit opening-table, middlegame-procedural, and endgame-table regime surfaces.
+- The current planning set now settles N11a: requirements, decisions, roadmap, and acceptance all describe one represented object over explicit regime substrates, project-owned truth surfaces, builder-only foreign-format ingestion boundaries, and fixture demotion.
+- N11b is now the earliest unresolved node because the downstream implementation surface still needs a concrete builder/runtime/module partition before N11c through N11f can proceed without hidden work.
+- The codebase still exposes fixture-owned bootstrap and scene manifests plus phase-derived anchored entrypoints, so N11b must map those current seams to explicit replacement surfaces for shared contracts, table assets, resolver/bootstrap flow, and fixture quarantine.
+- N12 remains closed until N11b makes that partition concrete enough that anchored entrypoints no longer smuggle fixture-backed phase coverage in as a stand-in for cross-regime continuity.
 
 ## Settle-and-advance conditions
-- Requirements, decisions, roadmap, and acceptance all explicitly declare one continuous represented object over opening-table, middlegame-procedural, and endgame-table substrates.
-- The planning artifacts define the shared representation contract, per-regime declarations, project-owned tabular truth surfaces, builder-only foreign-format ingestion boundaries, fixture demotion, and hard-fail criteria for regime bypass or representation fracture.
-- The roadmap and acceptance criteria no longer frame N12 or N14 as settleable from fixture-backed phase coverage, and the frontier now routes through N11b before any further anchored-entrypoint implementation or settlement claims.
-- N11b is explicitly opened as the second interstitial node for finalizing the concrete builder/runtime/module partition and inserting any additional prerequisite nodes discovery requires before N12 resumes.
-- A commit records N11a settlement and updates both `plan/completion-log.md` and this file to N11b or the next prerequisite frontier.
+- The concrete builder/runtime/module partition names the builder-owned files or module families for shared regime declarations, opening/endgame asset import-export, coverage metadata, provenance capture, and deterministic web publication.
+- The concrete builder/runtime/module partition names the runtime-owned files or module families for schema mirrors, regime resolution, middlegame procedural fallback, bootstrap loading, anchored entrypoint derivation, and acceptance hard-fail wiring.
+- Existing fixture-owned runtime seams such as bootstrap manifests, scene manifests, and phase-derived entrypoint helpers are explicitly classified as temporary/test-only or are mapped to their regime-backed replacements.
+- Any additional prerequisite nodes discovered from that module-level partition are inserted before N11c rather than hidden inside N11c through N14.
+- A commit records N11b settlement and updates both `plan/completion-log.md` and this file to N11c or the next prerequisite frontier.
 
 ## Advancement rule
 - Formal frontier events are tracked in `plan/completion-log.md` against the commit that records the exact continuation state transition.
