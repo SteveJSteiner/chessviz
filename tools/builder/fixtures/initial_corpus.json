@@ -1,6 +1,6 @@
 {
   "source_name": "initial-represented-subset",
-  "version": "2026-04-11-fixture-002",
+  "version": "2026-04-11-fixture-003",
   "location": "tools/builder/fixtures/initial_corpus.json",
   "games": [
     {
@@ -25,6 +25,30 @@
       "game_id": "repetition-draw",
       "moves_san": ["Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8"],
       "terminal_outcome": "draw"
+    },
+    {
+      "game_id": "italian-branch-lab",
+      "moves_san": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "Nf6", "d4", "exd4", "cxd4", "Bb4+", "Nc3"]
+    },
+    {
+      "game_id": "italian-branch-lab",
+      "moves_san": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "Nf6", "d3", "d6", "O-O", "O-O", "Re1"]
+    },
+    {
+      "game_id": "italian-branch-lab",
+      "moves_san": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "Nf6", "Ng5", "O-O", "d3", "d6", "O-O"]
+    },
+    {
+      "game_id": "italian-branch-lab",
+      "moves_san": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "Nf6", "O-O", "Nxe4", "d4", "d5", "Bb5"]
+    },
+    {
+      "game_id": "italian-branch-lab",
+      "moves_san": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "Nf6", "b4", "Bb6", "d4", "exd4", "O-O"]
+    },
+    {
+      "game_id": "italian-branch-lab",
+      "moves_san": ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "Nf6", "h3", "d6", "d4", "Bb6", "O-O"]
     }
   ]
 }

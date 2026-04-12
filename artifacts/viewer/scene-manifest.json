@@ -17,26 +17,28 @@
     "fov": 48
   },
   "runtime": {
-    "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
-    "initialFocusOccurrenceId": "occ-65caf3375c92984c",
+    "graphObjectId": "initial-represented-subset:2026-04-11-fixture-003",
+    "initialFocusOccurrenceId": "occ-25c32c2bc0227f68",
     "focusCandidateOccurrenceIds": [
-      "occ-65caf3375c92984c",
+      "occ-25c32c2bc0227f68",
       "occ-27e2be7f2bf706c6",
       "occ-7b367264afad7c15",
       "occ-d10897875e44e59b",
       "occ-2ec900ca21098443",
       "occ-39672723f3979502",
+      "occ-c691ba2463970683",
       "occ-854ee946e516ebcc",
-      "occ-efe95b9c393f7960",
       "occ-63c6882f2a36737a",
       "occ-d6e94fa5dd427d26",
-      "occ-8e57e74a73537a36",
+      "occ-efe95b9c393f7960",
+      "occ-65caf3375c92984c",
       "occ-387cdce9c0bf5677",
-      "occ-f7b8af2a834d288f"
+      "occ-f7b8af2a834d288f",
+      "occ-e183cdedadef1bf0"
     ],
-    "defaultNeighborhoodRadius": 1,
-    "maxNeighborhoodRadius": 2,
-    "defaultRefinementBudget": 6,
+    "defaultNeighborhoodRadius": 2,
+    "maxNeighborhoodRadius": 4,
+    "defaultRefinementBudget": 8,
     "maxRefinementBudget": 12,
     "cacheCapacity": 6
   }

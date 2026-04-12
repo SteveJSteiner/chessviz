@@ -172,6 +172,7 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
 
 def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     graph_object_id = _graph_object_id(dry_run)
+    initial_focus_occurrence_id = _initial_focus_occurrence_id(dry_run)
     focus_candidate_occurrence_ids = _focus_candidate_occurrence_ids(dry_run)
 
     return {
@@ -186,11 +187,11 @@ def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
         },
         "runtime": {
             "graphObjectId": graph_object_id,
-            "initialFocusOccurrenceId": dry_run.dag.root_occurrence_ids[0],
+            "initialFocusOccurrenceId": initial_focus_occurrence_id,
             "focusCandidateOccurrenceIds": focus_candidate_occurrence_ids,
-            "defaultNeighborhoodRadius": 1,
-            "maxNeighborhoodRadius": 2,
-            "defaultRefinementBudget": 6,
+            "defaultNeighborhoodRadius": 2,
+            "maxNeighborhoodRadius": 4,
+            "defaultRefinementBudget": 8,
             "maxRefinementBudget": 12,
             "cacheCapacity": 6,
         },
@@ -221,6 +222,7 @@ def _graph_object_id(dry_run: PipelineDryRun) -> str:
 
 def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
     ordered_candidates = [
+        _initial_focus_occurrence_id(dry_run),
         *dry_run.dag.root_occurrence_ids,
         *(record.occurrence_id for record in dry_run.salience.priority_frontier),
     ]
@@ -232,6 +234,25 @@ def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
         deduplicated_candidates.append(occurrence_id)
 
     return deduplicated_candidates
+
+
+def _initial_focus_occurrence_id(dry_run: PipelineDryRun) -> str:
+    best_occurrence_id = dry_run.dag.root_occurrence_ids[0]
+    best_key = (-1, -1.0, -1, "")
+
+    for occurrence in dry_run.dag.nodes:
+        salience_record = dry_run.salience.by_occurrence_id(occurrence.occurrence_id)
+        candidate_key = (
+            dry_run.dag.out_degree(occurrence.occurrence_id),
+            salience_record.normalized_score if salience_record is not None else 0.0,
+            occurrence.ply,
+            occurrence.occurrence_id,
+        )
+        if candidate_key > best_key:
+            best_occurrence_id = occurrence.occurrence_id
+            best_key = candidate_key
+
+    return best_occurrence_id
 
 
 def _move_family_payload(move_family: Any) -> dict[str, str]:

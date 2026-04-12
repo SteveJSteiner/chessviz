@@ -191,19 +191,35 @@ class IngestedCorpus:
 
     @property
     def occurrences(self) -> tuple[OccurrenceRecord, ...]:
-        return tuple(
-            occurrence
-            for game in self.games
-            for occurrence in game.occurrences
-        )
+        ordered_occurrences: list[OccurrenceRecord] = []
+        seen_occurrence_ids: set[str] = set()
+
+        for game in self.games:
+            for occurrence in game.occurrences:
+                if occurrence.occurrence_id in seen_occurrence_ids:
+                    continue
+                seen_occurrence_ids.add(occurrence.occurrence_id)
+                ordered_occurrences.append(occurrence)
+
+        return tuple(ordered_occurrences)
 
     @property
     def transitions(self) -> tuple[OccurrenceTransition, ...]:
-        return tuple(
-            transition
-            for game in self.games
-            for transition in game.transitions
-        )
+        ordered_transitions: list[OccurrenceTransition] = []
+        seen_transition_edges: set[tuple[str, str]] = set()
+
+        for game in self.games:
+            for transition in game.transitions:
+                edge = (
+                    transition.parent_occurrence_id,
+                    transition.child_occurrence_id,
+                )
+                if edge in seen_transition_edges:
+                    continue
+                seen_transition_edges.add(edge)
+                ordered_transitions.append(transition)
+
+        return tuple(ordered_transitions)
 
 
 @dataclass(frozen=True)

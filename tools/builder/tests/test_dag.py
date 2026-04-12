@@ -30,11 +30,11 @@ class DagArtifactTests(unittest.TestCase):
         dry_run = self.pipeline.dry_run(self.declaration)
         metrics = dry_run.dag.metrics
 
-        self.assertEqual(metrics.node_count, 36)
-        self.assertEqual(metrics.edge_count, 31)
-        self.assertEqual(metrics.root_count, 5)
-        self.assertEqual(metrics.leaf_count, 5)
-        self.assertEqual(metrics.max_out_degree, 1)
+        self.assertEqual(metrics.node_count, 75)
+        self.assertEqual(metrics.edge_count, 69)
+        self.assertEqual(metrics.root_count, 6)
+        self.assertEqual(metrics.leaf_count, 11)
+        self.assertEqual(metrics.max_out_degree, 6)
         self.assertEqual(metrics.max_in_degree, 1)
 
     def test_occurrence_dag_preserves_path_distinct_nodes(self) -> None:
@@ -49,6 +49,20 @@ class DagArtifactTests(unittest.TestCase):
             self.assertEqual(dag.in_degree(leaf_id), 1)
             self.assertEqual(dag.out_degree(leaf_id), 0)
 
+    def test_shared_root_fixture_builds_actual_branch_fan_out(self) -> None:
+        dry_run = self.pipeline.dry_run(self.declaration)
+        dag = dry_run.dag
+        italian_games = [
+            game for game in dry_run.ingested_corpus.games if game.game_id == "italian-branch-lab"
+        ]
+        branch_occurrence_ids = {
+            game.occurrences[8].occurrence_id for game in italian_games
+        }
+
+        self.assertEqual(len(branch_occurrence_ids), 1)
+        branch_occurrence_id = next(iter(branch_occurrence_ids))
+        self.assertEqual(dag.out_degree(branch_occurrence_id), 6)
+
     def test_convergence_metrics_respect_repeated_state_surface_without_node_merge(self) -> None:
         dry_run = self.pipeline.dry_run(self.declaration)
         dag = dry_run.dag
@@ -60,9 +74,9 @@ class DagArtifactTests(unittest.TestCase):
 
         self.assertIsNotNone(relation)
         assert relation is not None
-        self.assertEqual(dag.metrics.max_state_convergence, 7)
-        self.assertEqual(dag.metrics.repeated_state_group_count, 8)
-        self.assertEqual(dag.metrics.repeated_state_occurrence_count, 21)
+        self.assertEqual(dag.metrics.max_state_convergence, 8)
+        self.assertEqual(dag.metrics.repeated_state_group_count, 10)
+        self.assertEqual(dag.metrics.repeated_state_occurrence_count, 26)
         self.assertEqual(len(relation.occurrences), 2)
         self.assertNotEqual(
             relation.occurrences[0].occurrence_id,

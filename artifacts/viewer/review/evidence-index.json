@@ -1,9 +1,9 @@
 {
-  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-003",
   "sceneId": "runtime-exploration-fixture",
-  "focusOccurrenceId": "occ-65caf3375c92984c",
-  "rootGameId": "scholars-mate-white",
-  "focusLine": "1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6",
+  "focusOccurrenceId": "occ-25c32c2bc0227f68",
+  "rootGameId": "italian-branch-lab",
+  "focusLine": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6",
   "focusTurn": "White to move",
   "neighborhoodRadius": 2,
   "refinementBudgets": [
@@ -20,9 +20,39 @@
     },
     {
       "direction": "outgoing",
-      "san": "Qxf7#",
-      "uci": "h5f7",
-      "semantics": "capture checkmate"
+      "san": "b4",
+      "uci": "b2b4",
+      "semantics": "quiet move"
+    },
+    {
+      "direction": "outgoing",
+      "san": "d3",
+      "uci": "d2d3",
+      "semantics": "quiet move"
+    },
+    {
+      "direction": "outgoing",
+      "san": "d4",
+      "uci": "d2d4",
+      "semantics": "quiet move"
+    },
+    {
+      "direction": "outgoing",
+      "san": "h3",
+      "uci": "h2h3",
+      "semantics": "quiet move"
+    },
+    {
+      "direction": "outgoing",
+      "san": "Ng5",
+      "uci": "f3g5",
+      "semantics": "quiet move"
+    },
+    {
+      "direction": "outgoing",
+      "san": "O-O",
+      "uci": "e1g1",
+      "semantics": "castling move"
     }
   ],
   "artifacts": [

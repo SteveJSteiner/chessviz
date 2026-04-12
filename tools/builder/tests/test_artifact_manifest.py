@@ -22,7 +22,7 @@ class ArtifactManifestTests(unittest.TestCase):
 
         self.assertEqual(
             manifest["graphObjectId"],
-            "initial-represented-subset:2026-04-11-fixture-002",
+            "initial-represented-subset:2026-04-11-fixture-003",
         )
         self.assertEqual(len(manifest["occurrences"]), len(self.dry_run.occurrences))
         self.assertEqual(len(manifest["edges"]), len(self.dry_run.dag.edges))
@@ -68,10 +68,25 @@ class ArtifactManifestTests(unittest.TestCase):
         )
         self.assertEqual(
             scene_manifest["runtime"]["graphObjectId"],
-            "initial-represented-subset:2026-04-11-fixture-002",
+            "initial-represented-subset:2026-04-11-fixture-003",
         )
-        self.assertEqual(scene_manifest["runtime"]["defaultNeighborhoodRadius"], 1)
+        self.assertEqual(scene_manifest["runtime"]["defaultNeighborhoodRadius"], 2)
+        self.assertEqual(scene_manifest["runtime"]["maxNeighborhoodRadius"], 4)
+        self.assertEqual(scene_manifest["runtime"]["defaultRefinementBudget"], 8)
         self.assertEqual(scene_manifest["runtime"]["cacheCapacity"], 6)
+        italian_branch_focus = next(
+            game.occurrences[8].occurrence_id
+            for game in self.dry_run.ingested_corpus.games
+            if game.game_id == "italian-branch-lab"
+        )
+        self.assertEqual(
+            scene_manifest["runtime"]["initialFocusOccurrenceId"],
+            italian_branch_focus,
+        )
+        self.assertIn(
+            italian_branch_focus,
+            scene_manifest["runtime"]["focusCandidateOccurrenceIds"],
+        )
         self.assertGreaterEqual(
             len(scene_manifest["runtime"]["focusCandidateOccurrenceIds"]),
             len(self.dry_run.dag.root_occurrence_ids),

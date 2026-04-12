@@ -1,30 +1,37 @@
 {
-  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-002",
+  "graphObjectId": "initial-represented-subset:2026-04-11-fixture-003",
   "sourceName": "initial-represented-subset",
-  "version": "2026-04-11-fixture-002",
+  "version": "2026-04-11-fixture-003",
   "rootOccurrenceIds": [
     "occ-27e2be7f2bf706c6",
     "occ-7b367264afad7c15",
     "occ-d10897875e44e59b",
     "occ-2ec900ca21098443",
-    "occ-39672723f3979502"
+    "occ-39672723f3979502",
+    "occ-c691ba2463970683"
   ],
   "leafOccurrenceIds": [
     "occ-7108d24f15ffe66c",
     "occ-8a3b915d604d5403",
     "occ-d6e94fa5dd427d26",
     "occ-63c6882f2a36737a",
-    "occ-854ee946e516ebcc"
+    "occ-854ee946e516ebcc",
+    "occ-27c4c8b306dd7f88",
+    "occ-71618892463fa67a",
+    "occ-67c8744972075e12",
+    "occ-7fdbecbaa8bf671c",
+    "occ-24dcf15814b509be",
+    "occ-28b57dbf27801997"
   ],
   "priorityFrontierOccurrenceIds": [
     "occ-854ee946e516ebcc",
-    "occ-efe95b9c393f7960",
     "occ-63c6882f2a36737a",
     "occ-d6e94fa5dd427d26",
+    "occ-efe95b9c393f7960",
     "occ-65caf3375c92984c",
-    "occ-8e57e74a73537a36",
     "occ-387cdce9c0bf5677",
-    "occ-f7b8af2a834d288f"
+    "occ-f7b8af2a834d288f",
+    "occ-e183cdedadef1bf0"
   ],
   "occurrences": [
     {
@@ -37,13 +44,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.325,
-        "normalizedScore": 0.20000000000000004,
-        "frequencySignal": 1.0,
+        "rawScore": 0.1577922077922078,
+        "normalizedScore": 0.1592356687898089,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 18,
+          "priorityRank": 20,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -51,12 +58,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.029123495291,
-          0.070132221177,
+          -0.066356875016,
+          0.036925215819,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": 1.9643930006853567,
+        "azimuth": 2.6338001854431603,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -73,13 +80,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.25,
-        "normalizedScore": 0.10000000000000002,
-        "frequencySignal": 0.4,
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 25,
+          "priorityRank": 29,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -87,12 +94,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.010447303477,
-          0.225923328325,
+          -0.17190553798,
+          0.146965922728,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": 1.6170061020434143,
+        "azimuth": 2.4342477221049075,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -110,13 +117,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.2,
-        "normalizedScore": 0.03333333333333336,
-        "frequencySignal": 0.2,
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 33,
+          "priorityRank": 57,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -124,12 +131,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.053604137773,
-          0.363041623305,
+          -0.305660673003,
+          0.203086623925,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": 1.71739000655902,
+        "azimuth": 2.5551480475162984,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -148,13 +155,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.2,
-        "normalizedScore": 0.03333333333333336,
-        "frequencySignal": 0.2,
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 32,
+          "priorityRank": 54,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -162,12 +169,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.074719509937,
-          0.485468297385,
+          -0.410770364126,
+          0.269314279026,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": 1.723510206335349,
+        "azimuth": 2.5612682472926274,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -187,13 +194,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.25,
-        "normalizedScore": 0.10000000000000002,
-        "frequencySignal": 0.4,
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 27,
+          "priorityRank": 31,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -201,12 +208,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.076459040693,
-          0.590073130125,
+          -0.490896464329,
+          0.336233468155,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": 1.6996538960705683,
+        "azimuth": 2.5410473442256354,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -227,13 +234,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.25,
-        "normalizedScore": 0.10000000000000002,
-        "frequencySignal": 0.4,
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 30,
+          "priorityRank": 34,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -241,12 +248,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.162405584567,
-          0.658215810379,
+          -0.598315180376,
+          0.318814321923,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": 1.812700707778581,
+        "azimuth": 2.6520089953120927,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -268,11 +275,11 @@
       "phase": "middlegame",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.175,
-        "normalizedScore": 0.0,
-        "frequencySignal": 0.4,
+        "rawScore": 0.06688311688311688,
+        "normalizedScore": 0.031847133757961776,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
           "priorityRank": 35,
           "priorityBand": "detail",
@@ -282,12 +289,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.236479843993,
-          0.744908824659,
+          -0.700832194895,
+          0.345898985643,
           0.0
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": 1.8781948390107261,
+        "azimuth": 2.683114609972926,
         "elevation": 0.0,
         "rootGameId": "qgd-bogo-a",
         "terminalAnchorId": null
@@ -303,13 +310,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.325,
-        "normalizedScore": 0.20000000000000004,
-        "frequencySignal": 1.0,
+        "rawScore": 0.1577922077922078,
+        "normalizedScore": 0.1592356687898089,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 21,
+          "priorityRank": 23,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -317,12 +324,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.070873062785,
-          0.027271145864,
+          -0.075832806959,
+          -0.00401146032,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": 2.774267943835681,
+        "azimuth": -3.0887431676737096,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -339,13 +346,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.25,
-        "normalizedScore": 0.10000000000000002,
-        "frequencySignal": 0.4,
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 29,
+          "priorityRank": 33,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -353,12 +360,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.210117552223,
-          0.083672639969,
+          -0.220973638835,
+          -0.048178287346,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": 2.7626232272490996,
+        "azimuth": -2.9269247482977794,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -376,13 +383,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.2,
-        "normalizedScore": 0.03333333333333336,
-        "frequencySignal": 0.2,
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 31,
+          "priorityRank": 38,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -390,12 +397,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.338933359768,
-          0.140701106871,
+          -0.356904883612,
+          -0.085390443795,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": 2.748112348893277,
+        "azimuth": -2.9067544275683512,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -414,13 +421,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.2,
-        "normalizedScore": 0.03333333333333336,
-        "frequencySignal": 0.2,
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 34,
+          "priorityRank": 68,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -428,12 +435,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.472241812768,
-          0.135093090887,
+          -0.461457378494,
+          -0.16828416671,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": 2.862966358622464,
+        "azimuth": -2.791900417839164,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -453,13 +460,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.25,
-        "normalizedScore": 0.10000000000000002,
-        "frequencySignal": 0.4,
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 26,
+          "priorityRank": 30,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -467,12 +474,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.530249779847,
-          0.26993972433,
+          -0.584319993553,
+          -0.112260540409,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": 2.6707072091049664,
+        "azimuth": -2.9517837477209876,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -493,13 +500,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.25,
-        "normalizedScore": 0.10000000000000002,
-        "frequencySignal": 0.4,
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 28,
+          "priorityRank": 32,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -507,12 +514,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.583361125437,
-          0.345417753251,
+          -0.673026152027,
+          -0.081605303866,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": 2.606990003349583,
+        "azimuth": -3.0209303619840413,
         "elevation": 0.32,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -534,11 +541,11 @@
       "phase": "middlegame",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.175,
-        "normalizedScore": 0.0,
-        "frequencySignal": 0.4,
+        "rawScore": 0.06688311688311688,
+        "normalizedScore": 0.031847133757961776,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
           "priorityRank": 36,
           "priorityBand": "detail",
@@ -548,12 +555,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.707010977026,
-          0.333087604146,
+          -0.772371281831,
+          -0.11939211311,
           0.0
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": 2.701314119879655,
+        "azimuth": -2.9882278403776676,
         "elevation": 0.0,
         "rootGameId": "qgd-bogo-b",
         "terminalAnchorId": null
@@ -569,13 +576,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.325,
-        "normalizedScore": 0.20000000000000004,
-        "frequencySignal": 1.0,
+        "rawScore": 0.1577922077922078,
+        "normalizedScore": 0.1592356687898089,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 22,
+          "priorityRank": 25,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -583,12 +590,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.021668067149,
-          -0.072781874744,
+          -0.009648947032,
+          -0.075323331355,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": -1.8601530933893544,
+        "azimuth": -1.6982028248960355,
         "elevation": 0.32,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -605,13 +612,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.2857142857142857,
-        "normalizedScore": 0.14761904761904762,
-        "frequencySignal": 0.2,
+        "rawScore": 0.174025974025974,
+        "normalizedScore": 0.18198362147406733,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.14285714285714285,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 23,
+          "priorityRank": 18,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -619,12 +626,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.068190327746,
-          -0.208308787886,
+          0.106049236105,
+          -0.191822916854,
           0.093409409128
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": -1.2544384695599577,
+        "azimuth": -1.0657679031070935,
         "elevation": 0.40285714285714286,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -642,11 +649,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.37142857142857144,
-        "normalizedScore": 0.2619047619047619,
-        "frequencySignal": 0.2,
+        "rawScore": 0.2597402597402597,
+        "normalizedScore": 0.30209281164695173,
+        "frequencySignal": 0.18181818181818182,
         "terminalPullSignal": 0.2857142857142857,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 15,
           "priorityBand": "detail",
@@ -656,12 +663,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.111830228255,
-          -0.32308276215,
+          0.166126811098,
+          -0.298814915599,
           0.180482013513
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -1.2375689206623408,
+        "azimuth": -1.0633947736912828,
         "elevation": 0.4857142857142857,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -680,11 +687,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.4571428571428571,
-        "normalizedScore": 0.37619047619047613,
-        "frequencySignal": 0.2,
+        "rawScore": 0.3227272727272727,
+        "normalizedScore": 0.39035486806187436,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.42857142857142855,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 13,
           "priorityBand": "detail",
@@ -694,12 +701,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.062731333421,
-          -0.43150667207,
+          0.151075785066,
+          -0.409034638387,
           0.278611617183
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -1.4264302615102935,
+        "azimuth": -1.2169907512709737,
         "elevation": 0.5685714285714285,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -719,11 +726,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.5428571428571428,
-        "normalizedScore": 0.49047619047619045,
-        "frequencySignal": 0.2,
+        "rawScore": 0.4084415584415584,
+        "normalizedScore": 0.5104640582347588,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.5714285714285714,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 11,
           "priorityBand": "context",
@@ -733,12 +740,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.052347932473,
-          -0.495707790329,
+          0.154267449391,
+          -0.473991638624,
           0.380059487132
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -1.4655838753120343,
+        "azimuth": -1.2561443650727144,
         "elevation": 0.6514285714285715,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -759,26 +766,26 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.6285714285714286,
-        "normalizedScore": 0.6047619047619047,
-        "frequencySignal": 0.2,
+        "rawScore": 0.4941558441558441,
+        "normalizedScore": 0.6305732484076433,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.7142857142857143,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 9,
-          "priorityBand": "context",
-          "retainFromZoom": "medium"
+          "priorityRank": 8,
+          "priorityBand": "foreground",
+          "retainFromZoom": "coarse"
         }
       },
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.065183743429,
-          -0.52614409278,
+          0.173150830185,
+          -0.501094119683,
           0.478562930761
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -1.4475348688716203,
+        "azimuth": -1.2380953586323005,
         "elevation": 0.7342857142857142,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -800,11 +807,11 @@
       "phase": "middlegame",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.7142857142857143,
-        "normalizedScore": 0.7190476190476192,
-        "frequencySignal": 0.2,
+        "rawScore": 0.5798701298701298,
+        "normalizedScore": 0.7506824385805276,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.8571428571428571,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 5,
           "priorityBand": "foreground",
@@ -814,12 +821,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.079773147184,
-          -0.682289914403,
+          0.219885962253,
+          -0.650794472865,
           0.372731258902
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -1.454405049871122,
+        "azimuth": -1.2449655396318022,
         "elevation": 0.4971428571428571,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": null
@@ -842,13 +849,13 @@
       "phase": "middlegame",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P7]",
       "salience": {
-        "rawScore": 0.725,
-        "normalizedScore": 0.7333333333333334,
-        "frequencySignal": 0.2,
+        "rawScore": 0.6441558441558441,
+        "normalizedScore": 0.8407643312101911,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 1.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 4,
+          "priorityRank": 3,
           "priorityBand": "foreground",
           "retainFromZoom": "coarse"
         }
@@ -860,12 +867,12 @@
       },
       "embedding": {
         "coordinate": [
-          0.090508454355,
-          -0.690018709983,
+          0.231993584162,
+          -0.656122379853,
           0.45595092456
         ],
         "ballRadius": 0.8319908930049684,
-        "azimuth": -1.4403727916118136,
+        "azimuth": -1.2309332813724938,
         "elevation": 0.58,
         "rootGameId": "scholars-mate-white",
         "terminalAnchorId": "terminal:white-win"
@@ -881,13 +888,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.325,
-        "normalizedScore": 0.20000000000000004,
-        "frequencySignal": 1.0,
+        "rawScore": 0.1577922077922078,
+        "normalizedScore": 0.1592356687898089,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 19,
+          "priorityRank": 21,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -917,11 +924,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.35,
-        "normalizedScore": 0.2333333333333333,
-        "frequencySignal": 0.2,
+        "rawScore": 0.21558441558441557,
+        "normalizedScore": 0.2402183803457689,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.25,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 16,
           "priorityBand": "detail",
@@ -954,11 +961,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.5,
-        "normalizedScore": 0.43333333333333335,
-        "frequencySignal": 0.2,
+        "rawScore": 0.36558441558441557,
+        "normalizedScore": 0.4504094631483166,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.5,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 12,
           "priorityBand": "context",
@@ -992,13 +999,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.6499999999999999,
-        "normalizedScore": 0.6333333333333332,
-        "frequencySignal": 0.2,
+        "rawScore": 0.5155844155844155,
+        "normalizedScore": 0.6606005459508643,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.75,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 8,
+          "priorityRank": 7,
           "priorityBand": "foreground",
           "retainFromZoom": "coarse"
         }
@@ -1031,13 +1038,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.725,
-        "normalizedScore": 0.7333333333333334,
-        "frequencySignal": 0.2,
+        "rawScore": 0.6441558441558441,
+        "normalizedScore": 0.8407643312101911,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 1.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 3,
+          "priorityRank": 2,
           "priorityBand": "foreground",
           "retainFromZoom": "coarse"
         }
@@ -1070,13 +1077,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.325,
-        "normalizedScore": 0.20000000000000004,
-        "frequencySignal": 1.0,
+        "rawScore": 0.1577922077922078,
+        "normalizedScore": 0.1592356687898089,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 0.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
-          "priorityRank": 20,
+          "priorityRank": 22,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -1084,12 +1091,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.069500905954,
-          -0.030599517918,
+          -0.058589651707,
+          -0.048311066414,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": -2.7268553279866783,
+        "azimuth": -2.452050579431349,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1106,13 +1113,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.275,
-        "normalizedScore": 0.1333333333333334,
-        "frequencySignal": 0.2,
+        "rawScore": 0.14058441558441556,
+        "normalizedScore": 0.13512283894449498,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.125,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 24,
+          "priorityRank": 26,
           "priorityBand": "detail",
           "retainFromZoom": "close"
         }
@@ -1120,12 +1127,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.221884559913,
-          -0.043791991319,
+          -0.186020025249,
+          -0.128635324223,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": -2.9467331321889145,
+        "azimuth": -2.5365851890459705,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1143,11 +1150,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.35,
-        "normalizedScore": 0.2333333333333333,
-        "frequencySignal": 0.2,
+        "rawScore": 0.21558441558441557,
+        "normalizedScore": 0.2402183803457689,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.25,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 17,
           "priorityBand": "detail",
@@ -1157,12 +1164,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.32773627758,
-          -0.165110739191,
+          -0.224767385714,
+          -0.290090065596,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -2.6749164754945562,
+        "azimuth": -2.229993500792401,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1181,11 +1188,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.42499999999999993,
-        "normalizedScore": 0.33333333333333326,
-        "frequencySignal": 0.2,
+        "rawScore": 0.29058441558441556,
+        "normalizedScore": 0.34531392174704273,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.375,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 14,
           "priorityBand": "detail",
@@ -1195,12 +1202,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.398522668824,
-          -0.287127420085,
+          -0.245696893291,
+          -0.425318127475,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -2.5172538680523266,
+        "azimuth": -2.0946408092901145,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1220,26 +1227,26 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.7000000000000001,
-        "normalizedScore": 0.7000000000000002,
-        "frequencySignal": 1.0,
+        "rawScore": 0.4792207792207792,
+        "normalizedScore": 0.6096451319381255,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 0.5,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 6,
-          "priorityBand": "foreground",
-          "retainFromZoom": "coarse"
+          "priorityRank": 9,
+          "priorityBand": "context",
+          "retainFromZoom": "medium"
         }
       },
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.516732931129,
-          -0.29499044338,
+          -0.41629766197,
+          -0.425121794827,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -2.6228631710480728,
+        "azimuth": -2.3457076761420814,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1260,11 +1267,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.575,
-        "normalizedScore": 0.5333333333333333,
-        "frequencySignal": 0.2,
+        "rawScore": 0.4405844155844156,
+        "normalizedScore": 0.5555050045495905,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.625,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
           "priorityRank": 10,
           "priorityBand": "context",
@@ -1274,12 +1281,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.534449164458,
-          -0.417118349563,
+          -0.316922349115,
+          -0.599319490392,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -2.478877919592438,
+        "azimuth": -2.057220471941552,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1301,13 +1308,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.6499999999999999,
-        "normalizedScore": 0.6333333333333332,
-        "frequencySignal": 0.2,
+        "rawScore": 0.5155844155844155,
+        "normalizedScore": 0.6606005459508643,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.75,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 7,
+          "priorityRank": 6,
           "priorityBand": "foreground",
           "retainFromZoom": "coarse"
         }
@@ -1315,12 +1322,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.540124687654,
-          -0.508562744398,
+          -0.270804168508,
+          -0.690677816005,
           0.245847779056
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -2.386282024188323,
+        "azimuth": -1.9444605560772936,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1343,13 +1350,13 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.7250000000000001,
-        "normalizedScore": 0.7333333333333334,
-        "frequencySignal": 0.2,
+        "rawScore": 0.5905844155844155,
+        "normalizedScore": 0.7656960873521382,
+        "frequencySignal": 0.09090909090909091,
         "terminalPullSignal": 0.875,
-        "centralitySignal": 1.0,
+        "centralitySignal": 0.2857142857142857,
         "priorityHint": {
-          "priorityRank": 2,
+          "priorityRank": 4,
           "priorityBand": "foreground",
           "retainFromZoom": "coarse"
         }
@@ -1357,12 +1364,12 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.538486626499,
-          -0.577707075943,
+          -0.257948603139,
+          -0.746442114736,
           0.261716513677
         ],
         "ballRadius": 0.8319908930049684,
-        "azimuth": -2.321071267359258,
+        "azimuth": -1.9035198799149617,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": null
@@ -1386,11 +1393,11 @@
       "phase": "opening",
       "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
       "salience": {
-        "rawScore": 0.9249999999999999,
+        "rawScore": 0.7577922077922078,
         "normalizedScore": 1.0,
-        "frequencySignal": 1.0,
+        "frequencySignal": 0.5454545454545454,
         "terminalPullSignal": 1.0,
-        "centralitySignal": 0.5,
+        "centralitySignal": 0.14285714285714285,
         "priorityHint": {
           "priorityRank": 1,
           "priorityBand": "foreground",
@@ -1404,15 +1411,1746 @@
       },
       "embedding": {
         "coordinate": [
-          -0.670063185023,
-          -0.481089968336,
+          -0.51073108023,
+          -0.64775457794,
           0.273357540154
         ],
         "ballRadius": 0.8689974535721419,
-        "azimuth": -2.518903189864463,
+        "azimuth": -2.2384633520749238,
         "elevation": 0.32,
         "rootGameId": "repetition-draw",
         "terminalAnchorId": "terminal:draw"
+      }
+    },
+    {
+      "occurrenceId": "occ-c691ba2463970683",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:italian-branch-lab"
+      ],
+      "ply": 0,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.1577922077922078,
+        "normalizedScore": 0.1592356687898089,
+        "frequencySignal": 0.5454545454545454,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 24,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          -0.01321134802,
+          0.074780791041,
+          0.025165324849
+        ],
+        "ballRadius": 0.08,
+        "azimuth": 1.7456596477621464,
+        "elevation": 0.32,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-0d6ff4200cd3d978",
+      "stateKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4"
+      ],
+      "ply": 1,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 28,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.124892272105,
+          0.18855348525,
+          0.074948603662
+        ],
+        "ballRadius": 0.23825992030209497,
+        "azimuth": 0.9857738714961816,
+        "elevation": 0.32,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-01b0f8a4072b48a0",
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5"
+      ],
+      "ply": 2,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.08831168831168831,
+        "normalizedScore": 0.0618744313011829,
+        "frequencySignal": 0.18181818181818182,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 27,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.218915514124,
+          0.294531189373,
+          0.121612517914
+        ],
+        "ballRadius": 0.38660345103397864,
+        "azimuth": 0.9316178439112731,
+        "elevation": 0.32,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-55f354bf2d7841fa",
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3"
+      ],
+      "ply": 3,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 44,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.345052528276,
+          0.349572918948,
+          0.162773426981
+        ],
+        "ballRadius": 0.5174530524237938,
+        "azimuth": 0.7919057379179905,
+        "elevation": 0.32,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-9057d9a4043a3707",
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6"
+      ],
+      "ply": 4,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 55,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.34841729952,
+          0.482325273227,
+          0.197178724479
+        ],
+        "ballRadius": 0.6268267170328193,
+        "azimuth": 0.9452141847285395,
+        "elevation": 0.32,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-ba87ac9c8c2a67d3",
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4"
+      ],
+      "ply": 5,
+      "phase": "opening",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 60,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.40348914396,
+          0.544812020461,
+          0.224667261836
+        ],
+        "ballRadius": 0.7142121571865022,
+        "azimuth": 0.9333367976826868,
+        "elevation": 0.32,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-667c8961e77994e5",
+      "stateKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5"
+      ],
+      "ply": 6,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 47,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.42007518085,
+          0.659051375922,
+          0.0
+        ],
+        "ballRadius": 0.7815445436252338,
+        "azimuth": 1.0033343036205515,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-6e7ae72f929d65c9",
+      "stateKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3"
+      ],
+      "ply": 7,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 50,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.487400201893,
+          0.674277308856,
+          0.0
+        ],
+        "ballRadius": 0.8319908930049684,
+        "azimuth": 0.9448999544148765,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-25c32c2bc0227f68",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6"
+      ],
+      "ply": 8,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.17272727272727273,
+        "normalizedScore": 0.18016378525932664,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 1.0,
+        "priorityHint": {
+          "priorityRank": 19,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.513928426716,
+          0.700738286758,
+          0.0
+        ],
+        "ballRadius": 0.8689974535721419,
+        "azimuth": 0.9379976754039265,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-f0d6eae79500a722",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d4"
+      ],
+      "ply": 9,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 65,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.512976781753,
+          0.734289920926,
+          0.0
+        ],
+        "ballRadius": 0.8957270045010046,
+        "azimuth": 0.9610088911298389,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-ce2e2fcc396bf508",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d4",
+        "10:e5d4"
+      ],
+      "ply": 10,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 61,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.509578853365,
+          0.759750867067,
+          0.0
+        ],
+        "ballRadius": 0.9148180080243044,
+        "azimuth": 0.9799939497293391,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-6d1c5dfc25af296a",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BPP3/5N2/PP3PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d4",
+        "10:e5d4",
+        "11:c3d4"
+      ],
+      "ply": 11,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P7]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 49,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.526301790895,
+          0.764741465732,
+          0.0
+        ],
+        "ballRadius": 0.9283442704667189,
+        "azimuth": 0.9680278465421124,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-75d9ebf1f30ea6f8",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d4",
+        "10:e5d4",
+        "11:c3d4",
+        "12:c5b4"
+      ],
+      "ply": 12,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P7]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 51,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.529328761238,
+          0.774220609821,
+          0.0
+        ],
+        "ballRadius": 0.937873387054261,
+        "azimuth": 0.9710990984116026,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-27c4c8b306dd7f88",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/2N2N2/PP3PPP/R1BQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d4",
+        "10:e5d4",
+        "11:c3d4",
+        "12:c5b4",
+        "13:b1c3"
+      ],
+      "ply": 13,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P7]",
+      "salience": {
+        "rawScore": 0.04415584415584416,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 71,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.531757828529,
+          0.780657754312,
+          0.0
+        ],
+        "ballRadius": 0.9445596421453034,
+        "azimuth": 0.9728225113807085,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-7c7e7277329680d3",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d3"
+      ],
+      "ply": 9,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 53,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.521114041937,
+          0.728537591266,
+          0.0
+        ],
+        "ballRadius": 0.8957270045010046,
+        "azimuth": 0.9498836201243991,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-4f4ee8b0f295e704",
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d3",
+        "10:d7d6"
+      ],
+      "ply": 10,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 42,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.527989759462,
+          0.747073491504,
+          0.0
+        ],
+        "ballRadius": 0.9148180080243044,
+        "azimuth": 0.9555584673874886,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-34a6f5864ea78102",
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d3",
+        "10:d7d6",
+        "11:e1g1"
+      ],
+      "ply": 11,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 39,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.539533878304,
+          0.755464280208,
+          0.0
+        ],
+        "ballRadius": 0.9283442704667189,
+        "azimuth": 0.9506200011942377,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-79f965fc301271fa",
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d3",
+        "10:d7d6",
+        "11:e1g1",
+        "12:e8g8"
+      ],
+      "ply": 12,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 52,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.544864585171,
+          0.76336693272,
+          0.0
+        ],
+        "ballRadius": 0.937873387054261,
+        "azimuth": 0.9508917348045947,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-71618892463fa67a",
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQR1K1 b - -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:d2d3",
+        "10:d7d6",
+        "11:e1g1",
+        "12:e8g8",
+        "13:f1e1"
+      ],
+      "ply": 13,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.04415584415584416,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 74,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.55316484048,
+          0.765638019449,
+          0.0
+        ],
+        "ballRadius": 0.9445596421453034,
+        "azimuth": 0.9451361594378195,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-5b83a2c927cfb966",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/2P5/PP1P1PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:f3g5"
+      ],
+      "ply": 9,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 45,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.544049200956,
+          0.711573842642,
+          0.0
+        ],
+        "ballRadius": 0.8957270045010046,
+        "azimuth": 0.9180343899734658,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-46092dc245df58d7",
+      "stateKey": "r1bq1rk1/pppp1ppp/2n2n2/2b1p1N1/2B1P3/2P5/PP1P1PPP/RNBQK2R w KQ -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:f3g5",
+        "10:e8g8"
+      ],
+      "ply": 10,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 41,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.556103953652,
+          0.726388587836,
+          0.0
+        ],
+        "ballRadius": 0.9148180080243044,
+        "azimuth": 0.9174023674441831,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-f1708bbef014b2fd",
+      "stateKey": "r1bq1rk1/pppp1ppp/2n2n2/2b1p1N1/2B1P3/2PP4/PP3PPP/RNBQK2R b KQ -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:f3g5",
+        "10:e8g8",
+        "11:d2d3"
+      ],
+      "ply": 11,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 66,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.571300473676,
+          0.731736874351,
+          0.0
+        ],
+        "ballRadius": 0.9283442704667189,
+        "azimuth": 0.9079065250272895,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-4f9a24c2cb5ac6b0",
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p1N1/2B1P3/2PP4/PP3PPP/RNBQK2R w KQ -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:f3g5",
+        "10:e8g8",
+        "11:d2d3",
+        "12:d7d6"
+      ],
+      "ply": 12,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 43,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.569405694911,
+          0.745240662302,
+          0.0
+        ],
+        "ballRadius": 0.937873387054261,
+        "azimuth": 0.9183598220535277,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-67c8744972075e12",
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p1N1/2B1P3/2PP4/PP3PPP/RNBQ1RK1 b - -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:f3g5",
+        "10:e8g8",
+        "11:d2d3",
+        "12:d7d6",
+        "13:e1g1"
+      ],
+      "ply": 13,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.04415584415584416,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 73,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.568355214072,
+          0.754430426352,
+          0.0
+        ],
+        "ballRadius": 0.9445596421453034,
+        "azimuth": 0.9251503910268684,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-f9edcc5c2829694b",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:e1g1"
+      ],
+      "ply": 9,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 67,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.539665599814,
+          0.71490412432,
+          0.0
+        ],
+        "ballRadius": 0.8957270045010046,
+        "azimuth": 0.9241804187869833,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-5f720f29ae39c22c",
+      "stateKey": "r1bqk2r/pppp1ppp/2n5/2b1p3/2B1n3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:e1g1",
+        "10:f6e4"
+      ],
+      "ply": 10,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 46,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.541925753321,
+          0.737026774068,
+          0.0
+        ],
+        "ballRadius": 0.9148180080243044,
+        "azimuth": 0.9367786253543565,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-69da2b6496169de0",
+      "stateKey": "r1bqk2r/pppp1ppp/2n5/2b1p3/2BPn3/2P2N2/PP3PPP/RNBQ1RK1 b kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:e1g1",
+        "10:f6e4",
+        "11:d2d4"
+      ],
+      "ply": 11,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 48,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.5477895512,
+          0.749499627821,
+          0.0
+        ],
+        "ballRadius": 0.9283442704667189,
+        "azimuth": 0.9396488542542578,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-ac8c786cecc9fa69",
+      "stateKey": "r1bqk2r/ppp2ppp/2n5/2bpp3/2BPn3/2P2N2/PP3PPP/RNBQ1RK1 w kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:e1g1",
+        "10:f6e4",
+        "11:d2d4",
+        "12:d7d5"
+      ],
+      "ply": 12,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 59,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.548062635114,
+          0.761074134455,
+          0.0
+        ],
+        "ballRadius": 0.937873387054261,
+        "azimuth": 0.9466960393197021,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-7fdbecbaa8bf671c",
+      "stateKey": "r1bqk2r/ppp2ppp/2n5/1Bbpp3/3Pn3/2P2N2/PP3PPP/RNBQ1RK1 b kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:e1g1",
+        "10:f6e4",
+        "11:d2d4",
+        "12:d7d5",
+        "13:c4b5"
+      ],
+      "ply": 13,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.04415584415584416,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 75,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.554702861881,
+          0.764524461735,
+          0.0
+        ],
+        "ballRadius": 0.9445596421453034,
+        "azimuth": 0.943125888108241,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-9d4c880355c3035a",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/1PB1P3/2P2N2/P2P1PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:b2b4"
+      ],
+      "ply": 9,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 56,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.542516836999,
+          0.712742834524,
+          0.0
+        ],
+        "ballRadius": 0.8957270045010046,
+        "azimuth": 0.9201861072001728,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-3b78682dab123def",
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/4p3/1PB1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:b2b4",
+        "10:c5b6"
+      ],
+      "ply": 10,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 40,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.566918567542,
+          0.717980031465,
+          0.0
+        ],
+        "ballRadius": 0.9148180080243044,
+        "azimuth": 0.9024277804075801,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-13e0e444859204dd",
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/4p3/1PBPP3/2P2N2/P4PPP/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:b2b4",
+        "10:c5b6",
+        "11:d2d4"
+      ],
+      "ply": 11,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 37,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.578261965087,
+          0.726248018409,
+          0.0
+        ],
+        "ballRadius": 0.9283442704667189,
+        "azimuth": 0.8983571277151315,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-d7ea64962c65a70d",
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/8/1PBpP3/2P2N2/P4PPP/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:b2b4",
+        "10:c5b6",
+        "11:d2d4",
+        "12:e5d4"
+      ],
+      "ply": 12,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 63,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.581330889657,
+          0.735976145589,
+          0.0
+        ],
+        "ballRadius": 0.937873387054261,
+        "azimuth": 0.9022582803507884,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-24dcf15814b509be",
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/8/1PBpP3/2P2N2/P4PPP/RNBQ1RK1 b kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:b2b4",
+        "10:c5b6",
+        "11:d2d4",
+        "12:e5d4",
+        "13:e1g1"
+      ],
+      "ply": 13,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P7]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.04415584415584416,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 70,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.590148519407,
+          0.737507723764,
+          0.0
+        ],
+        "ballRadius": 0.9445596421453034,
+        "azimuth": 0.8959377115622463,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-d4c0a727bc3cb6b0",
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N1P/PP1P1PP1/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:h2h3"
+      ],
+      "ply": 9,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 62,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.546636679147,
+          0.709588054862,
+          0.0
+        ],
+        "ballRadius": 0.8957270045010046,
+        "azimuth": 0.9143930380105358,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-a57fc69957d5859e",
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2P2N1P/PP1P1PP1/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:h2h3",
+        "10:d7d6"
+      ],
+      "ply": 10,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 58,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.552292940667,
+          0.729290405459,
+          0.0
+        ],
+        "ballRadius": 0.9148180080243044,
+        "azimuth": 0.9226384178317747,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-d8b11eedcd7a0e3a",
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2BPP3/2P2N1P/PP3PP1/RNBQK2R b KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:h2h3",
+        "10:d7d6",
+        "11:d2d4"
+      ],
+      "ply": 11,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 64,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.57077275011,
+          0.732148586176,
+          0.0
+        ],
+        "ballRadius": 0.9283442704667189,
+        "azimuth": 0.9086275152377199,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-fef7f877cdfedb7b",
+      "stateKey": "r1bqk2r/ppp2ppp/1bnp1n2/4p3/2BPP3/2P2N1P/PP3PP1/RNBQK2R w KQkq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:h2h3",
+        "10:d7d6",
+        "11:d2d4",
+        "12:c5b6"
+      ],
+      "ply": 12,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.06558441558441558,
+        "normalizedScore": 0.0300272975432211,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.2857142857142857,
+        "priorityHint": {
+          "priorityRank": 69,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.582767853766,
+          0.734838838632,
+          0.0
+        ],
+        "ballRadius": 0.937873387054261,
+        "azimuth": 0.900304311065608,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
+      }
+    },
+    {
+      "occurrenceId": "occ-28b57dbf27801997",
+      "stateKey": "r1bqk2r/ppp2ppp/1bnp1n2/4p3/2BPP3/2P2N1P/PP3PP1/RNBQ1RK1 b kq -",
+      "path": [
+        "game:italian-branch-lab",
+        "1:e2e4",
+        "2:e7e5",
+        "3:g1f3",
+        "4:b8c6",
+        "5:f1c4",
+        "6:f8c5",
+        "7:c2c3",
+        "8:g8f6",
+        "9:h2h3",
+        "10:d7d6",
+        "11:d2d4",
+        "12:c5b6",
+        "13:e1g1"
+      ],
+      "ply": 13,
+      "phase": "middlegame",
+      "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]",
+      "salience": {
+        "rawScore": 0.04415584415584416,
+        "normalizedScore": 0.0,
+        "frequencySignal": 0.09090909090909091,
+        "terminalPullSignal": 0.0,
+        "centralitySignal": 0.14285714285714285,
+        "priorityHint": {
+          "priorityRank": 72,
+          "priorityBand": "detail",
+          "retainFromZoom": "close"
+        }
+      },
+      "terminal": null,
+      "embedding": {
+        "coordinate": [
+          0.586191980339,
+          0.740656384402,
+          0.0
+        ],
+        "ballRadius": 0.9445596421453034,
+        "azimuth": 0.9012910138067781,
+        "elevation": 0.0,
+        "rootGameId": "italian-branch-lab",
+        "terminalAnchorId": null
       }
     }
   ],
@@ -1540,6 +3278,158 @@
     {
       "sourceOccurrenceId": "occ-efe95b9c393f7960",
       "targetOccurrenceId": "occ-854ee946e516ebcc"
+    },
+    {
+      "sourceOccurrenceId": "occ-c691ba2463970683",
+      "targetOccurrenceId": "occ-0d6ff4200cd3d978"
+    },
+    {
+      "sourceOccurrenceId": "occ-0d6ff4200cd3d978",
+      "targetOccurrenceId": "occ-01b0f8a4072b48a0"
+    },
+    {
+      "sourceOccurrenceId": "occ-01b0f8a4072b48a0",
+      "targetOccurrenceId": "occ-55f354bf2d7841fa"
+    },
+    {
+      "sourceOccurrenceId": "occ-55f354bf2d7841fa",
+      "targetOccurrenceId": "occ-9057d9a4043a3707"
+    },
+    {
+      "sourceOccurrenceId": "occ-9057d9a4043a3707",
+      "targetOccurrenceId": "occ-ba87ac9c8c2a67d3"
+    },
+    {
+      "sourceOccurrenceId": "occ-ba87ac9c8c2a67d3",
+      "targetOccurrenceId": "occ-667c8961e77994e5"
+    },
+    {
+      "sourceOccurrenceId": "occ-667c8961e77994e5",
+      "targetOccurrenceId": "occ-6e7ae72f929d65c9"
+    },
+    {
+      "sourceOccurrenceId": "occ-6e7ae72f929d65c9",
+      "targetOccurrenceId": "occ-25c32c2bc0227f68"
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-f0d6eae79500a722"
+    },
+    {
+      "sourceOccurrenceId": "occ-f0d6eae79500a722",
+      "targetOccurrenceId": "occ-ce2e2fcc396bf508"
+    },
+    {
+      "sourceOccurrenceId": "occ-ce2e2fcc396bf508",
+      "targetOccurrenceId": "occ-6d1c5dfc25af296a"
+    },
+    {
+      "sourceOccurrenceId": "occ-6d1c5dfc25af296a",
+      "targetOccurrenceId": "occ-75d9ebf1f30ea6f8"
+    },
+    {
+      "sourceOccurrenceId": "occ-75d9ebf1f30ea6f8",
+      "targetOccurrenceId": "occ-27c4c8b306dd7f88"
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-7c7e7277329680d3"
+    },
+    {
+      "sourceOccurrenceId": "occ-7c7e7277329680d3",
+      "targetOccurrenceId": "occ-4f4ee8b0f295e704"
+    },
+    {
+      "sourceOccurrenceId": "occ-4f4ee8b0f295e704",
+      "targetOccurrenceId": "occ-34a6f5864ea78102"
+    },
+    {
+      "sourceOccurrenceId": "occ-34a6f5864ea78102",
+      "targetOccurrenceId": "occ-79f965fc301271fa"
+    },
+    {
+      "sourceOccurrenceId": "occ-79f965fc301271fa",
+      "targetOccurrenceId": "occ-71618892463fa67a"
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-5b83a2c927cfb966"
+    },
+    {
+      "sourceOccurrenceId": "occ-5b83a2c927cfb966",
+      "targetOccurrenceId": "occ-46092dc245df58d7"
+    },
+    {
+      "sourceOccurrenceId": "occ-46092dc245df58d7",
+      "targetOccurrenceId": "occ-f1708bbef014b2fd"
+    },
+    {
+      "sourceOccurrenceId": "occ-f1708bbef014b2fd",
+      "targetOccurrenceId": "occ-4f9a24c2cb5ac6b0"
+    },
+    {
+      "sourceOccurrenceId": "occ-4f9a24c2cb5ac6b0",
+      "targetOccurrenceId": "occ-67c8744972075e12"
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-f9edcc5c2829694b"
+    },
+    {
+      "sourceOccurrenceId": "occ-f9edcc5c2829694b",
+      "targetOccurrenceId": "occ-5f720f29ae39c22c"
+    },
+    {
+      "sourceOccurrenceId": "occ-5f720f29ae39c22c",
+      "targetOccurrenceId": "occ-69da2b6496169de0"
+    },
+    {
+      "sourceOccurrenceId": "occ-69da2b6496169de0",
+      "targetOccurrenceId": "occ-ac8c786cecc9fa69"
+    },
+    {
+      "sourceOccurrenceId": "occ-ac8c786cecc9fa69",
+      "targetOccurrenceId": "occ-7fdbecbaa8bf671c"
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-9d4c880355c3035a"
+    },
+    {
+      "sourceOccurrenceId": "occ-9d4c880355c3035a",
+      "targetOccurrenceId": "occ-3b78682dab123def"
+    },
+    {
+      "sourceOccurrenceId": "occ-3b78682dab123def",
+      "targetOccurrenceId": "occ-13e0e444859204dd"
+    },
+    {
+      "sourceOccurrenceId": "occ-13e0e444859204dd",
+      "targetOccurrenceId": "occ-d7ea64962c65a70d"
+    },
+    {
+      "sourceOccurrenceId": "occ-d7ea64962c65a70d",
+      "targetOccurrenceId": "occ-24dcf15814b509be"
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-d4c0a727bc3cb6b0"
+    },
+    {
+      "sourceOccurrenceId": "occ-d4c0a727bc3cb6b0",
+      "targetOccurrenceId": "occ-a57fc69957d5859e"
+    },
+    {
+      "sourceOccurrenceId": "occ-a57fc69957d5859e",
+      "targetOccurrenceId": "occ-d8b11eedcd7a0e3a"
+    },
+    {
+      "sourceOccurrenceId": "occ-d8b11eedcd7a0e3a",
+      "targetOccurrenceId": "occ-fef7f877cdfedb7b"
+    },
+    {
+      "sourceOccurrenceId": "occ-fef7f877cdfedb7b",
+      "targetOccurrenceId": "occ-28b57dbf27801997"
     }
   ],
   "transitions": [
@@ -2255,6 +4145,880 @@
         "forcingClass": "none",
         "specialClass": "none"
       }
+    },
+    {
+      "sourceOccurrenceId": "occ-c691ba2463970683",
+      "targetOccurrenceId": "occ-0d6ff4200cd3d978",
+      "moveUci": "e2e4",
+      "ply": 1,
+      "moveFacts": {
+        "san": "e4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-0d6ff4200cd3d978",
+      "targetOccurrenceId": "occ-01b0f8a4072b48a0",
+      "moveUci": "e7e5",
+      "ply": 2,
+      "moveFacts": {
+        "san": "e5",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-01b0f8a4072b48a0",
+      "targetOccurrenceId": "occ-55f354bf2d7841fa",
+      "moveUci": "g1f3",
+      "ply": 3,
+      "moveFacts": {
+        "san": "Nf3",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-55f354bf2d7841fa",
+      "targetOccurrenceId": "occ-9057d9a4043a3707",
+      "moveUci": "b8c6",
+      "ply": 4,
+      "moveFacts": {
+        "san": "Nc6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-9057d9a4043a3707",
+      "targetOccurrenceId": "occ-ba87ac9c8c2a67d3",
+      "moveUci": "f1c4",
+      "ply": 5,
+      "moveFacts": {
+        "san": "Bc4",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-ba87ac9c8c2a67d3",
+      "targetOccurrenceId": "occ-667c8961e77994e5",
+      "moveUci": "f8c5",
+      "ply": 6,
+      "moveFacts": {
+        "san": "Bc5",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-667c8961e77994e5",
+      "targetOccurrenceId": "occ-6e7ae72f929d65c9",
+      "moveUci": "c2c3",
+      "ply": 7,
+      "moveFacts": {
+        "san": "c3",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-6e7ae72f929d65c9",
+      "targetOccurrenceId": "occ-25c32c2bc0227f68",
+      "moveUci": "g8f6",
+      "ply": 8,
+      "moveFacts": {
+        "san": "Nf6",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-f0d6eae79500a722",
+      "moveUci": "d2d4",
+      "ply": 9,
+      "moveFacts": {
+        "san": "d4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-f0d6eae79500a722",
+      "targetOccurrenceId": "occ-ce2e2fcc396bf508",
+      "moveUci": "e5d4",
+      "ply": 10,
+      "moveFacts": {
+        "san": "exd4",
+        "movingPiece": "pawn",
+        "capturedPiece": "pawn",
+        "promotionPiece": null,
+        "isCapture": true,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-ce2e2fcc396bf508",
+      "targetOccurrenceId": "occ-6d1c5dfc25af296a",
+      "moveUci": "c3d4",
+      "ply": 11,
+      "moveFacts": {
+        "san": "cxd4",
+        "movingPiece": "pawn",
+        "capturedPiece": "pawn",
+        "promotionPiece": null,
+        "isCapture": true,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-6d1c5dfc25af296a",
+      "targetOccurrenceId": "occ-75d9ebf1f30ea6f8",
+      "moveUci": "c5b4",
+      "ply": 12,
+      "moveFacts": {
+        "san": "Bb4+",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": true,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "check",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-75d9ebf1f30ea6f8",
+      "targetOccurrenceId": "occ-27c4c8b306dd7f88",
+      "moveUci": "b1c3",
+      "ply": 13,
+      "moveFacts": {
+        "san": "Nc3",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-7c7e7277329680d3",
+      "moveUci": "d2d3",
+      "ply": 9,
+      "moveFacts": {
+        "san": "d3",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-7c7e7277329680d3",
+      "targetOccurrenceId": "occ-4f4ee8b0f295e704",
+      "moveUci": "d7d6",
+      "ply": 10,
+      "moveFacts": {
+        "san": "d6",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-4f4ee8b0f295e704",
+      "targetOccurrenceId": "occ-34a6f5864ea78102",
+      "moveUci": "e1g1",
+      "ply": 11,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-34a6f5864ea78102",
+      "targetOccurrenceId": "occ-79f965fc301271fa",
+      "moveUci": "e8g8",
+      "ply": 12,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-79f965fc301271fa",
+      "targetOccurrenceId": "occ-71618892463fa67a",
+      "moveUci": "f1e1",
+      "ply": 13,
+      "moveFacts": {
+        "san": "Re1",
+        "movingPiece": "rook",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-5b83a2c927cfb966",
+      "moveUci": "f3g5",
+      "ply": 9,
+      "moveFacts": {
+        "san": "Ng5",
+        "movingPiece": "knight",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-5b83a2c927cfb966",
+      "targetOccurrenceId": "occ-46092dc245df58d7",
+      "moveUci": "e8g8",
+      "ply": 10,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-46092dc245df58d7",
+      "targetOccurrenceId": "occ-f1708bbef014b2fd",
+      "moveUci": "d2d3",
+      "ply": 11,
+      "moveFacts": {
+        "san": "d3",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-f1708bbef014b2fd",
+      "targetOccurrenceId": "occ-4f9a24c2cb5ac6b0",
+      "moveUci": "d7d6",
+      "ply": 12,
+      "moveFacts": {
+        "san": "d6",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-4f9a24c2cb5ac6b0",
+      "targetOccurrenceId": "occ-67c8744972075e12",
+      "moveUci": "e1g1",
+      "ply": 13,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-f9edcc5c2829694b",
+      "moveUci": "e1g1",
+      "ply": 9,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-f9edcc5c2829694b",
+      "targetOccurrenceId": "occ-5f720f29ae39c22c",
+      "moveUci": "f6e4",
+      "ply": 10,
+      "moveFacts": {
+        "san": "Nxe4",
+        "movingPiece": "knight",
+        "capturedPiece": "pawn",
+        "promotionPiece": null,
+        "isCapture": true,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-5f720f29ae39c22c",
+      "targetOccurrenceId": "occ-69da2b6496169de0",
+      "moveUci": "d2d4",
+      "ply": 11,
+      "moveFacts": {
+        "san": "d4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-69da2b6496169de0",
+      "targetOccurrenceId": "occ-ac8c786cecc9fa69",
+      "moveUci": "d7d5",
+      "ply": 12,
+      "moveFacts": {
+        "san": "d5",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-ac8c786cecc9fa69",
+      "targetOccurrenceId": "occ-7fdbecbaa8bf671c",
+      "moveUci": "c4b5",
+      "ply": 13,
+      "moveFacts": {
+        "san": "Bb5",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-9d4c880355c3035a",
+      "moveUci": "b2b4",
+      "ply": 9,
+      "moveFacts": {
+        "san": "b4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-9d4c880355c3035a",
+      "targetOccurrenceId": "occ-3b78682dab123def",
+      "moveUci": "c5b6",
+      "ply": 10,
+      "moveFacts": {
+        "san": "Bb6",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-3b78682dab123def",
+      "targetOccurrenceId": "occ-13e0e444859204dd",
+      "moveUci": "d2d4",
+      "ply": 11,
+      "moveFacts": {
+        "san": "d4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-13e0e444859204dd",
+      "targetOccurrenceId": "occ-d7ea64962c65a70d",
+      "moveUci": "e5d4",
+      "ply": 12,
+      "moveFacts": {
+        "san": "exd4",
+        "movingPiece": "pawn",
+        "capturedPiece": "pawn",
+        "promotionPiece": null,
+        "isCapture": true,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-d7ea64962c65a70d",
+      "targetOccurrenceId": "occ-24dcf15814b509be",
+      "moveUci": "e1g1",
+      "ply": 13,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-d4c0a727bc3cb6b0",
+      "moveUci": "h2h3",
+      "ply": 9,
+      "moveFacts": {
+        "san": "h3",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-d4c0a727bc3cb6b0",
+      "targetOccurrenceId": "occ-a57fc69957d5859e",
+      "moveUci": "d7d6",
+      "ply": 10,
+      "moveFacts": {
+        "san": "d6",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-a57fc69957d5859e",
+      "targetOccurrenceId": "occ-d8b11eedcd7a0e3a",
+      "moveUci": "d2d4",
+      "ply": 11,
+      "moveFacts": {
+        "san": "d4",
+        "movingPiece": "pawn",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-d8b11eedcd7a0e3a",
+      "targetOccurrenceId": "occ-fef7f877cdfedb7b",
+      "moveUci": "c5b6",
+      "ply": 12,
+      "moveFacts": {
+        "san": "Bb6",
+        "movingPiece": "bishop",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": false,
+        "castleSide": null,
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
+    },
+    {
+      "sourceOccurrenceId": "occ-fef7f877cdfedb7b",
+      "targetOccurrenceId": "occ-28b57dbf27801997",
+      "moveUci": "e1g1",
+      "ply": 13,
+      "moveFacts": {
+        "san": "O-O",
+        "movingPiece": "king",
+        "capturedPiece": null,
+        "promotionPiece": null,
+        "isCapture": false,
+        "isCheck": false,
+        "isCheckmate": false,
+        "isCastle": true,
+        "castleSide": "kingside",
+        "isEnPassant": false
+      },
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      }
     }
   ],
   "departureRules": [
@@ -2784,6 +5548,652 @@
       "verticalLift": 0.05,
       "curvature": 0.12,
       "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-c691ba2463970683",
+      "targetOccurrenceId": "occ-0d6ff4200cd3d978",
+      "moveUci": "e2e4",
+      "ply": 1,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-0d6ff4200cd3d978",
+      "targetOccurrenceId": "occ-01b0f8a4072b48a0",
+      "moveUci": "e7e5",
+      "ply": 2,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-01b0f8a4072b48a0",
+      "targetOccurrenceId": "occ-55f354bf2d7841fa",
+      "moveUci": "g1f3",
+      "ply": 3,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-55f354bf2d7841fa",
+      "targetOccurrenceId": "occ-9057d9a4043a3707",
+      "moveUci": "b8c6",
+      "ply": 4,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-9057d9a4043a3707",
+      "targetOccurrenceId": "occ-ba87ac9c8c2a67d3",
+      "moveUci": "f1c4",
+      "ply": 5,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-ba87ac9c8c2a67d3",
+      "targetOccurrenceId": "occ-667c8961e77994e5",
+      "moveUci": "f8c5",
+      "ply": 6,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-667c8961e77994e5",
+      "targetOccurrenceId": "occ-6e7ae72f929d65c9",
+      "moveUci": "c2c3",
+      "ply": 7,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-6e7ae72f929d65c9",
+      "targetOccurrenceId": "occ-25c32c2bc0227f68",
+      "moveUci": "g8f6",
+      "ply": 8,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-f0d6eae79500a722",
+      "moveUci": "d2d4",
+      "ply": 9,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-f0d6eae79500a722",
+      "targetOccurrenceId": "occ-ce2e2fcc396bf508",
+      "moveUci": "e5d4",
+      "ply": 10,
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "capture-break",
+      "departureStrength": 0.58,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.16,
+      "curvature": 0.3,
+      "twist": 0.08
+    },
+    {
+      "sourceOccurrenceId": "occ-ce2e2fcc396bf508",
+      "targetOccurrenceId": "occ-6d1c5dfc25af296a",
+      "moveUci": "c3d4",
+      "ply": 11,
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "capture-break",
+      "departureStrength": 0.58,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.16,
+      "curvature": 0.3,
+      "twist": 0.08
+    },
+    {
+      "sourceOccurrenceId": "occ-6d1c5dfc25af296a",
+      "targetOccurrenceId": "occ-75d9ebf1f30ea6f8",
+      "moveUci": "c5b4",
+      "ply": 12,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "check",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "forcing-rise",
+      "departureStrength": 0.41,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.11,
+      "curvature": 0.17,
+      "twist": 0.07
+    },
+    {
+      "sourceOccurrenceId": "occ-75d9ebf1f30ea6f8",
+      "targetOccurrenceId": "occ-27c4c8b306dd7f88",
+      "moveUci": "b1c3",
+      "ply": 13,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-7c7e7277329680d3",
+      "moveUci": "d2d3",
+      "ply": 9,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-7c7e7277329680d3",
+      "targetOccurrenceId": "occ-4f4ee8b0f295e704",
+      "moveUci": "d7d6",
+      "ply": 10,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-4f4ee8b0f295e704",
+      "targetOccurrenceId": "occ-34a6f5864ea78102",
+      "moveUci": "e1g1",
+      "ply": 11,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
+    },
+    {
+      "sourceOccurrenceId": "occ-34a6f5864ea78102",
+      "targetOccurrenceId": "occ-79f965fc301271fa",
+      "moveUci": "e8g8",
+      "ply": 12,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
+    },
+    {
+      "sourceOccurrenceId": "occ-79f965fc301271fa",
+      "targetOccurrenceId": "occ-71618892463fa67a",
+      "moveUci": "f1e1",
+      "ply": 13,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.3,
+      "lateralOffset": 0.08,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-5b83a2c927cfb966",
+      "moveUci": "f3g5",
+      "ply": 9,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.28,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-5b83a2c927cfb966",
+      "targetOccurrenceId": "occ-46092dc245df58d7",
+      "moveUci": "e8g8",
+      "ply": 10,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
+    },
+    {
+      "sourceOccurrenceId": "occ-46092dc245df58d7",
+      "targetOccurrenceId": "occ-f1708bbef014b2fd",
+      "moveUci": "d2d3",
+      "ply": 11,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-f1708bbef014b2fd",
+      "targetOccurrenceId": "occ-4f9a24c2cb5ac6b0",
+      "moveUci": "d7d6",
+      "ply": 12,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-4f9a24c2cb5ac6b0",
+      "targetOccurrenceId": "occ-67c8744972075e12",
+      "moveUci": "e1g1",
+      "ply": 13,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-f9edcc5c2829694b",
+      "moveUci": "e1g1",
+      "ply": 9,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
+    },
+    {
+      "sourceOccurrenceId": "occ-f9edcc5c2829694b",
+      "targetOccurrenceId": "occ-5f720f29ae39c22c",
+      "moveUci": "f6e4",
+      "ply": 10,
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "capture-break",
+      "departureStrength": 0.6,
+      "lateralOffset": 0.16,
+      "verticalLift": 0.16,
+      "curvature": 0.3,
+      "twist": 0.08
+    },
+    {
+      "sourceOccurrenceId": "occ-5f720f29ae39c22c",
+      "targetOccurrenceId": "occ-69da2b6496169de0",
+      "moveUci": "d2d4",
+      "ply": 11,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-69da2b6496169de0",
+      "targetOccurrenceId": "occ-ac8c786cecc9fa69",
+      "moveUci": "d7d5",
+      "ply": 12,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-ac8c786cecc9fa69",
+      "targetOccurrenceId": "occ-7fdbecbaa8bf671c",
+      "moveUci": "c4b5",
+      "ply": 13,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-9d4c880355c3035a",
+      "moveUci": "b2b4",
+      "ply": 9,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-9d4c880355c3035a",
+      "targetOccurrenceId": "occ-3b78682dab123def",
+      "moveUci": "c5b6",
+      "ply": 10,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-3b78682dab123def",
+      "targetOccurrenceId": "occ-13e0e444859204dd",
+      "moveUci": "d2d4",
+      "ply": 11,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-13e0e444859204dd",
+      "targetOccurrenceId": "occ-d7ea64962c65a70d",
+      "moveUci": "e5d4",
+      "ply": 12,
+      "moveFamily": {
+        "interactionClass": "capture",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "capture-break",
+      "departureStrength": 0.58,
+      "lateralOffset": 0.11,
+      "verticalLift": 0.16,
+      "curvature": 0.3,
+      "twist": 0.08
+    },
+    {
+      "sourceOccurrenceId": "occ-d7ea64962c65a70d",
+      "targetOccurrenceId": "occ-24dcf15814b509be",
+      "moveUci": "e1g1",
+      "ply": 13,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
+    },
+    {
+      "sourceOccurrenceId": "occ-25c32c2bc0227f68",
+      "targetOccurrenceId": "occ-d4c0a727bc3cb6b0",
+      "moveUci": "h2h3",
+      "ply": 9,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-d4c0a727bc3cb6b0",
+      "targetOccurrenceId": "occ-a57fc69957d5859e",
+      "moveUci": "d7d6",
+      "ply": 10,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-a57fc69957d5859e",
+      "targetOccurrenceId": "occ-d8b11eedcd7a0e3a",
+      "moveUci": "d2d4",
+      "ply": 11,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.26,
+      "lateralOffset": 0.06,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-d8b11eedcd7a0e3a",
+      "targetOccurrenceId": "occ-fef7f877cdfedb7b",
+      "moveUci": "c5b6",
+      "ply": 12,
+      "moveFamily": {
+        "interactionClass": "quiet",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "quiet-glide",
+      "departureStrength": 0.29,
+      "lateralOffset": 0.1,
+      "verticalLift": 0.05,
+      "curvature": 0.12,
+      "twist": 0.03
+    },
+    {
+      "sourceOccurrenceId": "occ-fef7f877cdfedb7b",
+      "targetOccurrenceId": "occ-28b57dbf27801997",
+      "moveUci": "e1g1",
+      "ply": 13,
+      "moveFamily": {
+        "interactionClass": "castle",
+        "forcingClass": "none",
+        "specialClass": "none"
+      },
+      "centerlineProfile": "castle-sweep",
+      "departureStrength": 0.4,
+      "lateralOffset": 0.22,
+      "verticalLift": 0.1,
+      "curvature": 0.22,
+      "twist": 0.18
     }
   ],
   "repeatedStateRelations": [
@@ -2796,7 +6206,8 @@
         "occ-2ec900ca21098443",
         "occ-39672723f3979502",
         "occ-8e57e74a73537a36",
-        "occ-854ee946e516ebcc"
+        "occ-854ee946e516ebcc",
+        "occ-c691ba2463970683"
       ]
     },
     {
@@ -2854,13 +6265,15 @@
     {
       "stateKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
       "occurrenceIds": [
-        "occ-828d34dd90220088"
+        "occ-828d34dd90220088",
+        "occ-0d6ff4200cd3d978"
       ]
     },
     {
       "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
       "occurrenceIds": [
-        "occ-8f867a23923fe752"
+        "occ-8f867a23923fe752",
+        "occ-01b0f8a4072b48a0"
       ]
     },
     {
@@ -2936,6 +6349,222 @@
       "occurrenceIds": [
         "occ-a348e528205679e9",
         "occ-efe95b9c393f7960"
+      ]
+    },
+    {
+      "stateKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+      "occurrenceIds": [
+        "occ-55f354bf2d7841fa"
+      ]
+    },
+    {
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+      "occurrenceIds": [
+        "occ-9057d9a4043a3707"
+      ]
+    },
+    {
+      "stateKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-ba87ac9c8c2a67d3"
+      ]
+    },
+    {
+      "stateKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-667c8961e77994e5"
+      ]
+    },
+    {
+      "stateKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-6e7ae72f929d65c9"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-25c32c2bc0227f68"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-f0d6eae79500a722"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-ce2e2fcc396bf508"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BPP3/5N2/PP3PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-6d1c5dfc25af296a"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-75d9ebf1f30ea6f8"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/2N2N2/PP3PPP/R1BQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-27c4c8b306dd7f88"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-7c7e7277329680d3"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-4f4ee8b0f295e704"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b kq -",
+      "occurrenceIds": [
+        "occ-34a6f5864ea78102"
+      ]
+    },
+    {
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - -",
+      "occurrenceIds": [
+        "occ-79f965fc301271fa"
+      ]
+    },
+    {
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQR1K1 b - -",
+      "occurrenceIds": [
+        "occ-71618892463fa67a"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/2P5/PP1P1PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-5b83a2c927cfb966"
+      ]
+    },
+    {
+      "stateKey": "r1bq1rk1/pppp1ppp/2n2n2/2b1p1N1/2B1P3/2P5/PP1P1PPP/RNBQK2R w KQ -",
+      "occurrenceIds": [
+        "occ-46092dc245df58d7"
+      ]
+    },
+    {
+      "stateKey": "r1bq1rk1/pppp1ppp/2n2n2/2b1p1N1/2B1P3/2PP4/PP3PPP/RNBQK2R b KQ -",
+      "occurrenceIds": [
+        "occ-f1708bbef014b2fd"
+      ]
+    },
+    {
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p1N1/2B1P3/2PP4/PP3PPP/RNBQK2R w KQ -",
+      "occurrenceIds": [
+        "occ-4f9a24c2cb5ac6b0"
+      ]
+    },
+    {
+      "stateKey": "r1bq1rk1/ppp2ppp/2np1n2/2b1p1N1/2B1P3/2PP4/PP3PPP/RNBQ1RK1 b - -",
+      "occurrenceIds": [
+        "occ-67c8744972075e12"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq -",
+      "occurrenceIds": [
+        "occ-f9edcc5c2829694b"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n5/2b1p3/2B1n3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq -",
+      "occurrenceIds": [
+        "occ-5f720f29ae39c22c"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n5/2b1p3/2BPn3/2P2N2/PP3PPP/RNBQ1RK1 b kq -",
+      "occurrenceIds": [
+        "occ-69da2b6496169de0"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/2n5/2bpp3/2BPn3/2P2N2/PP3PPP/RNBQ1RK1 w kq -",
+      "occurrenceIds": [
+        "occ-ac8c786cecc9fa69"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/2n5/1Bbpp3/3Pn3/2P2N2/PP3PPP/RNBQ1RK1 b kq -",
+      "occurrenceIds": [
+        "occ-7fdbecbaa8bf671c"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/1PB1P3/2P2N2/P2P1PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-9d4c880355c3035a"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/4p3/1PB1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-3b78682dab123def"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/4p3/1PBPP3/2P2N2/P4PPP/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-13e0e444859204dd"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/8/1PBpP3/2P2N2/P4PPP/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-d7ea64962c65a70d"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/1bn2n2/8/1PBpP3/2P2N2/P4PPP/RNBQ1RK1 b kq -",
+      "occurrenceIds": [
+        "occ-24dcf15814b509be"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N1P/PP1P1PP1/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-d4c0a727bc3cb6b0"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2P2N1P/PP1P1PP1/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-a57fc69957d5859e"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2BPP3/2P2N1P/PP3PP1/RNBQK2R b KQkq -",
+      "occurrenceIds": [
+        "occ-d8b11eedcd7a0e3a"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/1bnp1n2/4p3/2BPP3/2P2N1P/PP3PP1/RNBQK2R w KQkq -",
+      "occurrenceIds": [
+        "occ-fef7f877cdfedb7b"
+      ]
+    },
+    {
+      "stateKey": "r1bqk2r/ppp2ppp/1bnp1n2/4p3/2BPP3/2P2N1P/PP3PP1/RNBQ1RK1 b kq -",
+      "occurrenceIds": [
+        "occ-28b57dbf27801997"
       ]
     }
   ],

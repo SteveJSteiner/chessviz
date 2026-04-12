@@ -51,11 +51,17 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
   assert.ok(evidenceIndex);
   assert.ok(reviewNotes);
 
-  assert.match(structureZoom!, /Scholar(?:'|&apos;)s Mate: Nf6 to Qxf7#/);
+  assert.match(
+    structureZoom!,
+    /Italian Branch Lab: Nf6 to b4, d3, d4, h3, Ng5, O-O/
+  );
   assert.match(structureZoom!, /Focus board/);
   assert.match(structureZoom!, /Owning line/);
-  assert.match(structureZoom!, /out Qxf7#/);
-  assert.match(refinementSteps!, /Scholar(?:'|&apos;)s Mate: refinement toward Qxf7#/i);
+  assert.match(structureZoom!, /out Ng5/);
+  assert.match(
+    refinementSteps!,
+    /Italian Branch Lab: refinement toward b4, d3, d4, h3, Ng5, O-O/i
+  );
   assert.match(refinementSteps!, /Budget 3/);
   assert.match(refinementSteps!, /Budget 6/);
   assert.match(refinementSteps!, /Budget 12/);
@@ -66,7 +72,7 @@ test('builds deterministic N10b review artifacts from the fixture manifests', ()
   const parsedEvidenceIndex = JSON.parse(evidenceIndex!);
   assert.equal(parsedEvidenceIndex.graphObjectId, builderBootstrapManifest.graphObjectId);
   assert.equal(parsedEvidenceIndex.sceneId, viewerSceneManifest.sceneId);
-  assert.equal(parsedEvidenceIndex.focusLine, '1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6');
+  assert.equal(parsedEvidenceIndex.focusLine, '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6');
   assert.equal(parsedEvidenceIndex.focusTurn, 'White to move');
   assert.deepEqual(parsedEvidenceIndex.refinementBudgets, [3, 6, 12]);
   assert.equal(parsedEvidenceIndex.artifacts[0].rootLabelsIncluded, true);

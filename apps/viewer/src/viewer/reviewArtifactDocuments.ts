@@ -72,6 +72,8 @@ type ReviewFocusContext = {
   localTransitions: ReviewLocalTransition[];
 };
 
+const REVIEW_ARTIFACT_NEIGHBORHOOD_RADIUS = 2;
+
 export function buildViewerReviewArtifacts(
   builderBootstrapManifest: BuilderBootstrapManifest,
   viewerSceneManifest: ViewerSceneManifest
@@ -82,7 +84,7 @@ export function buildViewerReviewArtifacts(
   );
   const sceneBootstrap = createSceneBootstrap(viewerSceneManifest);
   const focusOccurrenceId = viewerSceneManifest.runtime.initialFocusOccurrenceId;
-  const neighborhoodRadius = viewerSceneManifest.runtime.maxNeighborhoodRadius;
+  const neighborhoodRadius = REVIEW_ARTIFACT_NEIGHBORHOOD_RADIUS;
   const refinementBudgets = [
     N10B_REVIEW_BUDGETS.structure,
     N10B_REVIEW_BUDGETS.tactical,

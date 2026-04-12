@@ -63,8 +63,18 @@ export default function App() {
   const focusLine = runtimeKernel.describeOccurrenceLine(
     deferredRuntimeSnapshot.focusOccurrenceId
   );
+  const baseFocusOptions = runtimeKernel.getFocusOptions();
+  const currentFocusOccurrence = runtimeKernel.resolveOccurrence(
+    deferredRuntimeSnapshot.focusOccurrenceId
+  );
+  const focusOptions = currentFocusOccurrence
+    && !baseFocusOptions.some(
+      (occurrence) => occurrence.occurrenceId === currentFocusOccurrence.occurrenceId
+    )
+    ? [currentFocusOccurrence, ...baseFocusOptions]
+    : baseFocusOptions;
   const focusLinesByOccurrenceId = new Map(
-    runtimeKernel.getFocusOptions().map((occurrence) => [
+    focusOptions.map((occurrence) => [
       occurrence.occurrenceId,
       runtimeKernel.describeOccurrenceLine(occurrence.occurrenceId)
     ])
@@ -76,7 +86,7 @@ export default function App() {
       cameraDistance={cameraDistance}
       focusLine={focusLine}
       focusLinesByOccurrenceId={focusLinesByOccurrenceId}
-      focusOptions={runtimeKernel.getFocusOptions()}
+      focusOptions={focusOptions}
       navigationEntryPoint={createRuntimeNavigationEntryPoint(
         deferredRuntimeSnapshot,
         cameraDistance

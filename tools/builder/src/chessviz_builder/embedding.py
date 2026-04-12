@@ -114,7 +114,7 @@ def _root_angles(
     ingested_corpus: IngestedCorpus,
     config: EmbeddingConfig,
 ) -> dict[str, float]:
-    ordered_game_ids = tuple(sorted(game.game_id for game in ingested_corpus.games))
+    ordered_game_ids = tuple(sorted({game.game_id for game in ingested_corpus.games}))
     game_count = len(ordered_game_ids)
     denominator = game_count if game_count else 1
     angles: dict[str, float] = {}

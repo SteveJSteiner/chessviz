@@ -159,6 +159,13 @@ const secondaryButtonStyle = {
   fontSize: '0.86rem'
 } as const;
 
+const inlineButtonStyle = {
+  ...secondaryButtonStyle,
+  padding: '0.45rem 0.65rem',
+  fontSize: '0.8rem',
+  justifySelf: 'start'
+} as const;
+
 export function ViewerShell({
   carrierSurface,
   cameraDistance,
@@ -508,6 +515,15 @@ export function ViewerShell({
                     <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
                       {isOutgoing ? 'Resulting node' : 'Source node'} · ply {neighborOccurrence.ply} · {neighborOccurrence.phase}
                     </div>
+                  ) : null}
+                  {neighborOccurrence ? (
+                    <button
+                      onClick={() => onFocusOccurrenceChange(neighborOccurrence.occurrenceId)}
+                      style={inlineButtonStyle}
+                      type="button"
+                    >
+                      {isOutgoing ? 'Focus resulting node' : 'Focus source node'}
+                    </button>
                   ) : null}
                 </article>
               );

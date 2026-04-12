@@ -3,12 +3,12 @@
 Use this file as the human verdict record for the generated N10b review artifacts.
 
 ## Run context
-- graphObjectId: initial-represented-subset:2026-04-11-fixture-002
+- graphObjectId: initial-represented-subset:2026-04-11-fixture-003
 - sceneId: runtime-exploration-fixture
-- focusOccurrenceId: occ-65caf3375c92984c
-- rootGameId: scholars-mate-white
-- rootGameName: Scholar's Mate
-- focusLine: 1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6
+- focusOccurrenceId: occ-25c32c2bc0227f68
+- rootGameId: italian-branch-lab
+- rootGameName: Italian Branch Lab
+- focusLine: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6
 - focusTurn: White to move
 - neighborhoodRadius: 2
 - structureBudget: 3
