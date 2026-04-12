@@ -61,6 +61,10 @@ This file contains design and process decisions only. It must not become a task 
 - **D20p. Bootstrap is a seed surface, not a corpus truth surface** — Runtime bootstrap artifacts carry scene defaults, object identity, and anchor hints only; they do not embed fixture corpus truth or stand in for regime declarations.
 - **D20q. Anchored entrypoints are regime-backed** — Opening/middlegame/endgame entrypoints are derived from declared regime anchors and stable occurrence identity with provenance, not directly from phase annotations over fixture bootstrap data.
 - **D20r. Fixture artifact quarantine** — The current fixture bootstrap and scene manifests remain test/review scaffolds until replaced by regime-backed assets and may not be extended as N12/N14 runtime truth surfaces.
+- **D20s. Builder schema authority** — `tools/builder/src/chessviz_builder/contracts.py` is the authoritative source for shared serialized occurrence, transition, anchor, salience, and provenance structures; regime declarations, coverage metadata, and bootstrap seed publication are emitted from adjacent builder modules rather than inferred in the viewer.
+- **D20t. Viewer mirror and resolver split** — `apps/viewer/src/viewer/contracts.ts` mirrors builder-owned schemas, while runtime loading, regime resolution, bootstrap loading, and anchor derivation live in dedicated viewer modules rather than inside `App.tsx` or phase-filter helpers.
+- **D20u. Runtime kernel is post-resolution only** — `apps/viewer/src/viewer/runtimeKernel.ts` operates on already-declared occurrence and transition surfaces; regime dispatch and asset loading happen outside the kernel.
+- **D20v. Fixture harnesses stay quarantined** — `apps/viewer/src/viewer/fixtureArtifacts.ts`, `artifacts/builder/bootstrap.json`, `artifacts/viewer/scene-manifest.json`, and the builder `export-fixture-artifacts` flow remain dev/test or review harnesses until regime-backed loaders replace them.
 
 ## Performance/rendering budget stance (locked)
 
