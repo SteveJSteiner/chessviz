@@ -11,6 +11,7 @@ from chessviz_builder.corpus_ingest import (
     initial_corpus_declaration,
 )
 from chessviz_builder.labeling import (
+    ENDGAME_PHASE,
     FULL_MATERIAL_SIGNATURE,
     MIDDLEGAME_PHASE,
     OPENING_PHASE,
@@ -33,7 +34,10 @@ class OccurrenceLabelingTests(unittest.TestCase):
             if game.game_id.startswith("qgd-bogo-")
         )
 
-        self.assertEqual(set(labels.phases), {OPENING_PHASE, MIDDLEGAME_PHASE})
+        self.assertEqual(
+            set(labels.phases),
+            {OPENING_PHASE, MIDDLEGAME_PHASE, ENDGAME_PHASE},
+        )
 
         for game in qgd_games:
             label_record = labels.by_occurrence_id(game.final_occurrence.occurrence_id)
@@ -120,6 +124,31 @@ class OccurrenceLabelingTests(unittest.TestCase):
         self.assertNotEqual(len(qgd_leaf.path), len(synthetic_path_leaf.path))
         self.assertEqual(_classify_phase(qgd_leaf), MIDDLEGAME_PHASE)
         self.assertEqual(_classify_phase(synthetic_path_leaf), MIDDLEGAME_PHASE)
+
+    def test_endgame_fixture_produces_multiple_endgame_occurrences(self) -> None:
+        dry_run = self.pipeline.dry_run(self.declaration)
+        labels = dry_run.labels
+        endgame_game = next(
+            game
+            for game in dry_run.ingested_corpus.games
+            if game.game_id == "endgame-simplification-lab"
+        )
+
+        self.assertGreaterEqual(
+            sum(
+                1
+                for occurrence in endgame_game.occurrences
+                if labels.by_occurrence_id(occurrence.occurrence_id).phase
+                == ENDGAME_PHASE
+            ),
+            4,
+        )
+
+        final_label = labels.by_occurrence_id(endgame_game.final_occurrence.occurrence_id)
+
+        self.assertIsNotNone(final_label)
+        assert final_label is not None
+        self.assertEqual(final_label.phase, ENDGAME_PHASE)
 
 
 if __name__ == "__main__":

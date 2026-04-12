@@ -22,7 +22,7 @@ from .contracts import (
 
 INITIAL_CORPUS_DECLARATION = CorpusDeclaration(
     source_name="initial-represented-subset",
-    version="2026-04-11-fixture-003",
+    version="2026-04-11-fixture-004",
     location="tools/builder/fixtures/initial_corpus.json",
 )
 

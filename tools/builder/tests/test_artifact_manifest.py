@@ -22,7 +22,7 @@ class ArtifactManifestTests(unittest.TestCase):
 
         self.assertEqual(
             manifest["graphObjectId"],
-            "initial-represented-subset:2026-04-11-fixture-003",
+            "initial-represented-subset:2026-04-11-fixture-004",
         )
         self.assertEqual(len(manifest["occurrences"]), len(self.dry_run.occurrences))
         self.assertEqual(len(manifest["edges"]), len(self.dry_run.dag.edges))
@@ -64,11 +64,11 @@ class ArtifactManifestTests(unittest.TestCase):
         self.assertEqual(scene_manifest["sceneId"], "runtime-exploration-fixture")
         self.assertEqual(
             scene_manifest["summary"],
-            "N10 runtime multiscale carrier refinement over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
+            "N11 runtime camera grammar over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
         )
         self.assertEqual(
             scene_manifest["runtime"]["graphObjectId"],
-            "initial-represented-subset:2026-04-11-fixture-003",
+            "initial-represented-subset:2026-04-11-fixture-004",
         )
         self.assertEqual(scene_manifest["runtime"]["defaultNeighborhoodRadius"], 2)
         self.assertEqual(scene_manifest["runtime"]["maxNeighborhoodRadius"], 4)

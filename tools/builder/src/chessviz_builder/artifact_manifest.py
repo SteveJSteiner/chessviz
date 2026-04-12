@@ -178,7 +178,7 @@ def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     return {
         "sceneId": DEFAULT_SCENE_ID,
         "title": "Runtime Exploration Fixture",
-        "summary": "N10 runtime multiscale carrier refinement over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
+        "summary": "N11 runtime camera grammar over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
         "accentColor": "#0f766e",
         "camera": {
             "position": [0.0, 0.45, 4.2],

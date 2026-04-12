@@ -24,7 +24,7 @@ class CorpusIngestTests(unittest.TestCase):
         fixture = load_declared_corpus_fixture(declaration=self.declaration)
 
         self.assertEqual(fixture.declaration, self.declaration)
-        self.assertEqual(len(fixture.games), 11)
+        self.assertEqual(len(fixture.games), 12)
         self.assertEqual(
             {
                 game.game_id: game.terminal_outcome
@@ -61,9 +61,9 @@ class CorpusIngestTests(unittest.TestCase):
     def test_small_corpus_fixture_has_expected_occurrence_counts(self) -> None:
         ingested_corpus = self.pipeline.corpus_ingestor.ingest(self.declaration)
 
-        self.assertEqual(len(ingested_corpus.games), 11)
-        self.assertEqual(len(ingested_corpus.occurrences), 75)
-        self.assertEqual(len(ingested_corpus.transitions), 69)
+        self.assertEqual(len(ingested_corpus.games), 12)
+        self.assertEqual(len(ingested_corpus.occurrences), 118)
+        self.assertEqual(len(ingested_corpus.transitions), 111)
         self.assertEqual(
             [(game.game_id, len(game.occurrences)) for game in ingested_corpus.games],
             [
@@ -78,6 +78,7 @@ class CorpusIngestTests(unittest.TestCase):
                 ("italian-branch-lab", 14),
                 ("italian-branch-lab", 14),
                 ("italian-branch-lab", 14),
+                ("endgame-simplification-lab", 43),
             ],
         )
         self.assertEqual(

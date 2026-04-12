@@ -17,7 +17,7 @@
     "fov": 48
   },
   "runtime": {
-    "graphObjectId": "initial-represented-subset:2026-04-11-fixture-003",
+    "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
     "initialFocusOccurrenceId": "occ-25c32c2bc0227f68",
     "focusCandidateOccurrenceIds": [
       "occ-25c32c2bc0227f68",
@@ -27,6 +27,7 @@
       "occ-2ec900ca21098443",
       "occ-39672723f3979502",
       "occ-c691ba2463970683",
+      "occ-a38b4b89386c3e44",
       "occ-854ee946e516ebcc",
       "occ-63c6882f2a36737a",
       "occ-d6e94fa5dd427d26",
