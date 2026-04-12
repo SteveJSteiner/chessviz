@@ -21,3 +21,4 @@ One line per committed DAG frontier event.
 2026-04-11 | commit 17e7f9a | settled N09 transition move-fact export and departure-rule surface
 2026-04-11 | commit 7b7ab83 | split N10 into settled N10a carrier seam and active N10b human-reviewed carrier legibility loop
 2026-04-11 | commit c9c8232 | settled N10b direct-label/reference surface and opened N10c live-review label-density loop
+2026-04-11 | commit 43cfc85 | settled N10c live carrier legibility and advanced frontier to N11
