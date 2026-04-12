@@ -79,7 +79,7 @@ export function createOccurrencePresentation(
 ): OccurrencePresentation {
   const fillColor = occurrence.terminal
     ? terminalColor(occurrence.terminal.wdlLabel)
-    : phaseColor(occurrence.phase, accentColor);
+    : phaseColor(occurrence.annotations.phaseLabel, accentColor);
   const uncappedRadius = roundNumber(0.042 + (occurrence.salience.normalizedScore * 0.074));
   const cappedRadius = Math.min(uncappedRadius, radiusCap);
   const radius = roundNumber(

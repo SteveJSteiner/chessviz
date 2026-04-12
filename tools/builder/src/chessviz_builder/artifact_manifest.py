@@ -6,7 +6,22 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .contracts import BuilderWorkspace
+from .contracts import (
+    BuilderWorkspace,
+    CoverageMetadataRecord,
+    IdentitySemanticsRecord,
+    OccurrenceAnnotationRecord,
+    OccurrenceIdentityRecord,
+    OccurrenceRegimeRecord,
+    RecordProvenance,
+    RegimeDeclaration,
+    RegimeId,
+    REPRESENTATION_SCHEMA_VERSION,
+    ResolverInputRecord,
+    SharedAnchorRecord,
+    TransitionIdentityRecord,
+)
+from .labeling import ENDGAME_PHASE, MIDDLEGAME_PHASE, OPENING_PHASE
 from .pipeline import PipelineDryRun
 
 DEFAULT_SCENE_ID = "runtime-exploration-fixture"
@@ -14,58 +29,54 @@ DEFAULT_SCENE_ID = "runtime-exploration-fixture"
 
 def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     graph_object_id = _graph_object_id(dry_run)
+    identity_semantics = IdentitySemanticsRecord(
+        occurrence_key_field="occurrenceId",
+        position_key_field="stateKey",
+        path_key_field="path",
+        continuity_key_field="stateKey",
+    )
+    coverage_metadata = _build_coverage_metadata_records(dry_run)
+    resolver_inputs = _build_resolver_input_records(coverage_metadata)
+    regime_declarations = _build_regime_declarations(dry_run, coverage_metadata, resolver_inputs)
+    anchors = _build_shared_anchor_records(dry_run)
+    occurrence_by_id = {
+        occurrence.occurrence_id: occurrence for occurrence in dry_run.occurrences
+    }
     departure_rule_by_edge = {
         (rule.parent_occurrence_id, rule.child_occurrence_id): rule
         for rule in dry_run.departure_rules.records
     }
 
     return {
+        "schemaVersion": REPRESENTATION_SCHEMA_VERSION,
         "graphObjectId": graph_object_id,
         "sourceName": dry_run.ingested_corpus.declaration.source_name,
         "version": dry_run.ingested_corpus.declaration.version,
+        "identitySemantics": _identity_semantics_payload(identity_semantics),
+        "coverageMetadata": [
+            _coverage_metadata_payload(record) for record in coverage_metadata
+        ],
+        "resolverInputs": [
+            _resolver_input_payload(record) for record in resolver_inputs
+        ],
+        "regimeDeclarations": [
+            _regime_declaration_payload(record) for record in regime_declarations
+        ],
+        "anchors": [_anchor_payload(record) for record in anchors],
         "rootOccurrenceIds": list(dry_run.dag.root_occurrence_ids),
         "leafOccurrenceIds": list(dry_run.dag.leaf_occurrence_ids),
         "priorityFrontierOccurrenceIds": [
             record.occurrence_id for record in dry_run.salience.priority_frontier
         ],
         "occurrences": [
-            {
-                "occurrenceId": occurrence.occurrence_id,
-                "stateKey": occurrence.state_key,
-                "path": list(occurrence.path),
-                "ply": occurrence.ply,
-                "phase": label_record.phase,
-                "materialSignature": label_record.material_signature,
-                "salience": {
-                    "rawScore": salience_record.raw_score,
-                    "normalizedScore": salience_record.normalized_score,
-                    "frequencySignal": salience_record.frequency_signal,
-                    "terminalPullSignal": salience_record.terminal_pull_signal,
-                    "centralitySignal": salience_record.centrality_signal,
-                    "priorityHint": {
-                        "priorityRank": salience_record.priority_hint.priority_rank,
-                        "priorityBand": salience_record.priority_hint.priority_band,
-                        "retainFromZoom": salience_record.priority_hint.retain_from_zoom,
-                    },
-                },
-                "terminal": (
-                    {
-                        "wdlLabel": terminal_record.wdl_label,
-                        "outcomeClass": terminal_record.outcome_class,
-                        "anchorId": terminal_record.anchor_id,
-                    }
-                    if terminal_record is not None
-                    else None
-                ),
-                "embedding": {
-                    "coordinate": list(embedding_record.coordinate),
-                    "ballRadius": embedding_record.ball_radius,
-                    "azimuth": embedding_record.azimuth,
-                    "elevation": embedding_record.elevation,
-                    "rootGameId": embedding_record.root_game_id,
-                    "terminalAnchorId": embedding_record.terminal_anchor_id,
-                },
-            }
+            _occurrence_payload(
+                dry_run,
+                occurrence,
+                label_record,
+                salience_record,
+                terminal_record,
+                embedding_record,
+            )
             for occurrence in dry_run.occurrences
             for label_record in [dry_run.labels.by_occurrence_id(occurrence.occurrence_id)]
             for salience_record in [
@@ -89,32 +100,17 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
             for source_occurrence_id, target_occurrence_id in dry_run.dag.edges
         ],
         "transitions": [
-            {
-                "sourceOccurrenceId": transition.parent_occurrence_id,
-                "targetOccurrenceId": transition.child_occurrence_id,
-                "moveUci": transition.move_uci,
-                "ply": transition.ply,
-                "moveFacts": {
-                    "san": transition.move_facts.san,
-                    "movingPiece": transition.move_facts.moving_piece,
-                    "capturedPiece": transition.move_facts.captured_piece,
-                    "promotionPiece": transition.move_facts.promotion_piece,
-                    "isCapture": transition.move_facts.is_capture,
-                    "isCheck": transition.move_facts.is_check,
-                    "isCheckmate": transition.move_facts.is_checkmate,
-                    "isCastle": transition.move_facts.is_castle,
-                    "castleSide": transition.move_facts.castle_side,
-                    "isEnPassant": transition.move_facts.is_en_passant,
-                },
-                "moveFamily": _move_family_payload(
-                    departure_rule_by_edge[
-                        (
-                            transition.parent_occurrence_id,
-                            transition.child_occurrence_id,
-                        )
-                    ].move_family
-                ),
-            }
+            _transition_payload(
+                dry_run,
+                transition,
+                departure_rule_by_edge[
+                    (
+                        transition.parent_occurrence_id,
+                        transition.child_occurrence_id,
+                    )
+                ],
+                occurrence_by_id,
+            )
             for transition in dry_run.ingested_corpus.transitions
         ],
         "departureRules": [
@@ -140,15 +136,6 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
             }
             for relation in dry_run.repeated_state_query_surface.relations
         ],
-        "terminalAnchors": [
-            {
-                "anchorId": anchor.anchor_id,
-                "wdlLabel": anchor.wdl_label,
-                "outcomeClass": anchor.outcome_class,
-                "occurrenceIds": list(anchor.occurrence_ids),
-            }
-            for anchor in dry_run.terminal_labels.anchors
-        ],
         "salienceConfig": {
             "frequencyWeight": dry_run.salience.config.frequency_weight,
             "terminalPullWeight": dry_run.salience.config.terminal_pull_weight,
@@ -172,7 +159,9 @@ def build_builder_bootstrap_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
 
 def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
     graph_object_id = _graph_object_id(dry_run)
-    initial_focus_occurrence_id = _initial_focus_occurrence_id(dry_run)
+    initial_focus_occurrence_id = _navigation_anchor_occurrence_ids(dry_run)[
+        "middlegame"
+    ]
     focus_candidate_occurrence_ids = _focus_candidate_occurrence_ids(dry_run)
 
     return {
@@ -187,6 +176,12 @@ def build_viewer_scene_manifest(dry_run: PipelineDryRun) -> dict[str, Any]:
         },
         "runtime": {
             "graphObjectId": graph_object_id,
+            "bootstrap": {
+                "representationSchemaVersion": REPRESENTATION_SCHEMA_VERSION,
+                "seedSurface": "builder-bootstrap-manifest",
+                "focusCandidatesSource": "builder-bootstrap-manifest:focusCandidateOccurrenceIds",
+                "entrypointDerivation": "builder-bootstrap-manifest:anchors[navigation-entry]",
+            },
             "initialFocusOccurrenceId": initial_focus_occurrence_id,
             "focusCandidateOccurrenceIds": focus_candidate_occurrence_ids,
             "defaultNeighborhoodRadius": 2,
@@ -221,11 +216,7 @@ def _graph_object_id(dry_run: PipelineDryRun) -> str:
 
 
 def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
-    ordered_candidates = [
-        _initial_focus_occurrence_id(dry_run),
-        *dry_run.dag.root_occurrence_ids,
-        *(record.occurrence_id for record in dry_run.salience.priority_frontier),
-    ]
+    ordered_candidates = _focus_candidate_seed_occurrence_ids(dry_run)
     deduplicated_candidates: list[str] = []
 
     for occurrence_id in ordered_candidates:
@@ -236,7 +227,425 @@ def _focus_candidate_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
     return deduplicated_candidates
 
 
-def _initial_focus_occurrence_id(dry_run: PipelineDryRun) -> str:
+def _focus_candidate_seed_occurrence_ids(dry_run: PipelineDryRun) -> list[str]:
+    middlegame_occurrences = [
+        occurrence
+        for occurrence in dry_run.occurrences
+        if _has_phase_label(dry_run, occurrence.occurrence_id, MIDDLEGAME_PHASE)
+    ]
+
+    return [
+        _select_middlegame_anchor_occurrence_id(dry_run, middlegame_occurrences),
+        *dry_run.dag.root_occurrence_ids,
+        *(record.occurrence_id for record in dry_run.salience.priority_frontier),
+    ]
+
+
+def _move_family_payload(move_family: Any) -> dict[str, str]:
+    return {
+        "interactionClass": move_family.interaction_class,
+        "forcingClass": move_family.forcing_class,
+        "specialClass": move_family.special_class,
+    }
+
+
+def _occurrence_payload(
+    dry_run: PipelineDryRun,
+    occurrence,
+    label_record,
+    salience_record,
+    terminal_record,
+    embedding_record,
+) -> dict[str, Any]:
+    annotations = OccurrenceAnnotationRecord(
+        phase_label=label_record.phase,
+        material_signature=label_record.material_signature,
+    )
+    regime_id = _regime_id_for_phase(label_record.phase)
+    identity = OccurrenceIdentityRecord(
+        occurrence_key=occurrence.occurrence_id,
+        position_key=occurrence.state_key,
+        path_key="|".join(occurrence.path),
+        continuity_key=occurrence.state_key,
+    )
+    regime = OccurrenceRegimeRecord(
+        regime_id=regime_id,
+        candidate_regime_ids=(regime_id,),
+        resolver_input_id=_resolver_input_id(regime_id),
+        selection_rule="declared-regime-membership",
+    )
+    occurrence_provenance = RecordProvenance(
+        source_kind="fixture-corpus",
+        source_name=dry_run.ingested_corpus.declaration.source_name,
+        source_version=dry_run.ingested_corpus.declaration.version,
+        source_location=dry_run.ingested_corpus.declaration.location,
+        detail=(
+            f"occurrence {occurrence.occurrence_id} carried from "
+            f"{embedding_record.root_game_id} at ply {occurrence.ply}"
+        ),
+    )
+
+    return {
+        "occurrenceId": occurrence.occurrence_id,
+        "stateKey": occurrence.state_key,
+        "path": list(occurrence.path),
+        "ply": occurrence.ply,
+        "identity": _occurrence_identity_payload(identity),
+        "annotations": _occurrence_annotation_payload(annotations),
+        "regime": _occurrence_regime_payload(regime),
+        "provenance": _provenance_payload(occurrence_provenance),
+        "salience": {
+            "rawScore": salience_record.raw_score,
+            "normalizedScore": salience_record.normalized_score,
+            "frequencySignal": salience_record.frequency_signal,
+            "terminalPullSignal": salience_record.terminal_pull_signal,
+            "centralitySignal": salience_record.centrality_signal,
+            "priorityHint": {
+                "priorityRank": salience_record.priority_hint.priority_rank,
+                "priorityBand": salience_record.priority_hint.priority_band,
+                "retainFromZoom": salience_record.priority_hint.retain_from_zoom,
+            },
+            "provenance": _provenance_payload(
+                RecordProvenance(
+                    source_kind="salience-builder",
+                    source_name=dry_run.ingested_corpus.declaration.source_name,
+                    source_version=dry_run.ingested_corpus.declaration.version,
+                    source_location=dry_run.ingested_corpus.declaration.location,
+                    detail=f"salience-v1 score for {occurrence.occurrence_id}",
+                )
+            ),
+        },
+        "terminal": (
+            {
+                "wdlLabel": terminal_record.wdl_label,
+                "outcomeClass": terminal_record.outcome_class,
+                "anchorId": terminal_record.anchor_id,
+                "provenance": _provenance_payload(
+                    RecordProvenance(
+                        source_kind="terminal-labeler",
+                        source_name=dry_run.ingested_corpus.declaration.source_name,
+                        source_version=dry_run.ingested_corpus.declaration.version,
+                        source_location=dry_run.ingested_corpus.declaration.location,
+                        detail=(
+                            f"terminal {terminal_record.outcome_class} label for "
+                            f"{occurrence.occurrence_id}"
+                        ),
+                    )
+                ),
+            }
+            if terminal_record is not None
+            else None
+        ),
+        "embedding": {
+            "coordinate": list(embedding_record.coordinate),
+            "ballRadius": embedding_record.ball_radius,
+            "azimuth": embedding_record.azimuth,
+            "elevation": embedding_record.elevation,
+            "rootGameId": embedding_record.root_game_id,
+            "terminalAnchorId": embedding_record.terminal_anchor_id,
+        },
+    }
+
+
+def _transition_payload(
+    dry_run: PipelineDryRun,
+    transition,
+    departure_rule,
+    occurrence_by_id,
+) -> dict[str, Any]:
+    source_occurrence = occurrence_by_id[transition.parent_occurrence_id]
+    target_occurrence = occurrence_by_id[transition.child_occurrence_id]
+    identity = TransitionIdentityRecord(
+        transition_key=(
+            f"{transition.parent_occurrence_id}:{transition.child_occurrence_id}"
+        ),
+        source_occurrence_key=transition.parent_occurrence_id,
+        target_occurrence_key=transition.child_occurrence_id,
+        source_position_key=source_occurrence.state_key,
+        target_position_key=target_occurrence.state_key,
+    )
+    provenance = RecordProvenance(
+        source_kind="fixture-corpus-transition",
+        source_name=dry_run.ingested_corpus.declaration.source_name,
+        source_version=dry_run.ingested_corpus.declaration.version,
+        source_location=dry_run.ingested_corpus.declaration.location,
+        detail=(
+            f"transition {transition.move_uci} from {transition.parent_occurrence_id} "
+            f"to {transition.child_occurrence_id}"
+        ),
+    )
+
+    return {
+        "sourceOccurrenceId": transition.parent_occurrence_id,
+        "targetOccurrenceId": transition.child_occurrence_id,
+        "identity": _transition_identity_payload(identity),
+        "provenance": _provenance_payload(provenance),
+        "moveUci": transition.move_uci,
+        "ply": transition.ply,
+        "moveFacts": {
+            "san": transition.move_facts.san,
+            "movingPiece": transition.move_facts.moving_piece,
+            "capturedPiece": transition.move_facts.captured_piece,
+            "promotionPiece": transition.move_facts.promotion_piece,
+            "isCapture": transition.move_facts.is_capture,
+            "isCheck": transition.move_facts.is_check,
+            "isCheckmate": transition.move_facts.is_checkmate,
+            "isCastle": transition.move_facts.is_castle,
+            "castleSide": transition.move_facts.castle_side,
+            "isEnPassant": transition.move_facts.is_en_passant,
+        },
+        "moveFamily": _move_family_payload(departure_rule.move_family),
+    }
+
+
+def _build_coverage_metadata_records(
+    dry_run: PipelineDryRun,
+) -> tuple[CoverageMetadataRecord, ...]:
+    opening_labels = dry_run.labels.for_phase(OPENING_PHASE)
+    middlegame_labels = dry_run.labels.for_phase(MIDDLEGAME_PHASE)
+    endgame_labels = dry_run.labels.for_phase(ENDGAME_PHASE)
+
+    return (
+        CoverageMetadataRecord(
+            coverage_metadata_id=_coverage_metadata_id("opening-table"),
+            regime_id="opening-table",
+            coverage_kind="ply-window",
+            summary="Declared opening-table membership over the shared placeholder fixture contract.",
+            occurrence_count=len(opening_labels),
+            max_ply=max(
+                (
+                    dry_run.dag.by_occurrence_id(record.occurrence_id).ply
+                    for record in opening_labels
+                    if dry_run.dag.by_occurrence_id(record.occurrence_id) is not None
+                ),
+                default=0,
+            ),
+        ),
+        CoverageMetadataRecord(
+            coverage_metadata_id=_coverage_metadata_id("middlegame-procedural"),
+            regime_id="middlegame-procedural",
+            coverage_kind="procedural-fallback",
+            summary="Declared middlegame procedural fallback over explicit shared occurrence membership.",
+            occurrence_count=len(middlegame_labels),
+        ),
+        CoverageMetadataRecord(
+            coverage_metadata_id=_coverage_metadata_id("endgame-table"),
+            regime_id="endgame-table",
+            coverage_kind="material-signature-set",
+            summary="Declared endgame-table membership over observed terminal-material signatures.",
+            occurrence_count=len(endgame_labels),
+            supported_material_signatures=tuple(
+                sorted(
+                    {
+                        record.material_signature
+                        for record in endgame_labels
+                    }
+                )
+            ),
+        ),
+    )
+
+
+def _build_resolver_input_records(
+    coverage_metadata_records: tuple[CoverageMetadataRecord, ...],
+) -> tuple[ResolverInputRecord, ...]:
+    coverage_by_regime = {
+        record.regime_id: record for record in coverage_metadata_records
+    }
+    return (
+        ResolverInputRecord(
+            resolver_input_id=_resolver_input_id("opening-table"),
+            regime_id="opening-table",
+            priority=10,
+            selector="declared-opening-coverage",
+            coverage_metadata_id=coverage_by_regime["opening-table"].coverage_metadata_id,
+        ),
+        ResolverInputRecord(
+            resolver_input_id=_resolver_input_id("endgame-table"),
+            regime_id="endgame-table",
+            priority=20,
+            selector="declared-endgame-coverage",
+            coverage_metadata_id=coverage_by_regime["endgame-table"].coverage_metadata_id,
+        ),
+        ResolverInputRecord(
+            resolver_input_id=_resolver_input_id("middlegame-procedural"),
+            regime_id="middlegame-procedural",
+            priority=30,
+            selector="declared-middlegame-fallback",
+            coverage_metadata_id=coverage_by_regime[
+                "middlegame-procedural"
+            ].coverage_metadata_id,
+            is_fallback=True,
+        ),
+    )
+
+
+def _build_regime_declarations(
+    dry_run: PipelineDryRun,
+    coverage_metadata_records: tuple[CoverageMetadataRecord, ...],
+    resolver_input_records: tuple[ResolverInputRecord, ...],
+) -> tuple[RegimeDeclaration, ...]:
+    coverage_by_regime = {
+        record.regime_id: record for record in coverage_metadata_records
+    }
+    resolver_by_regime = {
+        record.regime_id: record for record in resolver_input_records
+    }
+
+    return tuple(
+        RegimeDeclaration(
+            regime_id=regime_id,
+            label=label,
+            backing_kind=backing_kind,
+            schema_version=REPRESENTATION_SCHEMA_VERSION,
+            coverage_metadata_id=coverage_by_regime[regime_id].coverage_metadata_id,
+            resolver_input_id=resolver_by_regime[regime_id].resolver_input_id,
+            provenance=RecordProvenance(
+                source_kind="builder-regime-declaration",
+                source_name=dry_run.ingested_corpus.declaration.source_name,
+                source_version=dry_run.ingested_corpus.declaration.version,
+                source_location=dry_run.ingested_corpus.declaration.location,
+                detail=(
+                    f"declared {regime_id} contract over placeholder fixture-owned "
+                    f"coverage for N11c"
+                ),
+            ),
+        )
+        for regime_id, label, backing_kind in (
+            ("opening-table", "Opening Table", "table"),
+            ("middlegame-procedural", "Middlegame Procedural", "procedural"),
+            ("endgame-table", "Endgame Table", "table"),
+        )
+    )
+
+
+def _build_shared_anchor_records(dry_run: PipelineDryRun) -> tuple[SharedAnchorRecord, ...]:
+    occurrence_by_id = {
+        occurrence.occurrence_id: occurrence for occurrence in dry_run.occurrences
+    }
+    embedding_by_occurrence_id = {
+        record.occurrence_id: record for record in dry_run.embedding.records
+    }
+    navigation_anchor_ids = _navigation_anchor_occurrence_ids(dry_run)
+    navigation_anchors = []
+
+    for entry_id, occurrence_id in navigation_anchor_ids.items():
+        occurrence = occurrence_by_id[occurrence_id]
+        embedding = embedding_by_occurrence_id[occurrence_id]
+        label_record = dry_run.labels.by_occurrence_id(occurrence_id)
+        if label_record is None:
+            continue
+        regime_id = _regime_id_for_phase(label_record.phase)
+        navigation_anchors.append(
+            SharedAnchorRecord(
+                anchor_id=f"entry:{entry_id}",
+                anchor_kind="navigation-entry",
+                label=f"{entry_id.title()} anchor",
+                occurrence_ids=(occurrence_id,),
+                regime_id=regime_id,
+                provenance=RecordProvenance(
+                    source_kind="builder-anchor-declaration",
+                    source_name=dry_run.ingested_corpus.declaration.source_name,
+                    source_version=dry_run.ingested_corpus.declaration.version,
+                    source_location=dry_run.ingested_corpus.declaration.location,
+                    detail=(
+                        f"declared {entry_id} navigation anchor from {regime_id} "
+                        f"membership"
+                    ),
+                ),
+                entry_id=entry_id,
+                anchor_ply=occurrence.ply,
+                root_game_id=embedding.root_game_id,
+            )
+        )
+
+    terminal_anchors = []
+    for anchor in dry_run.terminal_labels.anchors:
+        first_occurrence_id = anchor.occurrence_ids[0]
+        first_label = dry_run.labels.by_occurrence_id(first_occurrence_id)
+        regime_id = (
+            _regime_id_for_phase(first_label.phase)
+            if first_label is not None
+            else None
+        )
+        terminal_anchors.append(
+            SharedAnchorRecord(
+                anchor_id=anchor.anchor_id,
+                anchor_kind="terminal-outcome",
+                label=f"{anchor.outcome_class.title()} terminal",
+                occurrence_ids=anchor.occurrence_ids,
+                regime_id=regime_id,
+                provenance=RecordProvenance(
+                    source_kind="terminal-labeler",
+                    source_name=dry_run.ingested_corpus.declaration.source_name,
+                    source_version=dry_run.ingested_corpus.declaration.version,
+                    source_location=dry_run.ingested_corpus.declaration.location,
+                    detail=(
+                        f"declared terminal anchor {anchor.anchor_id} for "
+                        f"{anchor.outcome_class} outcomes"
+                    ),
+                ),
+                wdl_label=anchor.wdl_label,
+                outcome_class=anchor.outcome_class,
+            )
+        )
+
+    return tuple((*navigation_anchors, *terminal_anchors))
+
+
+def _navigation_anchor_occurrence_ids(dry_run: PipelineDryRun) -> dict[str, str]:
+    opening_occurrences = [
+        occurrence
+        for occurrence in dry_run.occurrences
+        if _has_phase_label(dry_run, occurrence.occurrence_id, OPENING_PHASE)
+        and occurrence.ply == 0
+    ]
+    middlegame_occurrences = [
+        occurrence
+        for occurrence in dry_run.occurrences
+        if _has_phase_label(dry_run, occurrence.occurrence_id, MIDDLEGAME_PHASE)
+    ]
+    endgame_occurrences = [
+        occurrence
+        for occurrence in dry_run.occurrences
+        if _has_phase_label(dry_run, occurrence.occurrence_id, ENDGAME_PHASE)
+    ]
+
+    if not opening_occurrences or not middlegame_occurrences or not endgame_occurrences:
+        raise ValueError("missing required declared regime anchor coverage")
+
+    opening_occurrence_ids = {
+        occurrence.occurrence_id for occurrence in opening_occurrences
+    }
+    preferred_opening_occurrence_id = next(
+        (
+            occurrence_id
+            for occurrence_id in _focus_candidate_seed_occurrence_ids(dry_run)
+            if occurrence_id in opening_occurrence_ids
+        ),
+        None,
+    )
+
+    return {
+        "opening": (
+            preferred_opening_occurrence_id
+            or sorted(
+                opening_occurrences,
+                key=lambda occurrence: _opening_anchor_key(dry_run, occurrence),
+            )[0].occurrence_id
+        ),
+        "middlegame": _select_middlegame_anchor_occurrence_id(
+            dry_run,
+            middlegame_occurrences,
+        ),
+        "endgame": sorted(endgame_occurrences, key=lambda occurrence: _endgame_anchor_key(dry_run, occurrence))[0].occurrence_id,
+    }
+
+
+def _select_middlegame_anchor_occurrence_id(
+    dry_run: PipelineDryRun,
+    middlegame_occurrences,
+) -> str:
     best_occurrence_id = dry_run.dag.root_occurrence_ids[0]
     best_key = (-1, -1.0, -1, "")
 
@@ -252,12 +661,180 @@ def _initial_focus_occurrence_id(dry_run: PipelineDryRun) -> str:
             best_occurrence_id = occurrence.occurrence_id
             best_key = candidate_key
 
-    return best_occurrence_id
+    if _has_phase_label(dry_run, best_occurrence_id, MIDDLEGAME_PHASE):
+        return best_occurrence_id
+
+    return sorted(
+        middlegame_occurrences,
+        key=lambda occurrence: _middlegame_anchor_key(dry_run, occurrence),
+    )[0].occurrence_id
 
 
-def _move_family_payload(move_family: Any) -> dict[str, str]:
+def _opening_anchor_key(dry_run: PipelineDryRun, occurrence) -> tuple[float, int, str, str]:
+    salience_record = dry_run.salience.by_occurrence_id(occurrence.occurrence_id)
+    embedding_record = dry_run.embedding.by_occurrence_id(occurrence.occurrence_id)
+    return (
+        -(salience_record.normalized_score if salience_record is not None else 0.0),
+        occurrence.ply,
+        embedding_record.root_game_id if embedding_record is not None else "",
+        occurrence.occurrence_id,
+    )
+
+
+def _middlegame_anchor_key(
+    dry_run: PipelineDryRun,
+    occurrence,
+) -> tuple[int, float, int, str, str]:
+    salience_record = dry_run.salience.by_occurrence_id(occurrence.occurrence_id)
+    embedding_record = dry_run.embedding.by_occurrence_id(occurrence.occurrence_id)
+    terminal_record = dry_run.terminal_labels.by_occurrence_id(occurrence.occurrence_id)
+    return (
+        0 if terminal_record is None else 1,
+        -(salience_record.normalized_score if salience_record is not None else 0.0),
+        occurrence.ply,
+        embedding_record.root_game_id if embedding_record is not None else "",
+        occurrence.occurrence_id,
+    )
+
+
+def _endgame_anchor_key(dry_run: PipelineDryRun, occurrence) -> tuple[int, float, str, str]:
+    salience_record = dry_run.salience.by_occurrence_id(occurrence.occurrence_id)
+    embedding_record = dry_run.embedding.by_occurrence_id(occurrence.occurrence_id)
+    return (
+        occurrence.ply,
+        -(salience_record.normalized_score if salience_record is not None else 0.0),
+        embedding_record.root_game_id if embedding_record is not None else "",
+        occurrence.occurrence_id,
+    )
+
+
+def _has_phase_label(
+    dry_run: PipelineDryRun,
+    occurrence_id: str,
+    expected_phase: str,
+) -> bool:
+    label_record = dry_run.labels.by_occurrence_id(occurrence_id)
+    return label_record is not None and label_record.phase == expected_phase
+
+
+def _regime_id_for_phase(phase_label: str) -> RegimeId:
+    if phase_label == OPENING_PHASE:
+        return "opening-table"
+    if phase_label == MIDDLEGAME_PHASE:
+        return "middlegame-procedural"
+    if phase_label == ENDGAME_PHASE:
+        return "endgame-table"
+    raise ValueError(f"unknown phase label for regime declaration: {phase_label}")
+
+
+def _coverage_metadata_id(regime_id: RegimeId) -> str:
+    return f"coverage:{regime_id}"
+
+
+def _resolver_input_id(regime_id: RegimeId) -> str:
+    return f"resolver:{regime_id}"
+
+
+def _identity_semantics_payload(identity_semantics: IdentitySemanticsRecord) -> dict[str, str]:
     return {
-        "interactionClass": move_family.interaction_class,
-        "forcingClass": move_family.forcing_class,
-        "specialClass": move_family.special_class,
+        "occurrenceKeyField": identity_semantics.occurrence_key_field,
+        "positionKeyField": identity_semantics.position_key_field,
+        "pathKeyField": identity_semantics.path_key_field,
+        "continuityKeyField": identity_semantics.continuity_key_field,
+    }
+
+
+def _coverage_metadata_payload(record: CoverageMetadataRecord) -> dict[str, Any]:
+    return {
+        "coverageMetadataId": record.coverage_metadata_id,
+        "regimeId": record.regime_id,
+        "coverageKind": record.coverage_kind,
+        "summary": record.summary,
+        "occurrenceCount": record.occurrence_count,
+        "maxPly": record.max_ply,
+        "supportedMaterialSignatures": list(record.supported_material_signatures),
+    }
+
+
+def _resolver_input_payload(record: ResolverInputRecord) -> dict[str, Any]:
+    return {
+        "resolverInputId": record.resolver_input_id,
+        "regimeId": record.regime_id,
+        "priority": record.priority,
+        "selector": record.selector,
+        "coverageMetadataId": record.coverage_metadata_id,
+        "isFallback": record.is_fallback,
+    }
+
+
+def _regime_declaration_payload(record: RegimeDeclaration) -> dict[str, Any]:
+    return {
+        "regimeId": record.regime_id,
+        "label": record.label,
+        "backingKind": record.backing_kind,
+        "schemaVersion": record.schema_version,
+        "coverageMetadataId": record.coverage_metadata_id,
+        "resolverInputId": record.resolver_input_id,
+        "provenance": _provenance_payload(record.provenance),
+    }
+
+
+def _anchor_payload(record: SharedAnchorRecord) -> dict[str, Any]:
+    return {
+        "anchorId": record.anchor_id,
+        "anchorKind": record.anchor_kind,
+        "label": record.label,
+        "occurrenceIds": list(record.occurrence_ids),
+        "regimeId": record.regime_id,
+        "provenance": _provenance_payload(record.provenance),
+        "entryId": record.entry_id,
+        "wdlLabel": record.wdl_label,
+        "outcomeClass": record.outcome_class,
+        "anchorPly": record.anchor_ply,
+        "rootGameId": record.root_game_id,
+    }
+
+
+def _occurrence_identity_payload(record: OccurrenceIdentityRecord) -> dict[str, str]:
+    return {
+        "occurrenceKey": record.occurrence_key,
+        "positionKey": record.position_key,
+        "pathKey": record.path_key,
+        "continuityKey": record.continuity_key,
+    }
+
+
+def _transition_identity_payload(record: TransitionIdentityRecord) -> dict[str, str]:
+    return {
+        "transitionKey": record.transition_key,
+        "sourceOccurrenceKey": record.source_occurrence_key,
+        "targetOccurrenceKey": record.target_occurrence_key,
+        "sourcePositionKey": record.source_position_key,
+        "targetPositionKey": record.target_position_key,
+    }
+
+
+def _occurrence_annotation_payload(record: OccurrenceAnnotationRecord) -> dict[str, str]:
+    return {
+        "phaseLabel": record.phase_label,
+        "materialSignature": record.material_signature,
+    }
+
+
+def _occurrence_regime_payload(record: OccurrenceRegimeRecord) -> dict[str, Any]:
+    return {
+        "regimeId": record.regime_id,
+        "candidateRegimeIds": list(record.candidate_regime_ids),
+        "resolverInputId": record.resolver_input_id,
+        "selectionRule": record.selection_rule,
+    }
+
+
+def _provenance_payload(record: RecordProvenance) -> dict[str, str]:
+    return {
+        "sourceKind": record.source_kind,
+        "sourceName": record.source_name,
+        "sourceVersion": record.source_version,
+        "sourceLocation": record.source_location,
+        "detail": record.detail,
     }

@@ -482,7 +482,7 @@ export function ViewerShell({
               <div style={{ marginTop: '0.75rem' }}>
                 <ChessBoard
                   parsedStateKey={focusParsedStateKey}
-                  subtitle={`Game ${focusOccurrence.embedding.rootGameId} · ${focusOccurrence.phase}`}
+                  subtitle={`Game ${focusOccurrence.embedding.rootGameId} · ${focusOccurrence.annotations.phaseLabel}`}
                   title={`Focus position at ply ${focusOccurrence.ply}`}
                 />
                 <p style={{ margin: '0.6rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
@@ -563,7 +563,7 @@ export function ViewerShell({
                   </div>
                   {neighborOccurrence ? (
                     <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
-                      {isOutgoing ? 'Resulting node' : 'Source node'} · ply {neighborOccurrence.ply} · {neighborOccurrence.phase}
+                      {isOutgoing ? 'Resulting node' : 'Source node'} · ply {neighborOccurrence.ply} · {neighborOccurrence.annotations.phaseLabel}
                     </div>
                   ) : null}
                   {neighborOccurrence ? (

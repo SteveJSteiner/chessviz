@@ -97,8 +97,29 @@ function createOccurrence({
     stateKey: `${occurrenceId}:state`,
     path: ['game:test', occurrenceId],
     ply: isFocus ? 3 : 4,
-    phase: 'opening',
-    materialSignature: 'balanced-material',
+    identity: {
+      occurrenceKey: occurrenceId,
+      positionKey: `${occurrenceId}:state`,
+      pathKey: `game:test|${occurrenceId}`,
+      continuityKey: `${occurrenceId}:state`
+    },
+    annotations: {
+      phaseLabel: 'opening',
+      materialSignature: 'balanced-material'
+    },
+    regime: {
+      regimeId: 'opening-table',
+      candidateRegimeIds: ['opening-table'],
+      resolverInputId: 'resolver:opening-table',
+      selectionRule: 'declared-regime-membership'
+    },
+    provenance: {
+      sourceKind: 'test-fixture',
+      sourceName: 'carrierPresentation.test',
+      sourceVersion: '1',
+      sourceLocation: 'in-memory',
+      detail: `occurrence ${occurrenceId}`
+    },
     salience: {
       rawScore: normalizedScore,
       normalizedScore,
@@ -109,6 +130,13 @@ function createOccurrence({
         priorityRank: 1,
         priorityBand: 'frontier',
         retainFromZoom: 'structure'
+      },
+      provenance: {
+        sourceKind: 'test-fixture',
+        sourceName: 'carrierPresentation.test',
+        sourceVersion: '1',
+        sourceLocation: 'in-memory',
+        detail: `salience ${occurrenceId}`
       }
     },
     terminal: null,

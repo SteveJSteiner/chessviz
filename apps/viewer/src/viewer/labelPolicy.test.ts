@@ -198,13 +198,38 @@ function createOccurrence({
   rootGameId?: string;
   terminal?: boolean;
 }): RuntimeNeighborhoodOccurrence {
+  const phaseLabel = ply < 8 ? 'opening' : 'middlegame';
+  const regimeId = phaseLabel === 'opening' ? 'opening-table' : 'middlegame-procedural';
+
   return {
     occurrenceId,
     stateKey: `${occurrenceId}:state`,
     path: ply === 0 ? [`game:${rootGameId}`] : [`game:${rootGameId}`, occurrenceId],
     ply,
-    phase: ply < 8 ? 'opening' : 'middlegame',
-    materialSignature: 'balanced-material',
+    identity: {
+      occurrenceKey: occurrenceId,
+      positionKey: `${occurrenceId}:state`,
+      pathKey:
+        ply === 0 ? `game:${rootGameId}` : `game:${rootGameId}|${occurrenceId}`,
+      continuityKey: `${occurrenceId}:state`
+    },
+    annotations: {
+      phaseLabel,
+      materialSignature: 'balanced-material'
+    },
+    regime: {
+      regimeId,
+      candidateRegimeIds: [regimeId],
+      resolverInputId: `resolver:${regimeId}`,
+      selectionRule: 'declared-regime-membership'
+    },
+    provenance: {
+      sourceKind: 'test-fixture',
+      sourceName: 'labelPolicy.test',
+      sourceVersion: '1',
+      sourceLocation: 'in-memory',
+      detail: `occurrence ${occurrenceId}`
+    },
     salience: {
       rawScore: normalizedScore,
       normalizedScore,
@@ -215,13 +240,27 @@ function createOccurrence({
         priorityRank,
         priorityBand: priorityRank <= 2 ? 'frontier' : 'local',
         retainFromZoom: priorityRank <= 2 ? 'structure' : 'contextual'
+      },
+      provenance: {
+        sourceKind: 'test-fixture',
+        sourceName: 'labelPolicy.test',
+        sourceVersion: '1',
+        sourceLocation: 'in-memory',
+        detail: `salience ${occurrenceId}`
       }
     },
     terminal: terminal
       ? {
           wdlLabel: 'W',
           outcomeClass: 'win',
-          anchorId: `terminal:${occurrenceId}`
+          anchorId: `terminal:${occurrenceId}`,
+          provenance: {
+            sourceKind: 'test-fixture',
+            sourceName: 'labelPolicy.test',
+            sourceVersion: '1',
+            sourceLocation: 'in-memory',
+            detail: `terminal ${occurrenceId}`
+          }
         }
       : null,
     embedding: {

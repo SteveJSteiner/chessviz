@@ -20,7 +20,7 @@ const viewerSceneManifest = JSON.parse(
   )
 ) as ViewerSceneManifest;
 
-test('derives opening, middlegame, and endgame entrypoints from builder phase data', () => {
+test('derives opening, middlegame, and endgame entrypoints from declared regime anchors', () => {
   const entryPoints = createAnchoredNavigationEntryPoints(
     builderBootstrapManifest,
     viewerSceneManifest
@@ -31,7 +31,9 @@ test('derives opening, middlegame, and endgame entrypoints from builder phase da
     ['opening', 'middlegame', 'endgame']
   );
   assert.equal(entryPoints[0]?.focusOccurrenceId, 'occ-27e2be7f2bf706c6');
+  assert.equal(entryPoints[0]?.anchorId, 'entry:opening');
   assert.equal(entryPoints[0]?.anchorPly, 0);
+  assert.equal(entryPoints[0]?.regimeId, 'opening-table');
   assert.equal(
     entryPoints[1]?.focusOccurrenceId,
     viewerSceneManifest.runtime.initialFocusOccurrenceId
@@ -44,6 +46,32 @@ test('derives opening, middlegame, and endgame entrypoints from builder phase da
     ),
     false
   );
+});
+
+test('keeps entrypoint derivation stable when annotation phase labels drift', () => {
+  const manifestWithMislabeledEndgame = {
+    ...builderBootstrapManifest,
+    occurrences: builderBootstrapManifest.occurrences.map((occurrence) =>
+      occurrence.occurrenceId === 'occ-50c5276a269f4c53'
+        ? {
+            ...occurrence,
+            annotations: {
+              ...occurrence.annotations,
+              phaseLabel: 'opening'
+            }
+          }
+        : occurrence
+    )
+  } satisfies BuilderBootstrapManifest;
+
+  const entryPoints = createAnchoredNavigationEntryPoints(
+    manifestWithMislabeledEndgame,
+    viewerSceneManifest
+  );
+
+  assert.equal(entryPoints[2]?.entryId, 'endgame');
+  assert.equal(entryPoints[2]?.focusOccurrenceId, 'occ-50c5276a269f4c53');
+  assert.equal(entryPoints[2]?.regimeId, 'endgame-table');
 });
 
 test('maps the declared initial focus to the middlegame entrypoint', () => {
@@ -61,20 +89,20 @@ test('maps the declared initial focus to the middlegame entrypoint', () => {
   );
 });
 
-test('fails fast when a required phase entrypoint cannot be derived', () => {
-  const manifestWithoutEndgame = {
+test('fails fast when a required declared regime anchor cannot be derived', () => {
+  const manifestWithoutEndgameAnchor = {
     ...builderBootstrapManifest,
-    occurrences: builderBootstrapManifest.occurrences.filter(
-      (occurrence) => occurrence.phase !== 'endgame'
+    anchors: builderBootstrapManifest.anchors.filter(
+      (anchor) => !(anchor.anchorKind === 'navigation-entry' && anchor.entryId === 'endgame')
     )
   } satisfies BuilderBootstrapManifest;
 
   assert.throws(
     () =>
       createAnchoredNavigationEntryPoints(
-        manifestWithoutEndgame,
+        manifestWithoutEndgameAnchor,
         viewerSceneManifest
       ),
-    /required phase coverage is missing/
+    /required declared regime anchor is missing/
   );
 });

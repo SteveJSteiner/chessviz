@@ -1,4 +1,5 @@
 import type {
+  BuilderAnchorRecord,
   BuilderBootstrapManifest,
   NavigationEntryPoint,
   NavigationEntryPointId,
@@ -21,34 +22,30 @@ export function createAnchoredNavigationEntryPoints(
       occurrence
     ])
   );
-  const initialFocusOccurrence = occurrenceById.get(
-    viewerSceneManifest.runtime.initialFocusOccurrenceId
-  );
-  const preferredOpeningOccurrenceId =
-    viewerSceneManifest.runtime.focusCandidateOccurrenceIds
-      .map((occurrenceId) => occurrenceById.get(occurrenceId))
-      .find(
-        (occurrence) => occurrence?.phase === 'opening' && occurrence.ply === 0
-      )?.occurrenceId;
   const baseOrbit = deriveCameraOrbitState(viewerSceneManifest.camera.position);
-  const openingAnchor = selectOpeningAnchor(
+  const openingAnchor = resolveNavigationAnchor(
     builderBootstrapManifest,
-    preferredOpeningOccurrenceId
+    occurrenceById,
+    'opening'
   );
-  const middlegameAnchor = selectMiddlegameAnchor(
+  const middlegameAnchor = resolveNavigationAnchor(
     builderBootstrapManifest,
-    initialFocusOccurrence?.phase === 'middlegame'
-      ? viewerSceneManifest.runtime.initialFocusOccurrenceId
-      : undefined
+    occurrenceById,
+    'middlegame'
   );
-  const endgameAnchor = selectEndgameAnchor(builderBootstrapManifest);
+  const endgameAnchor = resolveNavigationAnchor(
+    builderBootstrapManifest,
+    occurrenceById,
+    'endgame'
+  );
 
   return [
     buildEntryPoint({
       entryId: 'opening',
       label: 'Opening',
-      description: `${formatGameName(openingAnchor.embedding.rootGameId)} at full material. The farther stance keeps early branch identity readable without leaving the same object.`,
-      occurrence: openingAnchor,
+      description: `${formatGameName(openingAnchor.occurrence.embedding.rootGameId)} at full material. The farther stance keeps early branch identity readable without leaving the same object.`,
+      anchor: openingAnchor.anchor,
+      occurrence: openingAnchor.occurrence,
       distance: LIVE_VIEW_DISTANCE.structureThreshold + 0.3,
       neighborhoodRadius: clampNeighborhoodRadius(
         Math.max(viewerSceneManifest.runtime.defaultNeighborhoodRadius, 3),
@@ -59,8 +56,9 @@ export function createAnchoredNavigationEntryPoints(
     buildEntryPoint({
       entryId: 'middlegame',
       label: 'Middlegame',
-      description: `${formatGameName(middlegameAnchor.embedding.rootGameId)} at the branch-rich middle. This keeps the current camera grammar baseline while preserving local exploration.`,
-      occurrence: middlegameAnchor,
+      description: `${formatGameName(middlegameAnchor.occurrence.embedding.rootGameId)} at the branch-rich middle. This keeps the current camera grammar baseline while preserving local exploration.`,
+      anchor: middlegameAnchor.anchor,
+      occurrence: middlegameAnchor.occurrence,
       distance: LIVE_VIEW_DISTANCE.default,
       neighborhoodRadius: clampNeighborhoodRadius(
         viewerSceneManifest.runtime.defaultNeighborhoodRadius,
@@ -71,8 +69,9 @@ export function createAnchoredNavigationEntryPoints(
     buildEntryPoint({
       entryId: 'endgame',
       label: 'Endgame',
-      description: `${formatGameName(endgameAnchor.embedding.rootGameId)} in the simplified region. The closer stance tightens on terminal-facing structure without changing graph identity.`,
-      occurrence: endgameAnchor,
+      description: `${formatGameName(endgameAnchor.occurrence.embedding.rootGameId)} in the simplified region. The closer stance tightens on terminal-facing structure without changing graph identity.`,
+      anchor: endgameAnchor.anchor,
+      occurrence: endgameAnchor.occurrence,
       distance: LIVE_VIEW_DISTANCE.tacticalThreshold - 0.2,
       neighborhoodRadius: clampNeighborhoodRadius(
         viewerSceneManifest.runtime.defaultNeighborhoodRadius + 1,
@@ -113,6 +112,7 @@ function buildEntryPoint({
   entryId,
   label,
   description,
+  anchor,
   occurrence,
   distance,
   neighborhoodRadius,
@@ -121,174 +121,84 @@ function buildEntryPoint({
   entryId: NavigationEntryPointId;
   label: string;
   description: string;
+  anchor: BuilderAnchorRecord;
   occurrence: BuilderBootstrapManifest['occurrences'][number];
   distance: number;
   neighborhoodRadius: number;
   orbit: NavigationEntryPoint['orbit'];
 }): NavigationEntryPoint {
   return {
+    anchorId: anchor.anchorId,
     entryId,
     label,
     description,
+    regimeId: requireAnchorRegimeId(anchor, entryId),
     focusOccurrenceId: occurrence.occurrenceId,
     focus: occurrence.embedding.coordinate,
     distance: clampLiveViewDistance(distance),
     neighborhoodRadius,
     orbit,
     rootGameId: occurrence.embedding.rootGameId,
-    anchorPly: occurrence.ply
+    anchorPly: anchor.anchorPly ?? occurrence.ply
   };
 }
 
-function selectOpeningAnchor(
+function resolveNavigationAnchor(
   builderBootstrapManifest: BuilderBootstrapManifest,
-  preferredOccurrenceId: string | undefined
+  occurrenceById: Map<string, BuilderBootstrapManifest['occurrences'][number]>,
+  entryId: NavigationEntryPointId
 ) {
-  const preferredOccurrence = preferredOccurrenceId
-    ? builderBootstrapManifest.occurrences.find(
-        (occurrence) => occurrence.occurrenceId === preferredOccurrenceId
-      )
-    : undefined;
-
-  if (preferredOccurrence?.phase === 'opening' && preferredOccurrence.ply === 0) {
-    return preferredOccurrence;
-  }
-
-  const openingOccurrences = builderBootstrapManifest.occurrences.filter(
-    (occurrence) => occurrence.phase === 'opening' && occurrence.ply === 0
+  const anchor = builderBootstrapManifest.anchors.find(
+    (candidate) =>
+      candidate.anchorKind === 'navigation-entry' && candidate.entryId === entryId
   );
+  const occurrenceId = anchor?.occurrenceIds[0];
+  const occurrence = occurrenceId ? occurrenceById.get(occurrenceId) : undefined;
 
-  return requireAnchorOccurrence(
+  return requireNavigationAnchor(
     builderBootstrapManifest,
-    'opening',
-    [...openingOccurrences].sort(compareOpeningAnchors)[0]
+    entryId,
+    anchor,
+    occurrence
   );
 }
 
-function selectMiddlegameAnchor(
-  builderBootstrapManifest: BuilderBootstrapManifest,
-  preferredOccurrenceId: string | undefined
-) {
-  const preferredOccurrence = preferredOccurrenceId
-    ? builderBootstrapManifest.occurrences.find(
-        (occurrence) => occurrence.occurrenceId === preferredOccurrenceId
-      )
-    : undefined;
-
-  if (preferredOccurrence?.phase === 'middlegame') {
-    return preferredOccurrence;
-  }
-
-  const middlegameOccurrences = builderBootstrapManifest.occurrences.filter(
-    (occurrence) => occurrence.phase === 'middlegame'
-  );
-
-  return requireAnchorOccurrence(
-    builderBootstrapManifest,
-    'middlegame',
-    [...middlegameOccurrences].sort(compareMiddlegameAnchors)[0]
-  );
-}
-
-function selectEndgameAnchor(
-  builderBootstrapManifest: BuilderBootstrapManifest
-) {
-  const endgameOccurrences = builderBootstrapManifest.occurrences.filter(
-    (occurrence) => occurrence.phase === 'endgame'
-  );
-
-  return requireAnchorOccurrence(
-    builderBootstrapManifest,
-    'endgame',
-    [...endgameOccurrences].sort(compareEndgameAnchors)[0]
-  );
-}
-
-function requireAnchorOccurrence(
+function requireNavigationAnchor(
   builderBootstrapManifest: BuilderBootstrapManifest,
   entryId: NavigationEntryPointId,
+  anchor: BuilderAnchorRecord | undefined,
   occurrence: BuilderBootstrapManifest['occurrences'][number] | undefined
 ) {
-  if (!occurrence) {
+  if (
+    !anchor ||
+    !occurrence ||
+    anchor.anchorKind !== 'navigation-entry' ||
+    anchor.entryId !== entryId ||
+    anchor.occurrenceIds.length !== 1 ||
+    anchor.anchorPly === null ||
+    anchor.rootGameId === null ||
+    anchor.regimeId === null
+  ) {
     throw new Error(
-      `cannot derive ${entryId} entrypoint from ${builderBootstrapManifest.graphObjectId}; required phase coverage is missing`
+      `cannot derive ${entryId} entrypoint from ${builderBootstrapManifest.graphObjectId}; required declared regime anchor is missing`
     );
   }
 
-  return occurrence;
+  return {
+    anchor,
+    occurrence
+  };
 }
 
-function compareOpeningAnchors(
-  left: BuilderBootstrapManifest['occurrences'][number],
-  right: BuilderBootstrapManifest['occurrences'][number]
+function requireAnchorRegimeId(
+  anchor: BuilderAnchorRecord,
+  entryId: NavigationEntryPointId
 ) {
-  if (left.salience.normalizedScore !== right.salience.normalizedScore) {
-    return right.salience.normalizedScore - left.salience.normalizedScore;
+  if (anchor.regimeId === null) {
+    throw new Error(`declared ${entryId} anchor is missing a regime id`);
   }
 
-  if (left.ply !== right.ply) {
-    return left.ply - right.ply;
-  }
-
-  const rootComparison = left.embedding.rootGameId.localeCompare(
-    right.embedding.rootGameId
-  );
-  if (rootComparison !== 0) {
-    return rootComparison;
-  }
-
-  return left.occurrenceId.localeCompare(right.occurrenceId);
-}
-
-function compareMiddlegameAnchors(
-  left: BuilderBootstrapManifest['occurrences'][number],
-  right: BuilderBootstrapManifest['occurrences'][number]
-) {
-  const leftNonTerminal = Number(left.terminal === null);
-  const rightNonTerminal = Number(right.terminal === null);
-
-  if (leftNonTerminal !== rightNonTerminal) {
-    return rightNonTerminal - leftNonTerminal;
-  }
-
-  if (left.salience.normalizedScore !== right.salience.normalizedScore) {
-    return right.salience.normalizedScore - left.salience.normalizedScore;
-  }
-
-  if (left.ply !== right.ply) {
-    return left.ply - right.ply;
-  }
-
-  const rootComparison = left.embedding.rootGameId.localeCompare(
-    right.embedding.rootGameId
-  );
-  if (rootComparison !== 0) {
-    return rootComparison;
-  }
-
-  return left.occurrenceId.localeCompare(right.occurrenceId);
-}
-
-function compareEndgameAnchors(
-  left: BuilderBootstrapManifest['occurrences'][number],
-  right: BuilderBootstrapManifest['occurrences'][number]
-) {
-  if (left.ply !== right.ply) {
-    return left.ply - right.ply;
-  }
-
-  if (left.salience.normalizedScore !== right.salience.normalizedScore) {
-    return right.salience.normalizedScore - left.salience.normalizedScore;
-  }
-
-  const rootComparison = left.embedding.rootGameId.localeCompare(
-    right.embedding.rootGameId
-  );
-  if (rootComparison !== 0) {
-    return rootComparison;
-  }
-
-  return left.occurrenceId.localeCompare(right.occurrenceId);
+  return anchor.regimeId;
 }
 
 function shiftOrbit(

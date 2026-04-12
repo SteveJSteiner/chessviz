@@ -1,9 +1,9 @@
 import type {
+  BuilderAnchorRecord,
   BuilderBootstrapManifest,
   BuilderDepartureRuleRecord,
   BuilderOccurrenceRecord,
   BuilderRepeatedStateRelationRecord,
-  BuilderTerminalAnchorRecord,
   BuilderTransitionRecord,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationCacheStats,
@@ -94,7 +94,7 @@ export function createRuntimeExplorationKernel(
     ])
   );
   const repeatedStateRelations = builderBootstrapManifest.repeatedStateRelations;
-  const terminalAnchors = builderBootstrapManifest.terminalAnchors;
+  const anchors = builderBootstrapManifest.anchors;
   const cache = new Map<string, NeighborhoodCacheEntry>();
   const cacheStats = {
     hits: 0,
@@ -199,7 +199,7 @@ export function createRuntimeExplorationKernel(
           selectedOccurrenceIdSet
         ),
         terminalAnchors: selectTerminalAnchors(
-          terminalAnchors,
+          anchors,
           selectedOccurrenceIdSet
         ),
         priorityFrontierOccurrenceIds:
@@ -410,10 +410,11 @@ function selectRepeatedStateRelations(
 }
 
 function selectTerminalAnchors(
-  terminalAnchors: BuilderTerminalAnchorRecord[],
+  anchors: BuilderAnchorRecord[],
   selectedOccurrenceIdSet: Set<string>
 ) {
-  return terminalAnchors
+  return anchors
+    .filter((anchor) => anchor.anchorKind === 'terminal-outcome')
     .map((anchor) => ({
       ...anchor,
       occurrenceIds: anchor.occurrenceIds.filter((occurrenceId) =>

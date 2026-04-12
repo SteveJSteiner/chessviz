@@ -124,13 +124,37 @@ function createOccurrence({
   isFocus?: boolean;
   terminal?: boolean;
 }): RuntimeNeighborhoodOccurrence {
+  const phaseLabel = ply < 8 ? 'opening' : 'middlegame';
+  const regimeId = phaseLabel === 'opening' ? 'opening-table' : 'middlegame-procedural';
+
   return {
     occurrenceId,
     stateKey: `${occurrenceId}:state`,
     path: ['game:fixture', occurrenceId],
     ply,
-    phase: ply < 8 ? 'opening' : 'middlegame',
-    materialSignature: 'balanced',
+    identity: {
+      occurrenceKey: occurrenceId,
+      positionKey: `${occurrenceId}:state`,
+      pathKey: `game:fixture|${occurrenceId}`,
+      continuityKey: `${occurrenceId}:state`
+    },
+    annotations: {
+      phaseLabel,
+      materialSignature: 'balanced'
+    },
+    regime: {
+      regimeId,
+      candidateRegimeIds: [regimeId],
+      resolverInputId: `resolver:${regimeId}`,
+      selectionRule: 'declared-regime-membership'
+    },
+    provenance: {
+      sourceKind: 'test-fixture',
+      sourceName: 'cameraGrammar.test',
+      sourceVersion: '1',
+      sourceLocation: 'in-memory',
+      detail: `occurrence ${occurrenceId}`
+    },
     salience: {
       rawScore: normalizedScore,
       normalizedScore,
@@ -141,13 +165,27 @@ function createOccurrence({
         priorityRank: isFocus ? 0 : 2,
         priorityBand: isFocus ? 'focus' : 'local',
         retainFromZoom: isFocus ? 'structure' : 'tactical'
+      },
+      provenance: {
+        sourceKind: 'test-fixture',
+        sourceName: 'cameraGrammar.test',
+        sourceVersion: '1',
+        sourceLocation: 'in-memory',
+        detail: `salience ${occurrenceId}`
       }
     },
     terminal: terminal
       ? {
           wdlLabel: 'W',
           outcomeClass: 'win',
-          anchorId: `terminal:${occurrenceId}`
+          anchorId: `terminal:${occurrenceId}`,
+          provenance: {
+            sourceKind: 'test-fixture',
+            sourceName: 'cameraGrammar.test',
+            sourceVersion: '1',
+            sourceLocation: 'in-memory',
+            detail: `terminal ${occurrenceId}`
+          }
         }
       : null,
     embedding: {

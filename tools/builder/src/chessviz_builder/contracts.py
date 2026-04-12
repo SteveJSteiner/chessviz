@@ -4,11 +4,112 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Mapping, Protocol, Sequence
+from typing import Literal, Mapping, Protocol, Sequence
 
 import chess
 
 Vector3 = tuple[float, float, float]
+REPRESENTATION_SCHEMA_VERSION = "2026-04-12.n11c.v1"
+RegimeId = Literal[
+    "opening-table",
+    "middlegame-procedural",
+    "endgame-table",
+]
+
+
+@dataclass(frozen=True)
+class IdentitySemanticsRecord:
+    occurrence_key_field: str
+    position_key_field: str
+    path_key_field: str
+    continuity_key_field: str
+
+
+@dataclass(frozen=True)
+class RecordProvenance:
+    source_kind: str
+    source_name: str
+    source_version: str
+    source_location: str
+    detail: str
+
+
+@dataclass(frozen=True)
+class OccurrenceIdentityRecord:
+    occurrence_key: str
+    position_key: str
+    path_key: str
+    continuity_key: str
+
+
+@dataclass(frozen=True)
+class TransitionIdentityRecord:
+    transition_key: str
+    source_occurrence_key: str
+    target_occurrence_key: str
+    source_position_key: str
+    target_position_key: str
+
+
+@dataclass(frozen=True)
+class OccurrenceAnnotationRecord:
+    phase_label: str
+    material_signature: str
+
+
+@dataclass(frozen=True)
+class CoverageMetadataRecord:
+    coverage_metadata_id: str
+    regime_id: RegimeId
+    coverage_kind: str
+    summary: str
+    occurrence_count: int
+    max_ply: int | None = None
+    supported_material_signatures: tuple[str, ...] = tuple()
+
+
+@dataclass(frozen=True)
+class ResolverInputRecord:
+    resolver_input_id: str
+    regime_id: RegimeId
+    priority: int
+    selector: str
+    coverage_metadata_id: str
+    is_fallback: bool = False
+
+
+@dataclass(frozen=True)
+class OccurrenceRegimeRecord:
+    regime_id: RegimeId
+    candidate_regime_ids: tuple[RegimeId, ...]
+    resolver_input_id: str
+    selection_rule: str
+
+
+@dataclass(frozen=True)
+class RegimeDeclaration:
+    regime_id: RegimeId
+    label: str
+    backing_kind: str
+    schema_version: str
+    coverage_metadata_id: str
+    resolver_input_id: str
+    provenance: RecordProvenance
+
+
+@dataclass(frozen=True)
+class SharedAnchorRecord:
+    anchor_id: str
+    anchor_kind: str
+    label: str
+    occurrence_ids: tuple[str, ...]
+    regime_id: RegimeId | None
+    provenance: RecordProvenance
+    entry_id: str | None = None
+    wdl_label: str | None = None
+    outcome_class: str | None = None
+    anchor_ply: int | None = None
+    root_game_id: str | None = None
 
 
 @dataclass(frozen=True)

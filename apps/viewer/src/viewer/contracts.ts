@@ -15,6 +15,10 @@ export interface SceneBootstrap {
 }
 
 export type NavigationEntryPointId = 'opening' | 'middlegame' | 'endgame';
+export type BuilderRegimeId =
+  | 'opening-table'
+  | 'middlegame-procedural'
+  | 'endgame-table';
 
 export interface CameraOrbitPreset {
   azimuth: number;
@@ -22,9 +26,11 @@ export interface CameraOrbitPreset {
 }
 
 export interface NavigationEntryPoint {
+  anchorId: string;
   entryId: NavigationEntryPointId;
   label: string;
   description: string;
+  regimeId: BuilderRegimeId;
   focusOccurrenceId: string;
   focus: Vector3;
   distance: number;
@@ -32,6 +38,91 @@ export interface NavigationEntryPoint {
   orbit: CameraOrbitPreset;
   rootGameId: string;
   anchorPly: number;
+}
+
+export interface BuilderRecordProvenance {
+  sourceKind: string;
+  sourceName: string;
+  sourceVersion: string;
+  sourceLocation: string;
+  detail: string;
+}
+
+export interface BuilderIdentitySemantics {
+  occurrenceKeyField: string;
+  positionKeyField: string;
+  pathKeyField: string;
+  continuityKeyField: string;
+}
+
+export interface BuilderOccurrenceIdentity {
+  occurrenceKey: string;
+  positionKey: string;
+  pathKey: string;
+  continuityKey: string;
+}
+
+export interface BuilderOccurrenceAnnotations {
+  phaseLabel: string;
+  materialSignature: string;
+}
+
+export interface BuilderCoverageMetadataRecord {
+  coverageMetadataId: string;
+  regimeId: BuilderRegimeId;
+  coverageKind: string;
+  summary: string;
+  occurrenceCount: number;
+  maxPly: number | null;
+  supportedMaterialSignatures: string[];
+}
+
+export interface BuilderResolverInputRecord {
+  resolverInputId: string;
+  regimeId: BuilderRegimeId;
+  priority: number;
+  selector: string;
+  coverageMetadataId: string;
+  isFallback: boolean;
+}
+
+export interface BuilderOccurrenceRegime {
+  regimeId: BuilderRegimeId;
+  candidateRegimeIds: BuilderRegimeId[];
+  resolverInputId: string;
+  selectionRule: string;
+}
+
+export interface BuilderRegimeDeclaration {
+  regimeId: BuilderRegimeId;
+  label: string;
+  backingKind: 'table' | 'procedural';
+  schemaVersion: string;
+  coverageMetadataId: string;
+  resolverInputId: string;
+  provenance: BuilderRecordProvenance;
+}
+
+export interface BuilderAnchorRecord {
+  anchorId: string;
+  anchorKind: 'navigation-entry' | 'terminal-outcome';
+  label: string;
+  occurrenceIds: string[];
+  regimeId: BuilderRegimeId | null;
+  provenance: BuilderRecordProvenance;
+  entryId: NavigationEntryPointId | null;
+  wdlLabel: string | null;
+  outcomeClass: string | null;
+  anchorPly: number | null;
+  rootGameId: string | null;
+}
+
+export interface BuilderTransitionIdentity {
+  transitionKey: string;
+  sourceOccurrenceKey: string;
+  targetOccurrenceKey: string;
+  sourcePositionKey: string;
+  targetPositionKey: string;
 }
 
 export interface BuilderOccurrencePriorityHint {
@@ -47,12 +138,14 @@ export interface BuilderOccurrenceSalience {
   terminalPullSignal: number;
   centralitySignal: number;
   priorityHint: BuilderOccurrencePriorityHint;
+  provenance: BuilderRecordProvenance;
 }
 
 export interface BuilderOccurrenceTerminal {
   wdlLabel: string;
   outcomeClass: string;
   anchorId: string;
+  provenance: BuilderRecordProvenance;
 }
 
 export interface BuilderOccurrenceEmbedding {
@@ -69,8 +162,10 @@ export interface BuilderOccurrenceRecord {
   stateKey: string;
   path: string[];
   ply: number;
-  phase: string;
-  materialSignature: string;
+  identity: BuilderOccurrenceIdentity;
+  annotations: BuilderOccurrenceAnnotations;
+  regime: BuilderOccurrenceRegime;
+  provenance: BuilderRecordProvenance;
   salience: BuilderOccurrenceSalience;
   terminal: BuilderOccurrenceTerminal | null;
   embedding: BuilderOccurrenceEmbedding;
@@ -101,6 +196,8 @@ export interface BuilderMoveFamilyRecord {
 }
 
 export interface BuilderTransitionRecord extends BuilderEdgeRecord {
+  identity: BuilderTransitionIdentity;
+  provenance: BuilderRecordProvenance;
   moveUci: string;
   ply: number;
   moveFacts: BuilderMoveFactRecord;
@@ -124,17 +221,16 @@ export interface BuilderRepeatedStateRelationRecord {
   occurrenceIds: string[];
 }
 
-export interface BuilderTerminalAnchorRecord {
-  anchorId: string;
-  wdlLabel: string;
-  outcomeClass: string;
-  occurrenceIds: string[];
-}
-
 export interface BuilderBootstrapManifest {
+  schemaVersion: string;
   graphObjectId: string;
   sourceName: string;
   version: string;
+  identitySemantics: BuilderIdentitySemantics;
+  coverageMetadata: BuilderCoverageMetadataRecord[];
+  resolverInputs: BuilderResolverInputRecord[];
+  regimeDeclarations: BuilderRegimeDeclaration[];
+  anchors: BuilderAnchorRecord[];
   rootOccurrenceIds: string[];
   leafOccurrenceIds: string[];
   priorityFrontierOccurrenceIds: string[];
@@ -143,7 +239,6 @@ export interface BuilderBootstrapManifest {
   transitions: BuilderTransitionRecord[];
   departureRules: BuilderDepartureRuleRecord[];
   repeatedStateRelations: BuilderRepeatedStateRelationRecord[];
-  terminalAnchors: BuilderTerminalAnchorRecord[];
   salienceConfig: {
     frequencyWeight: number;
     terminalPullWeight: number;
@@ -164,8 +259,16 @@ export interface BuilderBootstrapManifest {
   };
 }
 
+export interface RuntimeBootstrapContract {
+  representationSchemaVersion: string;
+  seedSurface: string;
+  focusCandidatesSource: string;
+  entrypointDerivation: string;
+}
+
 export interface RuntimeExplorationConfig {
   graphObjectId: string;
+  bootstrap: RuntimeBootstrapContract;
   initialFocusOccurrenceId: string;
   focusCandidateOccurrenceIds: string[];
   defaultNeighborhoodRadius: number;
@@ -211,7 +314,7 @@ export interface RuntimeNeighborhoodSnapshot {
   occurrences: RuntimeNeighborhoodOccurrence[];
   edges: RuntimeNeighborhoodEdge[];
   repeatedStateRelations: BuilderRepeatedStateRelationRecord[];
-  terminalAnchors: BuilderTerminalAnchorRecord[];
+  terminalAnchors: BuilderAnchorRecord[];
   priorityFrontierOccurrenceIds: string[];
 }
 

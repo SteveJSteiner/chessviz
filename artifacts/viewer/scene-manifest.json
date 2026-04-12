@@ -1,7 +1,7 @@
 {
   "sceneId": "runtime-exploration-fixture",
-  "title": "Anchored Exploration Fixture",
-  "summary": "N12 anchored opening, middlegame, and endgame entrypoints over one graph object using the existing N11 camera grammar.",
+  "title": "Runtime Exploration Fixture",
+  "summary": "N11 runtime camera grammar over builder-owned transition facts, departure guides, and coarse embedding surfaces.",
   "accentColor": "#0f766e",
   "camera": {
     "position": [
@@ -18,6 +18,12 @@
   },
   "runtime": {
     "graphObjectId": "initial-represented-subset:2026-04-11-fixture-004",
+    "bootstrap": {
+      "representationSchemaVersion": "2026-04-12.n11c.v1",
+      "seedSurface": "builder-bootstrap-manifest",
+      "focusCandidatesSource": "builder-bootstrap-manifest:focusCandidateOccurrenceIds",
+      "entrypointDerivation": "builder-bootstrap-manifest:anchors[navigation-entry]"
+    },
     "initialFocusOccurrenceId": "occ-25c32c2bc0227f68",
     "focusCandidateOccurrenceIds": [
       "occ-25c32c2bc0227f68",
