@@ -34,6 +34,8 @@ type ViewerShellProps = {
   focusLine: RuntimeOccurrenceLine | undefined;
   focusLinesByOccurrenceId: Map<string, RuntimeOccurrenceLine | undefined>;
   focusOptions: BuilderOccurrenceRecord[];
+  graphViewScope: 'local-neighborhood' | 'whole-object';
+  meetsN12Scale: boolean;
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
   transitionSurface: RuntimeTransitionSurfaceSnapshot;
@@ -41,6 +43,7 @@ type ViewerShellProps = {
   navigationEntryPoint: NavigationEntryPoint;
   onBoardReferenceOpenChange: (open: boolean) => void;
   onEntryPointChange: (entryId: NavigationEntryPointId) => void;
+  onGraphViewScopeChange: (scope: 'local-neighborhood' | 'whole-object') => void;
   runtimeArtifactBoundary: RuntimeArtifactBoundary;
   neighborhoodRadius: number;
   orbitResetKey: number;
@@ -50,6 +53,8 @@ type ViewerShellProps = {
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onNeighborhoodRadiusChange: (radius: number) => void;
   renderTuning: ViewerRenderTuning;
+  totalGraphEdgeCount: number;
+  totalGraphOccurrenceCount: number;
 };
 
 const shellStyle = {
@@ -100,6 +105,12 @@ const entryPointGridStyle = {
   gap: '0.55rem'
 } as const;
 
+const graphScopeGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+  gap: '0.55rem'
+} as const;
+
 const controlLabelStyle = {
   display: 'grid',
   gap: '0.35rem',
@@ -143,6 +154,12 @@ const narrativeCardStyle = {
   padding: '0.95rem 1rem',
   background: 'rgba(247, 241, 230, 0.9)',
   border: '1px solid rgba(53, 42, 30, 0.09)'
+} as const;
+
+const warningCardStyle = {
+  ...narrativeCardStyle,
+  background: 'rgba(185, 28, 28, 0.08)',
+  border: '1px solid rgba(185, 28, 28, 0.18)'
 } as const;
 
 const moveCardStyle = {
@@ -195,6 +212,8 @@ export function ViewerShell({
   focusLine,
   focusLinesByOccurrenceId,
   focusOptions,
+  graphViewScope,
+  meetsN12Scale,
   runtimeConfig,
   runtimeSnapshot,
   transitionSurface,
@@ -202,6 +221,7 @@ export function ViewerShell({
   navigationEntryPoint,
   onBoardReferenceOpenChange,
   onEntryPointChange,
+  onGraphViewScopeChange,
   runtimeArtifactBoundary,
   neighborhoodRadius,
   orbitResetKey,
@@ -210,8 +230,11 @@ export function ViewerShell({
   onCameraDistanceChange,
   onFocusOccurrenceChange,
   onNeighborhoodRadiusChange,
-  renderTuning
+  renderTuning,
+  totalGraphEdgeCount,
+  totalGraphOccurrenceCount
 }: ViewerShellProps) {
+  const isWholeObjectView = graphViewScope === 'whole-object';
   const focusOccurrence = runtimeSnapshot.occurrences.find(
     (occurrence) => occurrence.isFocus
   );
@@ -255,6 +278,18 @@ export function ViewerShell({
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
+
+        {!meetsN12Scale ? (
+          <article style={warningCardStyle}>
+            <div style={{ fontWeight: 700 }}>Scale warning</div>
+            <p style={{ margin: '0.45rem 0 0' }}>
+              The current runtime artifact is not large enough to adjudicate the requested N12 behavior honestly.
+            </p>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#7f1d1d' }}>
+              Total graph size {totalGraphOccurrenceCount} nodes and {totalGraphEdgeCount} edges. The requested live pass needs 1000+ visible nodes in one view.
+            </p>
+          </article>
+        ) : null}
 
         <div style={controlStackStyle}>
           <div style={entryPointGridStyle}>
@@ -300,18 +335,54 @@ export function ViewerShell({
           </label>
 
           <label style={controlLabelStyle}>
-            Neighborhood radius: {neighborhoodRadius}
-            <input
-              max={runtimeConfig.maxNeighborhoodRadius}
-              min={0}
-              onChange={(event) =>
-                onNeighborhoodRadiusChange(Number(event.target.value))
-              }
-              style={controlInputStyle}
-              type="range"
-              value={neighborhoodRadius}
-            />
+            Graph scope
+            <div style={graphScopeGridStyle}>
+              <button
+                onClick={() => onGraphViewScopeChange('local-neighborhood')}
+                style={resolveEntryPointButtonStyle(
+                  graphViewScope === 'local-neighborhood'
+                )}
+                type="button"
+              >
+                Local neighborhood
+              </button>
+              <button
+                onClick={() => onGraphViewScopeChange('whole-object')}
+                style={resolveEntryPointButtonStyle(graphViewScope === 'whole-object')}
+                type="button"
+              >
+                Whole object
+              </button>
+            </div>
+            <span style={{ fontSize: '0.82rem', color: '#6c6254' }}>
+              {isWholeObjectView
+                ? `Rendering ${runtimeSnapshot.occurrences.length} of ${totalGraphOccurrenceCount} nodes in one view; neighborhood radius is bypassed.`
+                : 'Neighborhood mode limits the view around the current focus. Whole-object mode is required for scale checks.'}
+            </span>
           </label>
+
+          {isWholeObjectView ? (
+            <article style={narrativeCardStyle}>
+              <div style={{ fontWeight: 700 }}>Whole-object scope</div>
+              <p style={{ margin: '0.45rem 0 0' }}>
+                This view keeps the current focus anchor but renders the entire graph object instead of a local radius window.
+              </p>
+            </article>
+          ) : (
+            <label style={controlLabelStyle}>
+              Neighborhood radius: {neighborhoodRadius}
+              <input
+                max={runtimeConfig.maxNeighborhoodRadius}
+                min={0}
+                onChange={(event) =>
+                  onNeighborhoodRadiusChange(Number(event.target.value))
+                }
+                style={controlInputStyle}
+                type="range"
+                value={neighborhoodRadius}
+              />
+            </label>
+          )}
 
           <label style={controlLabelStyle}>
             View distance: {cameraDistance.toFixed(1)}
@@ -422,11 +493,23 @@ export function ViewerShell({
         <div style={statGridStyle}>
           <article style={statCardStyle}>
             <strong>{runtimeSnapshot.occurrences.length}</strong>
-            <div>local occurrences</div>
+            <div>visible occurrences</div>
           </article>
           <article style={statCardStyle}>
             <strong>{runtimeSnapshot.edges.length}</strong>
-            <div>local edges</div>
+            <div>visible edges</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{totalGraphOccurrenceCount}</strong>
+            <div>graph occurrences</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{totalGraphEdgeCount}</strong>
+            <div>graph edges</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{isWholeObjectView ? 'whole-object' : 'local'}</strong>
+            <div>view scope</div>
           </article>
           <article style={statCardStyle}>
             <strong>{runtimeSnapshot.cacheState}</strong>
@@ -668,7 +751,13 @@ export function ViewerShell({
         </p>
         <p style={{ marginTop: 0 }}>{runtimeArtifactBoundary.endgameTableManifest}</p>
 
-        <span style={metaLabelStyle}>Review Artifacts</span>
+        <span style={metaLabelStyle}>Review Workflow</span>
+        <p style={{ marginBottom: '0.35rem' }}>
+          N12 is adjudicated in the live viewer, not from the static SVGs alone. Switch entrypoints here, use whole-object scope for scale checks, drag to orbit, scroll or use the distance slider to zoom, and click nodes or move cards to test whether the experience still reads as one object.
+        </p>
+        <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
+          Generate the files below only as supporting evidence after the interactive pass.
+        </p>
         <pre style={codeBlockStyle}>
       {'pnpm --filter viewer review:artifacts\n\nartifacts/viewer/review/anchored-entrypoints.svg\nartifacts/viewer/review/structure-zoom.svg\nartifacts/viewer/review/refinement-steps.svg\nartifacts/viewer/review/camera-grammar.svg\nartifacts/viewer/review/review-notes-template.md'}
         </pre>

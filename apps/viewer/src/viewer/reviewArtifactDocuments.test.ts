@@ -55,6 +55,11 @@ test('builds deterministic N11 review artifacts from the published runtime artif
     anchoredEntrypoints!,
     /Opening, middlegame, and endgame over one object/
   );
+  const anchoredHeightMatch = anchoredEntrypoints!.match(/<svg[^>]+height="(\d+)"/i);
+  assert.ok(anchoredHeightMatch);
+  assert.ok(Number(anchoredHeightMatch?.[1] ?? '0') >= 1100);
+  assert.match(anchoredEntrypoints!, /Radius 3 · distance 5\.0/);
+  assert.match(anchoredEntrypoints!, /Expected read/);
   assert.match(anchoredEntrypoints!, /Endgame Simplification Lab/);
   assert.match(
     structureZoom!,
@@ -74,6 +79,13 @@ test('builds deterministic N11 review artifacts from the published runtime artif
   assert.equal(/Focus board/.test(refinementSteps!), false);
   assert.match(cameraGrammar!, /N11 camera grammar review/);
   assert.match(cameraGrammar!, /Context-Preserving Structure View/);
+  assert.match(reviewNotes!, /live N12 interactive review/);
+  assert.match(reviewNotes!, /static SVG artifacts alone/i);
+  assert.match(reviewNotes!, /graphOccurrenceCount: 118/);
+  assert.match(reviewNotes!, /insufficient for the requested 1000\+ node live-view threshold/i);
+  assert.match(reviewNotes!, /## Required live review/);
+  assert.match(reviewNotes!, /whole-object scope/);
+  assert.match(reviewNotes!, /## Supporting artifacts/);
   assert.match(reviewNotes!, /Do not mark N12 settled without recorded human review/);
   assert.match(reviewNotes!, /Anchored entrypoint verdict/);
 

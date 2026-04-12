@@ -169,6 +169,15 @@
     {
       "file": "review-notes-template.md",
       "regime": "human-verdict-template"
+    },
+    {
+      "file": "n12-live-review-notes.md",
+      "regime": "live-human-review",
+      "scope": "anchored-entrypoints-whole-object",
+      "graphOccurrenceCount": 118,
+      "graphEdgeCount": 111,
+      "wholeObjectViewReviewed": true,
+      "followOnIssue": "initial move labels are not positioned near their paths in whole-object scope"
     }
   ]
 }

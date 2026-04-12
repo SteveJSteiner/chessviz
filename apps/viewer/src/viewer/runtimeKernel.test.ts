@@ -130,6 +130,29 @@ test('tracks cache hits and evicts old neighborhoods under capacity pressure', (
   assert.equal(revisitedSnapshot.cacheStats.entryCount, 2);
 });
 
+test('can inspect the whole graph instead of only a local neighborhood window', () => {
+  const kernel = createRuntimeExplorationKernel(
+    builderBootstrapManifest,
+    viewerSceneManifest
+  );
+  const snapshot = kernel.inspectWholeGraph(
+    viewerSceneManifest.runtime.initialFocusOccurrenceId,
+    {
+      refinementBudget: 6
+    }
+  );
+
+  assert.equal(snapshot.graphObjectId, builderBootstrapManifest.graphObjectId);
+  assert.equal(snapshot.objectIdentityStable, true);
+  assert.equal(snapshot.refinementBudget, 6);
+  assert.equal(snapshot.occurrences.length, builderBootstrapManifest.occurrences.length);
+  assert.equal(snapshot.edges.length, builderBootstrapManifest.edges.length);
+  assert.equal(
+    snapshot.occurrences.filter((occurrence) => !Number.isFinite(occurrence.distance)).length > 0,
+    true
+  );
+});
+
 test('surfaces local terminal anchors and repeated-state relations from builder data', () => {
   const kernel = createRuntimeExplorationKernel(
     builderBootstrapManifest,

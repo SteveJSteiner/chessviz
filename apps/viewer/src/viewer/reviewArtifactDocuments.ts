@@ -282,6 +282,10 @@ export function buildViewerReviewArtifacts(
       content: renderReviewNotesTemplate(
         builderBootstrapManifest.graphObjectId,
         viewerSceneManifest.sceneId,
+        {
+          edgeCount: builderBootstrapManifest.edges.length,
+          occurrenceCount: builderBootstrapManifest.occurrences.length
+        },
         navigationEntryPoints,
         focusContext
       )
@@ -362,22 +366,35 @@ function renderAnchoredEntryPointsDocument(
   entryPointReviewScenes: EntryPointReviewScene[]
 ) {
   const width = 1700;
-  const height = 980;
   const viewports = [
     { x: 40, y: 176, width: 516, height: 620 },
     { x: 592, y: 176, width: 516, height: 620 },
     { x: 1144, y: 176, width: 516, height: 620 }
   ] as const;
   const graphObjectId = entryPointReviewScenes[0]?.reviewScene.runtimeSnapshot.graphObjectId;
+  const captionCards = entryPointReviewScenes.map((entryPointReviewScene, index) =>
+    buildAnchoredEntryPointCaptionCard(
+      viewports[index]!,
+      entryPointReviewScene.reviewScene
+    )
+  );
+  const captionBottom = Math.max(...captionCards.map((captionCard) => captionCard.bottom));
+  const expectedReadText =
+    'Each panel is the same graph object under a different anchor and camera stance. Opening should read as full-material branching, middlegame as branch-rich local complexity, and endgame as simplified routing without turning into a different diagram family.';
+  const expectedReadLines = wrapText(expectedReadText, 138);
+  const expectedReadY = captionBottom + 28;
+  const expectedReadHeight = 48 + (expectedReadLines.length * 20);
+  const legendY = expectedReadY + expectedReadHeight + 34;
+  const height = legendY + 40;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
     renderSvgStyleBlock(),
     '<rect width="100%" height="100%" fill="#ece6d8" />',
-    '<rect x="24" y="24" width="1652" height="932" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
+    `<rect x="24" y="24" width="1652" height="${height - 48}" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />`,
     '<text x="40" y="62" class="eyebrow">N12 anchored entrypoints review</text>',
     '<text x="40" y="96" class="title">Opening, middlegame, and endgame over one object</text>',
-    `<text x="40" y="124" class="subtitle">${escapeXml(graphObjectId ?? 'unknown graph object')} · switching presets should move the camera and anchor without swapping scene families</text>`,
+    `<text x="40" y="124" class="subtitle">${escapeXml(graphObjectId ?? 'unknown graph object')} · preset switches move camera and anchor without changing diagram family</text>`,
     ...entryPointReviewScenes.map((entryPointReviewScene, index) =>
       renderScenePanel(
         entryPointReviewScene.reviewScene,
@@ -386,24 +403,11 @@ function renderAnchoredEntryPointsDocument(
         `anchored-entrypoint-panel-${index}`
       )
     ),
-    ...entryPointReviewScenes.map((entryPointReviewScene, index) =>
-      renderAnchoredEntryPointCaption(
-        viewports[index]!,
-        entryPointReviewScene.reviewScene
-      )
-    ),
-    '<text x="40" y="850" class="section">Expected read</text>',
-    renderWrappedTextBlock(
-      40,
-      878,
-      'Each panel is the same graph object under a different anchor and camera stance. Opening should read as full-material branching, middlegame as branch-rich local complexity, and endgame as simplified routing without turning into a different diagram family.',
-      118,
-      20,
-      'copy'
-    ),
+    ...captionCards.map((captionCard) => captionCard.markup),
+    renderInfoCard(40, expectedReadY, 1620, 'Expected read', expectedReadText, 138, 'copy'),
     renderBandLegendRow(
       40,
-      930,
+      legendY,
       '#566574',
       '#87a9c8',
       '#dcecff',
@@ -641,6 +645,10 @@ function renderCameraGrammarDocument(
 function renderReviewNotesTemplate(
   graphObjectId: string,
   sceneId: string,
+  graphScale: {
+    edgeCount: number;
+    occurrenceCount: number;
+  },
   navigationEntryPoints: NavigationEntryPoint[],
   focusContext: ReviewFocusContext
 ) {
@@ -649,11 +657,15 @@ function renderReviewNotesTemplate(
   return [
     '# N12 Review Notes',
     '',
-    'Use this file as the human verdict record for the generated N12 review artifacts.',
+    'Use this file as the human verdict record for the live N12 interactive review.',
+    'Do not answer the camera-affordance question from the static SVG artifacts alone; they are supporting evidence only.',
     '',
     '## Run context',
     `- graphObjectId: ${graphObjectId}`,
     `- sceneId: ${sceneId}`,
+    `- graphOccurrenceCount: ${graphScale.occurrenceCount}`,
+    `- graphEdgeCount: ${graphScale.edgeCount}`,
+    `- scaleGate: ${graphScale.occurrenceCount >= 1000 ? 'meets the requested 1000+ node live-view threshold' : `insufficient for the requested 1000+ node live-view threshold (${graphScale.occurrenceCount} total nodes in current artifact set)`}`,
     ...navigationEntryPoints.map(
       (entryPoint) =>
         `- ${entryPoint.entryId} anchor: ${entryPoint.focusOccurrenceId} · ${formatGameName(entryPoint.rootGameId)} · ply ${entryPoint.anchorPly} · radius ${entryPoint.neighborhoodRadius} · distance ${entryPoint.distance.toFixed(1)}`
@@ -667,7 +679,14 @@ function renderReviewNotesTemplate(
     `- tacticalBudget: ${N10B_REVIEW_BUDGETS.tactical}`,
     `- contextualBudget: ${N10B_REVIEW_BUDGETS.contextual}`,
     '',
-    '## Reviewed artifacts',
+    '## Required live review',
+    '- switch the viewer to whole-object scope before recording the verdict; local-neighborhood mode is not sufficient for the scale gate',
+    '- run the interactive viewer and switch across the opening, middlegame, and endgame entrypoints in one session',
+    '- drag on the canvas to orbit and use scroll or the distance slider to test camera affordances directly',
+    '- click nodes or move cards after switching entrypoints to confirm local exploration still feels continuous',
+    '- record screenshots or screen capture from the live viewer after the interactive pass',
+    '',
+    '## Supporting artifacts',
     '- review/anchored-entrypoints.svg',
     '- review/structure-zoom.svg',
     '- review/refinement-steps.svg',
@@ -1275,23 +1294,29 @@ function renderPanelCaption(viewport: Viewport, refinementBudget: number) {
   ].join('');
 }
 
-function renderAnchoredEntryPointCaption(
+function buildAnchoredEntryPointCaptionCard(
   viewport: Viewport,
   reviewScene: ReviewScene
 ) {
   const entryPoint = reviewScene.navigationEntryPoint;
+  const cardX = viewport.x;
+  const cardY = viewport.y + viewport.height + 18;
+  const descriptionLines = wrapText(entryPoint.description, 54);
+  const cardHeight = 76 + (descriptionLines.length * 18);
 
-  return [
-    `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">${escapeXml(`${entryPoint.label} · ply ${entryPoint.anchorPly}`)}</text>`,
-    renderWrappedTextBlock(
-      viewport.x,
-      viewport.y + viewport.height + 28,
-      `${formatGameName(entryPoint.rootGameId)} · radius ${reviewScene.runtimeSnapshot.radius} · distance ${reviewScene.cameraDistance.toFixed(1)}. ${entryPoint.description}`,
-      54,
-      20,
-      'copy'
-    )
-  ].join('');
+  return {
+    bottom: cardY + cardHeight,
+    markup: [
+      `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">${escapeXml(`${entryPoint.label} · ply ${entryPoint.anchorPly}`)}</text>`,
+      `<rect x="${cardX}" y="${cardY}" width="${viewport.width}" height="${cardHeight}" rx="18" fill="#f4eee4" stroke="#ddd5c7" />`,
+      `<text x="${cardX + 18}" y="${cardY + 26}" class="section-small">${escapeXml(formatGameName(entryPoint.rootGameId))}</text>`,
+      `<text x="${cardX + 18}" y="${cardY + 48}" class="copy">${escapeXml(`Radius ${reviewScene.runtimeSnapshot.radius} · distance ${reviewScene.cameraDistance.toFixed(1)}`)}</text>`,
+      ...descriptionLines.map(
+        (line, index) =>
+          `<text x="${cardX + 18}" y="${cardY + 72 + (index * 18)}" class="copy">${escapeXml(line)}</text>`
+      )
+    ].join('')
+  };
 }
 
 function renderCameraGrammarCaption(viewport: Viewport, reviewScene: ReviewScene) {

@@ -28,6 +28,10 @@ type NeighborhoodRequest = {
   refinementBudget: number;
 };
 
+type WholeGraphRequest = {
+  refinementBudget: number;
+};
+
 type CarrierSurfaceRequest = {
   refinementBudget: number;
 };
@@ -36,6 +40,10 @@ export type RuntimeExplorationKernel = {
   inspectNeighborhood: (
     focusOccurrenceId: string,
     request: NeighborhoodRequest
+  ) => RuntimeNeighborhoodSnapshot;
+  inspectWholeGraph: (
+    focusOccurrenceId: string,
+    request: WholeGraphRequest
   ) => RuntimeNeighborhoodSnapshot;
   inspectTransitionSurface: (
     occurrenceIds: string[]
@@ -95,6 +103,12 @@ export function createRuntimeExplorationKernel(
   );
   const repeatedStateRelations = builderBootstrapManifest.repeatedStateRelations;
   const anchors = builderBootstrapManifest.anchors;
+  const allOccurrenceIds = builderBootstrapManifest.occurrences.map(
+    (occurrence) => occurrence.occurrenceId
+  );
+  const priorityFrontierSet = new Set(
+    builderBootstrapManifest.priorityFrontierOccurrenceIds
+  );
   const cache = new Map<string, NeighborhoodCacheEntry>();
   const cacheStats = {
     hits: 0,
@@ -149,11 +163,11 @@ export function createRuntimeExplorationKernel(
       }
 
       // Zoom/refinement budget changes presentation detail, not neighborhood ontology.
-      const selectedOccurrenceIds = cacheEntry.orderedOccurrenceIds;
-      const selectedOccurrenceIdSet = new Set(selectedOccurrenceIds);
-
-      return {
-        graphObjectId: builderBootstrapManifest.graphObjectId,
+      return buildRuntimeNeighborhoodSnapshot({
+        builderBootstrapManifest,
+        occurrenceById,
+        repeatedStateRelations,
+        anchors,
         focusOccurrenceId,
         radius,
         refinementBudget,
@@ -163,50 +177,53 @@ export function createRuntimeExplorationKernel(
           ...cacheStats,
           entryCount: cache.size
         },
-        occurrences: selectedOccurrenceIds
-          .map((occurrenceId) => {
-            const occurrence = occurrenceById.get(occurrenceId);
-            if (!occurrence) {
-              return null;
-            }
-            return {
-              ...occurrence,
-              distance: cacheEntry.distanceByOccurrenceId.get(occurrenceId) ?? 0,
-              isFocus: occurrenceId === focusOccurrenceId
-            } satisfies RuntimeNeighborhoodOccurrence;
-          })
-          .filter(
-            (occurrence): occurrence is RuntimeNeighborhoodOccurrence => occurrence !== null
-          ),
-        edges: builderBootstrapManifest.edges
-          .filter(
-            (edge) =>
-              selectedOccurrenceIdSet.has(edge.sourceOccurrenceId) &&
-              selectedOccurrenceIdSet.has(edge.targetOccurrenceId)
-          )
-          .map(
-            (edge) =>
-              ({
-                ...edge,
-                distance: Math.min(
-                  cacheEntry.distanceByOccurrenceId.get(edge.sourceOccurrenceId) ?? 0,
-                  cacheEntry.distanceByOccurrenceId.get(edge.targetOccurrenceId) ?? 0
-                )
-              }) satisfies RuntimeNeighborhoodEdge
-          ),
-        repeatedStateRelations: selectRepeatedStateRelations(
-          repeatedStateRelations,
-          selectedOccurrenceIdSet
+        orderedOccurrenceIds: cacheEntry.orderedOccurrenceIds,
+        distanceByOccurrenceId: cacheEntry.distanceByOccurrenceId
+      });
+    },
+    inspectWholeGraph(focusOccurrenceId, request) {
+      if (!occurrenceById.has(focusOccurrenceId)) {
+        throw new Error(`unknown occurrence: ${focusOccurrenceId}`);
+      }
+
+      const refinementBudget = clamp(
+        request.refinementBudget,
+        1,
+        viewerSceneManifest.runtime.maxRefinementBudget
+      );
+      const distanceByOccurrenceId = buildWholeGraphDistanceMap(
+        focusOccurrenceId,
+        adjacencyByOccurrenceId,
+        allOccurrenceIds
+      );
+      const orderedOccurrenceIds = sortOccurrenceIds(
+        allOccurrenceIds,
+        distanceByOccurrenceId,
+        focusOccurrenceId,
+        occurrenceById,
+        priorityFrontierSet
+      );
+
+      return buildRuntimeNeighborhoodSnapshot({
+        builderBootstrapManifest,
+        occurrenceById,
+        repeatedStateRelations,
+        anchors,
+        focusOccurrenceId,
+        radius: resolveWholeGraphRadius(
+          distanceByOccurrenceId,
+          viewerSceneManifest.runtime.maxNeighborhoodRadius
         ),
-        terminalAnchors: selectTerminalAnchors(
-          anchors,
-          selectedOccurrenceIdSet
-        ),
-        priorityFrontierOccurrenceIds:
-          builderBootstrapManifest.priorityFrontierOccurrenceIds.filter((occurrenceId) =>
-            selectedOccurrenceIdSet.has(occurrenceId)
-          )
-      };
+        refinementBudget,
+        objectIdentityStable: true,
+        cacheState: 'miss',
+        cacheStats: {
+          ...cacheStats,
+          entryCount: cache.size
+        },
+        orderedOccurrenceIds,
+        distanceByOccurrenceId
+      });
     },
     inspectTransitionSurface(occurrenceIds) {
       const selectedOccurrenceIds = [...new Set(occurrenceIds)];
@@ -354,8 +371,163 @@ function buildNeighborhoodCacheEntry(
     }
   }
 
-  const priorityFrontierSet = new Set(priorityFrontierOccurrenceIds);
-  const orderedOccurrenceIds = [...distanceByOccurrenceId.keys()].sort((left, right) => {
+  return {
+    focusOccurrenceId,
+    radius,
+    orderedOccurrenceIds: sortOccurrenceIds(
+      [...distanceByOccurrenceId.keys()],
+      distanceByOccurrenceId,
+      focusOccurrenceId,
+      occurrenceById,
+      new Set(priorityFrontierOccurrenceIds)
+    ),
+    distanceByOccurrenceId
+  };
+}
+
+function buildWholeGraphDistanceMap(
+  focusOccurrenceId: string,
+  adjacencyByOccurrenceId: Map<string, Set<string>>,
+  allOccurrenceIds: string[]
+) {
+  const distanceByOccurrenceId = new Map<string, number>([[focusOccurrenceId, 0]]);
+  const queue = [focusOccurrenceId];
+
+  while (queue.length > 0) {
+    const currentOccurrenceId = queue.shift();
+    if (!currentOccurrenceId) {
+      continue;
+    }
+
+    const currentDistance = distanceByOccurrenceId.get(currentOccurrenceId) ?? 0;
+    const neighbors = adjacencyByOccurrenceId.get(currentOccurrenceId);
+    if (!neighbors) {
+      continue;
+    }
+
+    for (const neighborOccurrenceId of neighbors) {
+      if (distanceByOccurrenceId.has(neighborOccurrenceId)) {
+        continue;
+      }
+
+      distanceByOccurrenceId.set(neighborOccurrenceId, currentDistance + 1);
+      queue.push(neighborOccurrenceId);
+    }
+  }
+
+  for (const occurrenceId of allOccurrenceIds) {
+    if (!distanceByOccurrenceId.has(occurrenceId)) {
+      distanceByOccurrenceId.set(occurrenceId, Number.POSITIVE_INFINITY);
+    }
+  }
+
+  return distanceByOccurrenceId;
+}
+
+function resolveWholeGraphRadius(
+  distanceByOccurrenceId: Map<string, number>,
+  fallbackRadius: number
+) {
+  const finiteDistances = [...distanceByOccurrenceId.values()].filter((distance) =>
+    Number.isFinite(distance)
+  );
+
+  if (finiteDistances.length === 0) {
+    return fallbackRadius;
+  }
+
+  return Math.max(...finiteDistances);
+}
+
+function buildRuntimeNeighborhoodSnapshot({
+  builderBootstrapManifest,
+  occurrenceById,
+  repeatedStateRelations,
+  anchors,
+  focusOccurrenceId,
+  radius,
+  refinementBudget,
+  objectIdentityStable,
+  cacheState,
+  cacheStats,
+  orderedOccurrenceIds,
+  distanceByOccurrenceId
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  occurrenceById: Map<string, BuilderOccurrenceRecord>;
+  repeatedStateRelations: BuilderRepeatedStateRelationRecord[];
+  anchors: BuilderAnchorRecord[];
+  focusOccurrenceId: string;
+  radius: number;
+  refinementBudget: number;
+  objectIdentityStable: boolean;
+  cacheState: 'hit' | 'miss';
+  cacheStats: RuntimeExplorationCacheStats;
+  orderedOccurrenceIds: string[];
+  distanceByOccurrenceId: Map<string, number>;
+}): RuntimeNeighborhoodSnapshot {
+  const selectedOccurrenceIdSet = new Set(orderedOccurrenceIds);
+
+  return {
+    graphObjectId: builderBootstrapManifest.graphObjectId,
+    focusOccurrenceId,
+    radius,
+    refinementBudget,
+    objectIdentityStable,
+    cacheState,
+    cacheStats,
+    occurrences: orderedOccurrenceIds
+      .map((occurrenceId) => {
+        const occurrence = occurrenceById.get(occurrenceId);
+        if (!occurrence) {
+          return null;
+        }
+
+        return {
+          ...occurrence,
+          distance: distanceByOccurrenceId.get(occurrenceId) ?? Number.POSITIVE_INFINITY,
+          isFocus: occurrenceId === focusOccurrenceId
+        } satisfies RuntimeNeighborhoodOccurrence;
+      })
+      .filter(
+        (occurrence): occurrence is RuntimeNeighborhoodOccurrence => occurrence !== null
+      ),
+    edges: builderBootstrapManifest.edges
+      .filter(
+        (edge) =>
+          selectedOccurrenceIdSet.has(edge.sourceOccurrenceId) &&
+          selectedOccurrenceIdSet.has(edge.targetOccurrenceId)
+      )
+      .map(
+        (edge) =>
+          ({
+            ...edge,
+            distance: Math.min(
+              distanceByOccurrenceId.get(edge.sourceOccurrenceId) ?? Number.POSITIVE_INFINITY,
+              distanceByOccurrenceId.get(edge.targetOccurrenceId) ?? Number.POSITIVE_INFINITY
+            )
+          }) satisfies RuntimeNeighborhoodEdge
+      ),
+    repeatedStateRelations: selectRepeatedStateRelations(
+      repeatedStateRelations,
+      selectedOccurrenceIdSet
+    ),
+    terminalAnchors: selectTerminalAnchors(anchors, selectedOccurrenceIdSet),
+    priorityFrontierOccurrenceIds:
+      builderBootstrapManifest.priorityFrontierOccurrenceIds.filter((occurrenceId) =>
+        selectedOccurrenceIdSet.has(occurrenceId)
+      )
+  };
+}
+
+function sortOccurrenceIds(
+  occurrenceIds: string[],
+  distanceByOccurrenceId: Map<string, number>,
+  focusOccurrenceId: string,
+  occurrenceById: Map<string, BuilderOccurrenceRecord>,
+  priorityFrontierSet: Set<string>
+) {
+  return [...occurrenceIds].sort((left, right) => {
     if (left === focusOccurrenceId) {
       return -1;
     }
@@ -386,13 +558,6 @@ function buildNeighborhoodCacheEntry(
 
     return left.localeCompare(right);
   });
-
-  return {
-    focusOccurrenceId,
-    radius,
-    orderedOccurrenceIds,
-    distanceByOccurrenceId
-  };
 }
 
 function selectRepeatedStateRelations(

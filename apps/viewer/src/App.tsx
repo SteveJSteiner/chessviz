@@ -18,8 +18,13 @@ import {
 } from './viewer/renderTuning';
 import { runtimeArtifactBoundary } from './viewer/runtimeArtifactBoundary';
 import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
-import { createRuntimeExplorationKernel } from './viewer/runtimeKernel';
+import {
+  createRuntimeExplorationKernel,
+  type RuntimeExplorationKernel
+} from './viewer/runtimeKernel';
 import { ViewerShell } from './viewer/ViewerShell';
+
+export type GraphViewScope = 'local-neighborhood' | 'whole-object';
 
 export default function App() {
   const [runtimeBootstrap] = useState(() =>
@@ -47,6 +52,8 @@ export default function App() {
   const [focusOccurrenceId, setFocusOccurrenceId] = useState(
     activeNavigationEntryPoint.focusOccurrenceId
   );
+  const [graphViewScope, setGraphViewScope] =
+    useState<GraphViewScope>('local-neighborhood');
   const [neighborhoodRadius, setNeighborhoodRadius] = useState(
     activeNavigationEntryPoint.neighborhoodRadius
   );
@@ -61,23 +68,39 @@ export default function App() {
     runtimeBootstrap.viewerSceneManifest.runtime
   );
   const [runtimeSnapshot, setRuntimeSnapshot] = useState(() =>
-    runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
-      radius: neighborhoodRadius,
-      refinementBudget
+    inspectRuntimeView({
+      focusOccurrenceId,
+      graphViewScope,
+      neighborhoodRadius,
+      refinementBudget,
+      runtimeKernel
     })
   );
   const deferredRuntimeSnapshot = useDeferredValue(runtimeSnapshot);
+  const totalGraphOccurrenceCount =
+    runtimeBootstrap.builderBootstrapManifest.occurrences.length;
+  const totalGraphEdgeCount = runtimeBootstrap.builderBootstrapManifest.edges.length;
+  const meetsN12Scale = totalGraphOccurrenceCount >= 1000;
 
   useEffect(() => {
     startTransition(() => {
       setRuntimeSnapshot(
-        runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
-          radius: neighborhoodRadius,
-          refinementBudget
+        inspectRuntimeView({
+          focusOccurrenceId,
+          graphViewScope,
+          neighborhoodRadius,
+          refinementBudget,
+          runtimeKernel
         })
       );
     });
-  }, [focusOccurrenceId, neighborhoodRadius, refinementBudget, runtimeKernel]);
+  }, [
+    focusOccurrenceId,
+    graphViewScope,
+    neighborhoodRadius,
+    refinementBudget,
+    runtimeKernel
+  ]);
 
   const transitionSurface = runtimeKernel.inspectTransitionSurface(
     deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId)
@@ -139,13 +162,16 @@ export default function App() {
       focusLine={focusLine}
       focusLinesByOccurrenceId={focusLinesByOccurrenceId}
       focusOptions={focusOptions}
+      graphViewScope={graphViewScope}
       entryPoints={navigationEntryPoints}
+      meetsN12Scale={meetsN12Scale}
       navigationEntryPoint={activeNavigationEntryPoint}
       onCameraDistanceChange={(distance) =>
         setCameraDistance(clampLiveViewDistance(distance))
       }
       onBoardReferenceOpenChange={setBoardReferenceOpen}
       onEntryPointChange={handleEntryPointChange}
+      onGraphViewScopeChange={setGraphViewScope}
       onRenderTuningChange={(partialTuning) =>
         setRenderTuning((currentTuning) =>
           clampViewerRenderTuning({
@@ -165,6 +191,33 @@ export default function App() {
       transitionSurface={transitionSurface}
       runtimeArtifactBoundary={runtimeArtifactBoundary}
       neighborhoodRadius={neighborhoodRadius}
+      totalGraphEdgeCount={totalGraphEdgeCount}
+      totalGraphOccurrenceCount={totalGraphOccurrenceCount}
     />
   );
+}
+
+function inspectRuntimeView({
+  focusOccurrenceId,
+  graphViewScope,
+  neighborhoodRadius,
+  refinementBudget,
+  runtimeKernel
+}: {
+  focusOccurrenceId: string;
+  graphViewScope: GraphViewScope;
+  neighborhoodRadius: number;
+  refinementBudget: number;
+  runtimeKernel: RuntimeExplorationKernel;
+}) {
+  if (graphViewScope === 'whole-object') {
+    return runtimeKernel.inspectWholeGraph(focusOccurrenceId, {
+      refinementBudget
+    });
+  }
+
+  return runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
+    radius: neighborhoodRadius,
+    refinementBudget
+  });
 }
