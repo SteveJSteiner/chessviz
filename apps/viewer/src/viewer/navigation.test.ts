@@ -30,7 +30,12 @@ test('derives opening, middlegame, and endgame entrypoints from declared regime 
     runtimeBootstrap.initialFocusOccurrenceId
   );
   assert.equal(entryPoints[2]?.focusOccurrenceId, 'occ-50c5276a269f4c53');
-  assert.equal(entryPoints[2]?.rootGameId, 'endgame-simplification-lab');
+  assert.equal(
+    entryPoints[2]?.subtreeKey,
+    runtimeBootstrap.builderBootstrapManifest.occurrences.find(
+      (occurrence) => occurrence.occurrenceId === 'occ-50c5276a269f4c53'
+    )?.embedding.subtreeKey
+  );
   assert.equal(
     runtimeArtifactBundle.viewerSceneManifest.runtime.focusCandidateOccurrenceIds.includes(
       entryPoints[2]?.focusOccurrenceId ?? ''

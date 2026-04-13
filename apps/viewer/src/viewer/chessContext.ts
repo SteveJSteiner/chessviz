@@ -112,27 +112,18 @@ export function formatFocusOptionLabel(
   return `${phaseLabel} · ply ${occurrence.ply} · ${occurrence.annotations.materialSignature} · ${shortOccurrenceId(occurrence.occurrenceId)}`;
 }
 
-export function formatGameName(rootGameId: string) {
-  if (rootGameId === 'scholars-mate-white') {
-    return 'Scholar\'s Mate';
-  }
-  if (rootGameId === 'fools-mate-black') {
-    return 'Fool\'s Mate';
-  }
-  if (rootGameId === 'repetition-draw') {
-    return 'Repetition Draw';
-  }
-  if (rootGameId === 'qgd-bogo-a') {
-    return 'QGD Bogo-Indian A';
-  }
-  if (rootGameId === 'qgd-bogo-b') {
-    return 'QGD Bogo-Indian B';
+export function formatSubtreeLabel(subtreeKey: string) {
+  if (subtreeKey === 'root') {
+    return 'Initial position';
   }
 
-  return rootGameId
-    .split('-')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+  const initialMoveLabel = formatInitialMoveLabel(subtreeKey);
+
+  if (initialMoveLabel) {
+    return `1. ${initialMoveLabel} subtree`;
+  }
+
+  return `${subtreeKey} subtree`;
 }
 
 export function formatTerminalOutcomeLabel(wdlLabel: string) {
@@ -191,4 +182,60 @@ function capitalizeLabel(label: string) {
   }
 
   return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function formatInitialMoveLabel(subtreeKey: string) {
+  const match = subtreeKey.match(/^([a-h][1-8])([a-h][1-8])([nbrq])?$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, rawFromSquare, rawToSquare, rawPromotionPiece] = match;
+  const fromSquare = rawFromSquare.toLowerCase();
+  const toSquare = rawToSquare.toLowerCase();
+  const promotionPiece = rawPromotionPiece?.toUpperCase();
+
+  if (fromSquare === 'e1' && toSquare === 'g1') {
+    return 'O-O';
+  }
+  if (fromSquare === 'e1' && toSquare === 'c1') {
+    return 'O-O-O';
+  }
+
+  const piecePrefix = initialMovePiecePrefix(fromSquare);
+
+  if (piecePrefix === null) {
+    return null;
+  }
+
+  if (promotionPiece) {
+    return `${piecePrefix}${toSquare}=${promotionPiece}`;
+  }
+
+  return `${piecePrefix}${toSquare}`;
+}
+
+function initialMovePiecePrefix(fromSquare: string) {
+  if (/^[a-h]2$/.test(fromSquare)) {
+    return '';
+  }
+
+  if (fromSquare === 'b1' || fromSquare === 'g1') {
+    return 'N';
+  }
+  if (fromSquare === 'c1' || fromSquare === 'f1') {
+    return 'B';
+  }
+  if (fromSquare === 'a1' || fromSquare === 'h1') {
+    return 'R';
+  }
+  if (fromSquare === 'd1') {
+    return 'Q';
+  }
+  if (fromSquare === 'e1') {
+    return 'K';
+  }
+
+  return null;
 }

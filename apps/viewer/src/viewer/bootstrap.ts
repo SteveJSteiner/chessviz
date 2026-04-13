@@ -173,7 +173,7 @@ function validateRuntimeBootstrapIntegrity(
     }
 
     if (
-      occurrence.embedding.rootGameId !== entryPoint.rootGameId ||
+      occurrence.embedding.subtreeKey !== entryPoint.subtreeKey ||
       occurrence.ply !== entryPoint.anchorPly
     ) {
       throw new Error(

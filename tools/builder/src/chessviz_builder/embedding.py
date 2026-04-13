@@ -53,20 +53,27 @@ class HyperbolicStyleEmbeddingBuilderV1:
             for game in ingested_corpus.games
             for occurrence in game.occurrences
         }
-        records = tuple(
-            _embedding_record(
-                node,
-                occurrence_to_game[node.occurrence_id].game_id,
-                root_angles[occurrence_to_game[node.occurrence_id].game_id],
-                occurrence_to_game[node.occurrence_id],
-                repeated_state_query_surface,
-                dag,
-                labels,
-                terminal_labels,
-                self.config,
+        records = []
+
+        for node in dag.nodes:
+            game = occurrence_to_game[node.occurrence_id]
+            subtree_key = _subtree_key_for_path(node.path)
+            records.append(
+                _embedding_record(
+                    node,
+                    subtree_key,
+                    root_angles[_sector_key_for_occurrence(node.path, game)],
+                    game.declared_terminal_outcome,
+                    len(game.transitions),
+                    repeated_state_query_surface,
+                    dag,
+                    labels,
+                    terminal_labels,
+                    self.config,
+                )
             )
-            for node in dag.nodes
-        )
+
+        records = tuple(records)
         return EmbeddingArtifact(
             dag=dag,
             config=self.config,
@@ -82,9 +89,10 @@ class HyperbolicStyleEmbeddingBuilderV1:
 
 def _embedding_record(
     node,
-    game_id: str,
+    subtree_key: str,
     root_angle: float,
-    game,
+    declared_terminal_outcome: str | None,
+    transition_count: int,
     repeated_state_query_surface: RepeatedStateQuerySurface,
     dag: DagArtifact,
     labels: OccurrenceLabelQuerySurface,
@@ -96,7 +104,13 @@ def _embedding_record(
     phase = label_record.phase if label_record is not None else OPENING_PHASE
     relation = repeated_state_query_surface.by_occurrence_id(node.occurrence_id)
     azimuth = _azimuth(node, root_angle, relation, dag, config)
-    elevation = _elevation(node.ply, phase, game, config)
+    elevation = _elevation(
+        node.ply,
+        phase,
+        declared_terminal_outcome,
+        transition_count,
+        config,
+    )
     ball_radius = _ball_radius(node.ply, config)
 
     return EmbeddingRecord(
@@ -105,7 +119,7 @@ def _embedding_record(
         ball_radius=ball_radius,
         azimuth=azimuth,
         elevation=elevation,
-        root_game_id=game_id,
+        subtree_key=subtree_key,
         terminal_anchor_id=(terminal_record.anchor_id if terminal_record else None),
     )
 
@@ -114,17 +128,45 @@ def _root_angles(
     ingested_corpus: IngestedCorpus,
     config: EmbeddingConfig,
 ) -> dict[str, float]:
-    ordered_game_ids = tuple(sorted({game.game_id for game in ingested_corpus.games}))
-    game_count = len(ordered_game_ids)
-    denominator = game_count if game_count else 1
+    ordered_sector_keys = tuple(
+        sorted({_sector_key_for_game(game) for game in ingested_corpus.games})
+    )
+    sector_count = len(ordered_sector_keys)
+    denominator = sector_count if sector_count else 1
     angles: dict[str, float] = {}
 
-    for index, game_id in enumerate(ordered_game_ids):
+    for index, sector_key in enumerate(ordered_sector_keys):
         evenly_spaced_angle = (2.0 * math.pi * index) / denominator
-        jitter = 0.15 * _signed_unit_interval(config.seed, f"root:{game_id}")
-        angles[game_id] = evenly_spaced_angle + jitter
+        jitter = 0.15 * _signed_unit_interval(config.seed, f"root:{sector_key}")
+        angles[sector_key] = evenly_spaced_angle + jitter
 
     return angles
+
+
+def _subtree_key_for_path(path: tuple[str, ...]) -> str:
+    if len(path) < 2:
+        return "root"
+
+    return _move_uci_from_path_component(path[1])
+
+
+def _sector_key_for_occurrence(path: tuple[str, ...], game) -> str:
+    if len(path) == 1:
+        return _sector_key_for_game(game)
+
+    return _subtree_key_for_path(path)
+
+
+def _sector_key_for_game(game) -> str:
+    if not game.transitions:
+        return "root"
+
+    return game.transitions[0].move_uci
+
+
+def _move_uci_from_path_component(path_component: str) -> str:
+    _, separator, move_uci = path_component.partition(":")
+    return move_uci if separator else path_component
 
 
 def _azimuth(
@@ -158,22 +200,28 @@ def _azimuth(
     return _blend_angles(path_angle, relation_angle, relation_strength)
 
 
-def _elevation(node_ply: int, phase: str, game, config: EmbeddingConfig) -> float:
+def _elevation(
+    node_ply: int,
+    phase: str,
+    declared_terminal_outcome: str | None,
+    transition_count: int,
+    config: EmbeddingConfig,
+) -> float:
     phase_pitch = {
         OPENING_PHASE: config.phase_pitch,
         MIDDLEGAME_PHASE: 0.0,
         ENDGAME_PHASE: -config.phase_pitch,
     }.get(phase, 0.0)
 
-    if game.declared_terminal_outcome is None or not game.transitions:
+    if declared_terminal_outcome is None or transition_count == 0:
         return phase_pitch
 
-    terminal_progress = node_ply / len(game.transitions)
+    terminal_progress = node_ply / transition_count
     terminal_pitch = {
         WHITE_WIN_OUTCOME: config.terminal_pitch,
         DRAW_OUTCOME: 0.0,
         BLACK_WIN_OUTCOME: -config.terminal_pitch,
-    }[game.declared_terminal_outcome]
+    }[declared_terminal_outcome]
     return max(
         -1.2,
         min(1.2, phase_pitch + terminal_progress * terminal_pitch),

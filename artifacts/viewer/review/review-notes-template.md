@@ -9,9 +9,9 @@ Do not answer the camera-affordance question from the static SVG artifacts alone
 - graphOccurrenceCount: 118
 - graphEdgeCount: 111
 - scaleGate: insufficient for the requested 1000+ node live-view threshold (118 total nodes in current artifact set)
-- opening anchor: occ-27e2be7f2bf706c6 · QGD Bogo-Indian A · ply 0 · radius 3 · distance 5.0
-- middlegame anchor: occ-25c32c2bc0227f68 · Italian Branch Lab · ply 8 · radius 2 · distance 4.2
-- endgame anchor: occ-50c5276a269f4c53 · Endgame Simplification Lab · ply 35 · radius 3 · distance 3.3
+- opening anchor: occ-27e2be7f2bf706c6 · Initial position · ply 0 · radius 3 · distance 5.0
+- middlegame anchor: occ-25c32c2bc0227f68 · 1. e4 subtree · ply 8 · radius 2 · distance 4.2
+- endgame anchor: occ-50c5276a269f4c53 · 1. Nc3 subtree · ply 35 · radius 3 · distance 3.3
 - middlegame focusNode: ply 8 · middlegame · white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]
 - middlegame focusTurn: White to move
 - structureDistance: 5.0

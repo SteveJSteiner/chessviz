@@ -62,6 +62,7 @@ class DeclaredCorpusIngestor:
 
     def _ingest_game(self, game: DeclaredGameFixture) -> IngestedGame:
         board = chess.Board()
+        # TODO: remove the fixture-oriented game: path prefix when occurrence paths stop carrying ingest identities.
         root_path = (f"game:{game.game_id}",)
         root_occurrence = self.identity_provider.identify(
             self.state_key_provider.key_for_board(board),

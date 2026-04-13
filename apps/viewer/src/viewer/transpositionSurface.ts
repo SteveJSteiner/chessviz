@@ -167,7 +167,7 @@ function buildTranspositionOccurrence(
   return {
     occurrenceId: occurrence.occurrenceId,
     coordinate: occurrence.embedding.coordinate,
-    rootGameId: occurrence.embedding.rootGameId,
+    subtreeKey: occurrence.embedding.subtreeKey,
     ply: occurrence.ply,
     phaseLabel: occurrence.annotations.phaseLabel,
     isFocus: occurrence.occurrenceId === focusOccurrenceId,

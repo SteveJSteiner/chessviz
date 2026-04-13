@@ -65,8 +65,7 @@ test('preserves the qgd-bogo-a root neighborhood across the 4.6 to 4.7 zoom thre
     viewerSceneManifest
   );
   const focusOccurrenceId = builderBootstrapManifest.occurrences.find(
-    (occurrence) =>
-      occurrence.embedding.rootGameId === 'qgd-bogo-a' && occurrence.ply === 0
+    (occurrence) => occurrence.path[0] === 'game:qgd-bogo-a' && occurrence.ply === 0
   )?.occurrenceId;
 
   if (!focusOccurrenceId) {

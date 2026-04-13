@@ -12,7 +12,7 @@ import {
 } from './cameraOrbit.ts';
 import {
   formatCastlingRights,
-  formatGameName,
+  formatSubtreeLabel,
   formatTerminalOutcomeLabel,
   formatTurnLabel,
   listBoardSquares,
@@ -190,12 +190,12 @@ export function buildViewerReviewArtifacts(
           navigationEntryPoints: navigationEntryPoints.map((entryPoint) => ({
             entryId: entryPoint.entryId,
             focusOccurrenceId: entryPoint.focusOccurrenceId,
-            rootGameId: entryPoint.rootGameId,
+            subtreeKey: entryPoint.subtreeKey,
             anchorPly: entryPoint.anchorPly,
             neighborhoodRadius: entryPoint.neighborhoodRadius,
             distance: roundNumber(entryPoint.distance)
           })),
-          rootGameId: focusContext.focusOccurrence.embedding.rootGameId,
+          subtreeKey: focusContext.focusOccurrence.embedding.subtreeKey,
           focusNode: {
             occurrenceId: focusContext.focusOccurrence.occurrenceId,
             ply: focusContext.focusOccurrence.ply,
@@ -481,7 +481,7 @@ function renderStructureZoomDocument(
   const height = 980;
   const viewport = { x: 48, y: 158, width: 930, height: 720 };
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
@@ -490,7 +490,7 @@ function renderStructureZoomDocument(
     '<rect x="24" y="24" width="1452" height="932" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
     '<text x="48" y="62" class="eyebrow">Viewer review artifact</text>',
     `<text x="48" y="96" class="title">${escapeXml(buildStructureZoomTitle(focusContext))}</text>`,
-    `<text x="48" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius} · distance ${reviewScene.cameraDistance.toFixed(1)} · budget ${reviewScene.runtimeSnapshot.refinementBudget}</text>`,
+    `<text x="48" y="124" class="subtitle">${escapeXml(formatSubtreeLabel(subtreeKey))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius} · distance ${reviewScene.cameraDistance.toFixed(1)} · budget ${reviewScene.runtimeSnapshot.refinementBudget}</text>`,
     renderScenePanel(reviewScene, focusContext, viewport, 'structure-panel'),
     '<rect x="1012" y="158" width="428" height="790" rx="26" fill="#fdfaf3" stroke="#dcd3c4" />',
     '<text x="1036" y="188" class="section">Reference check</text>',
@@ -540,7 +540,7 @@ function renderRefinementStepsDocument(
     { x: 1144, y: 176, width: 516, height: 620 }
   ] as const;
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
@@ -549,7 +549,7 @@ function renderRefinementStepsDocument(
     '<rect x="24" y="24" width="1652" height="872" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
     '<text x="40" y="62" class="eyebrow">Viewer refinement review</text>',
     `<text x="40" y="96" class="title">${escapeXml(buildRefinementTitle(focusContext))}</text>`,
-    `<text x="40" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · fixed radius ${neighborhoodRadius}</text>`,
+    `<text x="40" y="124" class="subtitle">${escapeXml(formatSubtreeLabel(subtreeKey))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · fixed radius ${neighborhoodRadius}</text>`,
     ...reviewScenes.map((reviewScene, index) =>
       renderScenePanel(
         reviewScene,
@@ -595,7 +595,7 @@ function renderCameraGrammarDocument(
     { x: 1144, y: 176, width: 516, height: 620 }
   ] as const;
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
@@ -604,7 +604,7 @@ function renderCameraGrammarDocument(
     '<rect x="24" y="24" width="1652" height="932" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />',
     '<text x="40" y="62" class="eyebrow">N11 camera grammar review</text>',
     `<text x="40" y="96" class="title">${escapeXml(buildCameraGrammarTitle(focusContext))}</text>`,
-    `<text x="40" y="124" class="subtitle">${escapeXml(formatGameName(rootGameId))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius}</text>`,
+    `<text x="40" y="124" class="subtitle">${escapeXml(formatSubtreeLabel(subtreeKey))} · ${escapeXml(formatTurnLabel(focusPosition.activeColor))} · radius ${neighborhoodRadius}</text>`,
     ...reviewScenes.map((reviewScene, index) =>
       renderScenePanel(
         reviewScene,
@@ -663,7 +663,7 @@ function renderReviewNotesTemplate(
     `- scaleGate: ${graphScale.occurrenceCount >= 1000 ? 'meets the requested 1000+ node live-view threshold' : `insufficient for the requested 1000+ node live-view threshold (${graphScale.occurrenceCount} total nodes in current artifact set)`}`,
     ...navigationEntryPoints.map(
       (entryPoint) =>
-        `- ${entryPoint.entryId} anchor: ${entryPoint.focusOccurrenceId} · ${formatGameName(entryPoint.rootGameId)} · ply ${entryPoint.anchorPly} · radius ${entryPoint.neighborhoodRadius} · distance ${entryPoint.distance.toFixed(1)}`
+        `- ${entryPoint.entryId} anchor: ${entryPoint.focusOccurrenceId} · ${formatSubtreeLabel(entryPoint.subtreeKey)} · ply ${entryPoint.anchorPly} · radius ${entryPoint.neighborhoodRadius} · distance ${entryPoint.distance.toFixed(1)}`
     ),
     `- middlegame focusNode: ${buildFocusNodeDescriptor(focusContext)}`,
     `- middlegame focusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
@@ -1000,13 +1000,13 @@ function createProjector(reviewScene: ReviewScene, viewport: Viewport) {
 }
 
 function buildFocusSummary(focusContext: ReviewFocusContext) {
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
 
-  return `The geometry remains primary here: SAN labels sit on the carriers themselves, terminal outcomes sit on terminal nodes, and this board is only a static reference check for ${buildFocusNodeDescriptor(focusContext)} in ${formatGameName(rootGameId)}.`;
+  return `The geometry remains primary here: SAN labels sit on the carriers themselves, terminal outcomes sit on terminal nodes, and this board is only a static reference check for ${buildFocusNodeDescriptor(focusContext)} in ${formatSubtreeLabel(subtreeKey)}.`;
 }
 
 function buildStructureZoomTitle(focusContext: ReviewFocusContext) {
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
   const incoming = focusContext.localTransitions
     .filter((entry) => entry.direction === 'incoming')
     .map((entry) => entry.transition.moveFacts.san)
@@ -1017,31 +1017,31 @@ function buildStructureZoomTitle(focusContext: ReviewFocusContext) {
     .join(', ');
 
   if (incoming && outgoing) {
-    return `${formatGameName(rootGameId)}: ${incoming} to ${outgoing}`;
+    return `${formatSubtreeLabel(subtreeKey)}: ${incoming} to ${outgoing}`;
   }
   if (incoming || outgoing) {
-    return `${formatGameName(rootGameId)}: ${incoming || outgoing}`;
+    return `${formatSubtreeLabel(subtreeKey)}: ${incoming || outgoing}`;
   }
-  return formatGameName(rootGameId);
+  return formatSubtreeLabel(subtreeKey);
 }
 
 function buildRefinementTitle(focusContext: ReviewFocusContext) {
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
   const outgoing = focusContext.localTransitions
     .filter((entry) => entry.direction === 'outgoing')
     .map((entry) => entry.transition.moveFacts.san)
     .join(', ');
 
   if (outgoing) {
-    return `${formatGameName(rootGameId)}: refinement toward ${outgoing}`;
+    return `${formatSubtreeLabel(subtreeKey)}: refinement toward ${outgoing}`;
   }
-  return `${formatGameName(rootGameId)}: refinement steps`;
+  return `${formatSubtreeLabel(subtreeKey)}: refinement steps`;
 }
 
 function buildCameraGrammarTitle(focusContext: ReviewFocusContext) {
-  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
+  const subtreeKey = focusContext.focusOccurrence.embedding.subtreeKey;
 
-  return `${formatGameName(rootGameId)}: camera grammar pass`;
+  return `${formatSubtreeLabel(subtreeKey)}: camera grammar pass`;
 }
 
 function buildFocusNodeDescriptor(focusContext: ReviewFocusContext) {
@@ -1077,7 +1077,7 @@ function buildOccurrenceDataLabel(
 ) {
   if (kind === 'root') {
     return {
-      text: formatGameName(occurrence.embedding.rootGameId),
+      text: formatSubtreeLabel(occurrence.embedding.subtreeKey),
       fillColor: '#f7f1e6',
       strokeColor: '#7a6a55'
     };
@@ -1291,7 +1291,7 @@ function buildAnchoredEntryPointCaptionCard(
     markup: [
       `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">${escapeXml(`${entryPoint.label} · ply ${entryPoint.anchorPly}`)}</text>`,
       `<rect x="${cardX}" y="${cardY}" width="${viewport.width}" height="${cardHeight}" rx="18" fill="#f4eee4" stroke="#ddd5c7" />`,
-      `<text x="${cardX + 18}" y="${cardY + 26}" class="section-small">${escapeXml(formatGameName(entryPoint.rootGameId))}</text>`,
+      `<text x="${cardX + 18}" y="${cardY + 26}" class="section-small">${escapeXml(formatSubtreeLabel(entryPoint.subtreeKey))}</text>`,
       `<text x="${cardX + 18}" y="${cardY + 48}" class="copy">${escapeXml(`Radius ${reviewScene.runtimeSnapshot.radius} · distance ${reviewScene.cameraDistance.toFixed(1)}`)}</text>`,
       ...descriptionLines.map(
         (line, index) =>

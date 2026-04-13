@@ -52,7 +52,7 @@ test('fails fast when declared entrypoint metadata fractures runtime bootstrap c
             anchor.anchorKind === 'navigation-entry' && anchor.entryId === 'endgame'
               ? {
                   ...anchor,
-                  rootGameId: 'broken-root-game'
+                  subtreeKey: 'broken-subtree'
                 }
               : anchor
           )

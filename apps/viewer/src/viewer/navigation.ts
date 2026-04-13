@@ -9,7 +9,7 @@ import {
   deriveCameraOrbitState,
   normalizeCameraOrbitState
 } from './cameraOrbit.ts';
-import { formatGameName } from './chessContext.ts';
+import { formatSubtreeLabel } from './chessContext.ts';
 import { LIVE_VIEW_DISTANCE, clampLiveViewDistance } from './labelPolicy.ts';
 
 export function createAnchoredNavigationEntryPoints(
@@ -46,7 +46,7 @@ export function createAnchoredNavigationEntryPoints(
     buildEntryPoint({
       entryId: 'opening',
       label: 'Opening',
-      description: `${formatGameName(openingAnchor.occurrence.embedding.rootGameId)} at full material. The farther stance keeps early branch identity readable without leaving the same object.`,
+      description: `${formatSubtreeLabel(openingAnchor.occurrence.embedding.subtreeKey)} at full material. The farther stance keeps early branch structure readable without leaving the same object.`,
       anchor: openingAnchor.anchor,
       resolvedOccurrence: openingAnchor.resolvedOccurrence,
       distance: LIVE_VIEW_DISTANCE.structureThreshold + 0.3,
@@ -59,7 +59,7 @@ export function createAnchoredNavigationEntryPoints(
     buildEntryPoint({
       entryId: 'middlegame',
       label: 'Middlegame',
-      description: `${formatGameName(middlegameAnchor.occurrence.embedding.rootGameId)} at the branch-rich middle. This keeps the current camera grammar baseline while preserving local exploration.`,
+      description: `${formatSubtreeLabel(middlegameAnchor.occurrence.embedding.subtreeKey)} at the branch-rich middle. This keeps the current camera grammar baseline while preserving local exploration.`,
       anchor: middlegameAnchor.anchor,
       resolvedOccurrence: middlegameAnchor.resolvedOccurrence,
       distance: LIVE_VIEW_DISTANCE.default,
@@ -72,7 +72,7 @@ export function createAnchoredNavigationEntryPoints(
     buildEntryPoint({
       entryId: 'endgame',
       label: 'Endgame',
-      description: `${formatGameName(endgameAnchor.occurrence.embedding.rootGameId)} in the simplified region. The closer stance tightens on terminal-facing structure without changing graph identity.`,
+      description: `${formatSubtreeLabel(endgameAnchor.occurrence.embedding.subtreeKey)} in the simplified region. The closer stance tightens on terminal-facing structure without changing graph identity.`,
       anchor: endgameAnchor.anchor,
       resolvedOccurrence: endgameAnchor.resolvedOccurrence,
       distance: LIVE_VIEW_DISTANCE.tacticalThreshold - 0.2,
@@ -145,7 +145,7 @@ function buildEntryPoint({
     distance: clampLiveViewDistance(distance),
     neighborhoodRadius,
     orbit,
-    rootGameId: occurrence.embedding.rootGameId,
+    subtreeKey: occurrence.embedding.subtreeKey,
     anchorPly: anchor.anchorPly ?? occurrence.ply
   };
 }
@@ -200,7 +200,7 @@ function requireNavigationAnchor(
     anchor.entryId !== entryId ||
     anchor.occurrenceIds.length !== 1 ||
     anchor.anchorPly === null ||
-    anchor.rootGameId === null
+    anchor.subtreeKey === null
   ) {
     throw new Error(
       `cannot derive ${entryId} entrypoint from ${builderBootstrapManifest.graphObjectId}; required declared regime anchor is missing`
@@ -214,7 +214,7 @@ function requireNavigationAnchor(
   }
 
   if (
-    anchor.rootGameId !== occurrence.embedding.rootGameId ||
+    anchor.subtreeKey !== occurrence.embedding.subtreeKey ||
     anchor.anchorPly !== occurrence.ply
   ) {
     throw new Error(

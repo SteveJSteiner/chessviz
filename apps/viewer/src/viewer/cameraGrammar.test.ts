@@ -193,7 +193,7 @@ function createOccurrence({
       ballRadius: 0.12,
       azimuth: 0,
       elevation: 0,
-      rootGameId: 'fixture',
+      subtreeKey: 'e2e4',
       terminalAnchorId: terminal ? `terminal:${occurrenceId}` : null
     },
     distance,

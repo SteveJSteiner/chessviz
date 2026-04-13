@@ -13,8 +13,8 @@ import type {
 import type { CameraGrammarState } from './cameraGrammar.ts';
 import { ChessBoard } from './ChessBoard.tsx';
 import {
-  formatGameName,
   formatFocusOptionLabel,
+  formatSubtreeLabel,
   formatTerminalOutcomeLabel,
   parseStateKey,
   shortOccurrenceId,
@@ -337,8 +337,8 @@ export function ViewerShell({
             return left.isVisibleInNeighborhood ? -1 : 1;
           }
 
-          if (left.rootGameId !== right.rootGameId) {
-            return left.rootGameId.localeCompare(right.rootGameId);
+          if (left.subtreeKey !== right.subtreeKey) {
+            return left.subtreeKey.localeCompare(right.subtreeKey);
           }
 
           return left.ply - right.ply;
@@ -748,7 +748,7 @@ export function ViewerShell({
               <div style={{ marginTop: '0.75rem' }}>
                 <ChessBoard
                   parsedStateKey={focusParsedStateKey}
-                  subtitle={`Game ${focusOccurrence.embedding.rootGameId} · ${focusOccurrence.annotations.phaseLabel}`}
+                  subtitle={`${formatSubtreeLabel(focusOccurrence.embedding.subtreeKey)} · ${focusOccurrence.annotations.phaseLabel}`}
                   title={`Focus position at ply ${focusOccurrence.ply}`}
                 />
                 <p style={{ margin: '0.6rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
@@ -793,7 +793,7 @@ export function ViewerShell({
                       }}
                     />
                     <strong>
-                      {formatGameName(occurrence.rootGameId)} · ply {occurrence.ply}
+                      {formatSubtreeLabel(occurrence.subtreeKey)} · ply {occurrence.ply}
                     </strong>
                   </div>
                   <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>

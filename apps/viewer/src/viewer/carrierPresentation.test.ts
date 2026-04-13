@@ -188,7 +188,7 @@ function createOccurrence({
       ballRadius: 0.12,
       azimuth: 0,
       elevation: 0,
-      rootGameId: 'test',
+      subtreeKey: 'e2e4',
       terminalAnchorId: null
     },
     distance: isFocus ? 0 : 1,

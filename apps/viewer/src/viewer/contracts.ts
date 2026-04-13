@@ -40,7 +40,7 @@ export interface NavigationEntryPoint {
   distance: number;
   neighborhoodRadius: number;
   orbit: CameraOrbitPreset;
-  rootGameId: string;
+  subtreeKey: string;
   anchorPly: number;
 }
 
@@ -118,7 +118,7 @@ export interface BuilderAnchorRecord {
   wdlLabel: string | null;
   outcomeClass: string | null;
   anchorPly: number | null;
-  rootGameId: string | null;
+  subtreeKey: string | null;
 }
 
 export interface BuilderTransitionIdentity {
@@ -157,7 +157,7 @@ export interface BuilderOccurrenceEmbedding {
   ballRadius: number;
   azimuth: number;
   elevation: number;
-  rootGameId: string;
+  subtreeKey: string;
   terminalAnchorId: string | null;
 }
 
@@ -505,7 +505,7 @@ export type RuntimeTranspositionEmphasis = 'focus' | 'context';
 export interface RuntimeTranspositionOccurrence {
   occurrenceId: string;
   coordinate: Vector3;
-  rootGameId: string;
+  subtreeKey: string;
   ply: number;
   phaseLabel: string;
   isFocus: boolean;

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { formatSubtreeLabel } from './chessContext.ts';
 import { buildViewerReviewArtifacts } from './reviewArtifactDocuments.ts';
 import {
   loadRuntimeArtifactBundleFromImportMetaUrl
@@ -50,6 +51,12 @@ test('builds deterministic N11 review artifacts from the published runtime artif
   assert.ok(evidenceIndex);
   assert.ok(reviewNotes);
 
+  const parsedEvidenceIndex = JSON.parse(evidenceIndex!);
+  const focusSubtreeLabel = formatSubtreeLabel(parsedEvidenceIndex.subtreeKey);
+  const endgameSubtreeLabel = formatSubtreeLabel(
+    parsedEvidenceIndex.navigationEntryPoints[2].subtreeKey
+  );
+
   assert.match(anchoredEntrypoints!, /N12 anchored entrypoints review/i);
   assert.match(
     anchoredEntrypoints!,
@@ -60,18 +67,23 @@ test('builds deterministic N11 review artifacts from the published runtime artif
   assert.ok(Number(anchoredHeightMatch?.[1] ?? '0') >= 1100);
   assert.match(anchoredEntrypoints!, /Radius 3 · distance 5\.0/);
   assert.match(anchoredEntrypoints!, /Expected read/);
-  assert.match(anchoredEntrypoints!, /Endgame Simplification Lab/);
+  assert.match(anchoredEntrypoints!, new RegExp(escapeRegExp(endgameSubtreeLabel)));
   assert.match(
     structureZoom!,
-    /Italian Branch Lab: Nf6 to b4, d3, d4, h3, Ng5, O-O/
+    new RegExp(
+      `${escapeRegExp(focusSubtreeLabel)}: Nf6 to b4, d3, d4, h3, Ng5, O-O`
+    )
   );
   assert.match(structureZoom!, /Focus board/);
   assert.match(structureZoom!, /Focused node/);
-  assert.match(structureZoom!, /in Nf6/);
+  assert.match(structureZoom!, new RegExp(escapeRegExp(focusSubtreeLabel)));
   assert.match(structureZoom!, /out [^<]+/);
   assert.match(
     refinementSteps!,
-    /Italian Branch Lab: refinement toward b4, d3, d4, h3, Ng5, O-O/i
+    new RegExp(
+      `${escapeRegExp(focusSubtreeLabel)}: refinement toward b4, d3, d4, h3, Ng5, O-O`,
+      'i'
+    )
   );
   assert.match(refinementSteps!, /Budget 3/);
   assert.match(refinementSteps!, /Budget 6/);
@@ -88,8 +100,6 @@ test('builds deterministic N11 review artifacts from the published runtime artif
   assert.match(reviewNotes!, /## Supporting artifacts/);
   assert.match(reviewNotes!, /Do not mark N12 settled without recorded human review/);
   assert.match(reviewNotes!, /Anchored entrypoint verdict/);
-
-  const parsedEvidenceIndex = JSON.parse(evidenceIndex!);
   assert.equal(
     parsedEvidenceIndex.graphObjectId,
     runtimeArtifactBundle.builderBootstrapManifest.graphObjectId
@@ -110,6 +120,7 @@ test('builds deterministic N11 review artifacts from the published runtime artif
   );
   assert.equal(typeof parsedEvidenceIndex.focusNode.phaseLabel, 'string');
   assert.equal(typeof parsedEvidenceIndex.focusNode.materialSignature, 'string');
+  assert.equal(typeof parsedEvidenceIndex.subtreeKey, 'string');
   assert.equal(parsedEvidenceIndex.focusTurn, 'White to move');
   assert.deepEqual(parsedEvidenceIndex.cameraDistances, [5, 3.85, 2.8]);
   assert.deepEqual(parsedEvidenceIndex.refinementBudgets, [3, 6, 12]);
@@ -118,3 +129,7 @@ test('builds deterministic N11 review artifacts from the published runtime artif
   assert.equal(parsedEvidenceIndex.artifacts[2].focusBoardIncluded, false);
   assert.equal(parsedEvidenceIndex.artifacts[3].regime, 'camera-grammar');
 });
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}

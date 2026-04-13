@@ -716,7 +716,7 @@ def _occurrence_payload(
         source_location=dry_run.ingested_corpus.declaration.location,
         detail=(
             f"occurrence {occurrence.occurrence_id} carried from "
-            f"{embedding_record.root_game_id} at ply {occurrence.ply}"
+            f"subtree {embedding_record.subtree_key} at ply {occurrence.ply}"
         ),
     )
 
@@ -776,7 +776,7 @@ def _occurrence_payload(
             "ballRadius": embedding_record.ball_radius,
             "azimuth": embedding_record.azimuth,
             "elevation": embedding_record.elevation,
-            "rootGameId": embedding_record.root_game_id,
+            "subtreeKey": embedding_record.subtree_key,
             "terminalAnchorId": embedding_record.terminal_anchor_id,
         },
     }
@@ -1002,7 +1002,7 @@ def _build_shared_anchor_records(
                 ),
                 entry_id=entry_id,
                 anchor_ply=occurrence.ply,
-                root_game_id=embedding.root_game_id,
+                subtree_key=embedding.subtree_key,
             )
         )
 
@@ -1144,7 +1144,7 @@ def _opening_anchor_key(dry_run: PipelineDryRun, occurrence) -> tuple[float, int
     return (
         -(salience_record.normalized_score if salience_record is not None else 0.0),
         occurrence.ply,
-        embedding_record.root_game_id if embedding_record is not None else "",
+        embedding_record.subtree_key if embedding_record is not None else "",
         occurrence.occurrence_id,
     )
 
@@ -1160,7 +1160,7 @@ def _middlegame_anchor_key(
         0 if terminal_record is None else 1,
         -(salience_record.normalized_score if salience_record is not None else 0.0),
         occurrence.ply,
-        embedding_record.root_game_id if embedding_record is not None else "",
+        embedding_record.subtree_key if embedding_record is not None else "",
         occurrence.occurrence_id,
     )
 
@@ -1171,7 +1171,7 @@ def _endgame_anchor_key(dry_run: PipelineDryRun, occurrence) -> tuple[int, float
     return (
         occurrence.ply,
         -(salience_record.normalized_score if salience_record is not None else 0.0),
-        embedding_record.root_game_id if embedding_record is not None else "",
+        embedding_record.subtree_key if embedding_record is not None else "",
         occurrence.occurrence_id,
     )
 
@@ -1323,7 +1323,7 @@ def _anchor_payload(record: SharedAnchorRecord) -> dict[str, Any]:
         "wdlLabel": record.wdl_label,
         "outcomeClass": record.outcome_class,
         "anchorPly": record.anchor_ply,
-        "rootGameId": record.root_game_id,
+        "subtreeKey": record.subtree_key,
     }
 
 

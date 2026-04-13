@@ -17,7 +17,7 @@ import {
   createOccurrencePresentation,
   scaleCoordinate
 } from './carrierPresentation.ts';
-import { formatGameName, formatTerminalOutcomeLabel } from './chessContext.ts';
+import { formatSubtreeLabel, formatTerminalOutcomeLabel } from './chessContext.ts';
 import {
   advanceCameraOrbitState,
   resolveOrbitUpVector,
@@ -161,8 +161,8 @@ function TranspositionRelations({
         return left.isFocus ? -1 : 1;
       }
 
-      if (left.rootGameId !== right.rootGameId) {
-        return left.rootGameId.localeCompare(right.rootGameId);
+      if (left.subtreeKey !== right.subtreeKey) {
+        return left.subtreeKey.localeCompare(right.subtreeKey);
       }
 
       return left.ply - right.ply;
@@ -804,7 +804,7 @@ function OccurrenceDataLabels({
           opacity={opacity}
           position={position}
           scale={scale * renderTuning.labelScale}
-          text={formatGameName(occurrence.embedding.rootGameId)}
+          text={formatSubtreeLabel(occurrence.embedding.subtreeKey)}
           textColor={isFocus ? '#7c2d12' : undefined}
         />
       ];

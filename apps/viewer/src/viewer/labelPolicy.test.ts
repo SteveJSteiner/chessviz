@@ -104,7 +104,7 @@ test('caps label saturation around a dense focus branch and keeps the most salie
 
 test('keeps root labels visible farther out and only adds distant terminal labels at closer view', () => {
   const occurrences = [
-    createOccurrence({ occurrenceId: 'root', distance: 2, normalizedScore: 0.8, ply: 0, rootGameId: 'dense-branch-root' }),
+    createOccurrence({ occurrenceId: 'root', distance: 2, normalizedScore: 0.8, ply: 0, subtreeKey: 'root', fixtureKey: 'dense-branch-root' }),
     createOccurrence({ occurrenceId: 'focus', distance: 0, isFocus: true, normalizedScore: 0.94, priorityRank: 0, ply: 5 }),
     createOccurrence({ occurrenceId: 'near-terminal', distance: 1, normalizedScore: 0.72, priorityRank: 2, ply: 6, terminal: true }),
     createOccurrence({ occurrenceId: 'far-terminal', distance: 2, normalizedScore: 0.66, priorityRank: 3, ply: 7, terminal: true })
@@ -186,7 +186,8 @@ function createOccurrence({
   normalizedScore,
   priorityRank = 5,
   ply = 1,
-  rootGameId = 'fixture-game',
+  fixtureKey = 'fixture-game',
+  subtreeKey = ply === 0 ? 'root' : 'e2e4',
   terminal = false
 }: {
   occurrenceId: string;
@@ -195,7 +196,8 @@ function createOccurrence({
   normalizedScore: number;
   priorityRank?: number;
   ply?: number;
-  rootGameId?: string;
+  fixtureKey?: string;
+  subtreeKey?: string;
   terminal?: boolean;
 }): RuntimeNeighborhoodOccurrence {
   const phaseLabel = ply < 8 ? 'opening' : 'middlegame';
@@ -204,13 +206,13 @@ function createOccurrence({
   return {
     occurrenceId,
     stateKey: `${occurrenceId}:state`,
-    path: ply === 0 ? [`game:${rootGameId}`] : [`game:${rootGameId}`, occurrenceId],
+    path: ply === 0 ? [`game:${fixtureKey}`] : [`game:${fixtureKey}`, occurrenceId],
     ply,
     identity: {
       occurrenceKey: occurrenceId,
       positionKey: `${occurrenceId}:state`,
       pathKey:
-        ply === 0 ? `game:${rootGameId}` : `game:${rootGameId}|${occurrenceId}`,
+        ply === 0 ? `game:${fixtureKey}` : `game:${fixtureKey}|${occurrenceId}`,
       continuityKey: `${occurrenceId}:state`
     },
     annotations: {
@@ -268,7 +270,7 @@ function createOccurrence({
       ballRadius: 0.12,
       azimuth: 0,
       elevation: 0,
-      rootGameId,
+      subtreeKey,
       terminalAnchorId: terminal ? `terminal:${occurrenceId}` : null
     },
     distance,

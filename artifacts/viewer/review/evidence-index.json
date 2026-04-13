@@ -6,7 +6,7 @@
     {
       "entryId": "opening",
       "focusOccurrenceId": "occ-27e2be7f2bf706c6",
-      "rootGameId": "qgd-bogo-a",
+      "subtreeKey": "root",
       "anchorPly": 0,
       "neighborhoodRadius": 3,
       "distance": 5
@@ -14,7 +14,7 @@
     {
       "entryId": "middlegame",
       "focusOccurrenceId": "occ-25c32c2bc0227f68",
-      "rootGameId": "italian-branch-lab",
+      "subtreeKey": "e2e4",
       "anchorPly": 8,
       "neighborhoodRadius": 2,
       "distance": 4.2
@@ -22,13 +22,13 @@
     {
       "entryId": "endgame",
       "focusOccurrenceId": "occ-50c5276a269f4c53",
-      "rootGameId": "endgame-simplification-lab",
+      "subtreeKey": "b1c3",
       "anchorPly": 35,
       "neighborhoodRadius": 3,
       "distance": 3.35
     }
   ],
-  "rootGameId": "italian-branch-lab",
+  "subtreeKey": "e2e4",
   "focusNode": {
     "occurrenceId": "occ-25c32c2bc0227f68",
     "ply": 8,

@@ -133,7 +133,7 @@
       "wdlLabel": null,
       "outcomeClass": null,
       "anchorPly": 0,
-      "rootGameId": "qgd-bogo-a"
+      "subtreeKey": "root"
     },
     {
       "anchorId": "entry:middlegame",
@@ -154,7 +154,7 @@
       "wdlLabel": null,
       "outcomeClass": null,
       "anchorPly": 8,
-      "rootGameId": "italian-branch-lab"
+      "subtreeKey": "e2e4"
     },
     {
       "anchorId": "entry:endgame",
@@ -175,7 +175,7 @@
       "wdlLabel": null,
       "outcomeClass": null,
       "anchorPly": 35,
-      "rootGameId": "endgame-simplification-lab"
+      "subtreeKey": "b1c3"
     },
     {
       "anchorId": "terminal:white-win",
@@ -196,7 +196,7 @@
       "wdlLabel": "W",
       "outcomeClass": "white-win",
       "anchorPly": null,
-      "rootGameId": null
+      "subtreeKey": null
     },
     {
       "anchorId": "terminal:black-win",
@@ -217,7 +217,7 @@
       "wdlLabel": "L",
       "outcomeClass": "black-win",
       "anchorPly": null,
-      "rootGameId": null
+      "subtreeKey": null
     },
     {
       "anchorId": "terminal:draw",
@@ -238,7 +238,7 @@
       "wdlLabel": "D",
       "outcomeClass": "draw",
       "anchorPly": null,
-      "rootGameId": null
+      "subtreeKey": null
     }
   ],
   "rootOccurrenceIds": [
@@ -305,7 +305,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-27e2be7f2bf706c6 carried from qgd-bogo-a at ply 0"
+        "detail": "occurrence occ-27e2be7f2bf706c6 carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -329,14 +329,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.075566654163,
-          0.007509141351,
+          -0.010017381944,
+          0.075275218261,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": 3.0425467156365964,
+        "azimuth": 1.7030957561754592,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -371,7 +371,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-1f6a34476710cf44 carried from qgd-bogo-a at ply 1"
+        "detail": "occurrence occ-1f6a34476710cf44 carried from subtree d2d4 at ply 1"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -395,14 +395,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.224090300782,
-          0.030561962092,
+          0.051453595057,
+          0.220234020958,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": 3.006046566505944,
+        "azimuth": 1.3412816822229512,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -438,7 +438,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-9ebdccf7cb340e19 carried from qgd-bogo-a at ply 2"
+        "detail": "occurrence occ-9ebdccf7cb340e19 carried from subtree d2d4 at ply 2"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -462,14 +462,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.3669514686,
-          -0.004386744832,
+          0.04016119792,
+          0.36477349413,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -3.129638658979518,
+        "azimuth": 1.4611389819709362,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -506,7 +506,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-7dbf8aaca2b3697d carried from qgd-bogo-a at ply 3"
+        "detail": "occurrence occ-7dbf8aaca2b3697d carried from subtree d2d4 at ply 3"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -530,14 +530,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.491104537479,
-          -0.008877285562,
+          0.050765054923,
+          0.488554379911,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -3.123518459203189,
+        "azimuth": 1.467259181747265,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -575,7 +575,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6ff7efa5769bde3d carried from qgd-bogo-a at ply 4"
+        "detail": "occurrence occ-6ff7efa5769bde3d carried from subtree d2d4 at ply 4"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -599,14 +599,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.594876867801,
-          -0.012401449679,
+          0.063490060062,
+          0.59160907369,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -3.1207485860904924,
+        "azimuth": 1.46388790749829,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -645,7 +645,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-ffd06139cfd8d752 carried from qgd-bogo-a at ply 5"
+        "detail": "occurrence occ-ffd06139cfd8d752 carried from subtree d2d4 at ply 5"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -669,14 +669,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.672162606008,
-          -0.088436745853,
+          -0.004162811475,
+          0.677942695169,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -3.0107735966708256,
+        "azimuth": 1.5769366085441086,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -716,7 +716,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-7108d24f15ffe66c carried from qgd-bogo-a at ply 6"
+        "detail": "occurrence occ-7108d24f15ffe66c carried from subtree d2d4 at ply 6"
       },
       "salience": {
         "rawScore": 0.0630952380952381,
@@ -740,14 +740,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.776691475239,
-          -0.086961060031,
+          -0.028287442194,
+          0.781032454053,
           0.0
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -3.03009356319992,
+        "azimuth": 1.6069985142222822,
         "elevation": 0.0,
-        "rootGameId": "qgd-bogo-a",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -781,7 +781,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-7b367264afad7c15 carried from qgd-bogo-b at ply 0"
+        "detail": "occurrence occ-7b367264afad7c15 carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -805,14 +805,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.071460227456,
-          -0.025693234851,
+          -0.010017381944,
+          0.075275218261,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": -2.7964390940126203,
+        "azimuth": 1.7030957561754592,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -847,7 +847,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-79415c2c47c30301 carried from qgd-bogo-b at ply 1"
+        "detail": "occurrence occ-79415c2c47c30301 carried from subtree d2d4 at ply 1"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -871,14 +871,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.180761210764,
-          -0.135926013385,
+          0.020745924977,
+          0.225211240901,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": -2.4968354502095096,
+        "azimuth": 1.478937941182649,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -914,7 +914,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-191cfbfe7e7d01d9 carried from qgd-bogo-b at ply 2"
+        "detail": "occurrence occ-191cfbfe7e7d01d9 carried from subtree d2d4 at ply 2"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -938,14 +938,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.284510663898,
-          -0.231789356887,
+          0.043003021964,
+          0.364449398326,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -2.457955477055523,
+        "azimuth": 1.4533449050514573,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -982,7 +982,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-fe3302c45c2e1b15 carried from qgd-bogo-b at ply 3"
+        "detail": "occurrence occ-fe3302c45c2e1b15 carried from subtree d2d4 at ply 3"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -1006,14 +1006,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.3427429684,
-          -0.351837647991,
+          0.001275807774,
+          0.491183107655,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -2.343101467326336,
+        "azimuth": 1.568198914780644,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -1051,7 +1051,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-3b54c1ad347a763b carried from qgd-bogo-b at ply 4"
+        "detail": "occurrence occ-3b54c1ad347a763b carried from subtree d2d4 at ply 4"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -1075,14 +1075,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.469113487582,
-          -0.366012048391,
+          0.100714483881,
+          0.586420392326,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -2.4790291643146283,
+        "azimuth": 1.4007111485017838,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -1121,7 +1121,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-75aa920e2785885d carried from qgd-bogo-b at ply 5"
+        "detail": "occurrence occ-75aa920e2785885d carried from subtree d2d4 at ply 5"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -1145,14 +1145,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.562168860638,
-          -0.378932446567,
+          0.149075338892,
+          0.661362359275,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -2.548492825400598,
+        "azimuth": 1.3490950570276996,
         "elevation": 0.32,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -1192,7 +1192,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-8a3b915d604d5403 carried from qgd-bogo-b at ply 6"
+        "detail": "occurrence occ-8a3b915d604d5403 carried from subtree d2d4 at ply 6"
       },
       "salience": {
         "rawScore": 0.0630952380952381,
@@ -1216,14 +1216,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.652135084633,
-          -0.430733914454,
+          0.118061721828,
+          0.772575759074,
           0.0
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -2.5578728377204194,
+        "azimuth": 1.4191537615533818,
         "elevation": 0.0,
-        "rootGameId": "qgd-bogo-b",
+        "subtreeKey": "d2d4",
         "terminalAnchorId": null
       }
     },
@@ -1257,7 +1257,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-d10897875e44e59b carried from scholars-mate-white at ply 0"
+        "detail": "occurrence occ-d10897875e44e59b carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -1281,14 +1281,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.000355815151,
-          -0.075937999847,
+          -0.073470875816,
+          0.019202521503,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": -1.5754818932844923,
+        "azimuth": 2.8859489229567963,
         "elevation": 0.32,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -1323,7 +1323,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-828d34dd90220088 carried from scholars-mate-white at ply 1"
+        "detail": "occurrence occ-828d34dd90220088 carried from subtree e2e4 at ply 1"
       },
       "salience": {
         "rawScore": 0.17023809523809522,
@@ -1347,14 +1347,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.13511906248,
-          -0.17258421383,
+          -0.200818744776,
+          0.087831108701,
           0.093409409128
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": -0.906559181729649,
+        "azimuth": 2.729295452206431,
         "elevation": 0.40285714285714286,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -1390,7 +1390,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-8f867a23923fe752 carried from scholars-mate-white at ply 2"
+        "detail": "occurrence occ-8f867a23923fe752 carried from subtree e2e4 at ply 2"
       },
       "salience": {
         "rawScore": 0.25595238095238093,
@@ -1414,14 +1414,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.208778016323,
-          -0.270740117179,
+          -0.322463332535,
+          0.113604006619,
           0.180482013513
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -0.9139035262501567,
+        "azimuth": 2.80286982609213,
         "elevation": 0.4857142857142857,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -1458,7 +1458,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-da1729ad0178e787 carried from scholars-mate-white at ply 3"
+        "detail": "occurrence occ-da1729ad0178e787 carried from subtree e2e4 at ply 3"
       },
       "salience": {
         "rawScore": 0.3208333333333333,
@@ -1482,14 +1482,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.210351842819,
-          -0.38194938206,
+          -0.366381938077,
+          0.236426529148,
           0.278611617183
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -1.0673911011000314,
+        "azimuth": 2.5685280645023614,
         "elevation": 0.5685714285714285,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -1527,7 +1527,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-40e4e824d7eaa81e carried from scholars-mate-white at ply 4"
+        "detail": "occurrence occ-40e4e824d7eaa81e carried from subtree e2e4 at ply 4"
       },
       "salience": {
         "rawScore": 0.406547619047619,
@@ -1551,14 +1551,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.22318919741,
-          -0.44570517339,
+          -0.407930740105,
+          0.286459474803,
           0.380059487132
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -1.1065447149017722,
+        "azimuth": 2.5293744507006206,
         "elevation": 0.6514285714285715,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -1597,7 +1597,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-e183cdedadef1bf0 carried from scholars-mate-white at ply 5"
+        "detail": "occurrence occ-e183cdedadef1bf0 carried from subtree e2e4 at ply 5"
       },
       "salience": {
         "rawScore": 0.49226190476190473,
@@ -1621,14 +1621,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.245901081639,
-          -0.469690520261,
+          -0.439303330676,
+          0.296798097082,
           0.478562930761
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -1.0884957084613582,
+        "azimuth": 2.547423457141035,
         "elevation": 0.7342857142857142,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -1668,7 +1668,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-65caf3375c92984c carried from scholars-mate-white at ply 6"
+        "detail": "occurrence occ-65caf3375c92984c carried from subtree e2e4 at ply 6"
       },
       "salience": {
         "rawScore": 0.5779761904761904,
@@ -1692,14 +1692,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.31442590078,
-          -0.610753334192,
+          -0.566550622305,
+          0.388463221777,
           0.372731258902
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -1.09536588946086,
+        "azimuth": 2.5405532761415333,
         "elevation": 0.4971428571428571,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -1740,7 +1740,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-d6e94fa5dd427d26 carried from scholars-mate-white at ply 7"
+        "detail": "occurrence occ-d6e94fa5dd427d26 carried from subtree e2e4 at ply 7"
       },
       "salience": {
         "rawScore": 0.6422619047619048,
@@ -1775,14 +1775,14 @@
       },
       "embedding": {
         "coordinate": [
-          0.327192373888,
-          -0.614217185453,
+          -0.579432186746,
+          0.385455498597,
           0.45595092456
         ],
         "ballRadius": 0.8319908930049684,
-        "azimuth": -1.0813336312015516,
+        "azimuth": 2.5545855344008412,
         "elevation": 0.58,
-        "rootGameId": "scholars-mate-white",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": "terminal:white-win"
       }
     },
@@ -1816,7 +1816,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-2ec900ca21098443 carried from fools-mate-black at ply 0"
+        "detail": "occurrence occ-2ec900ca21098443 carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -1840,14 +1840,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.024876799515,
-          0.071748528007,
+          -0.069340082203,
+          -0.03096222578,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": 1.2370446747077635,
+        "azimuth": -2.7216305447017604,
         "elevation": 0.32,
-        "rootGameId": "fools-mate-black",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -1882,7 +1882,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-098b343ea6d64bd5 carried from fools-mate-black at ply 1"
+        "detail": "occurrence occ-098b343ea6d64bd5 carried from subtree f2f3 at ply 1"
       },
       "salience": {
         "rawScore": 0.21369047619047618,
@@ -1906,14 +1906,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.210858040361,
-          0.102887501166,
+          -0.231769489893,
+          -0.036467172031,
           0.041482990987
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": 0.45395861879087124,
+        "azimuth": -2.985529706163544,
         "elevation": 0.17500000000000002,
-        "rootGameId": "fools-mate-black",
+        "subtreeKey": "f2f3",
         "terminalAnchorId": null
       }
     },
@@ -1949,7 +1949,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-e98487c361da0f1a carried from fools-mate-black at ply 2"
+        "detail": "occurrence occ-e98487c361da0f1a carried from subtree f2f3 at ply 2"
       },
       "salience": {
         "rawScore": 0.3636904761904762,
@@ -1973,14 +1973,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.297742657593,
-          0.246327145369,
+          -0.356928239263,
+          -0.14808776017,
           0.011596363894
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": 0.6911763001357392,
+        "azimuth": -2.7483120248186763,
         "elevation": 0.030000000000000027,
-        "rootGameId": "fools-mate-black",
+        "subtreeKey": "f2f3",
         "terminalAnchorId": null
       }
     },
@@ -2017,7 +2017,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f7b8af2a834d288f carried from fools-mate-black at ply 3"
+        "detail": "occurrence occ-f7b8af2a834d288f carried from subtree f2f3 at ply 3"
       },
       "salience": {
         "rawScore": 0.5136904761904761,
@@ -2041,14 +2041,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.402829595444,
-          0.319312489971,
+          -0.478808624755,
+          -0.187014571832,
           -0.059376024165
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": 0.6702577914928166,
+        "azimuth": -2.7692305334615988,
         "elevation": -0.11499999999999994,
-        "rootGameId": "fools-mate-black",
+        "subtreeKey": "f2f3",
         "terminalAnchorId": null
       }
     },
@@ -2086,7 +2086,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-63c6882f2a36737a carried from fools-mate-black at ply 4"
+        "detail": "occurrence occ-63c6882f2a36737a carried from subtree f2f3 at ply 4"
       },
       "salience": {
         "rawScore": 0.6422619047619048,
@@ -2121,14 +2121,14 @@
       },
       "embedding": {
         "coordinate": [
-          0.447651013034,
-          0.408108571476,
+          -0.547718406716,
+          -0.258744241534,
           -0.161144958356
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": 0.7392235886928858,
+        "azimuth": -2.7002647362615297,
         "elevation": -0.25999999999999995,
-        "rootGameId": "fools-mate-black",
+        "subtreeKey": "f2f3",
         "terminalAnchorId": "terminal:black-win"
       }
     },
@@ -2162,7 +2162,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-39672723f3979502 carried from repetition-draw at ply 0"
+        "detail": "occurrence occ-39672723f3979502 carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -2186,14 +2186,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.04776874148,
-          -0.059032649971,
+          -0.015130525911,
+          -0.074416218735,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": -2.2511170018998627,
+        "azimuth": -1.7713849897325213,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -2228,7 +2228,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-3df389a83da4b1a6 carried from repetition-draw at ply 1"
+        "detail": "occurrence occ-3df389a83da4b1a6 carried from subtree g1f3 at ply 1"
       },
       "salience": {
         "rawScore": 0.13869047619047617,
@@ -2252,14 +2252,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.139666723253,
-          -0.177886769736,
+          0.000865698761,
+          -0.226163098221,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": -2.236412837548773,
+        "azimuth": -1.5669685823925095,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2295,7 +2295,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-5844c88338924ed3 carried from repetition-draw at ply 2"
+        "detail": "occurrence occ-5844c88338924ed3 carried from subtree g1f3 at ply 2"
       },
       "salience": {
         "rawScore": 0.21369047619047618,
@@ -2319,14 +2319,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.12486910737,
-          -0.34508017889,
+          0.122665444476,
+          -0.345869646788,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -1.917993415402095,
+        "azimuth": -1.2299778646511315,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2363,7 +2363,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-a348e528205679e9 carried from repetition-draw at ply 3"
+        "detail": "occurrence occ-a348e528205679e9 carried from subtree g1f3 at ply 3"
       },
       "salience": {
         "rawScore": 0.30952380952380953,
@@ -2387,14 +2387,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.087488789217,
-          -0.483330305995,
+          0.220249092589,
+          -0.439036228739,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -1.7498697404202372,
+        "azimuth": -1.105817636222107,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2432,7 +2432,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-8e57e74a73537a36 carried from repetition-draw at ply 4"
+        "detail": "occurrence occ-8e57e74a73537a36 carried from subtree g1f3 at ply 4"
       },
       "salience": {
         "rawScore": 0.4886904761904762,
@@ -2456,14 +2456,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.321389540157,
-          -0.500740498938,
+          -0.043897442147,
+          -0.593384612517,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -2.1414056414702336,
+        "azimuth": -1.6446398731170389,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2502,7 +2502,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-80fd3ca4f20451b4 carried from repetition-draw at ply 5"
+        "detail": "occurrence occ-80fd3ca4f20451b4 carried from subtree g1f3 at ply 5"
       },
       "salience": {
         "rawScore": 0.4386904761904762,
@@ -2526,14 +2526,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.120575746612,
-          -0.667146997491,
+          0.327855186922,
+          -0.593409305067,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -1.7495995597671496,
+        "azimuth": -1.0660402160382476,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2573,7 +2573,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-387cdce9c0bf5677 carried from repetition-draw at ply 6"
+        "detail": "occurrence occ-387cdce9c0bf5677 carried from subtree g1f3 at ply 6"
       },
       "salience": {
         "rawScore": 0.5136904761904761,
@@ -2597,14 +2597,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.048439802794,
-          -0.740286653067,
+          0.428460356043,
+          -0.605633937707,
           0.245847779056
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -1.6361370249642726,
+        "azimuth": -0.9550827511878395,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2645,7 +2645,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-efe95b9c393f7960 carried from repetition-draw at ply 7"
+        "detail": "occurrence occ-efe95b9c393f7960 carried from subtree g1f3 at ply 7"
       },
       "salience": {
         "rawScore": 0.6095238095238095,
@@ -2669,14 +2669,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.005930344988,
-          -0.789732957094,
+          0.472982317382,
+          -0.632456354191,
           0.261716513677
         ],
         "ballRadius": 0.8319908930049684,
-        "azimuth": -1.5632871637688623,
+        "azimuth": -0.9286728080709774,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": null
       }
     },
@@ -2718,7 +2718,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-854ee946e516ebcc carried from repetition-draw at ply 8"
+        "detail": "occurrence occ-854ee946e516ebcc carried from subtree g1f3 at ply 8"
       },
       "salience": {
         "rawScore": 0.7672619047619048,
@@ -2753,14 +2753,14 @@
       },
       "embedding": {
         "coordinate": [
-          -0.365474254119,
-          -0.739500371286,
+          0.049255003575,
+          -0.823411303164,
           0.273357540154
         ],
         "ballRadius": 0.8689974535721419,
-        "azimuth": -2.0298074935643036,
+        "azimuth": -1.511049295418179,
         "elevation": 0.32,
-        "rootGameId": "repetition-draw",
+        "subtreeKey": "g1f3",
         "terminalAnchorId": "terminal:draw"
       }
     },
@@ -2794,7 +2794,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-c691ba2463970683 carried from italian-branch-lab at ply 0"
+        "detail": "occurrence occ-c691ba2463970683 carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -2818,14 +2818,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.056420679541,
-          0.050827289377,
+          -0.073470875816,
+          0.019202521503,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": 2.408301090474091,
+        "azimuth": 2.8859489229567963,
         "elevation": 0.32,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -2860,7 +2860,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-0d6ff4200cd3d978 carried from italian-branch-lab at ply 1"
+        "detail": "occurrence occ-0d6ff4200cd3d978 carried from subtree e2e4 at ply 1"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -2884,14 +2884,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.032067959927,
-          0.223879749816,
+          -0.160286442981,
+          0.159557991426,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": 1.7130660426544067,
+        "azimuth": 2.3584720045636782,
         "elevation": 0.32,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -2927,7 +2927,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-01b0f8a4072b48a0 carried from italian-branch-lab at ply 2"
+        "detail": "occurrence occ-01b0f8a4072b48a0 carried from subtree e2e4 at ply 2"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -2951,14 +2951,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.053608865993,
-          0.363040925138,
+          -0.273664732842,
+          0.244499975125,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": 1.7174030304780599,
+        "azimuth": 2.412419891078172,
         "elevation": 0.32,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -2995,7 +2995,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-55f354bf2d7841fa carried from italian-branch-lab at ply 3"
+        "detail": "occurrence occ-55f354bf2d7841fa carried from subtree e2e4 at ply 3"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3019,14 +3019,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.015171432401,
-          0.490950405408,
+          -0.293610213474,
+          0.393770892113,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": 1.5399039887727033,
+        "azimuth": 2.2114993718423115,
         "elevation": 0.32,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3064,7 +3064,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-9057d9a4043a3707 carried from italian-branch-lab at ply 4"
+        "detail": "occurrence occ-9057d9a4043a3707 carried from subtree e2e4 at ply 4"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3088,14 +3088,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.072656547996,
-          0.590553392872,
+          -0.424341121535,
+          0.417093390469,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": 1.6932124355832525,
+        "azimuth": 2.3648078186528605,
         "elevation": 0.32,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3134,7 +3134,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-ba87ac9c8c2a67d3 carried from italian-branch-lab at ply 5"
+        "detail": "occurrence occ-ba87ac9c8c2a67d3 carried from subtree e2e4 at ply 5"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3158,14 +3158,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.074787811285,
-          0.673817787102,
+          -0.477819616253,
+          0.480949104642,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": 1.6813350485374,
+        "azimuth": 2.3529304316070077,
         "elevation": 0.32,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3205,7 +3205,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-667c8961e77994e5 carried from italian-branch-lab at ply 6"
+        "detail": "occurrence occ-667c8961e77994e5 carried from subtree e2e4 at ply 6"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3229,14 +3229,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.140331881061,
-          0.76884253058,
+          -0.588257264679,
+          0.514553460996,
           0.0
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": 1.7513325544752645,
+        "azimuth": 2.4229279375448725,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3277,7 +3277,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6e7ae72f929d65c9 carried from italian-branch-lab at ply 7"
+        "detail": "occurrence occ-6e7ae72f929d65c9 carried from subtree e2e4 at ply 7"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3301,14 +3301,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.101335412854,
-          0.825796573101,
+          -0.593168499162,
+          0.583403786107,
           0.0
         ],
         "ballRadius": 0.8319908930049684,
-        "azimuth": 1.6928982052695893,
+        "azimuth": 2.3644935883391973,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3350,7 +3350,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-25c32c2bc0227f68 carried from italian-branch-lab at ply 8"
+        "detail": "occurrence occ-25c32c2bc0227f68 carried from subtree e2e4 at ply 8"
       },
       "salience": {
         "rawScore": 0.17083333333333334,
@@ -3374,14 +3374,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.099886883774,
-          0.863237617788,
+          -0.615331701555,
+          0.613615084052,
           0.0
         ],
         "ballRadius": 0.8689974535721419,
-        "azimuth": 1.6859959262586395,
+        "azimuth": 2.3575913093282472,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3424,7 +3424,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f0d6eae79500a722 carried from italian-branch-lab at ply 9"
+        "detail": "occurrence occ-f0d6eae79500a722 carried from subtree e2e4 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3448,14 +3448,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.123405395765,
-          0.887185423059,
+          -0.648643876501,
+          0.617728085868,
           0.0
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": 1.7090071419845518,
+        "azimuth": 2.3806025250541594,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3499,7 +3499,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-ce2e2fcc396bf508 carried from italian-branch-lab at ply 10"
+        "detail": "occurrence occ-ce2e2fcc396bf508 carried from subtree e2e4 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3523,14 +3523,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.143214094973,
-          0.903538439031,
+          -0.674326149885,
+          0.618204037019,
           0.0
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": 1.727992200584052,
+        "azimuth": 2.3995875836536595,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3575,7 +3575,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6d1c5dfc25af296a carried from italian-branch-lab at ply 11"
+        "detail": "occurrence occ-6d1c5dfc25af296a carried from subtree e2e4 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3599,14 +3599,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.134349783471,
-          0.918571292927,
+          -0.67674087953,
+          0.635487896408,
           0.0
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": 1.7160260973968253,
+        "azimuth": 2.387621480466433,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3652,7 +3652,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-75d9ebf1f30ea6f8 carried from italian-branch-lab at ply 12"
+        "detail": "occurrence occ-75d9ebf1f30ea6f8 carried from subtree e2e4 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3676,14 +3676,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.138578312582,
-          0.92757885995,
+          -0.685655928497,
+          0.639908147988,
           0.0
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": 1.7190973492663155,
+        "azimuth": 2.390692732335923,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3730,7 +3730,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-27c4c8b306dd7f88 carried from italian-branch-lab at ply 13"
+        "detail": "occurrence occ-27c4c8b306dd7f88 carried from subtree e2e4 at ply 13"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -3754,14 +3754,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.141176050449,
-          0.933949806119,
+          -0.691653745622,
+          0.643279110291,
           0.0
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": 1.7208207622354215,
+        "azimuth": 2.3924161453050288,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3804,7 +3804,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-7c7e7277329680d3 carried from italian-branch-lab at ply 9"
+        "detail": "occurrence occ-7c7e7277329680d3 carried from subtree e2e4 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3828,14 +3828,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.113527784141,
-          0.888503409572,
+          -0.641731484456,
+          0.624906047699,
           0.0
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": 1.6978818709791121,
+        "azimuth": 2.3694772540487197,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3879,7 +3879,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-4f4ee8b0f295e704 carried from italian-branch-lab at ply 10"
+        "detail": "occurrence occ-4f4ee8b0f295e704 carried from subtree e2e4 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3903,14 +3903,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.121095140552,
-          0.90676786155,
+          -0.659020231675,
+          0.634495328626,
           0.0
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": 1.7035567182422016,
+        "azimuth": 2.375152101311809,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -3955,7 +3955,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-34a6f5864ea78102 carried from italian-branch-lab at ply 11"
+        "detail": "occurrence occ-34a6f5864ea78102 carried from subtree e2e4 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -3979,14 +3979,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.118339888351,
-          0.920770739833,
+          -0.665576428369,
+          0.647171617508,
           0.0
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": 1.6986182520489508,
+        "azimuth": 2.3702136351185583,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4032,7 +4032,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-79f965fc301271fa carried from italian-branch-lab at ply 12"
+        "detail": "occurrence occ-79f965fc301271fa carried from subtree e2e4 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4056,14 +4056,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.119807372499,
-          0.930189595534,
+          -0.672585967118,
+          0.653631858908,
           0.0
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": 1.6988899856593078,
+        "azimuth": 2.3704853687289154,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4110,7 +4110,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-71618892463fa67a carried from italian-branch-lab at ply 13"
+        "detail": "occurrence occ-71618892463fa67a carried from subtree e2e4 at ply 13"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -4134,14 +4134,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.115267586086,
-          0.937500027289,
+          -0.673580897872,
+          0.662179501035,
           0.0
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": 1.6931344102925325,
+        "azimuth": 2.36472979336214,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4184,7 +4184,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-5b83a2c927cfb966 carried from italian-branch-lab at ply 9"
+        "detail": "occurrence occ-5b83a2c927cfb966 carried from subtree e2e4 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4208,14 +4208,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.085176843548,
-          0.89166797179,
+          -0.621506622376,
+          0.645024328948,
           0.0
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": 1.6660326408281787,
+        "azimuth": 2.3376280238977865,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4259,7 +4259,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-46092dc245df58d7 carried from italian-branch-lab at ply 10"
+        "detail": "occurrence occ-46092dc245df58d7 carried from subtree e2e4 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4283,14 +4283,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.086416670317,
-          0.91072726263,
+          -0.634336566939,
+          0.659173048333,
           0.0
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": 1.665400618298896,
+        "azimuth": 2.336996001368504,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4335,7 +4335,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f1708bbef014b2fd carried from italian-branch-lab at ply 11"
+        "detail": "occurrence occ-f1708bbef014b2fd carried from subtree e2e4 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4359,14 +4359,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.07891459155,
-          0.9249840927,
+          -0.637334823457,
+          0.675001783196,
           0.0
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": 1.6559047758820022,
+        "azimuth": 2.32750015895161,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4412,7 +4412,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-4f9a24c2cb5ac6b0 carried from italian-branch-lab at ply 12"
+        "detail": "occurrence occ-4f9a24c2cb5ac6b0 carried from subtree e2e4 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4436,14 +4436,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.089488471091,
-          0.933594292874,
+          -0.650969947,
+          0.675162660584,
           0.0
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": 1.6663580729082406,
+        "azimuth": 2.3379534559778485,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4490,7 +4490,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-67c8744972075e12 carried from italian-branch-lab at ply 13"
+        "detail": "occurrence occ-67c8744972075e12 carried from subtree e2e4 at ply 13"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -4514,14 +4514,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.09650915501,
-          0.939616358185,
+          -0.660213092676,
+          0.675508393604,
           0.0
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": 1.6731486418815813,
+        "azimuth": 2.344744024951189,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4564,7 +4564,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f9edcc5c2829694b carried from italian-branch-lab at ply 9"
+        "detail": "occurrence occ-f9edcc5c2829694b carried from subtree e2e4 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4588,14 +4588,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.090655417377,
-          0.891127635018,
+          -0.625459197273,
+          0.641192372958,
           0.0
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": 1.6721786696416963,
+        "azimuth": 2.343774052711304,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4639,7 +4639,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-5f720f29ae39c22c carried from italian-branch-lab at ply 10"
+        "detail": "occurrence occ-5f720f29ae39c22c carried from subtree e2e4 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4663,14 +4663,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.104045830864,
-          0.908881979624,
+          -0.646989001007,
+          0.646759012602,
           0.0
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": 1.6847768762090694,
+        "azimuth": 2.356372259278677,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4715,7 +4715,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-69da2b6496169de0 carried from italian-branch-lab at ply 11"
+        "detail": "occurrence occ-69da2b6496169de0 carried from subtree e2e4 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4739,14 +4739,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.108231057938,
-          0.922013623872,
+          -0.658436299889,
+          0.654434659456,
           0.0
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": 1.6876471051089708,
+        "azimuth": 2.3592424881785785,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4792,7 +4792,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-ac8c786cecc9fa69 carried from italian-branch-lab at ply 12"
+        "detail": "occurrence occ-ac8c786cecc9fa69 carried from subtree e2e4 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4816,14 +4816,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.115903537129,
-          0.930684081859,
+          -0.669837614879,
+          0.656448063321,
           0.0
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": 1.694694290174415,
+        "azimuth": 2.366289673244023,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4870,7 +4870,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-7fdbecbaa8bf671c carried from italian-branch-lab at ply 13"
+        "detail": "occurrence occ-7fdbecbaa8bf671c carried from subtree e2e4 at ply 13"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -4894,14 +4894,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.11338272502,
-          0.937729851949,
+          -0.672248377269,
+          0.663532242494,
           0.0
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": 1.6911241389629539,
+        "azimuth": 2.362719522032562,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -4944,7 +4944,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-9d4c880355c3035a carried from italian-branch-lab at ply 9"
+        "detail": "occurrence occ-9d4c880355c3035a carried from subtree e2e4 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -4968,14 +4968,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.087095262223,
-          0.891482631289,
+          -0.622893092513,
+          0.64368553028,
           0.0
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": 1.6681843580548856,
+        "azimuth": 2.3397797411244934,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5019,7 +5019,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-3b78682dab123def carried from italian-branch-lab at ply 10"
+        "detail": "occurrence occ-3b78682dab123def carried from subtree e2e4 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5043,14 +5043,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.072769726554,
-          0.91191916018,
+          -0.62439497172,
+          0.668597716939,
           0.0
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": 1.650426031262293,
+        "azimuth": 2.3220214143319007,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5095,7 +5095,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-13e0e444859204dd carried from italian-branch-lab at ply 11"
+        "detail": "occurrence occ-13e0e444859204dd carried from subtree e2e4 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5119,14 +5119,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.070078087067,
-          0.925695493249,
+          -0.630860001834,
+          0.68105707734,
           0.0
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": 1.6463553785698444,
+        "azimuth": 2.317950761639452,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5172,7 +5172,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-d7ea64962c65a70d carried from italian-branch-lab at ply 12"
+        "detail": "occurrence occ-d7ea64962c65a70d carried from subtree e2e4 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5196,14 +5196,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.074445213064,
-          0.934914113915,
+          -0.640014873705,
+          0.685556308104,
           0.0
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": 1.6502565312055013,
+        "azimuth": 2.321851914275109,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5250,7 +5250,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-24dcf15814b509be carried from italian-branch-lab at ply 13"
+        "detail": "occurrence occ-24dcf15814b509be carried from subtree e2e4 at ply 13"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -5274,14 +5274,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.069023170791,
-          0.942034351531,
+          -0.64020080256,
+          0.694504031645,
           0.0
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": 1.6439359624169592,
+        "azimuth": 2.315531345486567,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5324,7 +5324,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-d4c0a727bc3cb6b0 carried from italian-branch-lab at ply 9"
+        "detail": "occurrence occ-d4c0a727bc3cb6b0 carried from subtree e2e4 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5348,14 +5348,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.081929409105,
-          0.891972218466,
+          -0.619153746548,
+          0.647283171979,
           0.0
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": 1.6623912888652488,
+        "azimuth": 2.3339866719348565,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5399,7 +5399,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-a57fc69957d5859e carried from italian-branch-lab at ply 10"
+        "detail": "occurrence occ-a57fc69957d5859e carried from subtree e2e4 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5423,14 +5423,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.091184077757,
-          0.910262298334,
+          -0.637779318927,
+          0.655842609286,
           0.0
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": 1.6706366686864877,
+        "azimuth": 2.3422320517560955,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5475,7 +5475,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-d8b11eedcd7a0e3a carried from italian-branch-lab at ply 11"
+        "detail": "occurrence occ-d8b11eedcd7a0e3a carried from subtree e2e4 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5499,14 +5499,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.079581475457,
-          0.924926955642,
+          -0.63782132744,
+          0.674542095625,
           0.0
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": 1.6566257660924328,
+        "azimuth": 2.3282211491620406,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5552,7 +5552,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-fef7f877cdfedb7b carried from italian-branch-lab at ply 12"
+        "detail": "occurrence occ-fef7f877cdfedb7b carried from subtree e2e4 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5576,14 +5576,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.072618278647,
-          0.935057792733,
+          -0.638674096801,
+          0.686805567988,
           0.0
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": 1.648302561920321,
+        "azimuth": 2.3198979449899286,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5630,7 +5630,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-28b57dbf27801997 carried from italian-branch-lab at ply 13"
+        "detail": "occurrence occ-28b57dbf27801997 carried from subtree e2e4 at ply 13"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -5654,14 +5654,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          -0.074065152287,
-          0.941651353095,
+          -0.643909501428,
+          0.691066908151,
           0.0
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": 1.6492892646614912,
+        "azimuth": 2.320884647731099,
         "elevation": 0.0,
-        "rootGameId": "italian-branch-lab",
+        "subtreeKey": "e2e4",
         "terminalAnchorId": null
       }
     },
@@ -5695,7 +5695,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-a38b4b89386c3e44 carried from endgame-simplification-lab at ply 0"
+        "detail": "occurrence occ-a38b4b89386c3e44 carried from subtree root at ply 0"
       },
       "salience": {
         "rawScore": 0.16726190476190478,
@@ -5719,14 +5719,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.069883484601,
-          -0.029715400136,
+          0.069773975979,
+          -0.029971631608,
           0.025165324849
         ],
         "ballRadius": 0.08,
-        "azimuth": -0.40205145853035534,
+        "azimuth": -0.4057208820393011,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "root",
         "terminalAnchorId": null
       }
     },
@@ -5761,7 +5761,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-03923f40982b9b5e carried from endgame-simplification-lab at ply 1"
+        "detail": "occurrence occ-03923f40982b9b5e carried from subtree b1c3 at ply 1"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5785,14 +5785,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.218180344629,
-          -0.05956369405,
+          0.21805747036,
+          -0.060011965904,
           0.074948603662
         ],
         "ballRadius": 0.23825992030209497,
-        "azimuth": -0.2665078396950722,
+        "azimuth": -0.2685630108896621,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -5828,7 +5828,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-e74d7fb3111b2732 carried from endgame-simplification-lab at ply 2"
+        "detail": "occurrence occ-e74d7fb3111b2732 carried from subtree b1c3 at ply 2"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5852,14 +5852,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.339220880312,
-          -0.140006493416,
+          0.338932426814,
+          -0.140703354232,
           0.121612517914
         ],
         "ballRadius": 0.38660345103397864,
-        "azimuth": -0.39143176419864384,
+        "azimuth": -0.39348693539323376,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -5896,7 +5896,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-0ec08abd6d9eed0c carried from endgame-simplification-lab at ply 3"
+        "detail": "occurrence occ-0ec08abd6d9eed0c carried from subtree b1c3 at ply 3"
       },
       "salience": {
         "rawScore": 0.08452380952380951,
@@ -5920,14 +5920,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.482854294397,
-          -0.090078872737,
+          0.48268450361,
+          -0.090984300329,
           0.162773426981
         ],
         "ballRadius": 0.5174530524237938,
-        "azimuth": -0.18443486797751038,
+        "azimuth": -0.18631035413868954,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -5965,7 +5965,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f461ac60796e96e7 carried from endgame-simplification-lab at ply 4"
+        "detail": "occurrence occ-f461ac60796e96e7 carried from subtree b1c3 at ply 4"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -5989,14 +5989,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.572800493739,
-          -0.161033779598,
+          0.57246833231,
+          -0.162210641763,
           0.197178724479
         ],
         "ballRadius": 0.6268267170328193,
-        "azimuth": -0.27406008951839955,
+        "azimuth": -0.2761152607129894,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6035,7 +6035,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-3a4e4fac53b77251 carried from endgame-simplification-lab at ply 5"
+        "detail": "occurrence occ-3a4e4fac53b77251 carried from subtree b1c3 at ply 5"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6059,14 +6059,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.668484219749,
-          -0.112926856321,
+          0.668250724143,
+          -0.11430046638,
           0.224667261836
         ],
         "ballRadius": 0.7142121571865022,
-        "azimuth": -0.16734976202019392,
+        "azimuth": -0.16940493321478378,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6106,7 +6106,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-1c3a9bb8cdb69d3a carried from endgame-simplification-lab at ply 6"
+        "detail": "occurrence occ-1c3a9bb8cdb69d3a carried from subtree b1c3 at ply 6"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6130,14 +6130,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.735409552292,
-          -0.09769101085,
+          0.735207227597,
+          -0.099202196004,
           0.245847779056
         ],
         "ballRadius": 0.7815445436252338,
-        "azimuth": -0.13206572379758943,
+        "azimuth": -0.1341208949921793,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6178,7 +6178,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-695ac20c25d88703 carried from endgame-simplification-lab at ply 7"
+        "detail": "occurrence occ-695ac20c25d88703 carried from subtree b1c3 at ply 7"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6202,14 +6202,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.786714802141,
-          -0.069232453406,
+          0.786570856263,
+          -0.070849139658,
           0.261716513677
         ],
         "ballRadius": 0.8319908930049684,
-        "azimuth": -0.08777584843688466,
+        "azimuth": -0.08983101963147452,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6251,7 +6251,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-595209d36c22109f carried from endgame-simplification-lab at ply 8"
+        "detail": "occurrence occ-595209d36c22109f carried from subtree b1c3 at ply 8"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6275,14 +6275,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.820362234412,
-          -0.086244036932,
+          0.820183255783,
+          -0.087929838443,
           0.273357540154
         ],
         "ballRadius": 0.8689974535721419,
-        "azimuth": -0.10474446090716288,
+        "azimuth": -0.10679963210175274,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6325,7 +6325,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f8986fde1c8e8340 carried from endgame-simplification-lab at ply 9"
+        "detail": "occurrence occ-f8986fde1c8e8340 carried from subtree b1c3 at ply 9"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6349,14 +6349,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.842861934657,
-          -0.111886909277,
+          0.842630208056,
+          -0.113618897337,
           0.281765763057
         ],
         "ballRadius": 0.8957270045010046,
-        "azimuth": -0.13197483215596156,
+        "azimuth": -0.13403000335055143,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6400,7 +6400,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-543e2e3d6d132908 carried from endgame-simplification-lab at ply 10"
+        "detail": "occurrence occ-543e2e3d6d132908 carried from subtree b1c3 at ply 10"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6424,14 +6424,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.86207096525,
-          -0.104467226382,
+          0.861854446791,
+          -0.10623870793,
           0.287771154374
         ],
         "ballRadius": 0.9148180080243044,
-        "azimuth": -0.12059368922502808,
+        "azimuth": -0.12264886041961795,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6476,7 +6476,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-978f739caa4a3d51 carried from endgame-simplification-lab at ply 11"
+        "detail": "occurrence occ-978f739caa4a3d51 carried from subtree b1c3 at ply 11"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6500,14 +6500,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.873652742841,
-          -0.115216089352,
+          0.873414109185,
+          -0.117011350719,
           0.292026064228
         ],
         "ballRadius": 0.9283442704667189,
-        "azimuth": -0.13112192501164,
+        "azimuth": -0.13317709620622986,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6553,7 +6553,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f76c77a74df7e711 carried from endgame-simplification-lab at ply 12"
+        "detail": "occurrence occ-f76c77a74df7e711 carried from subtree b1c3 at ply 12"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6577,14 +6577,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.882543345026,
-          -0.116982077257,
+          0.882301063188,
+          -0.11879560659,
           0.295023605659
         ],
         "ballRadius": 0.937873387054261,
-        "azimuth": -0.13178286830610517,
+        "azimuth": -0.13383803950069503,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6631,7 +6631,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-c4f580477286d7a5 carried from endgame-simplification-lab at ply 13"
+        "detail": "occurrence occ-c4f580477286d7a5 carried from subtree b1c3 at ply 13"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6655,14 +6655,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.88885518098,
-          -0.117664791793,
+          0.888611482719,
+          -0.119491291579,
           0.297126877926
         ],
         "ballRadius": 0.9445596421453034,
-        "azimuth": -0.1316126810554091,
+        "azimuth": -0.13366785224999897,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6710,7 +6710,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-25a1cf2b12a643fd carried from endgame-simplification-lab at ply 14"
+        "detail": "occurrence occ-25a1cf2b12a643fd carried from subtree b1c3 at ply 14"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6734,14 +6734,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.89302198171,
-          -0.120013935657,
+          0.892773446759,
+          -0.121848993964,
           0.298598515903
         ],
         "ballRadius": 0.9492379460745469,
-        "azimuth": -0.13359038047010446,
+        "azimuth": -0.13564555166469433,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6790,7 +6790,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f52843f0d4705bbb carried from endgame-simplification-lab at ply 15"
+        "detail": "occurrence occ-f52843f0d4705bbb carried from subtree b1c3 at ply 15"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6814,14 +6814,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.89563741462,
-          -0.12378719242,
+          0.895381119463,
+          -0.125627617918,
           0.299626175134
         ],
         "ballRadius": 0.9525048515886383,
-        "azimuth": -0.13734117609397345,
+        "azimuth": -0.13939634728856332,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6871,7 +6871,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-ee6e1a1ce96b3e70 carried from endgame-simplification-lab at ply 16"
+        "detail": "occurrence occ-ee6e1a1ce96b3e70 carried from subtree b1c3 at ply 16"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6895,14 +6895,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.898004645185,
-          -0.12244373682,
+          0.897751106058,
+          -0.124289030215,
           0.300342810762
         ],
         "ballRadius": 0.9547830200814817,
-        "azimuth": -0.135515204911173,
+        "azimuth": -0.13757037610576286,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -6953,7 +6953,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6899449e91bf3d37 carried from endgame-simplification-lab at ply 17"
+        "detail": "occurrence occ-6899449e91bf3d37 carried from subtree b1c3 at ply 17"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -6977,14 +6977,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.899624829098,
-          -0.121709125918,
+          0.899372796299,
+          -0.123557750618,
           0.300842074417
         ],
         "ballRadius": 0.9563701679791005,
-        "azimuth": -0.1344723068024414,
+        "azimuth": -0.1365274779970313,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7036,7 +7036,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-e6f8d23deef4f09c carried from endgame-simplification-lab at ply 18"
+        "detail": "occurrence occ-e6f8d23deef4f09c carried from subtree b1c3 at ply 18"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7060,14 +7060,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.900560911117,
-          -0.122611197952,
+          0.900307022431,
+          -0.124461744554,
           0.301189666965
         ],
         "ballRadius": 0.9574751568483879,
-        "azimuth": -0.13531778624022747,
+        "azimuth": -0.1373729574348173,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7120,7 +7120,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-9bc6000445c1e02d carried from endgame-simplification-lab at ply 19"
+        "detail": "occurrence occ-9bc6000445c1e02d carried from subtree b1c3 at ply 19"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7144,14 +7144,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.901345316053,
-          -0.122259565137,
+          0.901092148375,
+          -0.124111724568,
           0.301431551615
         ],
         "ballRadius": 0.9582441026934939,
-        "azimuth": -0.1348184029198426,
+        "azimuth": -0.1368735741144325,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7205,7 +7205,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-cf440fcc098345e8 carried from endgame-simplification-lab at ply 20"
+        "detail": "occurrence occ-cf440fcc098345e8 carried from subtree b1c3 at ply 20"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7229,14 +7229,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.901898624721,
-          -0.121957541283,
+          0.901646076585,
+          -0.123810838494,
           0.301599821007
         ],
         "ballRadius": 0.9587790272952232,
-        "azimuth": -0.13440784279682794,
+        "azimuth": -0.1364630139914178,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7291,7 +7291,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-51a378ad9c10916f carried from endgame-simplification-lab at ply 21"
+        "detail": "occurrence occ-51a378ad9c10916f carried from subtree b1c3 at ply 21"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7315,14 +7315,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902185097565,
-          -0.12247351982,
+          0.9019314884,
+          -0.124327404692,
           0.301716852792
         ],
         "ballRadius": 0.9591510686977557,
-        "azimuth": -0.13492729056868658,
+        "azimuth": -0.13698246176327644,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7378,7 +7378,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-ee892176b68203aa carried from endgame-simplification-lab at ply 22"
+        "detail": "occurrence occ-ee892176b68203aa carried from subtree b1c3 at ply 22"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7402,14 +7402,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902450237402,
-          -0.122345931739,
+          0.902196889893,
+          -0.124200361788,
           0.301798235902
         ],
         "ballRadius": 0.959409783770379,
-        "azimuth": -0.13474930267476587,
+        "azimuth": -0.1368044738693557,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7466,7 +7466,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-5dbfd2ae06c825ac carried from endgame-simplification-lab at ply 23"
+        "detail": "occurrence occ-5dbfd2ae06c825ac carried from subtree b1c3 at ply 23"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7490,14 +7490,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902585375844,
-          -0.122619922287,
+          0.902331464952,
+          -0.12447462949,
           0.301854822982
         ],
         "ballRadius": 0.9595896728223433,
-        "azimuth": -0.135027443655439,
+        "azimuth": -0.13708261485002887,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7555,7 +7555,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-9685a67a638ae227 carried from endgame-simplification-lab at ply 24"
+        "detail": "occurrence occ-9685a67a638ae227 carried from subtree b1c3 at ply 24"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7579,14 +7579,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902720780902,
-          -0.122505072347,
+          0.90246710576,
+          -0.124360058073,
           0.301894165966
         ],
         "ballRadius": 0.9597147432793791,
-        "azimuth": -0.13488251158355283,
+        "azimuth": -0.13693768277814267,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7645,7 +7645,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-974c77aa03965d03 carried from endgame-simplification-lab at ply 25"
+        "detail": "occurrence occ-974c77aa03965d03 carried from subtree b1c3 at ply 25"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7669,14 +7669,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902809142118,
-          -0.12246772968,
+          0.902555543535,
+          -0.124322897081,
           0.301921518298
         ],
         "ballRadius": 0.9598016957243386,
-        "azimuth": -0.1348288545108044,
+        "azimuth": -0.13688402570539424,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7736,7 +7736,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-2fbe3b3c6789fb66 carried from endgame-simplification-lab at ply 26"
+        "detail": "occurrence occ-2fbe3b3c6789fb66 carried from subtree b1c3 at ply 26"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7760,14 +7760,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902855269777,
-          -0.12255453412,
+          0.902601492699,
+          -0.124409796139,
           0.301940533697
         ],
         "ballRadius": 0.9598621452516239,
-        "azimuth": -0.13491645525931942,
+        "azimuth": -0.13697162645390926,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7828,7 +7828,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-1452e02bacf17e28 carried from endgame-simplification-lab at ply 27"
+        "detail": "occurrence occ-1452e02bacf17e28 carried from subtree b1c3 at ply 27"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7852,14 +7852,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902904273574,
-          -0.122490069748,
+          0.902650628877,
+          -0.124345432614,
           0.301953752907
         ],
         "ballRadius": 0.9599041688203771,
-        "azimuth": -0.13483911563371384,
+        "azimuth": -0.1368942868283037,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -7921,7 +7921,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-0300f4026fbc8de8 carried from endgame-simplification-lab at ply 28"
+        "detail": "occurrence occ-0300f4026fbc8de8 carried from subtree b1c3 at ply 28"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -7945,14 +7945,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902929412431,
-          -0.122511045264,
+          0.902675724573,
+          -0.12436645975,
           0.301962942532
         ],
         "ballRadius": 0.9599333824315307,
-        "azimuth": -0.13485821750893068,
+        "azimuth": -0.13691338870352054,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8015,7 +8015,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-c30d83fe7f952079 carried from endgame-simplification-lab at ply 29"
+        "detail": "occurrence occ-c30d83fe7f952079 carried from subtree b1c3 at ply 29"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8039,14 +8039,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902949205087,
-          -0.12250854868,
+          0.902695522319,
+          -0.124364003849,
           0.301969330824
         ],
         "ballRadius": 0.9599536906673871,
-        "azimuth": -0.13485258218139476,
+        "azimuth": -0.13690775337598463,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8110,7 +8110,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-8fb2987adb547a02 carried from endgame-simplification-lab at ply 30"
+        "detail": "occurrence occ-8fb2987adb547a02 carried from subtree b1c3 at ply 30"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8134,14 +8134,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902959846848,
-          -0.122529787237,
+          0.902706120408,
+          -0.124385264231,
           0.301973771693
         ],
         "ballRadius": 0.9599678080903814,
-        "azimuth": -0.1348741079151516,
+        "azimuth": -0.13692927910974148,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8206,7 +8206,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-bce08b7933132d18 carried from endgame-simplification-lab at ply 31"
+        "detail": "occurrence occ-bce08b7933132d18 carried from subtree b1c3 at ply 31"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8230,14 +8230,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902967010977,
-          -0.122546270161,
+          0.902713250647,
+          -0.124401761845,
           0.301976858778
         ],
         "ballRadius": 0.9599776218647028,
-        "azimuth": -0.1348909748462272,
+        "azimuth": -0.13694614604081706,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8303,7 +8303,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6c78d7fb01a207df carried from endgame-simplification-lab at ply 32"
+        "detail": "occurrence occ-6c78d7fb01a207df carried from subtree b1c3 at ply 32"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8327,14 +8327,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.90297425759,
-          -0.122541027287,
+          0.902720508019,
+          -0.124396533874,
           0.301979004767
         ],
         "ballRadius": 0.9599844439148207,
-        "azimuth": -0.1348842041677809,
+        "azimuth": -0.1369393753623708,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8401,7 +8401,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6a2a7dc0e5b9be7e carried from endgame-simplification-lab at ply 33"
+        "detail": "occurrence occ-6a2a7dc0e5b9be7e carried from subtree b1c3 at ply 33"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8425,14 +8425,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902979903546,
-          -0.122532898516,
+          0.902726170669,
+          -0.124388416724,
           0.301980496548
         ],
         "ballRadius": 0.9599891862527001,
-        "azimuth": -0.13487453160357873,
+        "azimuth": -0.1369297027981686,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8500,7 +8500,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-a3c1a30111bc13dc carried from endgame-simplification-lab at ply 34"
+        "detail": "occurrence occ-a3c1a30111bc13dc carried from subtree b1c3 at ply 34"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8524,14 +8524,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.90298386375,
-          -0.122526986312,
+          0.902730143016,
+          -0.124382512671,
           0.301981533555
         ],
         "ballRadius": 0.9599924828751409,
-        "azimuth": -0.1348675182031934,
+        "azimuth": -0.13692268939778326,
         "elevation": 0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8600,7 +8600,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-50c5276a269f4c53 carried from endgame-simplification-lab at ply 35"
+        "detail": "occurrence occ-50c5276a269f4c53 carried from subtree b1c3 at ply 35"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8624,14 +8624,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902985784529,
-          -0.122529008956,
+          0.902732059634,
+          -0.124384539259,
           -0.301982254427
         ],
         "ballRadius": 0.9599947745094912,
-        "azimuth": -0.13486943424097836,
+        "azimuth": -0.1369246054355682,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8701,7 +8701,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-45339926994118ef carried from endgame-simplification-lab at ply 36"
+        "detail": "occurrence occ-45339926994118ef carried from subtree b1c3 at ply 36"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8725,14 +8725,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902987238723,
-          -0.122529538191,
+          0.902733512737,
+          -0.124385071481,
           -0.301982755537
         ],
         "ballRadius": 0.9599963675287121,
-        "azimuth": -0.13486979516464453,
+        "azimuth": -0.1369249663592344,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8803,7 +8803,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-6ae25cf2fa9aa2bc carried from endgame-simplification-lab at ply 37"
+        "detail": "occurrence occ-6ae25cf2fa9aa2bc carried from subtree b1c3 at ply 37"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8827,14 +8827,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902988264254,
-          -0.122529798083,
+          0.902734537732,
+          -0.12438533348,
           -0.301983103882
         ],
         "ballRadius": 0.9599974749080503,
-        "azimuth": -0.13486992645277016,
+        "azimuth": -0.13692509764736002,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -8906,7 +8906,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-f71834dad84e3e3b carried from endgame-simplification-lab at ply 38"
+        "detail": "occurrence occ-f71834dad84e3e3b carried from subtree b1c3 at ply 38"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -8930,14 +8930,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902989005677,
-          -0.122529768496,
+          0.902735279214,
+          -0.124385305417,
           -0.301983346032
         ],
         "ballRadius": 0.9599982446968948,
-        "azimuth": -0.13486978487870532,
+        "azimuth": -0.1369249560732952,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -9010,7 +9010,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-12c812ad5fe3b711 carried from endgame-simplification-lab at ply 39"
+        "detail": "occurrence occ-12c812ad5fe3b711 carried from subtree b1c3 at ply 39"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -9034,14 +9034,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902989520514,
-          -0.122529752042,
+          0.902735794084,
+          -0.124385290021,
           -0.301983514361
         ],
         "ballRadius": 0.959998779811333,
-        "azimuth": -0.13486969102024476,
+        "azimuth": -0.13692486221483463,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -9115,7 +9115,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-32fd6227caed02f0 carried from endgame-simplification-lab at ply 40"
+        "detail": "occurrence occ-32fd6227caed02f0 carried from subtree b1c3 at ply 40"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -9139,14 +9139,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902989876406,
-          -0.122529755302,
+          0.902736149968,
+          -0.124385294013,
           -0.301983631374
         ],
         "ballRadius": 0.9599991517930773,
-        "azimuth": -0.13486964205198657,
+        "azimuth": -0.13692481324657643,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -9221,7 +9221,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-addce167fb788f51 carried from endgame-simplification-lab at ply 41"
+        "detail": "occurrence occ-addce167fb788f51 carried from subtree b1c3 at ply 41"
       },
       "salience": {
         "rawScore": 0.06369047619047619,
@@ -9245,14 +9245,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.90299019443,
-          -0.122529237068,
+          0.902736469057,
+          -0.124384776433,
           -0.301983712715
         ],
         "ballRadius": 0.959999410374021,
-        "azimuth": -0.13486903159311128,
+        "azimuth": -0.13692420278770115,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     },
@@ -9328,7 +9328,7 @@
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
         "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
-        "detail": "occurrence occ-90a32b9ed0071db9 carried from endgame-simplification-lab at ply 42"
+        "detail": "occurrence occ-90a32b9ed0071db9 carried from subtree b1c3 at ply 42"
       },
       "salience": {
         "rawScore": 0.04226190476190476,
@@ -9352,14 +9352,14 @@
       "terminal": null,
       "embedding": {
         "coordinate": [
-          0.902990383923,
-          -0.122529109549,
+          0.902736658811,
+          -0.124384649304,
           -0.301983769259
         ],
         "ballRadius": 0.9599995901250388,
-        "azimuth": -0.13486886496768036,
+        "azimuth": -0.1369240361622702,
         "elevation": -0.32,
-        "rootGameId": "endgame-simplification-lab",
+        "subtreeKey": "b1c3",
         "terminalAnchorId": null
       }
     }

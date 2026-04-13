@@ -109,7 +109,7 @@ class SharedAnchorRecord:
     wdl_label: str | None = None
     outcome_class: str | None = None
     anchor_ply: int | None = None
-    root_game_id: str | None = None
+    subtree_key: str | None = None
 
 
 @dataclass(frozen=True)
@@ -670,7 +670,7 @@ class EmbeddingRecord:
     ball_radius: float
     azimuth: float
     elevation: float
-    root_game_id: str
+    subtree_key: str
     terminal_anchor_id: str | None
 
 
