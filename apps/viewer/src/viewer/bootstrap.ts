@@ -165,11 +165,8 @@ function validateRuntimeBootstrapIntegrity(
 
   for (const entryPoint of navigationEntryPoints) {
     const occurrence = runtimeKernel.resolveOccurrence(entryPoint.focusOccurrenceId);
-    const occurrenceLine = runtimeKernel.describeOccurrenceLine(
-      entryPoint.focusOccurrenceId
-    );
 
-    if (!occurrence || !occurrenceLine) {
+    if (!occurrence) {
       throw new Error(
         `runtime bootstrap fractures query continuity for ${entryPoint.entryId} entrypoint`
       );
@@ -177,8 +174,7 @@ function validateRuntimeBootstrapIntegrity(
 
     if (
       occurrence.embedding.rootGameId !== entryPoint.rootGameId ||
-      occurrence.ply !== entryPoint.anchorPly ||
-      occurrenceLine.rootGameId !== entryPoint.rootGameId
+      occurrence.ply !== entryPoint.anchorPly
     ) {
       throw new Error(
         `runtime bootstrap fractures identity, anchoring, or query continuity for ${entryPoint.entryId} entrypoint`

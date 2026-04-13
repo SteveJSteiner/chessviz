@@ -66,7 +66,7 @@ test('builds deterministic N11 review artifacts from the published runtime artif
     /Italian Branch Lab: Nf6 to b4, d3, d4, h3, Ng5, O-O/
   );
   assert.match(structureZoom!, /Focus board/);
-  assert.match(structureZoom!, /Owning line/);
+  assert.match(structureZoom!, /Focused node/);
   assert.match(structureZoom!, /in Nf6/);
   assert.match(structureZoom!, /out [^<]+/);
   assert.match(
@@ -104,7 +104,12 @@ test('builds deterministic N11 review artifacts from the published runtime artif
     ),
     ['opening', 'middlegame', 'endgame']
   );
-  assert.equal(parsedEvidenceIndex.focusLine, '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6');
+  assert.equal(
+    parsedEvidenceIndex.focusNode.occurrenceId,
+    parsedEvidenceIndex.focusOccurrenceId
+  );
+  assert.equal(typeof parsedEvidenceIndex.focusNode.phaseLabel, 'string');
+  assert.equal(typeof parsedEvidenceIndex.focusNode.materialSignature, 'string');
   assert.equal(parsedEvidenceIndex.focusTurn, 'White to move');
   assert.deepEqual(parsedEvidenceIndex.cameraDistances, [5, 3.85, 2.8]);
   assert.deepEqual(parsedEvidenceIndex.refinementBudgets, [3, 6, 12]);

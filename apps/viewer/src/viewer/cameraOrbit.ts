@@ -6,9 +6,10 @@ export interface CameraOrbitState {
 }
 
 export const CAMERA_ORBIT_LIMITS = {
-  minElevation: -(Math.PI * 0.38),
-  maxElevation: Math.PI * 0.44,
-  dragSensitivity: 0.0085
+  minElevation: -Math.PI,
+  maxElevation: Math.PI,
+  dragSensitivity: 0.0085,
+  poleAvoidanceEpsilon: 1e-4
 } as const;
 
 export function deriveCameraOrbitState(offset: Vector3): CameraOrbitState {
@@ -21,14 +22,10 @@ export function deriveCameraOrbitState(offset: Vector3): CameraOrbitState {
     };
   }
 
-  return {
+  return normalizeCameraOrbitState({
     azimuth: Math.atan2(offset[0], offset[2]),
-    elevation: clampNumber(
-      Math.asin(clampNumber(offset[1] / radius, -1, 1)),
-      CAMERA_ORBIT_LIMITS.minElevation,
-      CAMERA_ORBIT_LIMITS.maxElevation
-    )
-  };
+    elevation: Math.asin(clampNumber(offset[1] / radius, -1, 1))
+  });
 }
 
 export function advanceCameraOrbitState(
@@ -37,13 +34,18 @@ export function advanceCameraOrbitState(
   deltaY: number,
   sensitivity: number = CAMERA_ORBIT_LIMITS.dragSensitivity
 ): CameraOrbitState {
-  return {
+  return normalizeCameraOrbitState({
     azimuth: orbitState.azimuth - (deltaX * sensitivity),
-    elevation: clampNumber(
-      orbitState.elevation - (deltaY * sensitivity),
-      CAMERA_ORBIT_LIMITS.minElevation,
-      CAMERA_ORBIT_LIMITS.maxElevation
-    )
+    elevation: orbitState.elevation - (deltaY * sensitivity)
+  });
+}
+
+export function normalizeCameraOrbitState(
+  orbitState: CameraOrbitState
+): CameraOrbitState {
+  return {
+    azimuth: wrapAngle(orbitState.azimuth),
+    elevation: wrapAngle(orbitState.elevation)
   };
 }
 
@@ -53,18 +55,27 @@ export function resolveOrbitCameraPosition(
   orbitState: CameraOrbitState
 ): Vector3 {
   const clampedDistance = Math.max(distance, 0.1);
-  const clampedElevation = clampNumber(
-    orbitState.elevation,
-    CAMERA_ORBIT_LIMITS.minElevation,
-    CAMERA_ORBIT_LIMITS.maxElevation
-  );
-  const planarDistance = clampedDistance * Math.cos(clampedElevation);
+  const normalizedOrbitState = normalizeCameraOrbitState(orbitState);
+  const clampedElevation = normalizedOrbitState.elevation;
+  const planarDistance = clampedDistance * stabilizedCosine(clampedElevation);
 
   return [
-    focus[0] + (Math.sin(orbitState.azimuth) * planarDistance),
+    focus[0] + (Math.sin(normalizedOrbitState.azimuth) * planarDistance),
     focus[1] + (Math.sin(clampedElevation) * clampedDistance),
-    focus[2] + (Math.cos(orbitState.azimuth) * planarDistance)
+    focus[2] + (Math.cos(normalizedOrbitState.azimuth) * planarDistance)
   ];
+}
+
+export function resolveOrbitUpVector(orbitState: CameraOrbitState): Vector3 {
+  const normalizedOrbitState = normalizeCameraOrbitState(orbitState);
+  const { azimuth, elevation } = normalizedOrbitState;
+  const upVector = [
+    -(Math.sin(azimuth) * Math.sin(elevation)),
+    Math.cos(elevation),
+    -(Math.cos(azimuth) * Math.sin(elevation))
+  ] satisfies Vector3;
+
+  return normalizeVector(upVector);
 }
 
 function magnitude(vector: Vector3) {
@@ -73,4 +84,26 @@ function magnitude(vector: Vector3) {
 
 function clampNumber(value: number, minimum: number, maximum: number) {
   return Math.min(Math.max(value, minimum), maximum);
+}
+
+function wrapAngle(angle: number) {
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+function stabilizedCosine(angle: number) {
+  const cosine = Math.cos(angle);
+  if (Math.abs(cosine) >= CAMERA_ORBIT_LIMITS.poleAvoidanceEpsilon) {
+    return cosine;
+  }
+
+  return Math.sign(cosine || 1) * CAMERA_ORBIT_LIMITS.poleAvoidanceEpsilon;
+}
+
+function normalizeVector(vector: Vector3): Vector3 {
+  const length = magnitude(vector);
+  if (length <= 1e-6) {
+    return [0, 1, 0];
+  }
+
+  return [vector[0] / length, vector[1] / length, vector[2] / length];
 }

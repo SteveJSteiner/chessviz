@@ -24,7 +24,7 @@ This file contains design and process decisions only. It must not become a task 
 - **D14c. View-dependent realization is allowed** — Not all render geometry must be fully materialized ahead of time, provided runtime realization preserves object identity and zoom-monotone semantics.
 - **D14d. Visual design commitments are binding** — `plan/visual-design-commitments.md` is a locked rendering-constraint artifact with the same authority as the other `plan/` files.
 - **D14e. Labels stay on the object** — Move names live on carriers, game names on roots, and terminal outcomes on terminal nodes; side panels are reference only.
-- **D14f. No second chess representation** — The live viewer does not grow a move list, PGN tree, or parallel chess diagram beside the geometry; the board panel remains a single-position reference.
+- **D14f. Single geometric interface** — The live viewer keeps the geometry as the primary reading surface, and the board panel remains a single-position reference for the currently focused node.
 - **D14g. Chrome must justify itself** — Non-data visual elements stay out of the live viewer unless they solve a named legibility problem.
 - **D14h. Live label-density control is mandatory** — Branch-heavy views require salience/proximity-aware label selection so the geometry does not become wallpaper.
 - **D14i. One visual channel, one semantic job** — Channel roles remain singular and stable; redundancy is allowed only as an accessibility backup.

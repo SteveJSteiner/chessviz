@@ -20,7 +20,7 @@ Label opacity and visibility respond to camera distance rather than remaining pe
 
 ## 5. No second representation.
 
-Do not render a move-list panel, a game-tree diagram, a PGN viewer, or any other parallel chess representation alongside the geometric object. The board sidebar is the one allowed secondary view, and it shows the state of a single focused node without narrating the game. If the viewer starts containing two ways to read the same information, one becomes the real interface and the geometry becomes wallpaper.
+Keep one primary reading surface: the geometric object. The board sidebar is the one allowed secondary view, and it shows the state of a single focused node without narrating the game. If the viewer grows a second full reading surface for the same information, that surface becomes the real interface and the geometry becomes wallpaper.
 
 ## 6. Every visual channel has one semantic job.
 

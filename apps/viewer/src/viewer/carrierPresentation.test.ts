@@ -67,6 +67,47 @@ test('createOccurrencePresentation shrinks capped nodes when node size is reduce
   assert.equal(presentation.radius, 0.025);
 });
 
+test('createOccurrencePresentation exposes phase ring colors separately from focus ring', () => {
+  const openingOccurrence = createOccurrence({
+    occurrenceId: 'opening-node',
+    coordinate: [0, 0, 0],
+    normalizedScore: 0.8,
+    phaseLabel: 'opening'
+  });
+  const endgameOccurrence = createOccurrence({
+    occurrenceId: 'endgame-node',
+    coordinate: [0.2, 0, 0],
+    normalizedScore: 0.8,
+    phaseLabel: 'endgame',
+    isFocus: true
+  });
+  const openingPresentation = createOccurrencePresentation(
+    openingOccurrence,
+    '#0f766e'
+  );
+  const endgamePresentation = createOccurrencePresentation(
+    endgameOccurrence,
+    '#0f766e'
+  );
+
+  assert.equal(openingPresentation.phaseRingColor, '#1d4ed8');
+  assert.equal(endgamePresentation.phaseRingColor, '#6d28d9');
+  assert.equal(endgamePresentation.ringColor, '#b7791f');
+});
+
+test('createCarrierPresentation keeps quiet and capture families visually distinct', () => {
+  const quietPresentation = createCarrierPresentation(
+    createCarrier({ interactionClass: 'quiet', forcingClass: 'quiet', san: 'd4' })
+  );
+  const capturePresentation = createCarrierPresentation(
+    createCarrier({ interactionClass: 'capture', forcingClass: 'quiet', san: 'Qxd5' })
+  );
+
+  assert.equal(quietPresentation.structureColor, '#334155');
+  assert.equal(capturePresentation.structureColor, '#d97706');
+  assert.notEqual(quietPresentation.structureColor, capturePresentation.structureColor);
+});
+
 test('keeps terminal carrier thickness closer to the quiet baseline', () => {
   const quietPresentation = createCarrierPresentation(
     createCarrier({ interactionClass: 'quiet', forcingClass: 'quiet', san: 'd4' })
@@ -85,11 +126,13 @@ function createOccurrence({
   occurrenceId,
   coordinate,
   normalizedScore,
+  phaseLabel = 'opening',
   isFocus = false
 }: {
   occurrenceId: string;
   coordinate: [number, number, number];
   normalizedScore: number;
+  phaseLabel?: string;
   isFocus?: boolean;
 }): RuntimeNeighborhoodOccurrence {
   return {
@@ -104,7 +147,7 @@ function createOccurrence({
       continuityKey: `${occurrenceId}:state`
     },
     annotations: {
-      phaseLabel: 'opening',
+      phaseLabel,
       materialSignature: 'balanced-material'
     },
     regime: {

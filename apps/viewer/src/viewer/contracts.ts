@@ -500,6 +500,43 @@ export interface RuntimeNeighborhoodSnapshot {
   priorityFrontierOccurrenceIds: string[];
 }
 
+export type RuntimeTranspositionEmphasis = 'focus' | 'context';
+
+export interface RuntimeTranspositionOccurrence {
+  occurrenceId: string;
+  coordinate: Vector3;
+  rootGameId: string;
+  ply: number;
+  phaseLabel: string;
+  isFocus: boolean;
+  isVisibleInNeighborhood: boolean;
+}
+
+export interface RuntimeTranspositionLink {
+  stateKey: string;
+  sourceOccurrenceId: string;
+  targetOccurrenceId: string;
+  sourceVisibleInNeighborhood: boolean;
+  targetVisibleInNeighborhood: boolean;
+  emphasis: RuntimeTranspositionEmphasis;
+  samples: Vector3[];
+}
+
+export interface RuntimeTranspositionGroup {
+  stateKey: string;
+  emphasis: RuntimeTranspositionEmphasis;
+  visibleOccurrenceIds: string[];
+  offViewOccurrenceIds: string[];
+  occurrences: RuntimeTranspositionOccurrence[];
+  links: RuntimeTranspositionLink[];
+}
+
+export interface RuntimeTranspositionSurfaceSnapshot {
+  graphObjectId: string;
+  groups: RuntimeTranspositionGroup[];
+  links: RuntimeTranspositionLink[];
+}
+
 export interface RuntimeTransitionSurfaceSnapshot {
   graphObjectId: string;
   occurrenceIds: string[];
@@ -537,20 +574,6 @@ export interface RuntimeCarrierSurfaceSnapshot {
   occurrenceIds: string[];
   refinementBudget: number;
   carriers: RuntimeCarrierRecord[];
-}
-
-export interface RuntimeOccurrenceLineMove {
-  ply: number;
-  uci: string;
-  san: string | null;
-  sourceOccurrenceId: string | null;
-  targetOccurrenceId: string;
-}
-
-export interface RuntimeOccurrenceLine {
-  occurrenceId: string;
-  rootGameId: string;
-  moves: RuntimeOccurrenceLineMove[];
 }
 
 export interface RuntimeArtifactBoundary {

@@ -13,7 +13,6 @@ import {
 import {
   formatCastlingRights,
   formatGameName,
-  formatOccurrenceLine,
   formatTerminalOutcomeLabel,
   formatTurnLabel,
   listBoardSquares,
@@ -38,7 +37,6 @@ import type {
   RuntimeCarrierSurfaceSnapshot,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
-  RuntimeOccurrenceLine,
   SceneBootstrap,
   Vector3,
   ViewerSceneManifest
@@ -89,7 +87,6 @@ type ReviewLocalTransition = {
 
 type ReviewFocusContext = {
   focusOccurrence: BuilderOccurrenceRecord;
-  focusLine: RuntimeOccurrenceLine | null;
   localTransitions: ReviewLocalTransition[];
 };
 
@@ -153,7 +150,6 @@ export function buildViewerReviewArtifacts(
   }
 
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const focusLineText = formatOccurrenceLine(focusContext.focusLine);
 
   return [
     {
@@ -199,10 +195,13 @@ export function buildViewerReviewArtifacts(
             neighborhoodRadius: entryPoint.neighborhoodRadius,
             distance: roundNumber(entryPoint.distance)
           })),
-          rootGameId:
-            focusContext.focusLine?.rootGameId ??
-            focusContext.focusOccurrence.embedding.rootGameId,
-          focusLine: focusLineText,
+          rootGameId: focusContext.focusOccurrence.embedding.rootGameId,
+          focusNode: {
+            occurrenceId: focusContext.focusOccurrence.occurrenceId,
+            ply: focusContext.focusOccurrence.ply,
+            phaseLabel: focusContext.focusOccurrence.annotations.phaseLabel,
+            materialSignature: focusContext.focusOccurrence.annotations.materialSignature
+          },
           focusTurn: formatTurnLabel(focusPosition.activeColor),
           neighborhoodRadius,
           cameraDistances: reviewScenes.map((reviewScene) =>
@@ -469,7 +468,6 @@ function buildReviewFocusContext(
 
   return {
     focusOccurrence,
-    focusLine: kernel.describeOccurrenceLine(focusOccurrenceId) ?? null,
     localTransitions
   };
 }
@@ -483,8 +481,7 @@ function renderStructureZoomDocument(
   const height = 980;
   const viewport = { x: 48, y: 158, width: 930, height: 720 };
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
@@ -510,8 +507,8 @@ function renderStructureZoomDocument(
       1036,
       756,
       380,
-      'Owning line',
-      formatOccurrenceLine(focusContext.focusLine),
+      'Focused node',
+      buildFocusNodeDescriptor(focusContext),
       39,
       'copy'
     ),
@@ -543,8 +540,7 @@ function renderRefinementStepsDocument(
     { x: 1144, y: 176, width: 516, height: 620 }
   ] as const;
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
@@ -599,8 +595,7 @@ function renderCameraGrammarDocument(
     { x: 1144, y: 176, width: 516, height: 620 }
   ] as const;
   const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
@@ -670,7 +665,7 @@ function renderReviewNotesTemplate(
       (entryPoint) =>
         `- ${entryPoint.entryId} anchor: ${entryPoint.focusOccurrenceId} · ${formatGameName(entryPoint.rootGameId)} · ply ${entryPoint.anchorPly} · radius ${entryPoint.neighborhoodRadius} · distance ${entryPoint.distance.toFixed(1)}`
     ),
-    `- middlegame focusLine: ${formatOccurrenceLine(focusContext.focusLine)}`,
+    `- middlegame focusNode: ${buildFocusNodeDescriptor(focusContext)}`,
     `- middlegame focusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
     `- structureDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.structure.toFixed(1)}`,
     `- tacticalDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.tactical.toFixed(1)}`,
@@ -864,15 +859,14 @@ function renderCarrierLabelMarkup(
   const isOutgoing = carrier.sourceOccurrenceId === focusOccurrenceId;
   const isFocusAdjacent =
     isOutgoing || carrier.targetOccurrenceId === focusOccurrenceId;
-  const isAlongFocusLine = isLineTransition(carrier, focusContext.focusLine);
   const fillColor = isOutgoing
     ? '#deebf4'
-    : isFocusAdjacent || isAlongFocusLine
+    : isFocusAdjacent
       ? '#fdebd2'
       : '#f7f1e6';
   const strokeColor = isOutgoing
     ? '#3a6b87'
-    : isFocusAdjacent || isAlongFocusLine
+    : isFocusAdjacent
       ? '#c27b1b'
       : presentation.structureColor;
   const labelX = clampNumber(
@@ -1006,16 +1000,13 @@ function createProjector(reviewScene: ReviewScene, viewport: Viewport) {
 }
 
 function buildFocusSummary(focusContext: ReviewFocusContext) {
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
-  const lineText = formatOccurrenceLine(focusContext.focusLine);
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
 
-  return `The geometry remains primary here: SAN labels sit on the carriers themselves, terminal outcomes sit on terminal nodes, and this board is only a static reference check for the position after ${lineText} in ${formatGameName(rootGameId)}.`;
+  return `The geometry remains primary here: SAN labels sit on the carriers themselves, terminal outcomes sit on terminal nodes, and this board is only a static reference check for ${buildFocusNodeDescriptor(focusContext)} in ${formatGameName(rootGameId)}.`;
 }
 
 function buildStructureZoomTitle(focusContext: ReviewFocusContext) {
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
   const incoming = focusContext.localTransitions
     .filter((entry) => entry.direction === 'incoming')
     .map((entry) => entry.transition.moveFacts.san)
@@ -1035,8 +1026,7 @@ function buildStructureZoomTitle(focusContext: ReviewFocusContext) {
 }
 
 function buildRefinementTitle(focusContext: ReviewFocusContext) {
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
   const outgoing = focusContext.localTransitions
     .filter((entry) => entry.direction === 'outgoing')
     .map((entry) => entry.transition.moveFacts.san)
@@ -1049,10 +1039,20 @@ function buildRefinementTitle(focusContext: ReviewFocusContext) {
 }
 
 function buildCameraGrammarTitle(focusContext: ReviewFocusContext) {
-  const rootGameId =
-    focusContext.focusLine?.rootGameId ?? focusContext.focusOccurrence.embedding.rootGameId;
+  const rootGameId = focusContext.focusOccurrence.embedding.rootGameId;
 
   return `${formatGameName(rootGameId)}: camera grammar pass`;
+}
+
+function buildFocusNodeDescriptor(focusContext: ReviewFocusContext) {
+  const { focusOccurrence } = focusContext;
+  const descriptor = `ply ${focusOccurrence.ply} · ${focusOccurrence.annotations.phaseLabel} · ${focusOccurrence.annotations.materialSignature}`;
+
+  if (!focusOccurrence.terminal) {
+    return descriptor;
+  }
+
+  return `${descriptor} · terminal ${formatTerminalOutcomeLabel(focusOccurrence.terminal.wdlLabel)}`;
 }
 
 function formatCarrierLabel(
@@ -1063,29 +1063,11 @@ function formatCarrierLabel(
   if (carrier.sourceOccurrenceId === focusOccurrenceId) {
     return `out ${carrier.san}`;
   }
-  if (
-    carrier.targetOccurrenceId === focusOccurrenceId ||
-    isLineTransition(carrier, focusContext.focusLine)
-  ) {
+  if (carrier.targetOccurrenceId === focusOccurrenceId) {
     return `in ${carrier.san}`;
   }
 
   return carrier.san;
-}
-
-function isLineTransition(
-  carrier: RuntimeCarrierRecord,
-  focusLine: RuntimeOccurrenceLine | null
-) {
-  if (!focusLine) {
-    return false;
-  }
-
-  return focusLine.moves.some(
-    (move) =>
-      move.sourceOccurrenceId === carrier.sourceOccurrenceId &&
-      move.targetOccurrenceId === carrier.targetOccurrenceId
-  );
 }
 
 function buildOccurrenceDataLabel(

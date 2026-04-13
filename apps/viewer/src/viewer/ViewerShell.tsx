@@ -6,20 +6,26 @@ import type {
   RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationConfig,
   RuntimeNeighborhoodSnapshot,
-  RuntimeOccurrenceLine,
+  RuntimeTranspositionSurfaceSnapshot,
   RuntimeTransitionSurfaceSnapshot,
   SceneBootstrap
 } from './contracts';
 import type { CameraGrammarState } from './cameraGrammar.ts';
 import { ChessBoard } from './ChessBoard.tsx';
 import {
+  formatGameName,
   formatFocusOptionLabel,
-  formatOccurrenceLine,
+  formatTerminalOutcomeLabel,
   parseStateKey,
   shortOccurrenceId,
   summarizeMoveSemantics
 } from './chessContext.ts';
-import { createCarrierPresentation } from './carrierPresentation.ts';
+import {
+  CARRIER_FAMILY_KEY,
+  PHASE_NODE_KEY,
+  TERMINAL_NODE_KEY,
+  createCarrierPresentation
+} from './carrierPresentation.ts';
 import { LIVE_VIEW_DISTANCE } from './labelPolicy.ts';
 import type { ViewerRenderTuning } from './renderTuning.ts';
 import { SmokeCanvas } from './SmokeCanvas';
@@ -31,19 +37,20 @@ type ViewerShellProps = {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   cameraDistance: number;
   entryPoints: NavigationEntryPoint[];
-  focusLine: RuntimeOccurrenceLine | undefined;
-  focusLinesByOccurrenceId: Map<string, RuntimeOccurrenceLine | undefined>;
   focusOptions: BuilderOccurrenceRecord[];
   graphViewScope: 'local-neighborhood' | 'whole-object';
+  hoveredOccurrence: BuilderOccurrenceRecord | null;
   meetsN12Scale: boolean;
   runtimeConfig: RuntimeExplorationConfig;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
+  transpositionSurface: RuntimeTranspositionSurfaceSnapshot;
   transitionSurface: RuntimeTransitionSurfaceSnapshot;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
   onBoardReferenceOpenChange: (open: boolean) => void;
   onEntryPointChange: (entryId: NavigationEntryPointId) => void;
   onGraphViewScopeChange: (scope: 'local-neighborhood' | 'whole-object') => void;
+  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
   runtimeArtifactBoundary: RuntimeArtifactBoundary;
   neighborhoodRadius: number;
   orbitResetKey: number;
@@ -192,6 +199,53 @@ const inlineButtonStyle = {
   justifySelf: 'start'
 } as const;
 
+const legendGridStyle = {
+  display: 'grid',
+  gap: '0.55rem',
+  marginTop: '0.75rem'
+} as const;
+
+const legendRowStyle = {
+  display: 'grid',
+  gridTemplateColumns: '2.5rem 1fr',
+  gap: '0.7rem',
+  alignItems: 'center'
+} as const;
+
+const legendSwatchStyle = {
+  width: '2.5rem',
+  height: '1.2rem',
+  borderRadius: '999px',
+  border: '2px solid transparent',
+  position: 'relative'
+} as const;
+
+const selectionGridStyle = {
+  display: 'grid',
+  gap: '0.85rem',
+  marginTop: '1rem'
+} as const;
+
+const selectionCardStyle = {
+  ...narrativeCardStyle,
+  padding: '0.85rem'
+} as const;
+
+const selectionContentStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'minmax(8.5rem, 9.5rem) 1fr',
+  gap: '0.75rem',
+  alignItems: 'start',
+  marginTop: '0.7rem'
+} as const;
+
+const selectionTextStyle = {
+  display: 'grid',
+  gap: '0.35rem',
+  fontSize: '0.8rem',
+  color: '#5f5547'
+} as const;
+
 function resolveEntryPointButtonStyle(isActive: boolean) {
   return {
     ...secondaryButtonStyle,
@@ -209,19 +263,20 @@ export function ViewerShell({
   carrierSurface,
   cameraDistance,
   entryPoints,
-  focusLine,
-  focusLinesByOccurrenceId,
   focusOptions,
   graphViewScope,
+  hoveredOccurrence,
   meetsN12Scale,
   runtimeConfig,
   runtimeSnapshot,
+  transpositionSurface,
   transitionSurface,
   sceneBootstrap,
   navigationEntryPoint,
   onBoardReferenceOpenChange,
   onEntryPointChange,
   onGraphViewScopeChange,
+  onHoverOccurrenceChange,
   runtimeArtifactBoundary,
   neighborhoodRadius,
   orbitResetKey,
@@ -238,6 +293,8 @@ export function ViewerShell({
   const focusOccurrence = runtimeSnapshot.occurrences.find(
     (occurrence) => occurrence.isFocus
   );
+  const hoverMatchesFocus =
+    hoveredOccurrence?.occurrenceId === runtimeSnapshot.focusOccurrenceId;
   const focusParsedStateKey = focusOccurrence
     ? parseStateKey(focusOccurrence.stateKey)
     : null;
@@ -269,24 +326,46 @@ export function ViewerShell({
         transition.targetOccurrenceId === runtimeSnapshot.focusOccurrenceId
     )
     .sort((left, right) => left.ply - right.ply);
+  const focusTranspositionGroup = transpositionSurface.groups.find((group) =>
+    group.occurrences.some((occurrence) => occurrence.isFocus)
+  );
+  const relatedFocusOccurrences = focusTranspositionGroup
+    ? [...focusTranspositionGroup.occurrences]
+        .filter((occurrence) => !occurrence.isFocus)
+        .sort((left, right) => {
+          if (left.isVisibleInNeighborhood !== right.isVisibleInNeighborhood) {
+            return left.isVisibleInNeighborhood ? -1 : 1;
+          }
+
+          if (left.rootGameId !== right.rootGameId) {
+            return left.rootGameId.localeCompare(right.rootGameId);
+          }
+
+          return left.ply - right.ply;
+        })
+    : [];
+  const transpositionEchoCount = transpositionSurface.groups.reduce(
+    (count, group) => count + group.offViewOccurrenceIds.length,
+    0
+  );
 
   return (
     <main style={shellStyle}>
       <section style={panelStyle}>
         <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700 }}>
-          N12 Anchored Entrypoints
+          N13 Transposition Relations
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
 
         {!meetsN12Scale ? (
           <article style={warningCardStyle}>
-            <div style={{ fontWeight: 700 }}>Scale warning</div>
+            <div style={{ fontWeight: 700 }}>Scale note</div>
             <p style={{ margin: '0.45rem 0 0' }}>
-              The current runtime artifact is not large enough to adjudicate the requested N12 behavior honestly.
+              This artifact is enough to inspect N13 transposition legibility, but it remains below the later large-scale N14 acceptance run.
             </p>
             <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#7f1d1d' }}>
-              Total graph size {totalGraphOccurrenceCount} nodes and {totalGraphEdgeCount} edges. The requested live pass needs 1000+ visible nodes in one view.
+              Total graph size {totalGraphOccurrenceCount} nodes and {totalGraphEdgeCount} edges. The 1000+ visible-node requirement is deferred to N14.
             </p>
           </article>
         ) : null}
@@ -324,11 +403,7 @@ export function ViewerShell({
             >
               {focusOptions.map((occurrence) => (
                 <option key={occurrence.occurrenceId} value={occurrence.occurrenceId}>
-                  {formatFocusOptionLabel(
-                    occurrence.embedding.rootGameId,
-                    focusLinesByOccurrenceId.get(occurrence.occurrenceId),
-                    occurrence.ply
-                  )}
+                  {formatFocusOptionLabel(occurrence)}
                 </option>
               ))}
             </select>
@@ -357,7 +432,7 @@ export function ViewerShell({
             <span style={{ fontSize: '0.82rem', color: '#6c6254' }}>
               {isWholeObjectView
                 ? `Rendering ${runtimeSnapshot.occurrences.length} of ${totalGraphOccurrenceCount} nodes in one view; neighborhood radius is bypassed.`
-                : 'Neighborhood mode limits the view around the current focus. Whole-object mode is required for scale checks.'}
+                : 'Neighborhood mode limits the graph-radius view around the current focus. Whole-object mode is useful for inspecting distributed transposition clusters.'}
             </span>
           </label>
 
@@ -490,6 +565,26 @@ export function ViewerShell({
           </details>
         </div>
 
+        <span style={metaLabelStyle}>Selection</span>
+        <div style={selectionGridStyle}>
+          <CanvasHudCard
+            accentColor="#b7791f"
+            description="Current anchor and camera pivot."
+            emptyText="No anchored node is available in the current view."
+            occurrence={focusOccurrence ?? null}
+            title="Anchor"
+          />
+          <CanvasHudCard
+            accentColor="#38bdf8"
+            description={hoverMatchesFocus
+              ? 'Hover is on the current anchor.'
+              : 'Hover previews the node before you click it.'}
+            emptyText="Hover a node to inspect its position."
+            occurrence={hoveredOccurrence}
+            title="Hover"
+          />
+        </div>
+
         <div style={statGridStyle}>
           <article style={statCardStyle}>
             <strong>{runtimeSnapshot.occurrences.length}</strong>
@@ -524,6 +619,14 @@ export function ViewerShell({
             <div>runtime carriers</div>
           </article>
           <article style={statCardStyle}>
+            <strong>{transpositionSurface.groups.length}</strong>
+            <div>transposition groups</div>
+          </article>
+          <article style={statCardStyle}>
+            <strong>{transpositionSurface.links.length}</strong>
+            <div>relation links</div>
+          </article>
+          <article style={statCardStyle}>
             <strong>{cameraGrammar.band}</strong>
             <div>label reveal band</div>
           </article>
@@ -537,6 +640,87 @@ export function ViewerShell({
           </article>
         </div>
 
+        <span style={metaLabelStyle}>Visual Key</span>
+        <div style={sectionStackStyle}>
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>Nodes</div>
+            <div style={legendGridStyle}>
+              <LegendRow
+                fillColor={PHASE_NODE_KEY.opening.fillColor}
+                label="Opening nodes"
+                markColor={PHASE_NODE_KEY.opening.markColor}
+                ringColor={PHASE_NODE_KEY.opening.ringColor}
+                text="Blue phase ring."
+              />
+              <LegendRow
+                fillColor={sceneBootstrap.accentColor}
+                label="Middlegame nodes"
+                markColor={PHASE_NODE_KEY.middlegame.markColor}
+                ringColor={PHASE_NODE_KEY.middlegame.ringColor}
+                text="Teal phase ring."
+              />
+              <LegendRow
+                fillColor={PHASE_NODE_KEY.endgame.fillColor}
+                label="Endgame nodes"
+                markColor={PHASE_NODE_KEY.endgame.markColor}
+                ringColor={PHASE_NODE_KEY.endgame.ringColor}
+                text="Violet phase ring."
+              />
+              <LegendRow
+                fillColor={TERMINAL_NODE_KEY.W.fillColor}
+                label="Terminal nodes"
+                markColor={TERMINAL_NODE_KEY.W.markColor}
+                ringColor="#b7791f"
+                text="Green win, orange draw, red loss; the outer gold ring marks the current focus."
+              />
+            </div>
+          </article>
+
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>Ribbons</div>
+            <div style={legendGridStyle}>
+              <LegendRow
+                fillColor={CARRIER_FAMILY_KEY.quiet.structureColor}
+                label="Quiet"
+                markColor={CARRIER_FAMILY_KEY.quiet.tacticalColor}
+                ringColor={CARRIER_FAMILY_KEY.quiet.haloColor}
+                text="Slate ribbon."
+              />
+              <LegendRow
+                fillColor={CARRIER_FAMILY_KEY.capture.structureColor}
+                label="Capture"
+                markColor={CARRIER_FAMILY_KEY.capture.tacticalColor}
+                ringColor={CARRIER_FAMILY_KEY.capture.haloColor}
+                text="Amber ribbon."
+              />
+              <LegendRow
+                fillColor={CARRIER_FAMILY_KEY.castle.structureColor}
+                label="Castle"
+                markColor={CARRIER_FAMILY_KEY.castle.tacticalColor}
+                ringColor={CARRIER_FAMILY_KEY.castle.haloColor}
+                text="Teal ribbon."
+              />
+              <LegendRow
+                fillColor={CARRIER_FAMILY_KEY.check.structureColor}
+                label="Check"
+                markColor={CARRIER_FAMILY_KEY.check.tacticalColor}
+                ringColor={CARRIER_FAMILY_KEY.check.haloColor}
+                text="Indigo ribbon."
+              />
+              <LegendRow
+                fillColor={CARRIER_FAMILY_KEY.terminal.structureColor}
+                label="Mate"
+                markColor={CARRIER_FAMILY_KEY.terminal.tacticalColor}
+                ringColor={CARRIER_FAMILY_KEY.terminal.haloColor}
+                text="Magenta ribbon."
+              />
+            </div>
+            <p style={{ margin: '0.75rem 0 0', fontSize: '0.83rem', color: '#5f5547' }}>
+              Direction is embedded on the ribbon with a single slim arrowhead near the target node. Blue means the move leaves the focus node. Amber means the move arrives at the focus node.
+            </p>
+          </article>
+        </div>
+
         <span style={metaLabelStyle}>Navigation Entrypoint</span>
         <p style={{ marginBottom: '0.35rem' }}>{navigationEntryPoint.label}</p>
         <p style={{ marginTop: 0 }}>{navigationEntryPoint.description}</p>
@@ -546,11 +730,10 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>What this is</div>
             <p style={{ margin: '0.4rem 0 0' }}>
-              You are looking at the position after{' '}
-              {focusLine ? formatOccurrenceLine(focusLine) : 'the selected line'}.
+              You are looking at the currently focused graph node.
             </p>
             <p style={{ margin: '0.5rem 0 0' }}>
-              The canvas carries the move names on the ribbons themselves, so the geometry can stand on its own before you open any reference material.
+              The board panel is a single-position reference for that node, while the canvas shows the nearby transitions and repeated-state relations around it.
             </p>
           </article>
           {focusParsedStateKey && focusOccurrence ? (
@@ -576,17 +759,71 @@ export function ViewerShell({
           ) : null}
         </section>
 
-        <span style={metaLabelStyle}>Move Line</span>
-        <article style={narrativeCardStyle}>
-          <div style={{ fontWeight: 700 }}>{focusOccurrence?.embedding.rootGameId}</div>
-          <p style={{ margin: '0.45rem 0 0' }}>
-            {focusLine ? formatOccurrenceLine(focusLine) : 'No line available for this occurrence.'}
-          </p>
-          <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
-            Occurrence {shortOccurrenceId(runtimeSnapshot.focusOccurrenceId)} · salience{' '}
-            {focusOccurrence?.salience.normalizedScore.toFixed(3) ?? '0.000'}
-          </p>
-        </article>
+        <span style={metaLabelStyle}>Transposition Relation</span>
+        <div style={sectionStackStyle}>
+          {focusTranspositionGroup ? (
+            <>
+              <article style={narrativeCardStyle}>
+                <div style={{ fontWeight: 700 }}>
+                  This focus repeats across {focusTranspositionGroup.occurrences.length} occurrences
+                </div>
+                <p style={{ margin: '0.45rem 0 0' }}>
+                  The dark stitched overlay comes from the repeated-state query surface and keeps each occurrence separate instead of merging the node identity.
+                </p>
+                <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+                  Visible here {focusTranspositionGroup.visibleOccurrenceIds.length} · off-view echoes {focusTranspositionGroup.offViewOccurrenceIds.length}
+                </p>
+              </article>
+              {relatedFocusOccurrences.map((occurrence) => (
+                <article key={occurrence.occurrenceId} style={moveCardStyle}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem'
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: '0.9rem',
+                        height: '0.9rem',
+                        borderRadius: '999px',
+                        background: occurrence.isVisibleInNeighborhood ? '#0f172a' : '#d97706',
+                        display: 'inline-block'
+                      }}
+                    />
+                    <strong>
+                      {formatGameName(occurrence.rootGameId)} · ply {occurrence.ply}
+                    </strong>
+                  </div>
+                  <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
+                    {occurrence.isVisibleInNeighborhood
+                      ? 'Visible occurrence in the current graph view.'
+                      : 'Rendered as a transposition echo outside the current graph-radius window.'}
+                  </div>
+                  <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
+                    Phase {occurrence.phaseLabel} · occurrence {shortOccurrenceId(occurrence.occurrenceId)}
+                  </div>
+                  <button
+                    onClick={() => onFocusOccurrenceChange(occurrence.occurrenceId)}
+                    style={inlineButtonStyle}
+                    type="button"
+                  >
+                    Focus repeated occurrence
+                  </button>
+                </article>
+              ))}
+            </>
+          ) : transpositionSurface.groups.length > 0 ? (
+            <article style={narrativeCardStyle}>
+              This view contains {transpositionSurface.groups.length} repeated-state clusters, but the current focus is not part of one. Switch to whole-object scope or focus a repeated occurrence to inspect the relation layer directly.
+            </article>
+          ) : (
+            <article style={narrativeCardStyle}>
+              No transposition touches the current focus at this scope. Selecting a repeated occurrence promotes its sibling occurrences as relation echoes in local view.
+            </article>
+          )}
+        </div>
 
         <span style={metaLabelStyle}>Moves In This View</span>
         <div style={sectionStackStyle}>
@@ -618,6 +855,11 @@ export function ViewerShell({
                     }}
                   >
                     <span
+                      style={resolveDirectionBadgeStyle(isOutgoing)}
+                    >
+                      {isOutgoing ? 'OUT ->' : 'IN <-'}
+                    </span>
+                    <span
                       style={{
                         width: '0.9rem',
                         height: '0.9rem',
@@ -627,9 +869,7 @@ export function ViewerShell({
                       }}
                     />
                     <strong>
-                      {isOutgoing
-                        ? `Move from this position: ${transition.moveFacts.san}`
-                        : `Move that led here: ${transition.moveFacts.san}`}
+                      {transition.moveFacts.san}
                     </strong>
                   </div>
                   <div style={{ fontSize: '0.83rem', color: '#5f5547' }}>
@@ -683,6 +923,9 @@ export function ViewerShell({
     cameraDistance,
     cameraGrammar,
     renderTuning,
+    transpositionGroups: transpositionSurface.groups.length,
+    transpositionLinks: transpositionSurface.links.length,
+    transpositionEchoes: transpositionEchoCount,
     repeatedStateRelations: runtimeSnapshot.repeatedStateRelations.length,
     terminalAnchors: runtimeSnapshot.terminalAnchors.map((anchor) => anchor.anchorId),
     priorityFrontierOccurrenceIds: runtimeSnapshot.priorityFrontierOccurrenceIds
@@ -753,7 +996,7 @@ export function ViewerShell({
 
         <span style={metaLabelStyle}>Review Workflow</span>
         <p style={{ marginBottom: '0.35rem' }}>
-          N12 is adjudicated in the live viewer, not from the static SVGs alone. Switch entrypoints here, use whole-object scope for scale checks, drag to orbit, scroll or use the distance slider to zoom, and click nodes or move cards to test whether the experience still reads as one object.
+          N13 is adjudicated in the live viewer, not from the static SVGs alone. Switch entrypoints here, use whole-object scope or the transposition cards to inspect repeated-state clusters, drag to orbit, scroll or use the distance slider to zoom, and confirm the stitched relation stays readable without merging separate occurrences.
         </p>
         <p style={{ marginTop: 0, marginBottom: '0.35rem' }}>
           Generate the files below only as supporting evidence after the interactive pass.
@@ -770,11 +1013,14 @@ export function ViewerShell({
           carrierSurface={carrierSurface}
           onCameraDistanceChange={onCameraDistanceChange}
           onFocusOccurrenceChange={onFocusOccurrenceChange}
+          onHoverOccurrenceChange={onHoverOccurrenceChange}
           orbitPreset={navigationEntryPoint.orbit}
           orbitResetKey={orbitResetKey}
           renderTuning={renderTuning}
+          hoveredOccurrenceId={hoveredOccurrence?.occurrenceId ?? null}
           runtimeSnapshot={runtimeSnapshot}
           sceneBootstrap={sceneBootstrap}
+          transpositionSurface={transpositionSurface}
         />
       </section>
     </main>
@@ -822,4 +1068,134 @@ function countCarrierProfiles(carrierSurface: RuntimeCarrierSurfaceSnapshot) {
     counts[carrier.centerlineProfile] = (counts[carrier.centerlineProfile] ?? 0) + 1;
     return counts;
   }, {});
+}
+
+function LegendRow({
+  fillColor,
+  label,
+  markColor,
+  ringColor,
+  text
+}: {
+  fillColor: string;
+  label: string;
+  markColor: string;
+  ringColor: string;
+  text: string;
+}) {
+  return (
+    <div style={legendRowStyle}>
+      <div
+        style={{
+          ...legendSwatchStyle,
+          background: fillColor,
+          borderColor: ringColor
+        }}
+      >
+        <div
+          style={{
+            width: '0.45rem',
+            height: '0.45rem',
+            borderRadius: '999px',
+            background: markColor,
+            position: 'absolute',
+            inset: '0',
+            margin: 'auto'
+          }}
+        />
+      </div>
+      <div>
+        <div style={{ fontWeight: 700, fontSize: '0.85rem' }}>{label}</div>
+        <div style={{ fontSize: '0.8rem', color: '#5f5547' }}>{text}</div>
+      </div>
+    </div>
+  );
+}
+
+function resolveDirectionBadgeStyle(isOutgoing: boolean) {
+  return {
+    display: 'inline-flex',
+    alignItems: 'center',
+    borderRadius: '999px',
+    padding: '0.18rem 0.45rem',
+    fontSize: '0.72rem',
+    fontWeight: 700,
+    letterSpacing: '0.04em',
+    color: isOutgoing ? '#1e3a8a' : '#9a3412',
+    background: isOutgoing ? '#dbeafe' : '#ffedd5',
+    border: `1px solid ${isOutgoing ? '#1d4ed8' : '#c2410c'}`
+  };
+}
+
+function CanvasHudCard({
+  accentColor,
+  description,
+  emptyText,
+  occurrence,
+  title
+}: {
+  accentColor: string;
+  description: string;
+  emptyText: string;
+  occurrence: BuilderOccurrenceRecord | null;
+  title: string;
+}) {
+  const parsedStateKey = occurrence ? parseStateKey(occurrence.stateKey) : null;
+
+  return (
+    <article
+      style={{
+        ...selectionCardStyle,
+        borderColor: accentColor
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <span
+          style={{
+            width: '0.72rem',
+            height: '0.72rem',
+            borderRadius: '999px',
+            background: accentColor,
+            display: 'inline-block'
+          }}
+        />
+        <strong style={{ fontSize: '0.92rem' }}>{title}</strong>
+      </div>
+      {occurrence ? (
+        <div style={selectionContentStyle}>
+          {parsedStateKey ? (
+            <ChessBoard
+              compact
+              parsedStateKey={parsedStateKey}
+              subtitle={`Ply ${occurrence.ply} · ${occurrence.annotations.phaseLabel}`}
+              title={occurrence.annotations.materialSignature}
+            />
+          ) : (
+            <div style={{ ...selectionCardStyle, margin: 0 }}>No board data</div>
+          )}
+          <div style={selectionTextStyle}>
+            <div>
+              Material {occurrence.annotations.materialSignature}
+            </div>
+            <div>
+              {occurrence.terminal
+                ? `Terminal ${formatTerminalOutcomeLabel(occurrence.terminal.wdlLabel)}`
+                : 'Non-terminal position'}
+            </div>
+            <div>
+              Phase {occurrence.annotations.phaseLabel}
+            </div>
+            <div>
+              Node {shortOccurrenceId(occurrence.occurrenceId)}
+            </div>
+            <div style={{ color: '#7c6f60' }}>{description}</div>
+          </div>
+        </div>
+      ) : (
+        <div style={{ marginTop: '0.55rem', fontSize: '0.82rem', color: '#5f5547' }}>
+          {emptyText}
+        </div>
+      )}
+    </article>
+  );
 }

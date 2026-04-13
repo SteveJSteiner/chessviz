@@ -12,7 +12,7 @@ Do not answer the camera-affordance question from the static SVG artifacts alone
 - opening anchor: occ-27e2be7f2bf706c6 · QGD Bogo-Indian A · ply 0 · radius 3 · distance 5.0
 - middlegame anchor: occ-25c32c2bc0227f68 · Italian Branch Lab · ply 8 · radius 2 · distance 4.2
 - endgame anchor: occ-50c5276a269f4c53 · Endgame Simplification Lab · ply 35 · radius 3 · distance 3.3
-- middlegame focusLine: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6
+- middlegame focusNode: ply 8 · middlegame · white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]
 - middlegame focusTurn: White to move
 - structureDistance: 5.0
 - tacticalDistance: 3.8

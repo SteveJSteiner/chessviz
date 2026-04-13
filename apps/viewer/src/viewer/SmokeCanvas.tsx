@@ -1,8 +1,12 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import {
+  CatmullRomCurve3,
   CanvasTexture,
-  DoubleSide
+  DoubleSide,
+  Quaternion as ThreeQuaternion,
+  TubeGeometry,
+  Vector3 as ThreeVector3
 } from 'three';
 import type { CameraGrammarState } from './cameraGrammar.ts';
 import { createCarrierRibbonGeometry } from './carrierRibbon.ts';
@@ -16,6 +20,7 @@ import {
 import { formatGameName, formatTerminalOutcomeLabel } from './chessContext.ts';
 import {
   advanceCameraOrbitState,
+  resolveOrbitUpVector,
   resolveOrbitCameraPosition
 } from './cameraOrbit.ts';
 import {
@@ -30,6 +35,9 @@ import type {
   RuntimeCarrierRecord,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
+  RuntimeTranspositionLink,
+  RuntimeTranspositionOccurrence,
+  RuntimeTranspositionSurfaceSnapshot,
   SceneBootstrap,
   Vector3
 } from './contracts';
@@ -40,10 +48,13 @@ type SmokeCanvasProps = {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   onCameraDistanceChange: (distance: number) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
   orbitPreset: CameraOrbitPreset;
   orbitResetKey: number;
   renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
+  transpositionSurface: RuntimeTranspositionSurfaceSnapshot;
+  hoveredOccurrenceId: string | null;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 };
 
@@ -53,10 +64,13 @@ export function SmokeCanvas({
   carrierSurface,
   onCameraDistanceChange,
   onFocusOccurrenceChange,
+  onHoverOccurrenceChange,
   orbitPreset,
   orbitResetKey,
   renderTuning,
   sceneBootstrap,
+  transpositionSurface,
+  hoveredOccurrenceId,
   runtimeSnapshot
 }: SmokeCanvasProps) {
   const occurrenceRadiusCaps = useMemo(
@@ -87,12 +101,24 @@ export function SmokeCanvas({
       <hemisphereLight args={['#fff9ef', '#ddd3c2', 1.08]} />
       <directionalLight position={[2.4, 3.2, 3.8]} intensity={1.18} />
       <directionalLight position={[-2.8, 2.2, 1.4]} intensity={0.42} color="#f1dcc2" />
-      <NeighborhoodCarriers carrierSurface={carrierSurface} renderTuning={renderTuning} />
+      <TranspositionRelations
+        onFocusOccurrenceChange={onFocusOccurrenceChange}
+        onHoverOccurrenceChange={onHoverOccurrenceChange}
+        hoveredOccurrenceId={hoveredOccurrenceId}
+        transpositionSurface={transpositionSurface}
+      />
+      <NeighborhoodCarriers
+        carrierSurface={carrierSurface}
+        focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
+        renderTuning={renderTuning}
+      />
       {runtimeSnapshot.occurrences.map((occurrence) => (
         <NeighborhoodNode
           accentColor={sceneBootstrap.accentColor}
+          isHovered={hoveredOccurrenceId === occurrence.occurrenceId}
           key={occurrence.occurrenceId}
           onFocusOccurrenceChange={onFocusOccurrenceChange}
+          onHoverOccurrenceChange={onHoverOccurrenceChange}
           occurrence={occurrence}
           radiusCap={occurrenceRadiusCaps.get(occurrence.occurrenceId)}
           renderTuning={renderTuning}
@@ -108,10 +134,217 @@ export function SmokeCanvas({
       <OccurrenceDataLabels
         cameraDistance={cameraDistance}
         carrierSurface={carrierSurface}
+        focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
         renderTuning={renderTuning}
         runtimeSnapshot={runtimeSnapshot}
       />
     </Canvas>
+  );
+}
+
+function TranspositionRelations({
+  hoveredOccurrenceId,
+  onFocusOccurrenceChange,
+  onHoverOccurrenceChange,
+  transpositionSurface
+}: {
+  hoveredOccurrenceId: string | null;
+  onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
+  transpositionSurface: RuntimeTranspositionSurfaceSnapshot;
+}) {
+  const ghostOccurrences = transpositionSurface.groups
+    .flatMap((group) => group.occurrences)
+    .filter((occurrence) => !occurrence.isVisibleInNeighborhood)
+    .sort((left, right) => {
+      if (left.isFocus !== right.isFocus) {
+        return left.isFocus ? -1 : 1;
+      }
+
+      if (left.rootGameId !== right.rootGameId) {
+        return left.rootGameId.localeCompare(right.rootGameId);
+      }
+
+      return left.ply - right.ply;
+    });
+  const orderedLinks = [...transpositionSurface.links].sort((left, right) => {
+    if (left.emphasis !== right.emphasis) {
+      return left.emphasis === 'context' ? -1 : 1;
+    }
+
+    return `${left.sourceOccurrenceId}|${left.targetOccurrenceId}`.localeCompare(
+      `${right.sourceOccurrenceId}|${right.targetOccurrenceId}`
+    );
+  });
+
+  return (
+    <group>
+      {orderedLinks.map((link) => (
+        <TranspositionRelationLink
+          key={`${link.sourceOccurrenceId}:${link.targetOccurrenceId}:transposition`}
+          link={link}
+        />
+      ))}
+      {ghostOccurrences.map((occurrence) => (
+        <TranspositionEchoOccurrence
+          key={`${occurrence.occurrenceId}:transposition-echo`}
+          isHovered={hoveredOccurrenceId === occurrence.occurrenceId}
+          occurrence={occurrence}
+          onFocusOccurrenceChange={onFocusOccurrenceChange}
+          onHoverOccurrenceChange={onHoverOccurrenceChange}
+        />
+      ))}
+    </group>
+  );
+}
+
+function TranspositionRelationLink({
+  link
+}: {
+  link: RuntimeTranspositionLink;
+}) {
+  const touchesGhost =
+    !link.sourceVisibleInNeighborhood || !link.targetVisibleInNeighborhood;
+  const scaledSamples = useMemo(
+    () => link.samples.map((sample) => scaleCoordinate(sample)),
+    [link.samples]
+  );
+  const curve = useMemo(
+    () =>
+      new CatmullRomCurve3(
+        scaledSamples.map(
+          (sample) => new ThreeVector3(sample[0], sample[1], sample[2])
+        ),
+        false,
+        'centripetal'
+      ),
+    [scaledSamples]
+  );
+  const coreRadius = touchesGhost ? 0.0085 : link.emphasis === 'focus' ? 0.007 : 0.005;
+  const haloRadius = coreRadius * 1.9;
+  const tubeSegments = Math.max(28, scaledSamples.length * 12);
+  const haloGeometry = useMemo(
+    () => new TubeGeometry(curve, tubeSegments, haloRadius, 10, false),
+    [curve, haloRadius, tubeSegments]
+  );
+  const coreGeometry = useMemo(
+    () => new TubeGeometry(curve, tubeSegments, coreRadius, 10, false),
+    [coreRadius, curve, tubeSegments]
+  );
+  const centerSample = scaledSamples[Math.floor(scaledSamples.length / 2)] ?? scaledSamples[0];
+  const coreColor = link.emphasis === 'focus' ? '#0f172a' : '#334155';
+  const haloColor = link.emphasis === 'focus' ? '#dbe7f6' : '#e2e8f0';
+
+  useEffect(
+    () => () => {
+      haloGeometry.dispose();
+      coreGeometry.dispose();
+    },
+    [coreGeometry, haloGeometry]
+  );
+
+  return (
+    <group>
+      <mesh renderOrder={4}>
+        <primitive attach="geometry" object={haloGeometry} />
+        <meshBasicMaterial
+          color={haloColor}
+          depthWrite={false}
+          opacity={touchesGhost ? 0.72 : 0.42}
+          transparent
+        />
+      </mesh>
+      <mesh renderOrder={5}>
+        <primitive attach="geometry" object={coreGeometry} />
+        <meshStandardMaterial
+          color={coreColor}
+          depthWrite={false}
+          emissive={coreColor}
+          emissiveIntensity={touchesGhost ? 0.36 : 0.18}
+          opacity={touchesGhost ? 0.92 : 0.78}
+          roughness={0.18}
+          transparent
+        />
+      </mesh>
+      {centerSample ? (
+        <mesh position={centerSample} renderOrder={6}>
+          <sphereGeometry args={[touchesGhost ? 0.019 : 0.014, 14, 14]} />
+          <meshBasicMaterial color="#d97706" depthWrite={false} transparent opacity={0.94} />
+        </mesh>
+      ) : null}
+    </group>
+  );
+}
+
+function TranspositionEchoOccurrence({
+  isHovered,
+  occurrence,
+  onFocusOccurrenceChange,
+  onHoverOccurrenceChange
+}: {
+  isHovered: boolean;
+  occurrence: RuntimeTranspositionOccurrence;
+  onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
+}) {
+  const radius = 0.05;
+
+  return (
+    <group
+      onClick={(event) => {
+        event.stopPropagation();
+        onFocusOccurrenceChange(occurrence.occurrenceId);
+      }}
+      onPointerOut={(event) => {
+        event.stopPropagation();
+        onHoverOccurrenceChange(null);
+        setCanvasPointerCursor(event, 'grab');
+      }}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        onHoverOccurrenceChange(occurrence.occurrenceId);
+        setCanvasPointerCursor(event, 'pointer');
+      }}
+      position={scaleCoordinate(occurrence.coordinate)}
+    >
+      <mesh renderOrder={7}>
+        <sphereGeometry args={[radius, 16, 16]} />
+        <meshStandardMaterial
+          color="#eff6ff"
+          emissive="#dbeafe"
+          emissiveIntensity={isHovered ? 0.72 : 0.4}
+          opacity={0.94}
+          roughness={0.18}
+          transparent
+        />
+      </mesh>
+      {isHovered ? (
+        <mesh renderOrder={8}>
+          <ringGeometry args={[radius * 1.88, radius * 2.08, 30]} />
+          <meshBasicMaterial
+            color="#38bdf8"
+            depthWrite={false}
+            opacity={0.92}
+            side={DoubleSide}
+            transparent
+          />
+        </mesh>
+      ) : null}
+      <mesh renderOrder={8}>
+        <ringGeometry args={[radius * 1.34, radius * 1.7, 28]} />
+        <meshBasicMaterial
+          color="#0f172a"
+          depthWrite={false}
+          opacity={0.86}
+          side={DoubleSide}
+          transparent
+        />
+      </mesh>
+      <mesh renderOrder={9}>
+        <sphereGeometry args={[radius * 0.22, 10, 10]} />
+        <meshBasicMaterial color="#d97706" depthWrite={false} transparent opacity={0.95} />
+      </mesh>
+    </group>
   );
 }
 
@@ -230,8 +463,10 @@ function CameraRig({
       cameraDistance,
       orbitStateRef.current
     );
+    const cameraUp = resolveOrbitUpVector(orbitStateRef.current);
 
     camera.position.set(...cameraPosition);
+    camera.up.set(...cameraUp);
     camera.lookAt(...scaledFocus);
   });
 
@@ -240,13 +475,17 @@ function CameraRig({
 
 function NeighborhoodNode({
   accentColor,
+  isHovered,
   onFocusOccurrenceChange,
+  onHoverOccurrenceChange,
   occurrence,
   radiusCap,
   renderTuning
 }: {
   accentColor: string;
+  isHovered: boolean;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
   occurrence: RuntimeNeighborhoodOccurrence;
   radiusCap: number | undefined;
   renderTuning: ViewerRenderTuning;
@@ -266,19 +505,60 @@ function NeighborhoodNode({
         event.stopPropagation();
         onFocusOccurrenceChange(occurrence.occurrenceId);
       }}
+      onPointerOut={(event) => {
+        event.stopPropagation();
+        onHoverOccurrenceChange(null);
+        setCanvasPointerCursor(event, 'grab');
+      }}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        onHoverOccurrenceChange(occurrence.occurrenceId);
+        setCanvasPointerCursor(event, 'pointer');
+      }}
       position={position}
     >
       <mesh>
         <sphereGeometry args={[radius, 20, 20]} />
         <meshStandardMaterial
           color={presentation.fillColor}
-          emissive={occurrence.isFocus ? presentation.fillColor : '#000000'}
-          emissiveIntensity={occurrence.isFocus ? 0.2 : 0}
+          emissive={occurrence.isFocus || isHovered ? presentation.fillColor : '#000000'}
+          emissiveIntensity={occurrence.isFocus ? 0.2 : isHovered ? 0.1 : 0}
           roughness={0.3}
         />
       </mesh>
+      {isHovered && !occurrence.isFocus ? (
+        <mesh>
+          <ringGeometry args={[radius * 1.42, radius * 1.62, 36]} />
+          <meshBasicMaterial
+            color="#38bdf8"
+            depthWrite={false}
+            opacity={0.9}
+            side={DoubleSide}
+            transparent
+          />
+        </mesh>
+      ) : null}
       <mesh>
-        <ringGeometry args={[radius * 1.08, radius * 1.22, 32]} />
+        <ringGeometry args={[radius * 1.08, radius * 1.18, 32]} />
+        <meshBasicMaterial
+          color={presentation.phaseRingColor}
+          depthWrite={false}
+          opacity={0.88}
+          side={DoubleSide}
+          transparent
+        />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[radius * 0.24, 14, 14]} />
+        <meshStandardMaterial
+          color={presentation.centerMarkColor}
+          emissive={presentation.centerMarkColor}
+          emissiveIntensity={0.12}
+          roughness={0.22}
+        />
+      </mesh>
+      <mesh>
+        <ringGeometry args={[radius * 1.22, radius * 1.36, 32]} />
         <meshBasicMaterial
           color={presentation.ringColor}
           depthWrite={false}
@@ -293,9 +573,11 @@ function NeighborhoodNode({
 
 function NeighborhoodCarriers({
   carrierSurface,
+  focusOccurrenceId,
   renderTuning
 }: {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  focusOccurrenceId: string;
   renderTuning: ViewerRenderTuning;
 }) {
   return [...carrierSurface.carriers]
@@ -303,6 +585,7 @@ function NeighborhoodCarriers({
     .map((carrier) => (
       <NeighborhoodCarrier
         carrier={carrier}
+        focusOccurrenceId={focusOccurrenceId}
         key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}`}
         renderTuning={renderTuning}
       />
@@ -311,16 +594,23 @@ function NeighborhoodCarriers({
 
 function NeighborhoodCarrier({
   carrier,
+  focusOccurrenceId,
   renderTuning
 }: {
   carrier: RuntimeCarrierRecord;
+  focusOccurrenceId: string;
   renderTuning: ViewerRenderTuning;
 }) {
   const presentation = createCarrierPresentation(carrier);
   const thicknessScale = renderTuning.carrierThicknessScale;
+  const directionRelation = resolveCarrierFocusRelation(carrier, focusOccurrenceId);
   const scaledSamples = useMemo(
     () => carrier.samples.map((sample) => scaleCoordinate(sample)),
     [carrier.samples]
+  );
+  const directionMarkers = useMemo(
+    () => resolveCarrierDirectionMarkers(scaledSamples),
+    [scaledSamples]
   );
   const haloRibbonGeometry = useMemo(
     () =>
@@ -400,6 +690,22 @@ function NeighborhoodCarrier({
           />
         </mesh>
       ) : null}
+      {directionMarkers.map((marker) => (
+        <mesh
+          key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}:direction:${marker.kind}`}
+          position={marker.position}
+          quaternion={marker.quaternion}
+          renderOrder={5}
+        >
+          <coneGeometry args={[marker.radius * (0.72 + thicknessScale), marker.height * (0.72 + thicknessScale), 12]} />
+          <meshBasicMaterial
+            color={resolveCarrierDirectionColor(directionRelation, presentation.structureColor)}
+            depthWrite={false}
+            opacity={marker.opacity}
+            transparent
+          />
+        </mesh>
+      ))}
       {contextualResidueSamples.map((sample, index) => (
         <mesh key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}:context:${index}`} position={scaleCoordinate(sample)} renderOrder={4}>
           <sphereGeometry args={[presentation.contextualDotRadius * thicknessScale, 10, 10]} />
@@ -447,22 +753,16 @@ function CarrierLabels({
     }
 
     const presentation = createCarrierPresentation(carrier);
-    const label =
-      carrier.sourceOccurrenceId === focusOccurrenceId
-        ? `out ${carrier.san}`
-        : carrier.targetOccurrenceId === focusOccurrenceId
-          ? `in ${carrier.san}`
-          : carrier.san;
 
     return (
       <LabelSprite
-        backgroundColor={carrier.sourceOccurrenceId === focusOccurrenceId ? '#deebf4' : '#f7f1e6'}
-        borderColor={carrier.sourceOccurrenceId === focusOccurrenceId ? '#3a6b87' : presentation.structureColor}
+        backgroundColor="#f7f1e6"
+        borderColor={presentation.structureColor}
         key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}:label`}
         opacity={opacity}
         position={offsetLabelPosition(scaleCoordinate(centerSample), carrier.ply)}
         scale={scale * renderTuning.labelScale}
-        text={label}
+        text={carrier.san}
       />
     );
   });
@@ -471,11 +771,13 @@ function CarrierLabels({
 function OccurrenceDataLabels({
   cameraDistance,
   carrierSurface,
+  focusOccurrenceId,
   renderTuning,
   runtimeSnapshot
 }: {
   cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  focusOccurrenceId: string;
   renderTuning: ViewerRenderTuning;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 }) {
@@ -492,15 +794,18 @@ function OccurrenceDataLabels({
     const position = offsetNodeLabelPosition(scaleCoordinate(occurrence.embedding.coordinate));
 
     if (kind === 'root') {
+      const isFocus = occurrence.occurrenceId === focusOccurrenceId;
+
       return [
         <LabelSprite
-          backgroundColor="#f7f1e6"
-          borderColor="#7a6a55"
+          backgroundColor={isFocus ? '#fff7d8' : '#f7f1e6'}
+          borderColor={isFocus ? '#b7791f' : '#7a6a55'}
           key={`${occurrence.occurrenceId}:root-label`}
           opacity={opacity}
           position={position}
           scale={scale * renderTuning.labelScale}
           text={formatGameName(occurrence.embedding.rootGameId)}
+          textColor={isFocus ? '#7c2d12' : undefined}
         />
       ];
     }
@@ -535,6 +840,7 @@ function LabelSprite({
   position,
   backgroundColor,
   borderColor,
+  textColor,
   scale,
   opacity
 }: {
@@ -542,12 +848,13 @@ function LabelSprite({
   position: Vector3;
   backgroundColor: string;
   borderColor: string;
+  textColor?: string;
   scale: number;
   opacity: number;
 }) {
   const textureData = useMemo(
-    () => createLabelTextureData(text, backgroundColor, borderColor),
-    [backgroundColor, borderColor, text]
+    () => createLabelTextureData(text, backgroundColor, borderColor, textColor),
+    [backgroundColor, borderColor, text, textColor]
   );
 
   useEffect(() => () => textureData.texture.dispose(), [textureData]);
@@ -562,7 +869,8 @@ function LabelSprite({
 function createLabelTextureData(
   text: string,
   backgroundColor: string,
-  borderColor: string
+  borderColor: string,
+  textColor = '#231f18'
 ) {
   const pixelRatio = typeof window === 'undefined' ? 1 : Math.min(window.devicePixelRatio || 1, 2);
   const fontSize = 22;
@@ -599,7 +907,7 @@ function createLabelTextureData(
   context.lineWidth = 2;
 
   drawRoundedRect(context, 1, 1, width - 2, height - 2, height / 2, backgroundColor, borderColor);
-  context.fillStyle = '#231f18';
+  context.fillStyle = textColor;
   context.fillText(text, paddingX, height / 2);
 
   const texture = new CanvasTexture(canvas);
@@ -647,4 +955,90 @@ function offsetLabelPosition(position: Vector3, ply: number): Vector3 {
 
 function offsetNodeLabelPosition(position: Vector3): Vector3 {
   return [position[0], position[1] + 0.28, position[2]];
+}
+
+function resolveCarrierFocusRelation(
+  carrier: RuntimeCarrierRecord,
+  focusOccurrenceId: string
+) {
+  if (carrier.sourceOccurrenceId === focusOccurrenceId) {
+    return 'outgoing';
+  }
+
+  if (carrier.targetOccurrenceId === focusOccurrenceId) {
+    return 'incoming';
+  }
+
+  return 'ambient';
+}
+
+function resolveCarrierDirectionColor(
+  directionRelation: 'outgoing' | 'incoming' | 'ambient',
+  structureColor: string
+) {
+  if (directionRelation === 'outgoing') {
+    return '#2563eb';
+  }
+
+  if (directionRelation === 'incoming') {
+    return '#c2410c';
+  }
+
+  return structureColor;
+}
+
+function resolveCarrierDirectionMarkers(samples: Vector3[]) {
+  if (samples.length < 2) {
+    return [];
+  }
+
+  return [
+    {
+      kind: 'arrow-tip',
+      ...resolveCarrierDirectionFrame(samples, 0.93),
+      radius: 0.015,
+      height: 0.072,
+      opacity: 0.82
+    }
+  ] as const;
+}
+
+function resolveCarrierDirectionFrame(samples: Vector3[], progress: number) {
+  const lastIndex = samples.length - 1;
+  const index = Math.max(0, Math.min(lastIndex, Math.round(lastIndex * progress)));
+  const previousSample = samples[Math.max(0, index - 1)] ?? samples[index]!;
+  const nextSample = samples[Math.min(lastIndex, index + 1)] ?? samples[index]!;
+  const tangent = normalizeMarkerTangent(subtractVector3(nextSample, previousSample));
+  const quaternion = new ThreeQuaternion().setFromUnitVectors(
+    new ThreeVector3(0, 1, 0),
+    new ThreeVector3(tangent[0], tangent[1], tangent[2])
+  );
+
+  return {
+    position: samples[index] ?? samples[0]!,
+    quaternion
+  };
+}
+
+function subtractVector3(left: Vector3, right: Vector3): Vector3 {
+  return [left[0] - right[0], left[1] - right[1], left[2] - right[2]];
+}
+
+function normalizeMarkerTangent(vector: Vector3): Vector3 {
+  const length = Math.hypot(vector[0], vector[1], vector[2]);
+  if (length <= 1e-6) {
+    return [0, 1, 0];
+  }
+
+  return [vector[0] / length, vector[1] / length, vector[2] / length];
+}
+
+function setCanvasPointerCursor(
+  event: { nativeEvent: PointerEvent },
+  cursor: 'grab' | 'pointer'
+) {
+  const target = event.nativeEvent.target;
+  if (target instanceof HTMLCanvasElement) {
+    target.style.cursor = cursor;
+  }
 }

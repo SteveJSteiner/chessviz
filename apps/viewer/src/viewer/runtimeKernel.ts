@@ -10,7 +10,6 @@ import type {
   RuntimeNeighborhoodEdge,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
-  RuntimeOccurrenceLine,
   RuntimeTransitionSurfaceSnapshot,
   ViewerSceneManifest
 } from './contracts';
@@ -61,7 +60,6 @@ export type RuntimeExplorationKernel = {
     sourceOccurrenceId: string,
     targetOccurrenceId: string
   ) => BuilderDepartureRuleRecord | undefined;
-  describeOccurrenceLine: (occurrenceId: string) => RuntimeOccurrenceLine | undefined;
   getFocusOptions: () => BuilderOccurrenceRecord[];
   getCacheStats: () => RuntimeExplorationCacheStats;
 };
@@ -80,12 +78,6 @@ export function createRuntimeExplorationKernel(
     builderBootstrapManifest.occurrences.map((occurrence) => [
       occurrence.occurrenceId,
       occurrence
-    ])
-  );
-  const occurrenceIdByPathKey = new Map(
-    builderBootstrapManifest.occurrences.map((occurrence) => [
-      pathKey(occurrence.path),
-      occurrence.occurrenceId
     ])
   );
   const adjacencyByOccurrenceId = buildAdjacency(builderBootstrapManifest);
@@ -273,38 +265,6 @@ export function createRuntimeExplorationKernel(
       return departureRuleByKey.get(
         transitionKey(sourceOccurrenceId, targetOccurrenceId)
       );
-    },
-    describeOccurrenceLine(occurrenceId) {
-      const occurrence = occurrenceById.get(occurrenceId);
-      if (!occurrence) {
-        return undefined;
-      }
-
-      return {
-        occurrenceId,
-        rootGameId:
-          occurrence.path[0]?.replace(/^game:/, '') ?? occurrence.embedding.rootGameId,
-        moves: occurrence.path.slice(1).map((pathStep, index) => {
-          const targetPath = occurrence.path.slice(0, index + 2);
-          const sourcePath = targetPath.slice(0, -1);
-          const targetOccurrenceId = occurrenceIdByPathKey.get(pathKey(targetPath));
-          const sourceOccurrenceId = occurrenceIdByPathKey.get(pathKey(sourcePath)) ?? null;
-          const transition =
-            sourceOccurrenceId && targetOccurrenceId
-              ? transitionByKey.get(
-                  transitionKey(sourceOccurrenceId, targetOccurrenceId)
-                )
-              : undefined;
-
-          return {
-            ply: index + 1,
-            uci: pathStep.split(':').at(-1) ?? pathStep,
-            san: transition?.moveFacts.san ?? null,
-            sourceOccurrenceId,
-            targetOccurrenceId: targetOccurrenceId ?? occurrenceId
-          };
-        })
-      } satisfies RuntimeOccurrenceLine;
     },
     getFocusOptions() {
       return viewerSceneManifest.runtime.focusCandidateOccurrenceIds
@@ -595,8 +555,4 @@ function clamp(value: number, lowerBound: number, upperBound: number) {
 
 function transitionKey(sourceOccurrenceId: string, targetOccurrenceId: string) {
   return `${sourceOccurrenceId}|${targetOccurrenceId}`;
-}
-
-function pathKey(path: string[]) {
-  return path.join('|');
 }

@@ -236,27 +236,6 @@ test('surfaces builder-owned transition facts and departure rules without board 
   assert.equal(resolvedTransition.moveFacts.isCapture, true);
 });
 
-test('describes the owning chess line for an occurrence with SAN history', () => {
-  const kernel = createRuntimeExplorationKernel(
-    builderBootstrapManifest,
-    viewerSceneManifest
-  );
-  const line = kernel.describeOccurrenceLine('occ-65caf3375c92984c');
-
-  assert.ok(line);
-
-  if (!line) {
-    throw new Error('expected scholars mate focus line to resolve');
-  }
-
-  assert.equal(line.rootGameId, 'scholars-mate-white');
-  assert.deepEqual(
-    line.moves.map((move) => move.san ?? move.uci),
-    ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'Nf6']
-  );
-  assert.equal(line.moves.at(-1)?.targetOccurrenceId, 'occ-65caf3375c92984c');
-});
-
 test('derives multiscale carriers with topology preservation and zoom-monotone band reveal', () => {
   const kernel = createRuntimeExplorationKernel(
     builderBootstrapManifest,

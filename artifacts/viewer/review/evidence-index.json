@@ -29,7 +29,12 @@
     }
   ],
   "rootGameId": "italian-branch-lab",
-  "focusLine": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6",
+  "focusNode": {
+    "occurrenceId": "occ-25c32c2bc0227f68",
+    "ply": 8,
+    "phaseLabel": "middlegame",
+    "materialSignature": "white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]"
+  },
   "focusTurn": "White to move",
   "neighborhoodRadius": 2,
   "cameraDistances": [
@@ -169,15 +174,6 @@
     {
       "file": "review-notes-template.md",
       "regime": "human-verdict-template"
-    },
-    {
-      "file": "n12-live-review-notes.md",
-      "regime": "live-human-review",
-      "scope": "anchored-entrypoints-whole-object",
-      "graphOccurrenceCount": 118,
-      "graphEdgeCount": 111,
-      "wholeObjectViewReviewed": true,
-      "followOnIssue": "initial move labels are not positioned near their paths in whole-object scope"
     }
   ]
 }

@@ -1,7 +1,7 @@
 import type {
   BuilderMoveFactRecord,
   BuilderMoveFamilyRecord,
-  RuntimeOccurrenceLine,
+  BuilderOccurrenceRecord,
   Vector3
 } from './contracts';
 
@@ -72,24 +72,6 @@ export function pieceGlyph(pieceCode: string) {
   return PIECE_GLYPHS[pieceCode] ?? pieceCode;
 }
 
-export function formatOccurrenceLine(line: RuntimeOccurrenceLine | null | undefined) {
-  if (!line || line.moves.length === 0) {
-    return 'Initial position';
-  }
-
-  return line.moves.reduce((notation, move) => {
-    const moveText = move.san ?? move.uci;
-    const moveNumber = Math.ceil(move.ply / 2);
-
-    if ((move.ply % 2) === 1) {
-      const prefix = notation ? ' ' : '';
-      return `${notation}${prefix}${moveNumber}. ${moveText}`;
-    }
-
-    return `${notation} ${moveText}`;
-  }, '').trim();
-}
-
 export function summarizeMoveSemantics(
   moveFacts: BuilderMoveFactRecord,
   moveFamily: BuilderMoveFamilyRecord
@@ -121,12 +103,13 @@ export function formatCastlingRights(castling: string) {
 }
 
 export function formatFocusOptionLabel(
-  rootGameId: string,
-  line: RuntimeOccurrenceLine | null | undefined,
-  ply: number
+  occurrence: BuilderOccurrenceRecord
 ) {
-  const lineText = formatOccurrenceLine(line);
-  return `${formatGameName(rootGameId)} · ply ${ply} · ${lineText}`;
+  const phaseLabel = occurrence.terminal
+    ? `Terminal ${formatTerminalOutcomeLabel(occurrence.terminal.wdlLabel)}`
+    : capitalizeLabel(occurrence.annotations.phaseLabel);
+
+  return `${phaseLabel} · ply ${occurrence.ply} · ${occurrence.annotations.materialSignature} · ${shortOccurrenceId(occurrence.occurrenceId)}`;
 }
 
 export function formatGameName(rootGameId: string) {
@@ -200,4 +183,12 @@ function expandFenRank(rank: string): Array<ParsedBoardPiece | null> {
   }
 
   return squares;
+}
+
+function capitalizeLabel(label: string) {
+  if (label.length === 0) {
+    return label;
+  }
+
+  return label.charAt(0).toUpperCase() + label.slice(1);
 }

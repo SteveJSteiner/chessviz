@@ -22,6 +22,7 @@ import {
   createRuntimeExplorationKernel,
   type RuntimeExplorationKernel
 } from './viewer/runtimeKernel';
+import { buildRuntimeTranspositionSurface } from './viewer/transpositionSurface';
 import { ViewerShell } from './viewer/ViewerShell';
 
 export type GraphViewScope = 'local-neighborhood' | 'whole-object';
@@ -60,6 +61,7 @@ export default function App() {
   const [cameraDistance, setCameraDistance] = useState<number>(
     activeNavigationEntryPoint.distance
   );
+  const [hoveredOccurrenceId, setHoveredOccurrenceId] = useState<string | null>(null);
   const [boardReferenceOpen, setBoardReferenceOpen] = useState(false);
   const [orbitResetKey, setOrbitResetKey] = useState(0);
   const [renderTuning, setRenderTuning] = useState(DEFAULT_VIEWER_RENDER_TUNING);
@@ -111,9 +113,14 @@ export default function App() {
       refinementBudget: deferredRuntimeSnapshot.refinementBudget
     }
   );
-  const focusLine = runtimeKernel.describeOccurrenceLine(
-    deferredRuntimeSnapshot.focusOccurrenceId
+  const transpositionSurface = buildRuntimeTranspositionSurface(
+    runtimeBootstrap.builderBootstrapManifest,
+    deferredRuntimeSnapshot,
+    graphViewScope
   );
+  const hoveredOccurrence = hoveredOccurrenceId
+    ? runtimeKernel.resolveOccurrence(hoveredOccurrenceId) ?? null
+    : null;
   const baseFocusOptions = runtimeKernel.getFocusOptions();
   const currentFocusOccurrence = runtimeKernel.resolveOccurrence(
     deferredRuntimeSnapshot.focusOccurrenceId
@@ -124,12 +131,6 @@ export default function App() {
     )
     ? [currentFocusOccurrence, ...baseFocusOptions]
     : baseFocusOptions;
-  const focusLinesByOccurrenceId = new Map(
-    focusOptions.map((occurrence) => [
-      occurrence.occurrenceId,
-      runtimeKernel.describeOccurrenceLine(occurrence.occurrenceId)
-    ])
-  );
   const cameraGrammar = createCameraGrammarState({
     cameraDistance,
     runtimeConfig: runtimeBootstrap.viewerSceneManifest.runtime,
@@ -141,6 +142,7 @@ export default function App() {
 
     setActiveEntryPointId(entryId);
     setFocusOccurrenceId(entryPoint.focusOccurrenceId);
+    setHoveredOccurrenceId(null);
     setNeighborhoodRadius(entryPoint.neighborhoodRadius);
     setCameraDistance(entryPoint.distance);
     setBoardReferenceOpen(true);
@@ -148,8 +150,19 @@ export default function App() {
   };
 
   const handleFocusOccurrenceChange = (occurrenceId: string) => {
+    setHoveredOccurrenceId(null);
     setFocusOccurrenceId(occurrenceId);
     setBoardReferenceOpen(true);
+  };
+
+  const handleGraphViewScopeChange = (scope: GraphViewScope) => {
+    setHoveredOccurrenceId(null);
+    setGraphViewScope(scope);
+  };
+
+  const handleNeighborhoodRadiusChange = (radius: number) => {
+    setHoveredOccurrenceId(null);
+    setNeighborhoodRadius(radius);
   };
 
   return (
@@ -159,10 +172,9 @@ export default function App() {
       cameraGrammar={cameraGrammar}
       carrierSurface={carrierSurface}
       cameraDistance={cameraDistance}
-      focusLine={focusLine}
-      focusLinesByOccurrenceId={focusLinesByOccurrenceId}
       focusOptions={focusOptions}
       graphViewScope={graphViewScope}
+      hoveredOccurrence={hoveredOccurrence}
       entryPoints={navigationEntryPoints}
       meetsN12Scale={meetsN12Scale}
       navigationEntryPoint={activeNavigationEntryPoint}
@@ -171,7 +183,8 @@ export default function App() {
       }
       onBoardReferenceOpenChange={setBoardReferenceOpen}
       onEntryPointChange={handleEntryPointChange}
-      onGraphViewScopeChange={setGraphViewScope}
+      onGraphViewScopeChange={handleGraphViewScopeChange}
+      onHoverOccurrenceChange={setHoveredOccurrenceId}
       onRenderTuningChange={(partialTuning) =>
         setRenderTuning((currentTuning) =>
           clampViewerRenderTuning({
@@ -182,7 +195,7 @@ export default function App() {
       }
       onResetRenderTuning={() => setRenderTuning(DEFAULT_VIEWER_RENDER_TUNING)}
       onFocusOccurrenceChange={handleFocusOccurrenceChange}
-      onNeighborhoodRadiusChange={setNeighborhoodRadius}
+      onNeighborhoodRadiusChange={handleNeighborhoodRadiusChange}
       orbitResetKey={orbitResetKey}
       renderTuning={renderTuning}
       runtimeConfig={runtimeBootstrap.viewerSceneManifest.runtime}
@@ -193,6 +206,7 @@ export default function App() {
       neighborhoodRadius={neighborhoodRadius}
       totalGraphEdgeCount={totalGraphEdgeCount}
       totalGraphOccurrenceCount={totalGraphOccurrenceCount}
+      transpositionSurface={transpositionSurface}
     />
   );
 }

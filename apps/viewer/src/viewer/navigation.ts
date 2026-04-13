@@ -6,8 +6,8 @@ import type {
 } from './contracts';
 import type { RuntimeBootstrapMaterialization } from './bootstrap.ts';
 import {
-  CAMERA_ORBIT_LIMITS,
-  deriveCameraOrbitState
+  deriveCameraOrbitState,
+  normalizeCameraOrbitState
 } from './cameraOrbit.ts';
 import { formatGameName } from './chessContext.ts';
 import { LIVE_VIEW_DISTANCE, clampLiveViewDistance } from './labelPolicy.ts';
@@ -234,14 +234,10 @@ function shiftOrbit(
   deltaAzimuth: number,
   deltaElevation: number
 ) {
-  return {
+  return normalizeCameraOrbitState({
     azimuth: orbit.azimuth + deltaAzimuth,
-    elevation: clampNumber(
-      orbit.elevation + deltaElevation,
-      CAMERA_ORBIT_LIMITS.minElevation,
-      CAMERA_ORBIT_LIMITS.maxElevation
-    )
-  };
+    elevation: orbit.elevation + deltaElevation
+  });
 }
 
 function clampNeighborhoodRadius(radius: number, maximum: number) {
