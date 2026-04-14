@@ -36,8 +36,8 @@ This file contains design and process decisions only. It must not become a task 
 
 ## Data and computation stance (locked)
 
-- **D17. Represented subset** — The rendered object is a represented subset of chess sourced from declared regime surfaces; it is not a literal enumeration of all legal positions.
-- **D18. Per-regime declaration required** — Each run declares opening-table assets and coverage metadata, middlegame-procedural expansion and pruning policy, and endgame-table assets plus supported material classes.
+- **D17. Represented subset** — The rendered object is a represented subset of chess sourced from an explicit seed state plus live runtime generation, optionally refined by declared opening/endgame assets; it is not a literal enumeration of all legal positions.
+- **D18. Runtime-run declaration required** — Each run declares the seed state, live runtime expansion and pruning policy, and any optional opening/endgame assets or coverage metadata that participate in the run.
 - **D19. Salience-source declaration required** — Each run must declare salience inputs and weights (frequency, eval, terminal pull, policy, centrality).
 - **D20. Determinism policy** — For a fixed dataset and seed, structural outputs used for acceptance must be reproducible.
 
@@ -46,24 +46,30 @@ This file contains design and process decisions only. It must not become a task 
 - **D20a. One represented object, browser-generated first** — The live viewer’s primary object is generated in-browser from an explicit seed board state through legal-move expansion.
 - **D20b. Seed-state primacy** — A valid canonical state key or full FEN is sufficient to start a runtime object; no exported corpus is required for graph genesis.
 - **D20c. Assets are overlays, not graph genesis** — Opening-table and endgame-table assets may enrich, prioritize, or annotate the live object, but they do not replace graph generation.
-- **D20d. Shared representation contract** — Runtime-generated and asset-backed records normalize into the same occurrence, transition, anchor, salience, and provenance schema so continuity remains representable without object swaps.
+- **D20d. Shared semantics at explicit boundaries** — Runtime-generated and asset-backed data may use different in-memory representations, but occurrences, transitions, anchors, salience, and provenance must normalize at explicit integration, review, or export boundaries so continuity remains representable without object swaps.
 - **D20e. Stable identity across overlays and revisits** — Re-encountering the same position, occurrence, or anchored path across runtime generation and optional overlays preserves identity/continuity semantics instead of minting unrelated objects.
 - **D20f. Project-owned optional truth surfaces** — Opening-table and endgame-table data live in project-owned, textual, inspectable formats that carry schema version, position key, continuation or terminal payload, weight/frequency/score fields, and provenance.
-- **D20g. Imported and procedural outputs converge** — Imported opening/endgame records and live browser procedural outputs normalize into the same representation schema and review surface.
+- **D20g. Imported and procedural outputs converge where they meet** — Imported opening/endgame records and live browser procedural outputs may keep separate runtime internals, but they must converge when compared, reviewed, or exported together.
 - **D20h. Builder-only external ingestion boundary** — Foreign opening-book or tablebase formats may be read only by explicit builder commands such as `import-opening-book`, `import-endgame-table`, and `build-web-corpus`; they are never runtime truth surfaces.
 - **D20i. Live legal-move generation is binding** — The viewer runtime expands legal moves from the current seed state rather than requiring a precomputed runtime corpus.
+- **D20ia. Incremental focus-driven expansion is binding** — The live runtime expands legal moves from the currently focused frontier on demand; focus changes may request more graph rather than only navigating within startup materialization.
+- **D20ib. Graph horizon and view scope are separate** — The amount of graph materialized in memory is independent from the currently visible neighborhood or camera scope; zoom does not cap how deep a pursued line may grow.
+- **D20ic. Live graph store over immutable manifest** — The browser runtime owns a long-lived mutable graph store; startup bootstrap is only the first state of that store, not the immutable whole object.
+- **D20id. Additive stable embedding** — Expanding one frontier may add coordinates for new nodes but may not perturb already-placed nodes during normal exploration.
+- **D20ie. Focus-click-expand is primary exploration** — Selecting a non-terminal frontier node may trigger expansion and recentering as a first-class interaction rather than a separate tool mode.
+- **D20if. Seed URLs may carry path pre-expansion** — A seed FEN or state key plus an optional move path may pre-grow a line before interactive exploration begins.
 - **D20j. Bootstrap comes from explicit seed state** — Any live bootstrap derives from the current seed board state plus runtime configuration, never from fixture or exported corpus truth.
 - **D20k. Fixture demotion is binding** — The existing fixture remains a unit-test or review input for identity, transposition, and DAG assembly checks and is excluded from required runtime graph genesis and settlement review.
 - **D20l. Settlement hard-fails on bypass or fracture** — Bypassing live runtime generation with canned corpus truth, or fracturing identity/anchoring/navigation/query semantics, is a hard failure.
-- **D20m. Versioned representation contracts remain required** — Shared serialized occurrence, transition, anchor, salience, and provenance records remain versioned and inspectable even when generated in the browser.
+- **D20m. Versioned publication contracts remain required** — Shared serialized occurrence, transition, anchor, salience, and provenance records remain versioned and inspectable whenever they are published from browser or builder flows, even if the live in-memory store is viewer-owned.
 - **D20n. Builder owns optional asset publication** — Opening-table and endgame-table import adapters, validation, sharding, provenance capture, and coverage metadata are builder responsibilities.
-- **D20o. Runtime owns graph generation and exploration** — Runtime generates the graph from the current seed state, resolves any optional assets, caches neighborhoods, and never substitutes phase-label inference for graph genesis.
-- **D20p. Seed surfaces are runtime truth** — The runtime seed state is the truth surface for live graph genesis; any exported bootstrap artifact is convenience scaffolding only.
-- **D20q. Focus presets are graph-backed** — Opening/middlegame/endgame or equivalent focus presets derive from generated graph state, with optional asset-backed anchors refining but not replacing them.
+- **D20o. Runtime owns graph generation and exploration** — Runtime generates and grows the graph from the current seed state, resolves any optional assets, caches neighborhoods, and never substitutes phase-label inference or canned bootstrap truth for graph genesis.
+- **D20p. Seed surfaces are runtime truth** — The runtime seed state, plus any explicitly requested path pre-expansion, is the truth surface for live graph genesis; any exported bootstrap artifact is convenience scaffolding only.
+- **D20q. Focus presets are graph-backed** — Opening, middlegame, endgame, or equivalent focus presets derive from generated graph state, operate over the live graph store, and do not freeze later expansion; optional asset-backed anchors may refine but not replace them.
 - **D20r. Exported artifact quarantine** — `artifacts/builder/bootstrap.json`, `artifacts/viewer/scene-manifest.json`, and related exported runtime artifacts are test/review or explicit comparison paths only and may not be the default live runtime source.
-- **D20s. Builder schema authority** — `tools/builder/src/chessviz_builder/contracts.py` remains the authoritative source for shared serialized occurrence, transition, anchor, salience, and provenance structures.
-- **D20t. Viewer mirror and generator split** — `apps/viewer/src/viewer/contracts.ts` mirrors the shared schemas, while runtime generation, bootstrap loading, and optional asset loading live in dedicated viewer modules rather than inside `App.tsx`.
-- **D20u. Runtime kernel is post-generation only** — `apps/viewer/src/viewer/runtimeKernel.ts` operates on already-generated occurrence and transition surfaces; graph generation and optional asset loading happen outside the kernel.
+- **D20s. Builder schema authority applies to published artifacts only** — `tools/builder/src/chessviz_builder/contracts.py` remains authoritative for shared serialized occurrence, transition, anchor, salience, and provenance structures that are published or compared, but the live JS runtime may keep its own internal graph-store types and adapters.
+- **D20t. Viewer mirror, live-store, and adapter split** — `apps/viewer/src/viewer/contracts.ts` mirrors published schemas, while the live graph store, incremental expander, seed/path bootstrap, and optional asset adapters live in dedicated viewer modules rather than inside `App.tsx`.
+- **D20u. Runtime kernel is a query and indexing layer over the live store** — `apps/viewer/src/viewer/runtimeKernel.ts` queries the current graph and neighborhood surface; graph generation and optional asset loading happen outside the kernel, but the kernel must tolerate store growth without full-page restart.
 - **D20v. Artifact harnesses stay quarantined** — Artifact-backed runtime loaders remain explicit comparison or review harnesses; the live viewer default is the JS-generated runtime.
 
 ## Performance/rendering budget stance (locked)
@@ -95,6 +101,6 @@ This file contains design and process decisions only. It must not become a task 
 - **O10. Opening-table serialization and sharding** — Exact textual schema and shard map for opening coverage.
 - **O11. Endgame-table serialization and sharding** — Exact textual schema and material-class partition for endgame assets.
 - **O12. Regime coverage cutoff metadata** — Exact opening-coverage cutoff and resolver precedence details when multiple regimes might claim the same position.
-- **O13. Runtime generation policy** — Expansion horizon, pruning thresholds, and prioritization blend for live JS graph generation from a seed state.
+- **O13. Runtime growth policy** — Per-expansion depth, pruning thresholds, and prioritization blend for live JS graph growth from a seed state or focused frontier.
 - **O14. Cross-regime provenance exposure** — Which provenance fields stay runtime-visible versus review-only once all regimes emit the shared contract.
-- **O15. Seed materialization granularity** — How much of the unified object is generated up front versus expanded on demand around the current focus.
+- **O15. Seed and frontier materialization granularity** — How much of the unified object is generated up front, how much may be pre-grown along a URL-provided path, and how much is expanded on demand around the current focus.
