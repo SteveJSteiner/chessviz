@@ -94,14 +94,14 @@ The system shall represent chess as a single continuous zoomable object in which
 - **R46.** Crossing regime boundaries shall preserve occurrence identity, anchored-path continuity, navigation semantics, and query semantics.
 - **R47.** Regime selection shall remain an internal substrate mechanism and shall not require the user to switch visualizer, object instance, mode, or mental model.
 - **R48.** When the same position or anchored path is encountered across regime boundaries, the system shall preserve stable identity and continuity semantics rather than reintroducing it as a new unrelated object.
-- **R49.** The represented subset shall distinguish three internal backing regimes: opening-table, middlegame-procedural, and endgame-table.
-- **R50.** Positions inside declared opening coverage shall be served from opening-table assets.
-- **R51.** Positions inside declared supported terminal-material coverage shall be served from endgame-table assets.
-- **R52.** Positions outside opening-table and endgame-table coverage shall be expanded live by a middlegame-procedural path rather than by a precomputed middlegame lookup corpus.
-- **R53.** Opening-table and endgame-table support shall come from project-owned, inspectable, web-ready assets rather than from foreign binary formats at runtime.
+- **R49.** The live runtime shall accept any valid seed board state expressed as a canonical state key or full FEN.
+- **R50.** From that seed, the browser runtime shall be able to generate a local occurrence graph directly from legal moves without requiring a precomputed exported corpus.
+- **R51.** Opening-table and endgame-table assets may enrich, prioritize, or annotate runtime generation, but the graph-generation path itself shall remain available when those assets are absent.
+- **R52.** No exported fixture bootstrap or precomputed middlegame lookup corpus shall be required for live runtime graph genesis.
+- **R53.** Optional opening-table and endgame-table support shall come from project-owned, inspectable, web-ready assets rather than from foreign binary formats at runtime.
 - **R54.** External binary opening-book or tablebase formats may exist as ingestion inputs, but they shall not be the browser/runtime truth surface.
-- **R55.** The builder fixture shall remain a test-only input and shall not act as the runtime corpus, bootstrap source, or settlement review surface.
-- **R56.** Acceptance of regime-spanning navigation shall verify continuity of the represented object when exploration crosses opening, middlegame, and endgame boundaries.
+- **R55.** The builder fixture shall remain a test-only or review-only input and shall not act as the required runtime seed, corpus, or settlement review surface.
+- **R56.** Runtime-generated occurrences shall preserve stable occurrence identity and continuous object semantics even when optional asset-backed overlays or anchors are present.
 
 ## 14. Non-requirements
 

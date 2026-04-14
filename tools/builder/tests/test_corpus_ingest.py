@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 import unittest
 
 import chess
 
 from chessviz_builder.corpus_ingest import (
+    corpus_declaration_from_location,
     initial_corpus_declaration,
     load_declared_corpus_fixture,
 )
@@ -37,6 +39,19 @@ class CorpusIngestTests(unittest.TestCase):
                 "repetition-draw": "draw",
             },
         )
+
+    def test_absolute_corpus_path_resolves_same_declared_fixture(self) -> None:
+        absolute_fixture_path = (
+            Path(__file__).resolve().parents[1] / "fixtures" / "initial_corpus.json"
+        )
+        declaration = corpus_declaration_from_location(absolute_fixture_path)
+        fixture = load_declared_corpus_fixture(declaration=declaration)
+
+        self.assertEqual(declaration.source_name, self.declaration.source_name)
+        self.assertEqual(declaration.version, self.declaration.version)
+        self.assertEqual(Path(declaration.location), absolute_fixture_path)
+        self.assertEqual(fixture.declaration, declaration)
+        self.assertEqual(len(fixture.games), 12)
 
     def test_ingestion_produces_continuous_paths_rooted_at_initial_position(self) -> None:
         ingested_corpus = self.pipeline.corpus_ingestor.ingest(self.declaration)

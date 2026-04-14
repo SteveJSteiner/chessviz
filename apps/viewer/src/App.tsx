@@ -1,5 +1,4 @@
 import { startTransition, useDeferredValue, useEffect, useState } from 'react';
-import { materializeRuntimeBootstrap } from './viewer/bootstrap';
 import {
   createCameraGrammarState,
   resolveCameraGrammarRefinementBudget
@@ -8,15 +7,13 @@ import {
   clampLiveViewDistance
 } from './viewer/labelPolicy';
 import {
-  createAnchoredNavigationEntryPoints,
-  resolveInitialNavigationEntryPointId,
   resolveNavigationEntryPoint
 } from './viewer/navigation';
 import {
   DEFAULT_VIEWER_RENDER_TUNING,
   clampViewerRenderTuning
 } from './viewer/renderTuning';
-import { runtimeArtifactBoundary } from './viewer/runtimeArtifactBoundary';
+import { resolveViewerRuntimeSource } from './viewer/dynamicRuntime';
 import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
 import {
   createRuntimeExplorationKernel,
@@ -28,23 +25,21 @@ import { ViewerShell } from './viewer/ViewerShell';
 export type GraphViewScope = 'local-neighborhood' | 'whole-object';
 
 export default function App() {
-  const [runtimeBootstrap] = useState(() =>
-    materializeRuntimeBootstrap(runtimeArtifactBundle)
+  const [runtimeSource] = useState(() =>
+    resolveViewerRuntimeSource(
+      runtimeArtifactBundle,
+      globalThis.location?.search ?? ''
+    )
   );
+  const { runtimeBootstrap, navigationEntryPoints } = runtimeSource;
   const [runtimeKernel] = useState(() =>
     createRuntimeExplorationKernel(
       runtimeBootstrap.builderBootstrapManifest,
       runtimeBootstrap.viewerSceneManifest
     )
   );
-  const [navigationEntryPoints] = useState(() =>
-    createAnchoredNavigationEntryPoints(runtimeBootstrap)
-  );
   const [activeEntryPointId, setActiveEntryPointId] = useState(() =>
-    resolveInitialNavigationEntryPointId(
-      navigationEntryPoints,
-      runtimeBootstrap.initialFocusOccurrenceId
-    )
+    runtimeSource.initialEntryPointId
   );
   const activeNavigationEntryPoint = resolveNavigationEntryPoint(
     navigationEntryPoints,
@@ -103,10 +98,6 @@ export default function App() {
     refinementBudget,
     runtimeKernel
   ]);
-
-  const transitionSurface = runtimeKernel.inspectTransitionSurface(
-    deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId)
-  );
   const carrierSurface = runtimeKernel.inspectCarrierSurface(
     deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
     {
@@ -201,8 +192,6 @@ export default function App() {
       runtimeConfig={runtimeBootstrap.viewerSceneManifest.runtime}
       runtimeSnapshot={deferredRuntimeSnapshot}
       sceneBootstrap={runtimeBootstrap.sceneBootstrap}
-      transitionSurface={transitionSurface}
-      runtimeArtifactBoundary={runtimeArtifactBoundary}
       neighborhoodRadius={neighborhoodRadius}
       totalGraphEdgeCount={totalGraphEdgeCount}
       totalGraphOccurrenceCount={totalGraphOccurrenceCount}

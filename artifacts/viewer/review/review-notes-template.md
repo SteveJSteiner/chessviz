@@ -1,7 +1,7 @@
-# N12 Review Notes
+# N13 Review Notes
 
-Use this file as the human verdict record for the live N12 interactive review.
-Do not answer the camera-affordance question from the static SVG artifacts alone; they are supporting evidence only.
+Use this file as the human verdict record for the live N13 interactive review.
+Do not answer the transposition-legibility question from the static SVG artifacts alone; they are supporting evidence only.
 
 ## Run context
 - graphObjectId: initial-represented-subset:2026-04-11-fixture-004
@@ -12,23 +12,26 @@ Do not answer the camera-affordance question from the static SVG artifacts alone
 - opening anchor: occ-27e2be7f2bf706c6 · Initial position · ply 0 · radius 3 · distance 5.0
 - middlegame anchor: occ-25c32c2bc0227f68 · 1. e4 subtree · ply 8 · radius 2 · distance 4.2
 - endgame anchor: occ-50c5276a269f4c53 · 1. Nc3 subtree · ply 35 · radius 3 · distance 3.3
-- middlegame focusNode: ply 8 · middlegame · white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]
-- middlegame focusTurn: White to move
-- structureDistance: 5.0
-- tacticalDistance: 3.8
-- contextualDistance: 2.8
-- structureBudget: 3
-- tacticalBudget: 6
-- contextualBudget: 12
+- transpositionStateKey: rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -
+- transpositionOccurrenceCount: 2
+- transpositionFocusNode: ply 6 · middlegame · white[Q1,R2,B2,N2,P8]|black[Q1,R2,B2,N2,P8]
+- transpositionFocusTurn: White to move
+- transpositionLocalRadius: 1
+- transpositionLocalDistance: 3.2
+- transpositionWholeObjectDistance: 5.0
+- transpositionLocalOffViewEchoes: 1
+- transpositionWholeObjectLinks: 1
 
 ## Required live review
-- switch the viewer to whole-object scope before recording the verdict; local-neighborhood mode is not sufficient for the scale gate
-- run the interactive viewer and switch across the opening, middlegame, and endgame entrypoints in one session
-- drag on the canvas to orbit and use scroll or the distance slider to test camera affordances directly
-- click nodes or move cards after switching entrypoints to confirm local exploration still feels continuous
+- start from the known repeated-state focus recorded above or select that occurrence from the focus menu in the live viewer
+- inspect both local-neighborhood scope and whole-object scope in one session before recording the verdict
+- drag on the canvas to orbit and use scroll or the distance slider to test whether the stitched relation stays readable across camera changes
+- switch across the opening, middlegame, and endgame entrypoints before and after inspecting the repeated-state focus to confirm the relation still reads as part of the same shared object
+- click the repeated occurrence cards or echo nodes to confirm the viewer changes focus without merging occurrence identity
 - record screenshots or screen capture from the live viewer after the interactive pass
 
 ## Supporting artifacts
+- review/transposition-relations.svg
 - review/anchored-entrypoints.svg
 - review/structure-zoom.svg
 - review/refinement-steps.svg
@@ -38,20 +41,20 @@ Do not answer the camera-affordance question from the static SVG artifacts alone
 - name:
 - date:
 
-## Anchored entrypoint verdict
-- opening, middlegame, and endgame read as one object rather than three substitute diagrams:
-- switching presets changed anchor, emphasis, and camera stance without changing graph identity:
-- local exploration still felt available after switching presets:
-- the board reference stayed secondary and confirmatory rather than becoming the primary interface:
+## Relation verdict
+- the known repeated state rendered as multiple occurrences rather than collapsing into a single node:
+- the stitched relation stayed readable in whole-object scope:
+- the local-neighborhood view surfaced the off-view echo without losing the focused occurrence as the primary anchor:
+- switching entrypoints or focusing the repeated sibling still read as one shared object rather than a detached overlay:
 
-## Camera grammar carryover
-- orbiting still kept the focused position legible while preserving surrounding branch context:
-- zooming closer still added tactical/contextual detail on the same carriers rather than swapping representations:
-- zooming back out still restored the coarse reading without contradictory emphasis:
+## Carryover checks
+- orbiting still kept the focused repeated position legible while preserving the surrounding branch context:
+- zooming closer still changed only legibility and emphasis, not occurrence identity or regime continuity:
+- zooming back out still kept the repeated-state relation visible enough to track without introducing a regime seam:
 - what still needs iteration:
 
 ## Settlement note
-- N12 settled: no / yes
+- N13 settled: no / yes
 - if yes, reference the commit that updates plan/completion-log.md and plan/continuation.md
 
-Do not mark N12 settled without recorded human review.
+Do not mark N13 settled without recorded human review.

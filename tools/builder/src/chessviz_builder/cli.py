@@ -18,13 +18,16 @@ from chessviz_builder.artifact_manifest import (
     write_web_corpus_artifacts,
 )
 from chessviz_builder.config import ARTIFACT_ROOT_ENV, load_builder_workspace
-from chessviz_builder.corpus_ingest import initial_corpus_declaration
+from chessviz_builder.corpus_ingest import (
+    corpus_declaration_from_location,
+    initial_corpus_declaration,
+)
 from chessviz_builder.pipeline import create_placeholder_pipeline
 
 REQUIRED_IMPORTS = ("chess", "chess.pgn", "chess.engine")
 
 
-def run_env_check() -> int:
+def run_env_check(corpus: Path | None = None) -> int:
     """Run builder environment and fixture-ingestion checks."""
     print(f"Python version: {platform.python_version()}")
 
@@ -39,7 +42,7 @@ def run_env_check() -> int:
 
     workspace = load_builder_workspace()
     pipeline = create_placeholder_pipeline(workspace)
-    declaration = initial_corpus_declaration()
+    declaration = _resolve_corpus_declaration(corpus, workspace.repository_root)
     dry_run = pipeline.dry_run(declaration)
 
     artifact_root = os.getenv(ARTIFACT_ROOT_ENV)
@@ -112,11 +115,12 @@ def run_env_check() -> int:
     return 0 if not failed_imports else 1
 
 
-def run_export_fixture_artifacts() -> int:
+def run_export_fixture_artifacts(corpus: Path | None = None) -> int:
     """Write builder/runtime fixture manifests for viewer-side exploration."""
     workspace = load_builder_workspace()
     pipeline = create_placeholder_pipeline(workspace)
-    dry_run = pipeline.dry_run(initial_corpus_declaration())
+    declaration = _resolve_corpus_declaration(corpus, workspace.repository_root)
+    dry_run = pipeline.dry_run(declaration)
     builder_manifest, viewer_scene_manifest = write_fixture_artifacts(
         workspace,
         dry_run,
@@ -127,10 +131,10 @@ def run_export_fixture_artifacts() -> int:
     return 0
 
 
-def run_import_opening_book(source: Path) -> int:
+def run_import_opening_book(source: Path, corpus: Path | None = None) -> int:
     """Normalize an opening import source into project-owned table assets."""
     workspace = load_builder_workspace()
-    dry_run = _load_pipeline_dry_run(workspace)
+    dry_run = _load_pipeline_dry_run(workspace, corpus)
     published = write_opening_table_assets(workspace, dry_run, source)
 
     print(f"opening table manifest written: {published.manifest_path}")
@@ -138,10 +142,10 @@ def run_import_opening_book(source: Path) -> int:
     return 0
 
 
-def run_import_endgame_table(source: Path) -> int:
+def run_import_endgame_table(source: Path, corpus: Path | None = None) -> int:
     """Normalize an endgame import source into project-owned table assets."""
     workspace = load_builder_workspace()
-    dry_run = _load_pipeline_dry_run(workspace)
+    dry_run = _load_pipeline_dry_run(workspace, corpus)
     published = write_endgame_table_assets(workspace, dry_run, source)
 
     print(f"endgame table manifest written: {published.manifest_path}")
@@ -149,10 +153,14 @@ def run_import_endgame_table(source: Path) -> int:
     return 0
 
 
-def run_build_web_corpus(opening_source: Path, endgame_source: Path) -> int:
+def run_build_web_corpus(
+    opening_source: Path,
+    endgame_source: Path,
+    corpus: Path | None = None,
+) -> int:
     """Publish combined opening/endgame table assets and a corpus manifest."""
     workspace = load_builder_workspace()
-    dry_run = _load_pipeline_dry_run(workspace)
+    dry_run = _load_pipeline_dry_run(workspace, corpus)
     opening_assets, endgame_assets, web_corpus_manifest, web_corpus_hash = (
         write_web_corpus_artifacts(
             workspace,
@@ -174,15 +182,20 @@ def run_build_web_corpus(opening_source: Path, endgame_source: Path) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="chessviz-builder")
     subparsers = parser.add_subparsers(dest="command", required=True)
-    subparsers.add_parser("env-check", help="Validate builder runtime environment")
-    subparsers.add_parser(
+    env_check_parser = subparsers.add_parser(
+        "env-check", help="Validate builder runtime environment"
+    )
+    add_corpus_argument(env_check_parser)
+    export_fixture_parser = subparsers.add_parser(
         "export-fixture-artifacts",
         help="Write fixture-owned builder and viewer manifests",
     )
+    add_corpus_argument(export_fixture_parser)
     import_opening_parser = subparsers.add_parser(
         "import-opening-book",
         help="Normalize an opening import source into project-owned web shards",
     )
+    add_corpus_argument(import_opening_parser)
     import_opening_parser.add_argument(
         "--source",
         required=True,
@@ -192,6 +205,7 @@ def build_parser() -> argparse.ArgumentParser:
         "import-endgame-table",
         help="Normalize an endgame import source into project-owned web shards",
     )
+    add_corpus_argument(import_endgame_parser)
     import_endgame_parser.add_argument(
         "--source",
         required=True,
@@ -201,6 +215,7 @@ def build_parser() -> argparse.ArgumentParser:
         "build-web-corpus",
         help="Publish opening/endgame project-owned shards and a combined corpus manifest",
     )
+    add_corpus_argument(build_web_corpus_parser)
     build_web_corpus_parser.add_argument(
         "--opening-source",
         required=True,
@@ -219,29 +234,54 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "env-check":
-        return run_env_check()
+        return run_env_check(Path(args.corpus) if args.corpus else None)
 
     if args.command == "export-fixture-artifacts":
-        return run_export_fixture_artifacts()
+        return run_export_fixture_artifacts(Path(args.corpus) if args.corpus else None)
 
     if args.command == "import-opening-book":
-        return run_import_opening_book(Path(args.source))
+        return run_import_opening_book(
+            Path(args.source),
+            Path(args.corpus) if args.corpus else None,
+        )
 
     if args.command == "import-endgame-table":
-        return run_import_endgame_table(Path(args.source))
+        return run_import_endgame_table(
+            Path(args.source),
+            Path(args.corpus) if args.corpus else None,
+        )
 
     if args.command == "build-web-corpus":
         return run_build_web_corpus(
             Path(args.opening_source),
             Path(args.endgame_source),
+            Path(args.corpus) if args.corpus else None,
         )
 
     parser.error(f"unknown command: {args.command}")
 
 
-def _load_pipeline_dry_run(workspace):
+def add_corpus_argument(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--corpus",
+        help=(
+            "Path to a declared corpus JSON file. Defaults to "
+            "tools/builder/fixtures/initial_corpus.json."
+        ),
+    )
+
+
+def _resolve_corpus_declaration(corpus: Path | None, repository_root: Path):
+    if corpus is None:
+        return initial_corpus_declaration()
+
+    return corpus_declaration_from_location(corpus, repository_root=repository_root)
+
+
+def _load_pipeline_dry_run(workspace, corpus: Path | None = None):
     pipeline = create_placeholder_pipeline(workspace)
-    return pipeline.dry_run(initial_corpus_declaration())
+    declaration = _resolve_corpus_declaration(corpus, workspace.repository_root)
+    return pipeline.dry_run(declaration)
 
 
 if __name__ == "__main__":

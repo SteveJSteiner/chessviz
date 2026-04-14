@@ -39,6 +39,15 @@ uv run chessviz-builder export-fixture-artifacts
 uv run chessviz-builder build-web-corpus --opening-source /path/to/opening-import.json --endgame-source /path/to/endgame-import.json
 ```
 
+To publish runtime artifacts from a larger declared corpus, point the builder at a different corpus declaration file:
+
+```bash
+uv run chessviz-builder build-web-corpus --corpus /path/to/corpus.json --opening-source /path/to/opening-import.json --endgame-source /path/to/endgame-import.json
+uv run chessviz-builder export-fixture-artifacts --corpus /path/to/corpus.json
+```
+
+The checked-in repository still only includes the small `tools/builder/fixtures/initial_corpus.json` input, so a larger whole-object viewer run requires supplying a larger declared corpus JSON through `--corpus`.
+
 ## Usage
 
 ```bash
@@ -48,6 +57,8 @@ uv run chessviz-builder export-fixture-artifacts
 uv run chessviz-builder import-opening-book --source /path/to/opening-import.json
 uv run chessviz-builder import-endgame-table --source /path/to/endgame-import.json
 uv run chessviz-builder build-web-corpus --opening-source /path/to/opening-import.json --endgame-source /path/to/endgame-import.json
+uv run chessviz-builder export-fixture-artifacts --corpus /path/to/corpus.json
+uv run chessviz-builder build-web-corpus --corpus /path/to/corpus.json --opening-source /path/to/opening-import.json --endgame-source /path/to/endgame-import.json
 ```
 
 `CHESSVIZ_ARTIFACT_ROOT` now scopes fixture bootstrap output and the N11d opening/endgame/web-corpus publication surfaces together.

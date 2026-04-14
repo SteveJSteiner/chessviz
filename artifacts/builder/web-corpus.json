@@ -112,7 +112,7 @@
       "provenance": {
         "detail": "declared middlegame-procedural fallback alongside published opening/endgame table assets for N11d",
         "sourceKind": "builder-regime-declaration",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004"
       },

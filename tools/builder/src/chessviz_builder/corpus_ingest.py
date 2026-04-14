@@ -108,6 +108,30 @@ def initial_corpus_declaration() -> CorpusDeclaration:
     return INITIAL_CORPUS_DECLARATION
 
 
+def corpus_declaration_from_location(
+    location: str | Path,
+    repository_root: Path | None = None,
+) -> CorpusDeclaration:
+    resolved_repository_root = repository_root or find_repository_root()
+    fixture_path = _resolve_fixture_path(resolved_repository_root, str(location))
+
+    with fixture_path.open("r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+
+    source_name = payload.get("source_name")
+    version = payload.get("version")
+    if not isinstance(source_name, str) or not isinstance(version, str):
+        raise ValueError(
+            "declared corpus fixture must define string source_name and version fields"
+        )
+
+    return CorpusDeclaration(
+        source_name=source_name,
+        version=version,
+        location=str(location),
+    )
+
+
 def load_declared_corpus_fixture(
     repository_root: Path | None = None,
     declaration: CorpusDeclaration = INITIAL_CORPUS_DECLARATION,
@@ -118,7 +142,7 @@ def load_declared_corpus_fixture(
     with fixture_path.open("r", encoding="utf-8") as handle:
         payload = json.load(handle)
 
-    _validate_declaration(payload, declaration)
+    _validate_declaration(payload, declaration, resolved_repository_root)
     games = tuple(
         DeclaredGameFixture(
             game_id=str(game_payload["game_id"]),
@@ -136,19 +160,35 @@ def _resolve_fixture_path(repository_root: Path, location: str) -> Path:
     return candidate if candidate.is_absolute() else repository_root / candidate
 
 
-def _validate_declaration(payload: dict[str, object], declaration: CorpusDeclaration) -> None:
-    expected = {
+def _validate_declaration(
+    payload: dict[str, object],
+    declaration: CorpusDeclaration,
+    repository_root: Path,
+) -> None:
+    for key, expected_value in {
         "source_name": declaration.source_name,
         "version": declaration.version,
-        "location": declaration.location,
-    }
-    for key, expected_value in expected.items():
+    }.items():
         actual_value = payload.get(key)
         if actual_value != expected_value:
             raise ValueError(
                 f"declared corpus fixture mismatch for {key}: "
                 f"expected {expected_value!r}, got {actual_value!r}"
             )
+
+    actual_location = payload.get("location")
+    if not isinstance(actual_location, str):
+        raise ValueError(
+            "declared corpus fixture mismatch for location: expected a string location field"
+        )
+
+    expected_location_path = _resolve_fixture_path(repository_root, declaration.location)
+    actual_location_path = _resolve_fixture_path(repository_root, actual_location)
+    if expected_location_path.resolve() != actual_location_path.resolve():
+        raise ValueError(
+            "declared corpus fixture mismatch for location: "
+            f"expected {declaration.location!r}, got {actual_location!r}"
+        )
 
 
 def _optional_terminal_outcome(game_payload: dict[str, object]) -> str | None:

@@ -4,23 +4,23 @@ This file contains explicit, testable acceptance checks and performance/renderin
 
 ## Declared initial data scope
 
-- **Opening-table surface:** Acceptance runs use declared project-owned opening-table assets emitted as deterministic web shards plus manifest metadata for opening coverage.
-- **Middlegame surface:** Acceptance runs use live procedural expansion from the current position under a declared expansion, scoring, and pruning policy; no precomputed full-middlegame lookup corpus is allowed.
-- **Endgame-table surface:** Acceptance runs use declared project-owned endgame-table assets emitted as deterministic web shards plus manifest metadata for supported material classes.
-- **Fixture rule:** The builder fixture is test-only and is excluded from runtime corpus, bootstrap truth, and settlement review.
-- **Truth-surface rule:** Reviewed and settled runtime data comes from project-owned web assets and live procedural outputs, not foreign binary layouts.
-- **Bootstrap rule:** Any bootstrap or seeded scene used for acceptance is derived from regime surfaces rather than from fixture data.
-- **Entrypoint rule:** Runtime bootstrap and anchored entrypoint derivation use regime declarations and resolver outputs, not phase labels embedded in fixture artifacts.
-- **Represented-subset rule:** The object is built from the declared regime surfaces, not exhaustive legal-state enumeration.
-- **Determinism rule:** Each acceptance run records the seed, config hash, and regime-surface hashes or policy hashes used to produce structural outputs.
-- **Run declaration requirement:** Each acceptance run records regime surface metadata, any builder-time import inputs, and the salience-input declaration.
+- **Seed-state surface:** Acceptance runs declare an explicit seed board state as a canonical state key or full FEN.
+- **Runtime graph surface:** Acceptance runs use browser-side legal-move expansion from that seed under a declared expansion, scoring, and pruning policy; no exported corpus or precomputed middlegame lookup corpus is allowed as a runtime prerequisite.
+- **Optional asset surface:** Acceptance runs may include project-owned opening-table or endgame-table assets as optional overlays, prioritization hints, or validation references, but those assets do not replace live graph generation.
+- **Fixture rule:** The builder fixture is test-only or review-only and is excluded from required runtime graph genesis and settlement review.
+- **Truth-surface rule:** Reviewed and settled runtime data comes from the browser-generated graph plus any optional project-owned assets, not foreign binary layouts or exported fixture corpora.
+- **Bootstrap rule:** Any bootstrap or seeded scene used for acceptance is derived from the explicit seed state plus runtime configuration rather than from fixture data or exported corpus bootstrap artifacts.
+- **Entrypoint rule:** Runtime focus presets or anchors derive from generated graph state and optional declared overlays, not phase labels embedded in fixture artifacts.
+- **Represented-subset rule:** The object is the dynamically generated neighborhood and relation surface around the declared seed, not exhaustive legal-state enumeration.
+- **Determinism rule:** Each acceptance run records the seed, config hash, and any optional asset hashes or policy hashes used to produce structural outputs.
+- **Run declaration requirement:** Each acceptance run records seed-state metadata, runtime-generation policy, any builder-time import inputs for optional assets, and the salience-input declaration.
 
 ## Acceptance run declaration template
 
-- **Corpus declaration fields:** Every recorded run declares corpus profile, corpus version/date, content hash, and each included or omitted slice with its source and selection rule.
+- **Seed declaration fields:** Every recorded run declares the seed state, seed kind, and any explicit starting-position normalization applied before generation.
 - **Salience declaration fields:** Every recorded run declares frequency, eval, terminal pull, policy, and centrality inputs with a source plus weight, or marks the input as omitted.
-- **Bootstrap declaration fields:** Every recorded run declares the bootstrap seed surface, focus-candidate source, and anchored-entrypoint derivation surface.
-- **Determinism declaration fields:** Every recorded run declares the fixed seed, config hash, and any supplemental external-slice hashes used in the run.
+- **Bootstrap declaration fields:** Every recorded run declares the bootstrap seed surface, focus-candidate source, and focus-preset or anchor derivation surface.
+- **Determinism declaration fields:** Every recorded run declares the fixed seed, config hash, and any supplemental optional-asset hashes used in the run.
 
 ```yaml
 run_declaration:
@@ -28,25 +28,28 @@ run_declaration:
     graph_object_id:
     schema_version:
   bootstrap:
-    seed_surface:
+    seed_state:
+    seed_kind:
     focus_candidates_source:
     entrypoint_derivation:
-  regimes:
+  runtime_generation:
+    expansion_policy:
+    pruning_policy:
+    scoring_policy:
+    runtime_config_hash:
+    max_depth:
+    max_branching:
+  optional_assets:
     opening_table:
-      asset_set:
-      manifest_hash:
-      coverage_cutoff:
-      schema_version:
-    middlegame_procedural:
-      expansion_policy:
-      pruning_policy:
-      scoring_policy:
-      runtime_config_hash:
+      asset_set: omitted
+      manifest_hash: omitted
+      coverage_cutoff: omitted
+      schema_version: omitted
     endgame_table:
-      asset_set:
-      manifest_hash:
+      asset_set: omitted
+      manifest_hash: omitted
       supported_material_classes: []
-      schema_version:
+      schema_version: omitted
   ingestion_inputs:
     opening_import:
       source: omitted
@@ -75,7 +78,7 @@ run_declaration:
   determinism:
     seed:
     config_hash:
-    regime_hashes: []
+    optional_asset_hashes: []
 ```
 
 ## Performance/rendering budgets
@@ -90,9 +93,9 @@ run_declaration:
 
 - **A1. Occurrence distinction + transposition relation:** A known transposition case renders as multiple occurrences with a visible relation.
 - **A2. Ontology continuity across zoom:** Zoom changes legibility/emphasis only; object identity remains constant.
-- **A3. Anchored-view unity plus regime continuity:** Opening, middlegame, and endgame entrypoints reference the same underlying object id, and shared positions preserve stable identity when navigation crosses regime boundaries.
-- **A4. Internal regime resolution correctness:** Declared opening-covered positions resolve to opening-table, declared supported terminal-material positions resolve to endgame-table, and all other declared positions resolve to middlegame-procedural.
-- **A5. Cross-regime navigation continuity:** Traversals that cross opening-table to middlegame-procedural or middlegame-procedural to endgame-table preserve object identity, anchor semantics, navigation continuity, and query semantics.
+- **A3. Focus-preset unity plus optional-overlay continuity:** Any opening, middlegame, endgame, or equivalent focus presets reference the same underlying generated object id, and shared positions preserve stable identity when optional overlays are present.
+- **A4. Runtime graph-generation correctness:** From the declared seed state, the browser runtime expands legal positions without exported corpus dependency; optional opening-table or endgame-table assets may refine interpretation but do not replace graph generation.
+- **A5. Optional-overlay continuity:** When opening-table or endgame-table overlays are enabled, they preserve object identity, anchor semantics, navigation continuity, and query semantics.
 - **A6. Mixed-scale single frame:** One camera frame can show local board-detail proxy and distal branching context together.
 - **A7. Move-interaction departure salience:** Move-interaction departures remain classifiable at coarse zoom, with captures still showing stronger departure than matched quiet-move controls.
 - **A8. Coarse salience preservation:** At coarse zoom, configured top-k salient frontier remains legible.
@@ -101,14 +104,14 @@ run_declaration:
 - **A11. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
 - **A12. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
 - **A13. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
-- **A14. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family and without bypassing the procedural middlegame path when middlegame resolution is required.
+- **A14. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family and without bypassing the live legal-move generation path when runtime expansion is required.
 - **A15. On-object labeling primacy:** Move, root, and terminal labels remain readable on the geometry itself without requiring a sidebar or legend lookup.
 - **A16. Reference-view subordination:** The focused board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry.
 - **A17. Branch-aware label density:** In declared high-branch runs, label selection or fade keeps the geometry readable without simultaneous all-edge text saturation.
-- **A18. Project-owned truth surface only:** Acceptance runs and browser/runtime fetch paths use only declared opening/endgame web assets plus live procedural middlegame outputs; fixture data is absent.
+- **A18. Runtime truth surface only:** Acceptance runs and browser/runtime fetch paths use the browser-generated graph plus any optional declared opening/endgame web assets; fixture data is absent from required runtime truth.
 - **A19. Runtime asset boundary:** No foreign binary opening-book or tablebase formats are committed as runtime truth artifacts or loaded by the web runtime.
-- **A20. Hard-fail integrity:** Acceptance fails when required opening/endgame assets are missing, middlegame procedural expansion is bypassed by canned coverage, or regime transitions fracture identity, anchoring, navigation, or query continuity.
-- **A21. Entrypoint derivation boundary:** Opening/middlegame/endgame entrypoints and bootstrap focus candidates are derived from declared regime anchors or resolver outputs rather than from phase labels embedded in fixture manifests.
+- **A20. Hard-fail integrity:** Acceptance fails when live runtime graph generation is bypassed by canned corpus truth, optional assets are treated as mandatory runtime prerequisites, or overlays fracture identity, anchoring, navigation, or query continuity.
+- **A21. Entrypoint derivation boundary:** Focus presets, anchors, and bootstrap focus candidates are derived from generated graph state or declared overlay annotations rather than from phase labels embedded in fixture manifests.
 
 ## Visual evidence requirements
 

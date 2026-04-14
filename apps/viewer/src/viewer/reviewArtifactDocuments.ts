@@ -18,6 +18,7 @@ import {
   listBoardSquares,
   parseStateKey,
   pieceGlyph,
+  shortOccurrenceId,
   summarizeMoveSemantics
 } from './chessContext.ts';
 import {
@@ -30,13 +31,19 @@ import {
 import type {
   BuilderBootstrapManifest,
   BuilderOccurrenceRecord,
+  BuilderRepeatedStateRelationRecord,
   BuilderTransitionRecord,
   NavigationEntryPoint,
+  NavigationEntryPointId,
   RuntimeArtifactBundle,
   RuntimeCarrierRecord,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
+  RuntimeTranspositionGroup,
+  RuntimeTranspositionLink,
+  RuntimeTranspositionOccurrence,
+  RuntimeTranspositionSurfaceSnapshot,
   SceneBootstrap,
   Vector3,
   ViewerSceneManifest
@@ -50,14 +57,19 @@ import {
   resolveNavigationEntryPoint
 } from './navigation.ts';
 import { createRuntimeExplorationKernel } from './runtimeKernel.ts';
+import { buildRuntimeTranspositionSurface } from './transpositionSurface.ts';
+
+type ReviewGraphViewScope = 'local-neighborhood' | 'whole-object';
 
 type ReviewScene = {
   cameraDistance: number;
   cameraGrammar: CameraGrammarState;
+  graphViewScope: ReviewGraphViewScope;
   sceneBootstrap: SceneBootstrap;
   navigationEntryPoint: NavigationEntryPoint;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  transpositionSurface: RuntimeTranspositionSurfaceSnapshot;
 };
 
 type ViewerReviewArtifact = {
@@ -95,6 +107,16 @@ type EntryPointReviewScene = {
   focusContext: ReviewFocusContext;
 };
 
+type TranspositionReviewContext = {
+  relation: BuilderRepeatedStateRelationRecord;
+  focusContext: ReviewFocusContext;
+  relationOccurrences: BuilderOccurrenceRecord[];
+  localScene: ReviewScene;
+  localGroup: RuntimeTranspositionGroup;
+  wholeObjectScene: ReviewScene;
+  wholeObjectGroup: RuntimeTranspositionGroup;
+};
+
 export function buildViewerReviewArtifacts(
   runtimeArtifactBundle: RuntimeArtifactBundle
 ): ViewerReviewArtifact[] {
@@ -119,6 +141,7 @@ export function buildViewerReviewArtifacts(
   ];
   const reviewScenes = reviewDistances.map((cameraDistance) =>
     buildReviewScene({
+      builderBootstrapManifest,
       kernel,
       sceneBootstrap,
       runtimeConfig: viewerSceneManifest.runtime,
@@ -144,6 +167,13 @@ export function buildViewerReviewArtifacts(
     (entryPointReviewScene) =>
       entryPointReviewScene.reviewScene.navigationEntryPoint.entryId === 'middlegame'
   )?.focusContext;
+  const transpositionReviewContext = buildTranspositionReviewContext({
+    builderBootstrapManifest,
+    kernel,
+    navigationEntryPoints,
+    runtimeConfig: viewerSceneManifest.runtime,
+    sceneBootstrap
+  });
 
   if (!focusContext) {
     throw new Error('expected middlegame entrypoint review context');
@@ -179,6 +209,10 @@ export function buildViewerReviewArtifacts(
         focusContext,
         neighborhoodRadius
       )
+    },
+    {
+      fileName: 'review/transposition-relations.svg',
+      content: renderTranspositionRelationsDocument(transpositionReviewContext)
     },
     {
       fileName: 'review/evidence-index.json',
@@ -217,6 +251,18 @@ export function buildViewerReviewArtifacts(
               entry.transition.moveFamily
             )
           })),
+          transpositionReview: {
+            stateKey: transpositionReviewContext.relation.stateKey,
+            focusOccurrenceId: transpositionReviewContext.focusContext.focusOccurrence.occurrenceId,
+            occurrenceIds: transpositionReviewContext.relation.occurrenceIds,
+            localNeighborhoodRadius: transpositionReviewContext.localScene.runtimeSnapshot.radius,
+            localCameraDistance: roundNumber(transpositionReviewContext.localScene.cameraDistance),
+            wholeObjectCameraDistance: roundNumber(
+              transpositionReviewContext.wholeObjectScene.cameraDistance
+            ),
+            localOffViewOccurrenceIds: transpositionReviewContext.localGroup.offViewOccurrenceIds,
+            wholeObjectLinkCount: transpositionReviewContext.wholeObjectGroup.links.length
+          },
           artifacts: [
             {
               file: 'anchored-entrypoints.svg',
@@ -267,6 +313,16 @@ export function buildViewerReviewArtifacts(
               liveLabelPolicyApplied: true
             },
             {
+              file: 'transposition-relations.svg',
+              regime: 'transposition-relations',
+              stateKey: transpositionReviewContext.relation.stateKey,
+              occurrenceIds: transpositionReviewContext.relation.occurrenceIds,
+              localNeighborhoodRadius: transpositionReviewContext.localScene.runtimeSnapshot.radius,
+              localOffViewOccurrenceIds: transpositionReviewContext.localGroup.offViewOccurrenceIds,
+              wholeObjectOccurrenceCount: transpositionReviewContext.wholeObjectGroup.occurrences.length,
+              wholeObjectLinkCount: transpositionReviewContext.wholeObjectGroup.links.length
+            },
+            {
               file: 'review-notes-template.md',
               regime: 'human-verdict-template'
             }
@@ -286,10 +342,184 @@ export function buildViewerReviewArtifacts(
           occurrenceCount: builderBootstrapManifest.occurrences.length
         },
         navigationEntryPoints,
-        focusContext
+        transpositionReviewContext
       )
     }
   ];
+}
+
+function buildTranspositionReviewContext({
+  builderBootstrapManifest,
+  kernel,
+  navigationEntryPoints,
+  runtimeConfig,
+  sceneBootstrap
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  kernel: ReturnType<typeof createRuntimeExplorationKernel>;
+  navigationEntryPoints: NavigationEntryPoint[];
+  runtimeConfig: ViewerSceneManifest['runtime'];
+  sceneBootstrap: SceneBootstrap;
+}) {
+  const relation = selectTranspositionReviewRelation(
+    builderBootstrapManifest.repeatedStateRelations
+  );
+
+  if (!relation) {
+    throw new Error('expected repeated-state relation for N13 review artifacts');
+  }
+
+  const relationOccurrences = relation.occurrenceIds
+    .map((occurrenceId) => kernel.resolveOccurrence(occurrenceId))
+    .filter((occurrence): occurrence is BuilderOccurrenceRecord => occurrence !== undefined)
+    .sort((left, right) => {
+      if (left.ply !== right.ply) {
+        return left.ply - right.ply;
+      }
+
+      if (left.embedding.subtreeKey !== right.embedding.subtreeKey) {
+        return left.embedding.subtreeKey.localeCompare(right.embedding.subtreeKey);
+      }
+
+      return left.occurrenceId.localeCompare(right.occurrenceId);
+    });
+
+  if (relationOccurrences.length < 2) {
+    throw new Error('expected N13 review relation to resolve at least two occurrences');
+  }
+
+  const focusOccurrence = relationOccurrences[0]!;
+  const reviewEntryPoint = resolveNavigationEntryPoint(
+    navigationEntryPoints,
+    resolveNavigationEntryPointIdFromPhase(focusOccurrence.annotations.phaseLabel)
+  );
+  const transpositionEntryPoint = {
+    ...reviewEntryPoint,
+    label: `${formatSubtreeLabel(focusOccurrence.embedding.subtreeKey)} transposition`,
+    description:
+      'Known repeated-state case used for N13 supporting evidence; local scope keeps the focus neighborhood while whole-object scope confirms the relation stays on the shared graph.',
+    focusOccurrenceId: focusOccurrence.occurrenceId,
+    focus: focusOccurrence.embedding.coordinate,
+    neighborhoodRadius: 1,
+    subtreeKey: focusOccurrence.embedding.subtreeKey,
+    anchorPly: focusOccurrence.ply
+  } satisfies NavigationEntryPoint;
+  const localTranspositionEntryPoint = {
+    ...transpositionEntryPoint,
+    distance: Math.max(
+      CAMERA_GRAMMAR_REVIEW_DISTANCES.contextual,
+      reviewEntryPoint.distance - 1
+    )
+  } satisfies NavigationEntryPoint;
+  const wholeObjectTranspositionEntryPoint = {
+    ...transpositionEntryPoint,
+    distance: Math.max(
+      CAMERA_GRAMMAR_REVIEW_DISTANCES.structure,
+      reviewEntryPoint.distance
+    )
+  } satisfies NavigationEntryPoint;
+  const focusContext = buildReviewFocusContext(
+    builderBootstrapManifest,
+    kernel,
+    focusOccurrence.occurrenceId
+  );
+  const localBaseScene = buildReviewScene({
+    builderBootstrapManifest,
+    kernel,
+    sceneBootstrap,
+    runtimeConfig,
+    navigationEntryPoint: localTranspositionEntryPoint
+  });
+  const wholeObjectBaseScene = buildReviewScene({
+    builderBootstrapManifest,
+    kernel,
+    sceneBootstrap,
+    runtimeConfig,
+    navigationEntryPoint: wholeObjectTranspositionEntryPoint,
+    graphViewScope: 'whole-object'
+  });
+  const localGroup = resolveTranspositionReviewGroup(localBaseScene, relation.stateKey);
+  const wholeObjectGroup = resolveTranspositionReviewGroup(
+    wholeObjectBaseScene,
+    relation.stateKey
+  );
+  const localScene = isolateTranspositionReviewScene(localBaseScene, localGroup);
+  const wholeObjectScene = isolateTranspositionReviewScene(
+    wholeObjectBaseScene,
+    wholeObjectGroup
+  );
+
+  return {
+    relation,
+    focusContext,
+    relationOccurrences,
+    localScene,
+    localGroup,
+    wholeObjectScene,
+    wholeObjectGroup
+  } satisfies TranspositionReviewContext;
+}
+
+function selectTranspositionReviewRelation(
+  repeatedStateRelations: BuilderRepeatedStateRelationRecord[]
+) {
+  return repeatedStateRelations
+    .filter((relation) => relation.occurrenceIds.length > 1)
+    .sort((left, right) => {
+      const leftPairRank = left.occurrenceIds.length === 2 ? 0 : 1;
+      const rightPairRank = right.occurrenceIds.length === 2 ? 0 : 1;
+      if (leftPairRank !== rightPairRank) {
+        return leftPairRank - rightPairRank;
+      }
+
+      if (left.occurrenceIds.length !== right.occurrenceIds.length) {
+        return left.occurrenceIds.length - right.occurrenceIds.length;
+      }
+
+      return left.stateKey.localeCompare(right.stateKey);
+    })[0] ?? null;
+}
+
+function resolveNavigationEntryPointIdFromPhase(
+  phaseLabel: string
+): NavigationEntryPointId {
+  if (phaseLabel === 'opening') {
+    return 'opening';
+  }
+  if (phaseLabel === 'endgame') {
+    return 'endgame';
+  }
+
+  return 'middlegame';
+}
+
+function resolveTranspositionReviewGroup(
+  reviewScene: ReviewScene,
+  stateKey: string
+) {
+  const relationGroup = reviewScene.transpositionSurface.groups.find(
+    (group) => group.stateKey === stateKey
+  );
+
+  if (!relationGroup) {
+    throw new Error(`expected transposition review group for state ${stateKey}`);
+  }
+
+  return relationGroup;
+}
+
+function isolateTranspositionReviewScene(
+  reviewScene: ReviewScene,
+  relationGroup: RuntimeTranspositionGroup
+) {
+  return {
+    ...reviewScene,
+    transpositionSurface: {
+      graphObjectId: reviewScene.transpositionSurface.graphObjectId,
+      groups: [relationGroup],
+      links: relationGroup.links
+    }
+  } satisfies ReviewScene;
 }
 
 function buildEntryPointReviewScene({
@@ -307,6 +537,7 @@ function buildEntryPointReviewScene({
 }): EntryPointReviewScene {
   return {
     reviewScene: buildReviewScene({
+      builderBootstrapManifest: runtimeBootstrap.builderBootstrapManifest,
       kernel,
       sceneBootstrap,
       runtimeConfig,
@@ -321,30 +552,41 @@ function buildEntryPointReviewScene({
 }
 
 function buildReviewScene({
+  builderBootstrapManifest,
   kernel,
   sceneBootstrap,
   runtimeConfig,
-  navigationEntryPoint
+  navigationEntryPoint,
+  graphViewScope = 'local-neighborhood'
 }: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
   kernel: ReturnType<typeof createRuntimeExplorationKernel>;
   sceneBootstrap: SceneBootstrap;
   runtimeConfig: ViewerSceneManifest['runtime'];
   navigationEntryPoint: NavigationEntryPoint;
+  graphViewScope?: ReviewGraphViewScope;
 }): ReviewScene {
   const refinementBudget = resolveCameraGrammarRefinementBudget(
     navigationEntryPoint.distance,
     runtimeConfig
   );
-  const runtimeSnapshot = kernel.inspectNeighborhood(
-    navigationEntryPoint.focusOccurrenceId,
-    {
-      radius: navigationEntryPoint.neighborhoodRadius,
-      refinementBudget
-    }
-  );
+  const runtimeSnapshot =
+    graphViewScope === 'whole-object'
+      ? kernel.inspectWholeGraph(navigationEntryPoint.focusOccurrenceId, {
+          refinementBudget
+        })
+      : kernel.inspectNeighborhood(navigationEntryPoint.focusOccurrenceId, {
+          radius: navigationEntryPoint.neighborhoodRadius,
+          refinementBudget
+        });
   const carrierSurface = kernel.inspectCarrierSurface(
     runtimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
     { refinementBudget }
+  );
+  const transpositionSurface = buildRuntimeTranspositionSurface(
+    builderBootstrapManifest,
+    runtimeSnapshot,
+    graphViewScope
   );
 
   return {
@@ -354,10 +596,12 @@ function buildReviewScene({
       runtimeConfig,
       runtimeSnapshot
     }),
+    graphViewScope,
     sceneBootstrap,
     navigationEntryPoint,
     runtimeSnapshot,
-    carrierSurface
+    carrierSurface,
+    transpositionSurface
   };
 }
 
@@ -637,6 +881,80 @@ function renderCameraGrammarDocument(
   ].join('');
 }
 
+function renderTranspositionRelationsDocument(
+  transpositionReviewContext: TranspositionReviewContext
+) {
+  const width = 1700;
+  const leftViewport = { x: 40, y: 176, width: 768, height: 620 };
+  const rightViewport = { x: 892, y: 176, width: 768, height: 620 };
+  const localCaption = renderTranspositionSceneCaption(
+    leftViewport,
+    'Local neighborhood',
+    transpositionReviewContext.localScene,
+    transpositionReviewContext.localGroup,
+    'The focus neighborhood stays intact while the repeated sibling is promoted as an off-view echo instead of collapsing into the same node.'
+  );
+  const wholeObjectCaption = renderTranspositionSceneCaption(
+    rightViewport,
+    'Whole object',
+    transpositionReviewContext.wholeObjectScene,
+    transpositionReviewContext.wholeObjectGroup,
+    'Whole-object scope keeps the repeated occurrences stitched into the same graph view so the relation reads as part of one object.'
+  );
+  const occurrenceCardY = Math.max(localCaption.bottom, wholeObjectCaption.bottom) + 24;
+  const expectedReadY = occurrenceCardY;
+  const legendY = occurrenceCardY + 188;
+  const height = legendY + 42;
+  const focusOccurrence = transpositionReviewContext.focusContext.focusOccurrence;
+
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    renderSvgStyleBlock(),
+    '<rect width="100%" height="100%" fill="#ede6da" />',
+    `<rect x="24" y="24" width="1652" height="${height - 48}" rx="28" fill="#fbf7ef" stroke="#ddd5c7" />`,
+    '<text x="40" y="62" class="eyebrow">N13 transposition relation review</text>',
+    '<text x="40" y="96" class="title">Repeated states remain visible relations across separate occurrences</text>',
+    `<text x="40" y="124" class="subtitle">${escapeXml(formatSubtreeLabel(focusOccurrence.embedding.subtreeKey))} · focus ply ${focusOccurrence.ply} · current graph size ${transpositionReviewContext.wholeObjectScene.runtimeSnapshot.occurrences.length}</text>`,
+    renderScenePanel(
+      transpositionReviewContext.localScene,
+      transpositionReviewContext.focusContext,
+      leftViewport,
+      'transposition-local-panel',
+      { showTranspositionSurface: true }
+    ),
+    renderScenePanel(
+      transpositionReviewContext.wholeObjectScene,
+      transpositionReviewContext.focusContext,
+      rightViewport,
+      'transposition-whole-panel',
+      { showTranspositionSurface: true }
+    ),
+    localCaption.markup,
+    wholeObjectCaption.markup,
+    renderTranspositionOccurrenceCard(
+      40,
+      occurrenceCardY,
+      768,
+      transpositionReviewContext
+    ),
+    renderInfoCard(
+      892,
+      expectedReadY,
+      768,
+      'Expected read',
+      'The repeated state should read as a stitched relation between separate occurrences. Local scope should keep the focus occurrence primary while whole-object scope should keep the same relation readable without turning it into a detached overlay or collapsing node identity.',
+      88,
+      'copy'
+    ),
+    renderTranspositionLegendRow(
+      40,
+      legendY,
+      'Dark stitched arcs and amber knots come directly from the repeated-state query surface. Pale echo nodes mark off-view repeated occurrences without merging them into the visible neighborhood.'
+    ),
+    '</svg>'
+  ].join('');
+}
+
 function renderReviewNotesTemplate(
   graphObjectId: string,
   sceneId: string,
@@ -645,15 +963,16 @@ function renderReviewNotesTemplate(
     occurrenceCount: number;
   },
   navigationEntryPoints: NavigationEntryPoint[],
-  focusContext: ReviewFocusContext
+  transpositionReviewContext: TranspositionReviewContext
 ) {
-  const focusPosition = parseStateKey(focusContext.focusOccurrence.stateKey);
+  const focusOccurrence = transpositionReviewContext.focusContext.focusOccurrence;
+  const focusPosition = parseStateKey(focusOccurrence.stateKey);
 
   return [
-    '# N12 Review Notes',
+    '# N13 Review Notes',
     '',
-    'Use this file as the human verdict record for the live N12 interactive review.',
-    'Do not answer the camera-affordance question from the static SVG artifacts alone; they are supporting evidence only.',
+    'Use this file as the human verdict record for the live N13 interactive review.',
+    'Do not answer the transposition-legibility question from the static SVG artifacts alone; they are supporting evidence only.',
     '',
     '## Run context',
     `- graphObjectId: ${graphObjectId}`,
@@ -665,23 +984,26 @@ function renderReviewNotesTemplate(
       (entryPoint) =>
         `- ${entryPoint.entryId} anchor: ${entryPoint.focusOccurrenceId} · ${formatSubtreeLabel(entryPoint.subtreeKey)} · ply ${entryPoint.anchorPly} · radius ${entryPoint.neighborhoodRadius} · distance ${entryPoint.distance.toFixed(1)}`
     ),
-    `- middlegame focusNode: ${buildFocusNodeDescriptor(focusContext)}`,
-    `- middlegame focusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
-    `- structureDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.structure.toFixed(1)}`,
-    `- tacticalDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.tactical.toFixed(1)}`,
-    `- contextualDistance: ${CAMERA_GRAMMAR_REVIEW_DISTANCES.contextual.toFixed(1)}`,
-    `- structureBudget: ${N10B_REVIEW_BUDGETS.structure}`,
-    `- tacticalBudget: ${N10B_REVIEW_BUDGETS.tactical}`,
-    `- contextualBudget: ${N10B_REVIEW_BUDGETS.contextual}`,
+    `- transpositionStateKey: ${transpositionReviewContext.relation.stateKey}`,
+    `- transpositionOccurrenceCount: ${transpositionReviewContext.relation.occurrenceIds.length}`,
+    `- transpositionFocusNode: ${buildFocusNodeDescriptor(transpositionReviewContext.focusContext)}`,
+    `- transpositionFocusTurn: ${formatTurnLabel(focusPosition.activeColor)}`,
+    `- transpositionLocalRadius: ${transpositionReviewContext.localScene.runtimeSnapshot.radius}`,
+    `- transpositionLocalDistance: ${transpositionReviewContext.localScene.cameraDistance.toFixed(1)}`,
+    `- transpositionWholeObjectDistance: ${transpositionReviewContext.wholeObjectScene.cameraDistance.toFixed(1)}`,
+    `- transpositionLocalOffViewEchoes: ${transpositionReviewContext.localGroup.offViewOccurrenceIds.length}`,
+    `- transpositionWholeObjectLinks: ${transpositionReviewContext.wholeObjectGroup.links.length}`,
     '',
     '## Required live review',
-    '- switch the viewer to whole-object scope before recording the verdict; local-neighborhood mode is not sufficient for the scale gate',
-    '- run the interactive viewer and switch across the opening, middlegame, and endgame entrypoints in one session',
-    '- drag on the canvas to orbit and use scroll or the distance slider to test camera affordances directly',
-    '- click nodes or move cards after switching entrypoints to confirm local exploration still feels continuous',
+    '- start from the known repeated-state focus recorded above or select that occurrence from the focus menu in the live viewer',
+    '- inspect both local-neighborhood scope and whole-object scope in one session before recording the verdict',
+    '- drag on the canvas to orbit and use scroll or the distance slider to test whether the stitched relation stays readable across camera changes',
+    '- switch across the opening, middlegame, and endgame entrypoints before and after inspecting the repeated-state focus to confirm the relation still reads as part of the same shared object',
+    '- click the repeated occurrence cards or echo nodes to confirm the viewer changes focus without merging occurrence identity',
     '- record screenshots or screen capture from the live viewer after the interactive pass',
     '',
     '## Supporting artifacts',
+    '- review/transposition-relations.svg',
     '- review/anchored-entrypoints.svg',
     '- review/structure-zoom.svg',
     '- review/refinement-steps.svg',
@@ -691,23 +1013,23 @@ function renderReviewNotesTemplate(
     '- name:',
     '- date:',
     '',
-    '## Anchored entrypoint verdict',
-    '- opening, middlegame, and endgame read as one object rather than three substitute diagrams:',
-    '- switching presets changed anchor, emphasis, and camera stance without changing graph identity:',
-    '- local exploration still felt available after switching presets:',
-    '- the board reference stayed secondary and confirmatory rather than becoming the primary interface:',
+    '## Relation verdict',
+    '- the known repeated state rendered as multiple occurrences rather than collapsing into a single node:',
+    '- the stitched relation stayed readable in whole-object scope:',
+    '- the local-neighborhood view surfaced the off-view echo without losing the focused occurrence as the primary anchor:',
+    '- switching entrypoints or focusing the repeated sibling still read as one shared object rather than a detached overlay:',
     '',
-    '## Camera grammar carryover',
-    '- orbiting still kept the focused position legible while preserving surrounding branch context:',
-    '- zooming closer still added tactical/contextual detail on the same carriers rather than swapping representations:',
-    '- zooming back out still restored the coarse reading without contradictory emphasis:',
+    '## Carryover checks',
+    '- orbiting still kept the focused repeated position legible while preserving the surrounding branch context:',
+    '- zooming closer still changed only legibility and emphasis, not occurrence identity or regime continuity:',
+    '- zooming back out still kept the repeated-state relation visible enough to track without introducing a regime seam:',
     '- what still needs iteration:',
     '',
     '## Settlement note',
-    '- N12 settled: no / yes',
+    '- N13 settled: no / yes',
     '- if yes, reference the commit that updates plan/completion-log.md and plan/continuation.md',
     '',
-    'Do not mark N12 settled without recorded human review.'
+    'Do not mark N13 settled without recorded human review.'
   ].join('\n');
 }
 
@@ -715,7 +1037,10 @@ function renderScenePanel(
   reviewScene: ReviewScene,
   focusContext: ReviewFocusContext,
   viewport: Viewport,
-  panelId: string
+  panelId: string,
+  options?: {
+    showTranspositionSurface?: boolean;
+  }
 ) {
   const projector = createProjector(reviewScene, viewport);
   const carrierLabelSelections = selectCarrierLabelSelections({
@@ -734,12 +1059,32 @@ function renderScenePanel(
     .sort((left, right) => right.depth - left.depth)
     .map((carrier) => carrier.markup)
     .join('');
+  const transpositionLinkMarkup = options?.showTranspositionSurface
+    ? reviewScene.transpositionSurface.links
+        .map((link) => renderTranspositionLinkMarkup(link, projector))
+        .filter((link): link is { depth: number; markup: string } => link !== null)
+        .sort((left, right) => right.depth - left.depth)
+        .map((link) => link.markup)
+        .join('')
+    : '';
   const nodeMarkup = reviewScene.runtimeSnapshot.occurrences
     .map((occurrence) => renderOccurrenceMarkup(occurrence, projector, reviewScene.sceneBootstrap))
     .filter((occurrence): occurrence is { depth: number; markup: string } => occurrence !== null)
     .sort((left, right) => right.depth - left.depth)
     .map((occurrence) => occurrence.markup)
     .join('');
+  const transpositionEchoMarkup = options?.showTranspositionSurface
+    ? reviewScene.transpositionSurface.groups
+        .flatMap((group) => group.occurrences)
+        .filter((occurrence) => !occurrence.isVisibleInNeighborhood)
+        .map((occurrence) => renderTranspositionEchoMarkup(occurrence, projector))
+        .filter(
+          (occurrence): occurrence is { depth: number; markup: string } => occurrence !== null
+        )
+        .sort((left, right) => right.depth - left.depth)
+        .map((occurrence) => occurrence.markup)
+        .join('')
+    : '';
   const carrierLabelMarkup = carrierLabelSelections
     .map((selection) =>
       renderCarrierLabelMarkup(
@@ -780,7 +1125,9 @@ function renderScenePanel(
     `<ellipse cx="${roundNumber(viewport.x + (viewport.width * 0.5))}" cy="${roundNumber(viewport.y + (viewport.height * 0.88))}" rx="${roundNumber(viewport.width * 0.28)}" ry="${roundNumber(viewport.height * 0.06)}" fill="#ece3d3" opacity="0.72" />`,
     `<g clip-path="url(#${clipId})">`,
     carrierMarkup,
+    transpositionLinkMarkup,
     nodeMarkup,
+    transpositionEchoMarkup,
     carrierLabelMarkup,
     occurrenceLabelMarkup,
     focusPoint.visible
@@ -961,6 +1308,60 @@ function renderOccurrenceMarkup(
   };
 }
 
+function renderTranspositionLinkMarkup(
+  link: RuntimeTranspositionLink,
+  projector: ReturnType<typeof createProjector>
+) {
+  const projectedSamples = link.samples.map((sample) =>
+    projector.project(scaleCoordinate(sample))
+  );
+  const visibleSamples = projectedSamples.filter((sample) => sample.visible);
+  if (visibleSamples.length < 2) {
+    return null;
+  }
+
+  const averageDepth =
+    visibleSamples.reduce((depth, sample) => depth + sample.depth, 0) /
+    visibleSamples.length;
+  const touchesGhost =
+    !link.sourceVisibleInNeighborhood || !link.targetVisibleInNeighborhood;
+  const path = buildPathData(visibleSamples);
+  const centerSample = visibleSamples[Math.floor(visibleSamples.length / 2)] ?? visibleSamples[0];
+  const coreColor = link.emphasis === 'focus' ? '#0f172a' : '#334155';
+  const haloColor = link.emphasis === 'focus' ? '#dbe7f6' : '#e2e8f0';
+  const haloWidth = touchesGhost ? 15 : link.emphasis === 'focus' ? 12 : 9;
+  const coreWidth = touchesGhost ? 7 : link.emphasis === 'focus' ? 5.8 : 4.2;
+
+  return {
+    depth: averageDepth + 0.02,
+    markup: [
+      `<path d="${path}" fill="none" stroke="${haloColor}" stroke-width="${haloWidth}" stroke-linecap="round" stroke-linejoin="round" opacity="${touchesGhost ? '0.72' : '0.42'}" />`,
+      `<path d="${path}" fill="none" stroke="${coreColor}" stroke-width="${coreWidth}" stroke-linecap="round" stroke-linejoin="round" opacity="${touchesGhost ? '0.92' : '0.78'}" />`,
+      centerSample
+        ? `<circle cx="${roundNumber(centerSample.x)}" cy="${roundNumber(centerSample.y)}" r="${touchesGhost ? '8' : '6'}" fill="#d97706" opacity="0.94" />`
+        : ''
+    ].join('')
+  };
+}
+
+function renderTranspositionEchoMarkup(
+  occurrence: RuntimeTranspositionOccurrence,
+  projector: ReturnType<typeof createProjector>
+) {
+  const projected = projector.project(scaleCoordinate(occurrence.coordinate));
+  if (!projected.visible) {
+    return null;
+  }
+
+  return {
+    depth: projected.depth + 0.01,
+    markup: [
+      `<circle cx="${roundNumber(projected.x)}" cy="${roundNumber(projected.y)}" r="10" fill="#eff6ff" stroke="#0f172a" stroke-width="3" opacity="0.94" />`,
+      `<circle cx="${roundNumber(projected.x)}" cy="${roundNumber(projected.y)}" r="3.5" fill="#d97706" opacity="0.95" />`
+    ].join('')
+  };
+}
+
 function createProjector(reviewScene: ReviewScene, viewport: Viewport) {
   const scaledFocus = scaleCoordinate(reviewScene.cameraGrammar.lookAt);
   const cameraPosition = resolveOrbitCameraPosition(
@@ -1121,6 +1522,109 @@ function renderInfoCard(
       (line, index) =>
         `<text x="${x + 16}" y="${y + 48 + (index * 20)}" class="${className}">${escapeXml(line)}</text>`
     )
+  ].join('');
+}
+
+function renderTranspositionSceneCaption(
+  viewport: Viewport,
+  title: string,
+  reviewScene: ReviewScene,
+  relationGroup: RuntimeTranspositionGroup,
+  description: string
+) {
+  const cardY = viewport.y + viewport.height + 18;
+  const descriptionLines = wrapText(description, 70);
+  const cardHeight = 78 + (descriptionLines.length * 18);
+  const statLine =
+    reviewScene.graphViewScope === 'whole-object'
+      ? `${relationGroup.occurrences.length} occurrences · ${relationGroup.links.length} stitched links`
+      : `radius ${reviewScene.runtimeSnapshot.radius} · visible ${relationGroup.visibleOccurrenceIds.length} · off-view echoes ${relationGroup.offViewOccurrenceIds.length}`;
+
+  return {
+    bottom: cardY + cardHeight,
+    markup: [
+      `<text x="${viewport.x}" y="${viewport.y - 22}" class="section">${escapeXml(title)}</text>`,
+      `<rect x="${viewport.x}" y="${cardY}" width="${viewport.width}" height="${cardHeight}" rx="18" fill="#f4eee4" stroke="#ddd5c7" />`,
+      `<text x="${viewport.x + 18}" y="${cardY + 26}" class="section-small">${escapeXml(statLine)}</text>`,
+      `<text x="${viewport.x + 18}" y="${cardY + 48}" class="copy">${escapeXml(`Focus ${shortOccurrenceId(reviewScene.runtimeSnapshot.focusOccurrenceId)} · distance ${reviewScene.cameraDistance.toFixed(1)}`)}</text>`,
+      ...descriptionLines.map(
+        (line, index) =>
+          `<text x="${viewport.x + 18}" y="${cardY + 72 + (index * 18)}" class="copy">${escapeXml(line)}</text>`
+      )
+    ].join('')
+  };
+}
+
+function renderTranspositionOccurrenceCard(
+  x: number,
+  y: number,
+  width: number,
+  transpositionReviewContext: TranspositionReviewContext
+) {
+  const stateKeyLines = wrapText(
+    transpositionReviewContext.relation.stateKey,
+    Math.max(42, Math.floor((width - 32) / 8.4))
+  );
+  const rowY = y + 76 + (stateKeyLines.length * 18);
+  const rowHeight = 52;
+  const cardHeight = rowY - y + (transpositionReviewContext.relationOccurrences.length * rowHeight) + 18;
+
+  return [
+    `<rect x="${x}" y="${y}" width="${width}" height="${cardHeight}" rx="18" fill="#f4eee4" stroke="#ddd5c7" />`,
+    `<text x="${x + 16}" y="${y + 26}" class="metric-label">Repeated-state cluster</text>`,
+    ...stateKeyLines.map(
+      (line, index) =>
+        `<text x="${x + 16}" y="${y + 50 + (index * 18)}" class="copy">${escapeXml(line)}</text>`
+    ),
+    ...transpositionReviewContext.relationOccurrences.map((occurrence, index) => {
+      const currentRowY = rowY + (index * rowHeight);
+      const isFocus = occurrence.occurrenceId === transpositionReviewContext.focusContext.focusOccurrence.occurrenceId;
+      const localStatus = describeTranspositionOccurrenceStatus(
+        occurrence,
+        transpositionReviewContext.localGroup,
+        transpositionReviewContext.focusContext.focusOccurrence.occurrenceId
+      );
+
+      return [
+        `<rect x="${x + 12}" y="${currentRowY}" width="${width - 24}" height="44" rx="14" fill="#fbf7ef" stroke="#ddd5c7" />`,
+        `<circle cx="${x + 34}" cy="${currentRowY + 22}" r="7" fill="${isFocus ? '#d97706' : '#0f172a'}" />`,
+        `<text x="${x + 50}" y="${currentRowY + 16}" class="metric-label">${escapeXml(isFocus ? 'Focus occurrence' : 'Repeated sibling')}</text>`,
+        `<text x="${x + 50}" y="${currentRowY + 34}" class="section-small">${escapeXml(`${formatSubtreeLabel(occurrence.embedding.subtreeKey)} · ply ${occurrence.ply} · ${occurrence.annotations.phaseLabel}`)}</text>`,
+        `<text x="${x + 340}" y="${currentRowY + 34}" class="copy">${escapeXml(`${localStatus} · ${shortOccurrenceId(occurrence.occurrenceId)}`)}</text>`
+      ].join('');
+    })
+  ].join('');
+}
+
+function describeTranspositionOccurrenceStatus(
+  occurrence: BuilderOccurrenceRecord,
+  relationGroup: RuntimeTranspositionGroup,
+  focusOccurrenceId: string
+) {
+  if (occurrence.occurrenceId === focusOccurrenceId) {
+    return 'local focus';
+  }
+  if (relationGroup.visibleOccurrenceIds.includes(occurrence.occurrenceId)) {
+    return 'visible in local scope';
+  }
+
+  return 'off-view echo in local scope';
+}
+
+function renderTranspositionLegendRow(
+  x: number,
+  y: number,
+  label: string
+) {
+  const path = `M${x} ${y} C ${x + 18} ${y - 18}, ${x + 42} ${y + 18}, ${x + 62} ${y}`;
+
+  return [
+    `<path d="${path}" fill="none" stroke="#dbe7f6" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="0.72" />`,
+    `<path d="${path}" fill="none" stroke="#0f172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.88" />`,
+    `<circle cx="${x + 34}" cy="${y}" r="6" fill="#d97706" opacity="0.94" />`,
+    `<circle cx="${x + 98}" cy="${y}" r="10" fill="#eff6ff" stroke="#0f172a" stroke-width="3" opacity="0.94" />`,
+    `<circle cx="${x + 98}" cy="${y}" r="3.5" fill="#d97706" opacity="0.95" />`,
+    `<text x="${x + 124}" y="${y + 5}" class="copy">${escapeXml(label)}</text>`
   ].join('');
 }
 

@@ -13,6 +13,9 @@ importers:
       '@react-three/fiber':
         specifier: ^9.1.2
         version: 9.5.0(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(three@0.177.0)
+      chess.js:
+        specifier: ^1.4.0
+        version: 1.4.0
       react:
         specifier: ^19.1.0
         version: 19.2.5
@@ -532,6 +535,9 @@ packages:
 
   caniuse-lite@1.0.30001787:
     resolution: {integrity: sha512-mNcrMN9KeI68u7muanUpEejSLghOKlVhRqS/Za2IeyGllJ9I9otGpR9g3nsw7n4W378TE/LyIteA0+/FOZm4Kg==}
+
+  chess.js@1.4.0:
+    resolution: {integrity: sha512-BBJgrrtKQOzFLonR0l+k64A98NLemPwNsCskwb+29bRwobUa4iTm51E1kwGPbWXAcfdDa18nad6vpPPKPWarqw==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -1159,6 +1165,8 @@ snapshots:
       ieee754: 1.2.1
 
   caniuse-lite@1.0.30001787: {}
+
+  chess.js@1.4.0: {}
 
   convert-source-map@2.0.0: {}
 

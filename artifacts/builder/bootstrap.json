@@ -89,7 +89,7 @@
       "provenance": {
         "detail": "declared middlegame-procedural fallback alongside published opening/endgame table assets for N11d",
         "sourceKind": "builder-regime-declaration",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004"
       },
@@ -126,7 +126,7 @@
         "sourceKind": "builder-anchor-declaration",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "declared opening navigation anchor from opening-table runtime coverage"
       },
       "entryId": "opening",
@@ -147,7 +147,7 @@
         "sourceKind": "builder-anchor-declaration",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "declared middlegame navigation anchor from middlegame-procedural runtime coverage"
       },
       "entryId": "middlegame",
@@ -168,7 +168,7 @@
         "sourceKind": "builder-anchor-declaration",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "declared endgame navigation anchor from endgame-table runtime coverage"
       },
       "entryId": "endgame",
@@ -189,7 +189,7 @@
         "sourceKind": "terminal-labeler",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "declared terminal anchor terminal:white-win for white-win outcomes"
       },
       "entryId": null,
@@ -210,7 +210,7 @@
         "sourceKind": "terminal-labeler",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "declared terminal anchor terminal:black-win for black-win outcomes"
       },
       "entryId": null,
@@ -231,7 +231,7 @@
         "sourceKind": "terminal-labeler",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "declared terminal anchor terminal:draw for draw outcomes"
       },
       "entryId": null,
@@ -304,7 +304,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-27e2be7f2bf706c6 carried from subtree root at ply 0"
       },
       "salience": {
@@ -322,7 +322,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-27e2be7f2bf706c6"
         }
       },
@@ -370,7 +370,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-1f6a34476710cf44 carried from subtree d2d4 at ply 1"
       },
       "salience": {
@@ -388,7 +388,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-1f6a34476710cf44"
         }
       },
@@ -437,7 +437,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-9ebdccf7cb340e19 carried from subtree d2d4 at ply 2"
       },
       "salience": {
@@ -455,7 +455,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-9ebdccf7cb340e19"
         }
       },
@@ -505,7 +505,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-7dbf8aaca2b3697d carried from subtree d2d4 at ply 3"
       },
       "salience": {
@@ -523,7 +523,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-7dbf8aaca2b3697d"
         }
       },
@@ -574,7 +574,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6ff7efa5769bde3d carried from subtree d2d4 at ply 4"
       },
       "salience": {
@@ -592,7 +592,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6ff7efa5769bde3d"
         }
       },
@@ -644,7 +644,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-ffd06139cfd8d752 carried from subtree d2d4 at ply 5"
       },
       "salience": {
@@ -662,7 +662,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-ffd06139cfd8d752"
         }
       },
@@ -715,7 +715,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-7108d24f15ffe66c carried from subtree d2d4 at ply 6"
       },
       "salience": {
@@ -733,7 +733,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-7108d24f15ffe66c"
         }
       },
@@ -780,7 +780,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-7b367264afad7c15 carried from subtree root at ply 0"
       },
       "salience": {
@@ -798,7 +798,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-7b367264afad7c15"
         }
       },
@@ -846,7 +846,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-79415c2c47c30301 carried from subtree d2d4 at ply 1"
       },
       "salience": {
@@ -864,7 +864,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-79415c2c47c30301"
         }
       },
@@ -913,7 +913,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-191cfbfe7e7d01d9 carried from subtree d2d4 at ply 2"
       },
       "salience": {
@@ -931,7 +931,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-191cfbfe7e7d01d9"
         }
       },
@@ -981,7 +981,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-fe3302c45c2e1b15 carried from subtree d2d4 at ply 3"
       },
       "salience": {
@@ -999,7 +999,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-fe3302c45c2e1b15"
         }
       },
@@ -1050,7 +1050,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-3b54c1ad347a763b carried from subtree d2d4 at ply 4"
       },
       "salience": {
@@ -1068,7 +1068,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-3b54c1ad347a763b"
         }
       },
@@ -1120,7 +1120,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-75aa920e2785885d carried from subtree d2d4 at ply 5"
       },
       "salience": {
@@ -1138,7 +1138,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-75aa920e2785885d"
         }
       },
@@ -1191,7 +1191,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-8a3b915d604d5403 carried from subtree d2d4 at ply 6"
       },
       "salience": {
@@ -1209,7 +1209,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-8a3b915d604d5403"
         }
       },
@@ -1256,7 +1256,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-d10897875e44e59b carried from subtree root at ply 0"
       },
       "salience": {
@@ -1274,7 +1274,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-d10897875e44e59b"
         }
       },
@@ -1322,7 +1322,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-828d34dd90220088 carried from subtree e2e4 at ply 1"
       },
       "salience": {
@@ -1340,7 +1340,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-828d34dd90220088"
         }
       },
@@ -1389,7 +1389,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-8f867a23923fe752 carried from subtree e2e4 at ply 2"
       },
       "salience": {
@@ -1407,7 +1407,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-8f867a23923fe752"
         }
       },
@@ -1457,7 +1457,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-da1729ad0178e787 carried from subtree e2e4 at ply 3"
       },
       "salience": {
@@ -1475,7 +1475,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-da1729ad0178e787"
         }
       },
@@ -1526,7 +1526,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-40e4e824d7eaa81e carried from subtree e2e4 at ply 4"
       },
       "salience": {
@@ -1544,7 +1544,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-40e4e824d7eaa81e"
         }
       },
@@ -1596,7 +1596,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-e183cdedadef1bf0 carried from subtree e2e4 at ply 5"
       },
       "salience": {
@@ -1614,7 +1614,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-e183cdedadef1bf0"
         }
       },
@@ -1667,7 +1667,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-65caf3375c92984c carried from subtree e2e4 at ply 6"
       },
       "salience": {
@@ -1685,7 +1685,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-65caf3375c92984c"
         }
       },
@@ -1739,7 +1739,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-d6e94fa5dd427d26 carried from subtree e2e4 at ply 7"
       },
       "salience": {
@@ -1757,7 +1757,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-d6e94fa5dd427d26"
         }
       },
@@ -1769,7 +1769,7 @@
           "sourceKind": "terminal-labeler",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "terminal white-win label for occ-d6e94fa5dd427d26"
         }
       },
@@ -1815,7 +1815,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-2ec900ca21098443 carried from subtree root at ply 0"
       },
       "salience": {
@@ -1833,7 +1833,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-2ec900ca21098443"
         }
       },
@@ -1881,7 +1881,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-098b343ea6d64bd5 carried from subtree f2f3 at ply 1"
       },
       "salience": {
@@ -1899,7 +1899,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-098b343ea6d64bd5"
         }
       },
@@ -1948,7 +1948,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-e98487c361da0f1a carried from subtree f2f3 at ply 2"
       },
       "salience": {
@@ -1966,7 +1966,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-e98487c361da0f1a"
         }
       },
@@ -2016,7 +2016,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f7b8af2a834d288f carried from subtree f2f3 at ply 3"
       },
       "salience": {
@@ -2034,7 +2034,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f7b8af2a834d288f"
         }
       },
@@ -2085,7 +2085,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-63c6882f2a36737a carried from subtree f2f3 at ply 4"
       },
       "salience": {
@@ -2103,7 +2103,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-63c6882f2a36737a"
         }
       },
@@ -2115,7 +2115,7 @@
           "sourceKind": "terminal-labeler",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "terminal black-win label for occ-63c6882f2a36737a"
         }
       },
@@ -2161,7 +2161,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-39672723f3979502 carried from subtree root at ply 0"
       },
       "salience": {
@@ -2179,7 +2179,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-39672723f3979502"
         }
       },
@@ -2227,7 +2227,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-3df389a83da4b1a6 carried from subtree g1f3 at ply 1"
       },
       "salience": {
@@ -2245,7 +2245,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-3df389a83da4b1a6"
         }
       },
@@ -2294,7 +2294,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-5844c88338924ed3 carried from subtree g1f3 at ply 2"
       },
       "salience": {
@@ -2312,7 +2312,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-5844c88338924ed3"
         }
       },
@@ -2362,7 +2362,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-a348e528205679e9 carried from subtree g1f3 at ply 3"
       },
       "salience": {
@@ -2380,7 +2380,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-a348e528205679e9"
         }
       },
@@ -2431,7 +2431,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-8e57e74a73537a36 carried from subtree g1f3 at ply 4"
       },
       "salience": {
@@ -2449,7 +2449,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-8e57e74a73537a36"
         }
       },
@@ -2501,7 +2501,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-80fd3ca4f20451b4 carried from subtree g1f3 at ply 5"
       },
       "salience": {
@@ -2519,7 +2519,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-80fd3ca4f20451b4"
         }
       },
@@ -2572,7 +2572,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-387cdce9c0bf5677 carried from subtree g1f3 at ply 6"
       },
       "salience": {
@@ -2590,7 +2590,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-387cdce9c0bf5677"
         }
       },
@@ -2644,7 +2644,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-efe95b9c393f7960 carried from subtree g1f3 at ply 7"
       },
       "salience": {
@@ -2662,7 +2662,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-efe95b9c393f7960"
         }
       },
@@ -2717,7 +2717,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-854ee946e516ebcc carried from subtree g1f3 at ply 8"
       },
       "salience": {
@@ -2735,7 +2735,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-854ee946e516ebcc"
         }
       },
@@ -2747,7 +2747,7 @@
           "sourceKind": "terminal-labeler",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "terminal draw label for occ-854ee946e516ebcc"
         }
       },
@@ -2793,7 +2793,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-c691ba2463970683 carried from subtree root at ply 0"
       },
       "salience": {
@@ -2811,7 +2811,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-c691ba2463970683"
         }
       },
@@ -2859,7 +2859,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-0d6ff4200cd3d978 carried from subtree e2e4 at ply 1"
       },
       "salience": {
@@ -2877,7 +2877,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-0d6ff4200cd3d978"
         }
       },
@@ -2926,7 +2926,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-01b0f8a4072b48a0 carried from subtree e2e4 at ply 2"
       },
       "salience": {
@@ -2944,7 +2944,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-01b0f8a4072b48a0"
         }
       },
@@ -2994,7 +2994,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-55f354bf2d7841fa carried from subtree e2e4 at ply 3"
       },
       "salience": {
@@ -3012,7 +3012,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-55f354bf2d7841fa"
         }
       },
@@ -3063,7 +3063,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-9057d9a4043a3707 carried from subtree e2e4 at ply 4"
       },
       "salience": {
@@ -3081,7 +3081,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-9057d9a4043a3707"
         }
       },
@@ -3133,7 +3133,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-ba87ac9c8c2a67d3 carried from subtree e2e4 at ply 5"
       },
       "salience": {
@@ -3151,7 +3151,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-ba87ac9c8c2a67d3"
         }
       },
@@ -3204,7 +3204,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-667c8961e77994e5 carried from subtree e2e4 at ply 6"
       },
       "salience": {
@@ -3222,7 +3222,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-667c8961e77994e5"
         }
       },
@@ -3276,7 +3276,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6e7ae72f929d65c9 carried from subtree e2e4 at ply 7"
       },
       "salience": {
@@ -3294,7 +3294,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6e7ae72f929d65c9"
         }
       },
@@ -3349,7 +3349,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-25c32c2bc0227f68 carried from subtree e2e4 at ply 8"
       },
       "salience": {
@@ -3367,7 +3367,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-25c32c2bc0227f68"
         }
       },
@@ -3423,7 +3423,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f0d6eae79500a722 carried from subtree e2e4 at ply 9"
       },
       "salience": {
@@ -3441,7 +3441,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f0d6eae79500a722"
         }
       },
@@ -3498,7 +3498,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-ce2e2fcc396bf508 carried from subtree e2e4 at ply 10"
       },
       "salience": {
@@ -3516,7 +3516,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-ce2e2fcc396bf508"
         }
       },
@@ -3574,7 +3574,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6d1c5dfc25af296a carried from subtree e2e4 at ply 11"
       },
       "salience": {
@@ -3592,7 +3592,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6d1c5dfc25af296a"
         }
       },
@@ -3651,7 +3651,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-75d9ebf1f30ea6f8 carried from subtree e2e4 at ply 12"
       },
       "salience": {
@@ -3669,7 +3669,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-75d9ebf1f30ea6f8"
         }
       },
@@ -3729,7 +3729,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-27c4c8b306dd7f88 carried from subtree e2e4 at ply 13"
       },
       "salience": {
@@ -3747,7 +3747,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-27c4c8b306dd7f88"
         }
       },
@@ -3803,7 +3803,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-7c7e7277329680d3 carried from subtree e2e4 at ply 9"
       },
       "salience": {
@@ -3821,7 +3821,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-7c7e7277329680d3"
         }
       },
@@ -3878,7 +3878,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-4f4ee8b0f295e704 carried from subtree e2e4 at ply 10"
       },
       "salience": {
@@ -3896,7 +3896,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-4f4ee8b0f295e704"
         }
       },
@@ -3954,7 +3954,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-34a6f5864ea78102 carried from subtree e2e4 at ply 11"
       },
       "salience": {
@@ -3972,7 +3972,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-34a6f5864ea78102"
         }
       },
@@ -4031,7 +4031,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-79f965fc301271fa carried from subtree e2e4 at ply 12"
       },
       "salience": {
@@ -4049,7 +4049,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-79f965fc301271fa"
         }
       },
@@ -4109,7 +4109,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-71618892463fa67a carried from subtree e2e4 at ply 13"
       },
       "salience": {
@@ -4127,7 +4127,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-71618892463fa67a"
         }
       },
@@ -4183,7 +4183,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-5b83a2c927cfb966 carried from subtree e2e4 at ply 9"
       },
       "salience": {
@@ -4201,7 +4201,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-5b83a2c927cfb966"
         }
       },
@@ -4258,7 +4258,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-46092dc245df58d7 carried from subtree e2e4 at ply 10"
       },
       "salience": {
@@ -4276,7 +4276,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-46092dc245df58d7"
         }
       },
@@ -4334,7 +4334,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f1708bbef014b2fd carried from subtree e2e4 at ply 11"
       },
       "salience": {
@@ -4352,7 +4352,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f1708bbef014b2fd"
         }
       },
@@ -4411,7 +4411,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-4f9a24c2cb5ac6b0 carried from subtree e2e4 at ply 12"
       },
       "salience": {
@@ -4429,7 +4429,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-4f9a24c2cb5ac6b0"
         }
       },
@@ -4489,7 +4489,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-67c8744972075e12 carried from subtree e2e4 at ply 13"
       },
       "salience": {
@@ -4507,7 +4507,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-67c8744972075e12"
         }
       },
@@ -4563,7 +4563,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f9edcc5c2829694b carried from subtree e2e4 at ply 9"
       },
       "salience": {
@@ -4581,7 +4581,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f9edcc5c2829694b"
         }
       },
@@ -4638,7 +4638,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-5f720f29ae39c22c carried from subtree e2e4 at ply 10"
       },
       "salience": {
@@ -4656,7 +4656,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-5f720f29ae39c22c"
         }
       },
@@ -4714,7 +4714,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-69da2b6496169de0 carried from subtree e2e4 at ply 11"
       },
       "salience": {
@@ -4732,7 +4732,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-69da2b6496169de0"
         }
       },
@@ -4791,7 +4791,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-ac8c786cecc9fa69 carried from subtree e2e4 at ply 12"
       },
       "salience": {
@@ -4809,7 +4809,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-ac8c786cecc9fa69"
         }
       },
@@ -4869,7 +4869,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-7fdbecbaa8bf671c carried from subtree e2e4 at ply 13"
       },
       "salience": {
@@ -4887,7 +4887,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-7fdbecbaa8bf671c"
         }
       },
@@ -4943,7 +4943,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-9d4c880355c3035a carried from subtree e2e4 at ply 9"
       },
       "salience": {
@@ -4961,7 +4961,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-9d4c880355c3035a"
         }
       },
@@ -5018,7 +5018,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-3b78682dab123def carried from subtree e2e4 at ply 10"
       },
       "salience": {
@@ -5036,7 +5036,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-3b78682dab123def"
         }
       },
@@ -5094,7 +5094,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-13e0e444859204dd carried from subtree e2e4 at ply 11"
       },
       "salience": {
@@ -5112,7 +5112,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-13e0e444859204dd"
         }
       },
@@ -5171,7 +5171,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-d7ea64962c65a70d carried from subtree e2e4 at ply 12"
       },
       "salience": {
@@ -5189,7 +5189,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-d7ea64962c65a70d"
         }
       },
@@ -5249,7 +5249,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-24dcf15814b509be carried from subtree e2e4 at ply 13"
       },
       "salience": {
@@ -5267,7 +5267,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-24dcf15814b509be"
         }
       },
@@ -5323,7 +5323,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-d4c0a727bc3cb6b0 carried from subtree e2e4 at ply 9"
       },
       "salience": {
@@ -5341,7 +5341,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-d4c0a727bc3cb6b0"
         }
       },
@@ -5398,7 +5398,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-a57fc69957d5859e carried from subtree e2e4 at ply 10"
       },
       "salience": {
@@ -5416,7 +5416,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-a57fc69957d5859e"
         }
       },
@@ -5474,7 +5474,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-d8b11eedcd7a0e3a carried from subtree e2e4 at ply 11"
       },
       "salience": {
@@ -5492,7 +5492,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-d8b11eedcd7a0e3a"
         }
       },
@@ -5551,7 +5551,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-fef7f877cdfedb7b carried from subtree e2e4 at ply 12"
       },
       "salience": {
@@ -5569,7 +5569,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-fef7f877cdfedb7b"
         }
       },
@@ -5629,7 +5629,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-28b57dbf27801997 carried from subtree e2e4 at ply 13"
       },
       "salience": {
@@ -5647,7 +5647,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-28b57dbf27801997"
         }
       },
@@ -5694,7 +5694,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-a38b4b89386c3e44 carried from subtree root at ply 0"
       },
       "salience": {
@@ -5712,7 +5712,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-a38b4b89386c3e44"
         }
       },
@@ -5760,7 +5760,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-03923f40982b9b5e carried from subtree b1c3 at ply 1"
       },
       "salience": {
@@ -5778,7 +5778,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-03923f40982b9b5e"
         }
       },
@@ -5827,7 +5827,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-e74d7fb3111b2732 carried from subtree b1c3 at ply 2"
       },
       "salience": {
@@ -5845,7 +5845,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-e74d7fb3111b2732"
         }
       },
@@ -5895,7 +5895,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-0ec08abd6d9eed0c carried from subtree b1c3 at ply 3"
       },
       "salience": {
@@ -5913,7 +5913,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-0ec08abd6d9eed0c"
         }
       },
@@ -5964,7 +5964,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f461ac60796e96e7 carried from subtree b1c3 at ply 4"
       },
       "salience": {
@@ -5982,7 +5982,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f461ac60796e96e7"
         }
       },
@@ -6034,7 +6034,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-3a4e4fac53b77251 carried from subtree b1c3 at ply 5"
       },
       "salience": {
@@ -6052,7 +6052,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-3a4e4fac53b77251"
         }
       },
@@ -6105,7 +6105,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-1c3a9bb8cdb69d3a carried from subtree b1c3 at ply 6"
       },
       "salience": {
@@ -6123,7 +6123,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-1c3a9bb8cdb69d3a"
         }
       },
@@ -6177,7 +6177,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-695ac20c25d88703 carried from subtree b1c3 at ply 7"
       },
       "salience": {
@@ -6195,7 +6195,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-695ac20c25d88703"
         }
       },
@@ -6250,7 +6250,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-595209d36c22109f carried from subtree b1c3 at ply 8"
       },
       "salience": {
@@ -6268,7 +6268,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-595209d36c22109f"
         }
       },
@@ -6324,7 +6324,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f8986fde1c8e8340 carried from subtree b1c3 at ply 9"
       },
       "salience": {
@@ -6342,7 +6342,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f8986fde1c8e8340"
         }
       },
@@ -6399,7 +6399,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-543e2e3d6d132908 carried from subtree b1c3 at ply 10"
       },
       "salience": {
@@ -6417,7 +6417,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-543e2e3d6d132908"
         }
       },
@@ -6475,7 +6475,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-978f739caa4a3d51 carried from subtree b1c3 at ply 11"
       },
       "salience": {
@@ -6493,7 +6493,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-978f739caa4a3d51"
         }
       },
@@ -6552,7 +6552,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f76c77a74df7e711 carried from subtree b1c3 at ply 12"
       },
       "salience": {
@@ -6570,7 +6570,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f76c77a74df7e711"
         }
       },
@@ -6630,7 +6630,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-c4f580477286d7a5 carried from subtree b1c3 at ply 13"
       },
       "salience": {
@@ -6648,7 +6648,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-c4f580477286d7a5"
         }
       },
@@ -6709,7 +6709,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-25a1cf2b12a643fd carried from subtree b1c3 at ply 14"
       },
       "salience": {
@@ -6727,7 +6727,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-25a1cf2b12a643fd"
         }
       },
@@ -6789,7 +6789,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f52843f0d4705bbb carried from subtree b1c3 at ply 15"
       },
       "salience": {
@@ -6807,7 +6807,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f52843f0d4705bbb"
         }
       },
@@ -6870,7 +6870,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-ee6e1a1ce96b3e70 carried from subtree b1c3 at ply 16"
       },
       "salience": {
@@ -6888,7 +6888,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-ee6e1a1ce96b3e70"
         }
       },
@@ -6952,7 +6952,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6899449e91bf3d37 carried from subtree b1c3 at ply 17"
       },
       "salience": {
@@ -6970,7 +6970,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6899449e91bf3d37"
         }
       },
@@ -7035,7 +7035,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-e6f8d23deef4f09c carried from subtree b1c3 at ply 18"
       },
       "salience": {
@@ -7053,7 +7053,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-e6f8d23deef4f09c"
         }
       },
@@ -7119,7 +7119,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-9bc6000445c1e02d carried from subtree b1c3 at ply 19"
       },
       "salience": {
@@ -7137,7 +7137,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-9bc6000445c1e02d"
         }
       },
@@ -7204,7 +7204,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-cf440fcc098345e8 carried from subtree b1c3 at ply 20"
       },
       "salience": {
@@ -7222,7 +7222,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-cf440fcc098345e8"
         }
       },
@@ -7290,7 +7290,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-51a378ad9c10916f carried from subtree b1c3 at ply 21"
       },
       "salience": {
@@ -7308,7 +7308,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-51a378ad9c10916f"
         }
       },
@@ -7377,7 +7377,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-ee892176b68203aa carried from subtree b1c3 at ply 22"
       },
       "salience": {
@@ -7395,7 +7395,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-ee892176b68203aa"
         }
       },
@@ -7465,7 +7465,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-5dbfd2ae06c825ac carried from subtree b1c3 at ply 23"
       },
       "salience": {
@@ -7483,7 +7483,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-5dbfd2ae06c825ac"
         }
       },
@@ -7554,7 +7554,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-9685a67a638ae227 carried from subtree b1c3 at ply 24"
       },
       "salience": {
@@ -7572,7 +7572,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-9685a67a638ae227"
         }
       },
@@ -7644,7 +7644,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-974c77aa03965d03 carried from subtree b1c3 at ply 25"
       },
       "salience": {
@@ -7662,7 +7662,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-974c77aa03965d03"
         }
       },
@@ -7735,7 +7735,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-2fbe3b3c6789fb66 carried from subtree b1c3 at ply 26"
       },
       "salience": {
@@ -7753,7 +7753,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-2fbe3b3c6789fb66"
         }
       },
@@ -7827,7 +7827,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-1452e02bacf17e28 carried from subtree b1c3 at ply 27"
       },
       "salience": {
@@ -7845,7 +7845,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-1452e02bacf17e28"
         }
       },
@@ -7920,7 +7920,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-0300f4026fbc8de8 carried from subtree b1c3 at ply 28"
       },
       "salience": {
@@ -7938,7 +7938,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-0300f4026fbc8de8"
         }
       },
@@ -8014,7 +8014,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-c30d83fe7f952079 carried from subtree b1c3 at ply 29"
       },
       "salience": {
@@ -8032,7 +8032,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-c30d83fe7f952079"
         }
       },
@@ -8109,7 +8109,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-8fb2987adb547a02 carried from subtree b1c3 at ply 30"
       },
       "salience": {
@@ -8127,7 +8127,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-8fb2987adb547a02"
         }
       },
@@ -8205,7 +8205,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-bce08b7933132d18 carried from subtree b1c3 at ply 31"
       },
       "salience": {
@@ -8223,7 +8223,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-bce08b7933132d18"
         }
       },
@@ -8302,7 +8302,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6c78d7fb01a207df carried from subtree b1c3 at ply 32"
       },
       "salience": {
@@ -8320,7 +8320,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6c78d7fb01a207df"
         }
       },
@@ -8400,7 +8400,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6a2a7dc0e5b9be7e carried from subtree b1c3 at ply 33"
       },
       "salience": {
@@ -8418,7 +8418,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6a2a7dc0e5b9be7e"
         }
       },
@@ -8499,7 +8499,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-a3c1a30111bc13dc carried from subtree b1c3 at ply 34"
       },
       "salience": {
@@ -8517,7 +8517,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-a3c1a30111bc13dc"
         }
       },
@@ -8599,7 +8599,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-50c5276a269f4c53 carried from subtree b1c3 at ply 35"
       },
       "salience": {
@@ -8617,7 +8617,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-50c5276a269f4c53"
         }
       },
@@ -8700,7 +8700,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-45339926994118ef carried from subtree b1c3 at ply 36"
       },
       "salience": {
@@ -8718,7 +8718,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-45339926994118ef"
         }
       },
@@ -8802,7 +8802,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-6ae25cf2fa9aa2bc carried from subtree b1c3 at ply 37"
       },
       "salience": {
@@ -8820,7 +8820,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-6ae25cf2fa9aa2bc"
         }
       },
@@ -8905,7 +8905,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-f71834dad84e3e3b carried from subtree b1c3 at ply 38"
       },
       "salience": {
@@ -8923,7 +8923,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-f71834dad84e3e3b"
         }
       },
@@ -9009,7 +9009,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-12c812ad5fe3b711 carried from subtree b1c3 at ply 39"
       },
       "salience": {
@@ -9027,7 +9027,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-12c812ad5fe3b711"
         }
       },
@@ -9114,7 +9114,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-32fd6227caed02f0 carried from subtree b1c3 at ply 40"
       },
       "salience": {
@@ -9132,7 +9132,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-32fd6227caed02f0"
         }
       },
@@ -9220,7 +9220,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-addce167fb788f51 carried from subtree b1c3 at ply 41"
       },
       "salience": {
@@ -9238,7 +9238,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-addce167fb788f51"
         }
       },
@@ -9327,7 +9327,7 @@
         "sourceKind": "fixture-corpus",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "occurrence occ-90a32b9ed0071db9 carried from subtree b1c3 at ply 42"
       },
       "salience": {
@@ -9345,7 +9345,7 @@
           "sourceKind": "salience-builder",
           "sourceName": "initial-represented-subset",
           "sourceVersion": "2026-04-11-fixture-004",
-          "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+          "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
           "detail": "salience-v1 score for occ-90a32b9ed0071db9"
         }
       },
@@ -9825,7 +9825,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d4 from occ-27e2be7f2bf706c6 to occ-1f6a34476710cf44"
       },
       "moveUci": "d2d4",
@@ -9862,7 +9862,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-1f6a34476710cf44 to occ-9ebdccf7cb340e19"
       },
       "moveUci": "g8f6",
@@ -9899,7 +9899,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c2c4 from occ-9ebdccf7cb340e19 to occ-7dbf8aaca2b3697d"
       },
       "moveUci": "c2c4",
@@ -9936,7 +9936,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e7e6 from occ-7dbf8aaca2b3697d to occ-6ff7efa5769bde3d"
       },
       "moveUci": "e7e6",
@@ -9973,7 +9973,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b1c3 from occ-6ff7efa5769bde3d to occ-ffd06139cfd8d752"
       },
       "moveUci": "b1c3",
@@ -10010,7 +10010,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f8b4 from occ-ffd06139cfd8d752 to occ-7108d24f15ffe66c"
       },
       "moveUci": "f8b4",
@@ -10047,7 +10047,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d4 from occ-7b367264afad7c15 to occ-79415c2c47c30301"
       },
       "moveUci": "d2d4",
@@ -10084,7 +10084,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e7e6 from occ-79415c2c47c30301 to occ-191cfbfe7e7d01d9"
       },
       "moveUci": "e7e6",
@@ -10121,7 +10121,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c2c4 from occ-191cfbfe7e7d01d9 to occ-fe3302c45c2e1b15"
       },
       "moveUci": "c2c4",
@@ -10158,7 +10158,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-fe3302c45c2e1b15 to occ-3b54c1ad347a763b"
       },
       "moveUci": "g8f6",
@@ -10195,7 +10195,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b1c3 from occ-3b54c1ad347a763b to occ-75aa920e2785885d"
       },
       "moveUci": "b1c3",
@@ -10232,7 +10232,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f8b4 from occ-75aa920e2785885d to occ-8a3b915d604d5403"
       },
       "moveUci": "f8b4",
@@ -10269,7 +10269,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e2e4 from occ-d10897875e44e59b to occ-828d34dd90220088"
       },
       "moveUci": "e2e4",
@@ -10306,7 +10306,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e7e5 from occ-828d34dd90220088 to occ-8f867a23923fe752"
       },
       "moveUci": "e7e5",
@@ -10343,7 +10343,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f1c4 from occ-8f867a23923fe752 to occ-da1729ad0178e787"
       },
       "moveUci": "f1c4",
@@ -10380,7 +10380,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b8c6 from occ-da1729ad0178e787 to occ-40e4e824d7eaa81e"
       },
       "moveUci": "b8c6",
@@ -10417,7 +10417,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d1h5 from occ-40e4e824d7eaa81e to occ-e183cdedadef1bf0"
       },
       "moveUci": "d1h5",
@@ -10454,7 +10454,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-e183cdedadef1bf0 to occ-65caf3375c92984c"
       },
       "moveUci": "g8f6",
@@ -10491,7 +10491,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h5f7 from occ-65caf3375c92984c to occ-d6e94fa5dd427d26"
       },
       "moveUci": "h5f7",
@@ -10528,7 +10528,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f2f3 from occ-2ec900ca21098443 to occ-098b343ea6d64bd5"
       },
       "moveUci": "f2f3",
@@ -10565,7 +10565,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e7e5 from occ-098b343ea6d64bd5 to occ-e98487c361da0f1a"
       },
       "moveUci": "e7e5",
@@ -10602,7 +10602,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g2g4 from occ-e98487c361da0f1a to occ-f7b8af2a834d288f"
       },
       "moveUci": "g2g4",
@@ -10639,7 +10639,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d8h4 from occ-f7b8af2a834d288f to occ-63c6882f2a36737a"
       },
       "moveUci": "d8h4",
@@ -10676,7 +10676,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g1f3 from occ-39672723f3979502 to occ-3df389a83da4b1a6"
       },
       "moveUci": "g1f3",
@@ -10713,7 +10713,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-3df389a83da4b1a6 to occ-5844c88338924ed3"
       },
       "moveUci": "g8f6",
@@ -10750,7 +10750,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f3g1 from occ-5844c88338924ed3 to occ-a348e528205679e9"
       },
       "moveUci": "f3g1",
@@ -10787,7 +10787,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f6g8 from occ-a348e528205679e9 to occ-8e57e74a73537a36"
       },
       "moveUci": "f6g8",
@@ -10824,7 +10824,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g1f3 from occ-8e57e74a73537a36 to occ-80fd3ca4f20451b4"
       },
       "moveUci": "g1f3",
@@ -10861,7 +10861,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-80fd3ca4f20451b4 to occ-387cdce9c0bf5677"
       },
       "moveUci": "g8f6",
@@ -10898,7 +10898,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f3g1 from occ-387cdce9c0bf5677 to occ-efe95b9c393f7960"
       },
       "moveUci": "f3g1",
@@ -10935,7 +10935,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f6g8 from occ-efe95b9c393f7960 to occ-854ee946e516ebcc"
       },
       "moveUci": "f6g8",
@@ -10972,7 +10972,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e2e4 from occ-c691ba2463970683 to occ-0d6ff4200cd3d978"
       },
       "moveUci": "e2e4",
@@ -11009,7 +11009,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e7e5 from occ-0d6ff4200cd3d978 to occ-01b0f8a4072b48a0"
       },
       "moveUci": "e7e5",
@@ -11046,7 +11046,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g1f3 from occ-01b0f8a4072b48a0 to occ-55f354bf2d7841fa"
       },
       "moveUci": "g1f3",
@@ -11083,7 +11083,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b8c6 from occ-55f354bf2d7841fa to occ-9057d9a4043a3707"
       },
       "moveUci": "b8c6",
@@ -11120,7 +11120,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f1c4 from occ-9057d9a4043a3707 to occ-ba87ac9c8c2a67d3"
       },
       "moveUci": "f1c4",
@@ -11157,7 +11157,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f8c5 from occ-ba87ac9c8c2a67d3 to occ-667c8961e77994e5"
       },
       "moveUci": "f8c5",
@@ -11194,7 +11194,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c2c3 from occ-667c8961e77994e5 to occ-6e7ae72f929d65c9"
       },
       "moveUci": "c2c3",
@@ -11231,7 +11231,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-6e7ae72f929d65c9 to occ-25c32c2bc0227f68"
       },
       "moveUci": "g8f6",
@@ -11268,7 +11268,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d4 from occ-25c32c2bc0227f68 to occ-f0d6eae79500a722"
       },
       "moveUci": "d2d4",
@@ -11305,7 +11305,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e5d4 from occ-f0d6eae79500a722 to occ-ce2e2fcc396bf508"
       },
       "moveUci": "e5d4",
@@ -11342,7 +11342,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c3d4 from occ-ce2e2fcc396bf508 to occ-6d1c5dfc25af296a"
       },
       "moveUci": "c3d4",
@@ -11379,7 +11379,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c5b4 from occ-6d1c5dfc25af296a to occ-75d9ebf1f30ea6f8"
       },
       "moveUci": "c5b4",
@@ -11416,7 +11416,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b1c3 from occ-75d9ebf1f30ea6f8 to occ-27c4c8b306dd7f88"
       },
       "moveUci": "b1c3",
@@ -11453,7 +11453,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d3 from occ-25c32c2bc0227f68 to occ-7c7e7277329680d3"
       },
       "moveUci": "d2d3",
@@ -11490,7 +11490,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d7d6 from occ-7c7e7277329680d3 to occ-4f4ee8b0f295e704"
       },
       "moveUci": "d7d6",
@@ -11527,7 +11527,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e1g1 from occ-4f4ee8b0f295e704 to occ-34a6f5864ea78102"
       },
       "moveUci": "e1g1",
@@ -11564,7 +11564,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e8g8 from occ-34a6f5864ea78102 to occ-79f965fc301271fa"
       },
       "moveUci": "e8g8",
@@ -11601,7 +11601,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f1e1 from occ-79f965fc301271fa to occ-71618892463fa67a"
       },
       "moveUci": "f1e1",
@@ -11638,7 +11638,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f3g5 from occ-25c32c2bc0227f68 to occ-5b83a2c927cfb966"
       },
       "moveUci": "f3g5",
@@ -11675,7 +11675,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e8g8 from occ-5b83a2c927cfb966 to occ-46092dc245df58d7"
       },
       "moveUci": "e8g8",
@@ -11712,7 +11712,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d3 from occ-46092dc245df58d7 to occ-f1708bbef014b2fd"
       },
       "moveUci": "d2d3",
@@ -11749,7 +11749,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d7d6 from occ-f1708bbef014b2fd to occ-4f9a24c2cb5ac6b0"
       },
       "moveUci": "d7d6",
@@ -11786,7 +11786,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e1g1 from occ-4f9a24c2cb5ac6b0 to occ-67c8744972075e12"
       },
       "moveUci": "e1g1",
@@ -11823,7 +11823,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e1g1 from occ-25c32c2bc0227f68 to occ-f9edcc5c2829694b"
       },
       "moveUci": "e1g1",
@@ -11860,7 +11860,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f6e4 from occ-f9edcc5c2829694b to occ-5f720f29ae39c22c"
       },
       "moveUci": "f6e4",
@@ -11897,7 +11897,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d4 from occ-5f720f29ae39c22c to occ-69da2b6496169de0"
       },
       "moveUci": "d2d4",
@@ -11934,7 +11934,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d7d5 from occ-69da2b6496169de0 to occ-ac8c786cecc9fa69"
       },
       "moveUci": "d7d5",
@@ -11971,7 +11971,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c4b5 from occ-ac8c786cecc9fa69 to occ-7fdbecbaa8bf671c"
       },
       "moveUci": "c4b5",
@@ -12008,7 +12008,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b2b4 from occ-25c32c2bc0227f68 to occ-9d4c880355c3035a"
       },
       "moveUci": "b2b4",
@@ -12045,7 +12045,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c5b6 from occ-9d4c880355c3035a to occ-3b78682dab123def"
       },
       "moveUci": "c5b6",
@@ -12082,7 +12082,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d4 from occ-3b78682dab123def to occ-13e0e444859204dd"
       },
       "moveUci": "d2d4",
@@ -12119,7 +12119,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e5d4 from occ-13e0e444859204dd to occ-d7ea64962c65a70d"
       },
       "moveUci": "e5d4",
@@ -12156,7 +12156,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e1g1 from occ-d7ea64962c65a70d to occ-24dcf15814b509be"
       },
       "moveUci": "e1g1",
@@ -12193,7 +12193,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h2h3 from occ-25c32c2bc0227f68 to occ-d4c0a727bc3cb6b0"
       },
       "moveUci": "h2h3",
@@ -12230,7 +12230,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d7d6 from occ-d4c0a727bc3cb6b0 to occ-a57fc69957d5859e"
       },
       "moveUci": "d7d6",
@@ -12267,7 +12267,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d4 from occ-a57fc69957d5859e to occ-d8b11eedcd7a0e3a"
       },
       "moveUci": "d2d4",
@@ -12304,7 +12304,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c5b6 from occ-d8b11eedcd7a0e3a to occ-fef7f877cdfedb7b"
       },
       "moveUci": "c5b6",
@@ -12341,7 +12341,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e1g1 from occ-fef7f877cdfedb7b to occ-28b57dbf27801997"
       },
       "moveUci": "e1g1",
@@ -12378,7 +12378,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b1c3 from occ-a38b4b89386c3e44 to occ-03923f40982b9b5e"
       },
       "moveUci": "b1c3",
@@ -12415,7 +12415,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g8f6 from occ-03923f40982b9b5e to occ-e74d7fb3111b2732"
       },
       "moveUci": "g8f6",
@@ -12452,7 +12452,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c3b1 from occ-e74d7fb3111b2732 to occ-0ec08abd6d9eed0c"
       },
       "moveUci": "c3b1",
@@ -12489,7 +12489,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b8c6 from occ-0ec08abd6d9eed0c to occ-f461ac60796e96e7"
       },
       "moveUci": "b8c6",
@@ -12526,7 +12526,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e2e3 from occ-f461ac60796e96e7 to occ-3a4e4fac53b77251"
       },
       "moveUci": "e2e3",
@@ -12563,7 +12563,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c6b8 from occ-3a4e4fac53b77251 to occ-1c3a9bb8cdb69d3a"
       },
       "moveUci": "c6b8",
@@ -12600,7 +12600,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f1e2 from occ-1c3a9bb8cdb69d3a to occ-695ac20c25d88703"
       },
       "moveUci": "f1e2",
@@ -12637,7 +12637,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f6g4 from occ-695ac20c25d88703 to occ-595209d36c22109f"
       },
       "moveUci": "f6g4",
@@ -12674,7 +12674,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e2g4 from occ-595209d36c22109f to occ-f8986fde1c8e8340"
       },
       "moveUci": "e2g4",
@@ -12711,7 +12711,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b8c6 from occ-f8986fde1c8e8340 to occ-543e2e3d6d132908"
       },
       "moveUci": "b8c6",
@@ -12748,7 +12748,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g4d7 from occ-543e2e3d6d132908 to occ-978f739caa4a3d51"
       },
       "moveUci": "g4d7",
@@ -12785,7 +12785,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e8d7 from occ-978f739caa4a3d51 to occ-f76c77a74df7e711"
       },
       "moveUci": "e8d7",
@@ -12822,7 +12822,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d1h5 from occ-f76c77a74df7e711 to occ-c4f580477286d7a5"
       },
       "moveUci": "d1h5",
@@ -12859,7 +12859,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c6b8 from occ-c4f580477286d7a5 to occ-25a1cf2b12a643fd"
       },
       "moveUci": "c6b8",
@@ -12896,7 +12896,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h5h7 from occ-25a1cf2b12a643fd to occ-f52843f0d4705bbb"
       },
       "moveUci": "h5h7",
@@ -12933,7 +12933,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h8h7 from occ-f52843f0d4705bbb to occ-ee6e1a1ce96b3e70"
       },
       "moveUci": "h8h7",
@@ -12970,7 +12970,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition e1f1 from occ-ee6e1a1ce96b3e70 to occ-6899449e91bf3d37"
       },
       "moveUci": "e1f1",
@@ -13007,7 +13007,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h7h2 from occ-6899449e91bf3d37 to occ-e6f8d23deef4f09c"
       },
       "moveUci": "h7h2",
@@ -13044,7 +13044,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h1h2 from occ-e6f8d23deef4f09c to occ-9bc6000445c1e02d"
       },
       "moveUci": "h1h2",
@@ -13081,7 +13081,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d7d6 from occ-9bc6000445c1e02d to occ-cf440fcc098345e8"
       },
       "moveUci": "d7d6",
@@ -13118,7 +13118,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h2h6 from occ-cf440fcc098345e8 to occ-51a378ad9c10916f"
       },
       "moveUci": "h2h6",
@@ -13155,7 +13155,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g7h6 from occ-51a378ad9c10916f to occ-ee892176b68203aa"
       },
       "moveUci": "g7h6",
@@ -13192,7 +13192,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g1h3 from occ-ee892176b68203aa to occ-5dbfd2ae06c825ac"
       },
       "moveUci": "g1h3",
@@ -13229,7 +13229,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c8h3 from occ-5dbfd2ae06c825ac to occ-9685a67a638ae227"
       },
       "moveUci": "c8h3",
@@ -13266,7 +13266,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition g2h3 from occ-9685a67a638ae227 to occ-974c77aa03965d03"
       },
       "moveUci": "g2h3",
@@ -13303,7 +13303,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d8d7 from occ-974c77aa03965d03 to occ-2fbe3b3c6789fb66"
       },
       "moveUci": "d8d7",
@@ -13340,7 +13340,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition h3h4 from occ-2fbe3b3c6789fb66 to occ-1452e02bacf17e28"
       },
       "moveUci": "h3h4",
@@ -13377,7 +13377,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d7b5 from occ-1452e02bacf17e28 to occ-0300f4026fbc8de8"
       },
       "moveUci": "d7b5",
@@ -13414,7 +13414,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c2c4 from occ-0300f4026fbc8de8 to occ-c30d83fe7f952079"
       },
       "moveUci": "c2c4",
@@ -13451,7 +13451,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b5c4 from occ-c30d83fe7f952079 to occ-8fb2987adb547a02"
       },
       "moveUci": "b5c4",
@@ -13488,7 +13488,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d2d3 from occ-8fb2987adb547a02 to occ-bce08b7933132d18"
       },
       "moveUci": "d2d3",
@@ -13525,7 +13525,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c4c1 from occ-bce08b7933132d18 to occ-6c78d7fb01a207df"
       },
       "moveUci": "c4c1",
@@ -13562,7 +13562,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f1g2 from occ-6c78d7fb01a207df to occ-6a2a7dc0e5b9be7e"
       },
       "moveUci": "f1g2",
@@ -13599,7 +13599,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c1b1 from occ-6a2a7dc0e5b9be7e to occ-a3c1a30111bc13dc"
       },
       "moveUci": "c1b1",
@@ -13636,7 +13636,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition a1b1 from occ-a3c1a30111bc13dc to occ-50c5276a269f4c53"
       },
       "moveUci": "a1b1",
@@ -13673,7 +13673,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition f8g7 from occ-50c5276a269f4c53 to occ-45339926994118ef"
       },
       "moveUci": "f8g7",
@@ -13710,7 +13710,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b2b4 from occ-45339926994118ef to occ-6ae25cf2fa9aa2bc"
       },
       "moveUci": "b2b4",
@@ -13747,7 +13747,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b8c6 from occ-6ae25cf2fa9aa2bc to occ-f71834dad84e3e3b"
       },
       "moveUci": "b8c6",
@@ -13784,7 +13784,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition b4b5 from occ-f71834dad84e3e3b to occ-12c812ad5fe3b711"
       },
       "moveUci": "b4b5",
@@ -13821,7 +13821,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition c6b4 from occ-12c812ad5fe3b711 to occ-32fd6227caed02f0"
       },
       "moveUci": "c6b4",
@@ -13858,7 +13858,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition d3d4 from occ-32fd6227caed02f0 to occ-addce167fb788f51"
       },
       "moveUci": "d3d4",
@@ -13895,7 +13895,7 @@
         "sourceKind": "fixture-corpus-transition",
         "sourceName": "initial-represented-subset",
         "sourceVersion": "2026-04-11-fixture-004",
-        "sourceLocation": "tools/builder/fixtures/initial_corpus.json",
+        "sourceLocation": "/Users/stevesteiner/chessviz/tools/builder/fixtures/initial_corpus.json",
         "detail": "transition a7a5 from occ-addce167fb788f51 to occ-90a32b9ed0071db9"
       },
       "moveUci": "a7a5",

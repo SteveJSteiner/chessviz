@@ -91,6 +91,21 @@
       "semantics": "castling move"
     }
   ],
+  "transpositionReview": {
+    "stateKey": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+    "focusOccurrenceId": "occ-7108d24f15ffe66c",
+    "occurrenceIds": [
+      "occ-7108d24f15ffe66c",
+      "occ-8a3b915d604d5403"
+    ],
+    "localNeighborhoodRadius": 1,
+    "localCameraDistance": 3.2,
+    "wholeObjectCameraDistance": 5,
+    "localOffViewOccurrenceIds": [
+      "occ-8a3b915d604d5403"
+    ],
+    "wholeObjectLinkCount": 1
+  },
   "artifacts": [
     {
       "file": "anchored-entrypoints.svg",
@@ -170,6 +185,21 @@
         "contextual"
       ],
       "liveLabelPolicyApplied": true
+    },
+    {
+      "file": "transposition-relations.svg",
+      "regime": "transposition-relations",
+      "stateKey": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+      "occurrenceIds": [
+        "occ-7108d24f15ffe66c",
+        "occ-8a3b915d604d5403"
+      ],
+      "localNeighborhoodRadius": 1,
+      "localOffViewOccurrenceIds": [
+        "occ-8a3b915d604d5403"
+      ],
+      "wholeObjectOccurrenceCount": 2,
+      "wholeObjectLinkCount": 1
     },
     {
       "file": "review-notes-template.md",
