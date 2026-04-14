@@ -23,6 +23,10 @@ import {
   createAnchoredNavigationEntryPoints,
   resolveInitialNavigationEntryPointId
 } from './navigation.ts';
+import {
+  createRuntimeExplorationKernel,
+  type RuntimeExplorationKernel
+} from './runtimeKernel.ts';
 
 const DYNAMIC_SCHEMA_VERSION = '2026-04-13.dynamic.v1';
 const DYNAMIC_SOURCE_VERSION = '2026-04-13.dynamic-js';
@@ -64,6 +68,24 @@ export type ViewerRuntimeSource = {
   navigationEntryPoints: NavigationEntryPoint[];
   initialEntryPointId: NavigationEntryPointId;
   mode: 'dynamic' | 'artifacts';
+  dynamicOptions?: DynamicRuntimeOptions;
+};
+
+export type ViewerRuntimeExpansionResult = {
+  didExpand: boolean;
+  occurrenceDelta: number;
+  edgeDelta: number;
+};
+
+export type ViewerRuntimeStore = {
+  inspectNeighborhood: RuntimeExplorationKernel['inspectNeighborhood'];
+  inspectWholeGraph: RuntimeExplorationKernel['inspectWholeGraph'];
+  inspectCarrierSurface: RuntimeExplorationKernel['inspectCarrierSurface'];
+  resolveOccurrence: RuntimeExplorationKernel['resolveOccurrence'];
+  getFocusOptions: RuntimeExplorationKernel['getFocusOptions'];
+  getBuilderBootstrapManifest: () => BuilderBootstrapManifest;
+  getViewerSceneManifest: () => ViewerSceneManifest;
+  expandFocusOccurrence: (occurrenceId: string) => ViewerRuntimeExpansionResult;
 };
 
 export type DynamicRuntimeOptions = {
@@ -216,7 +238,8 @@ export function createDynamicRuntimeSource(
     },
     navigationEntryPoints,
     initialEntryPointId: 'middlegame',
-    mode: 'dynamic'
+    mode: 'dynamic',
+    dynamicOptions: options
   };
 }
 
@@ -239,6 +262,247 @@ function createArtifactRuntimeSource(
       runtimeBootstrap.initialFocusOccurrenceId
     ),
     mode: 'artifacts'
+  };
+}
+
+export function createViewerRuntimeStore(
+  runtimeSource: ViewerRuntimeSource
+): ViewerRuntimeStore {
+  let builderBootstrapManifest = runtimeSource.runtimeBootstrap.builderBootstrapManifest;
+  let viewerSceneManifest = runtimeSource.runtimeBootstrap.viewerSceneManifest;
+  let runtimeKernel = createRuntimeExplorationKernel(
+    builderBootstrapManifest,
+    viewerSceneManifest
+  );
+
+  return {
+    inspectNeighborhood(focusOccurrenceId, request) {
+      return runtimeKernel.inspectNeighborhood(focusOccurrenceId, request);
+    },
+    inspectWholeGraph(focusOccurrenceId, request) {
+      return runtimeKernel.inspectWholeGraph(focusOccurrenceId, request);
+    },
+    inspectCarrierSurface(occurrenceIds, request) {
+      return runtimeKernel.inspectCarrierSurface(occurrenceIds, request);
+    },
+    resolveOccurrence(occurrenceId) {
+      return runtimeKernel.resolveOccurrence(occurrenceId);
+    },
+    getFocusOptions() {
+      return runtimeKernel.getFocusOptions();
+    },
+    getBuilderBootstrapManifest() {
+      return builderBootstrapManifest;
+    },
+    getViewerSceneManifest() {
+      return viewerSceneManifest;
+    },
+    expandFocusOccurrence(occurrenceId) {
+      if (runtimeSource.mode !== 'dynamic' || !runtimeSource.dynamicOptions) {
+        return {
+          didExpand: false,
+          occurrenceDelta: 0,
+          edgeDelta: 0
+        };
+      }
+
+      const expansion = expandDynamicOccurrenceMaterialization({
+        builderBootstrapManifest,
+        viewerSceneManifest,
+        occurrenceId,
+        dynamicOptions: runtimeSource.dynamicOptions
+      });
+
+      if (!expansion) {
+        return {
+          didExpand: false,
+          occurrenceDelta: 0,
+          edgeDelta: 0
+        };
+      }
+
+      builderBootstrapManifest = expansion.builderBootstrapManifest;
+      viewerSceneManifest = expansion.viewerSceneManifest;
+      runtimeKernel = createRuntimeExplorationKernel(
+        builderBootstrapManifest,
+        viewerSceneManifest
+      );
+
+      return expansion.result;
+    }
+  };
+}
+
+function expandDynamicOccurrenceMaterialization({
+  builderBootstrapManifest,
+  viewerSceneManifest,
+  occurrenceId,
+  dynamicOptions
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  viewerSceneManifest: ViewerSceneManifest;
+  occurrenceId: string;
+  dynamicOptions: DynamicRuntimeOptions;
+}) {
+  const focusOccurrence = builderBootstrapManifest.occurrences.find(
+    (occurrence) => occurrence.occurrenceId === occurrenceId
+  );
+
+  if (
+    !focusOccurrence ||
+    focusOccurrence.terminal !== null
+  ) {
+    return null;
+  }
+
+  if (
+    builderBootstrapManifest.transitions.some(
+      (transition) => transition.sourceOccurrenceId === occurrenceId
+    )
+  ) {
+    return null;
+  }
+
+  const reconstructedState = reconstructDynamicOccurrenceState(
+    dynamicOptions.fen,
+    focusOccurrence.path,
+    dynamicOptions.maxBranching
+  );
+  const orderedMoves = orderMoves(
+    reconstructedState.board.moves({ verbose: true })
+  ).slice(0, dynamicOptions.maxBranching);
+
+  if (orderedMoves.length === 0) {
+    return null;
+  }
+
+  const existingOccurrenceIds = new Set(
+    builderBootstrapManifest.occurrences.map((occurrence) => occurrence.occurrenceId)
+  );
+  const existingTransitionKeys = new Set(
+    builderBootstrapManifest.transitions.map((transition) =>
+      `${transition.sourceOccurrenceId}:${transition.targetOccurrenceId}`
+    )
+  );
+  const newGeneratedOccurrences: GeneratedOccurrence[] = [];
+  const newGeneratedTransitions: GeneratedTransition[] = [];
+
+  for (const [index, move] of orderedMoves.entries()) {
+    const childBoard = new Chess(move.after);
+    const childStateKey = toCanonicalStateKey(childBoard.fen());
+    const moveUci = toMoveUci(move);
+    const nextPly = focusOccurrence.ply + 1;
+    const path = [...focusOccurrence.path, `${nextPly}:${moveUci}`];
+    const occurrenceKey = `occ-${hashString(`${childStateKey}|${path.join('|')}`)}`;
+    const segmentSpan =
+      (reconstructedState.sectorEnd - reconstructedState.sectorStart) /
+      orderedMoves.length;
+    const sectorStart = reconstructedState.sectorStart + (segmentSpan * index);
+    const sectorEnd = sectorStart + segmentSpan;
+    const subtreeKey =
+      focusOccurrence.embedding.subtreeKey === 'root'
+        ? moveUci
+        : focusOccurrence.embedding.subtreeKey;
+    const moveFacts = resolveMoveFacts(move, childBoard);
+    const moveFamily = resolveMoveFamily(moveFacts);
+
+    if (!existingOccurrenceIds.has(occurrenceKey)) {
+      const phaseLabel = resolvePhaseLabel(childBoard, nextPly);
+      const terminal = resolveTerminal(childBoard);
+      const coordinate = resolveCoordinate(
+        nextPly,
+        sectorStart,
+        sectorEnd,
+        phaseLabel,
+        terminal !== null
+      );
+
+      newGeneratedOccurrences.push({
+        occurrenceId: occurrenceKey,
+        stateKey: childStateKey,
+        path,
+        ply: nextPly,
+        phaseLabel,
+        materialSignature: materialSignature(childBoard),
+        subtreeKey,
+        coordinate,
+        azimuth: roundNumber((sectorStart + sectorEnd) * 0.5),
+        elevation: roundNumber(
+          Math.atan2(coordinate[1], Math.hypot(coordinate[0], coordinate[2]))
+        ),
+        ballRadius: roundNumber(0.08 + (nextPly * 0.012)),
+        terminal
+      });
+      existingOccurrenceIds.add(occurrenceKey);
+    }
+
+    const transitionKey = `${occurrenceId}:${occurrenceKey}`;
+
+    if (!existingTransitionKeys.has(transitionKey)) {
+      newGeneratedTransitions.push({
+        sourceOccurrenceId: occurrenceId,
+        targetOccurrenceId: occurrenceKey,
+        moveUci,
+        ply: nextPly,
+        moveFacts,
+        moveFamily
+      });
+      existingTransitionKeys.add(transitionKey);
+    }
+  }
+
+  if (newGeneratedTransitions.length === 0) {
+    return null;
+  }
+
+  const generatedOccurrences = [
+    ...builderBootstrapManifest.occurrences.map(toGeneratedOccurrence),
+    ...newGeneratedOccurrences
+  ];
+  const generatedTransitions = [
+    ...builderBootstrapManifest.transitions.map(toGeneratedTransition),
+    ...newGeneratedTransitions
+  ];
+  const maxMaterializedPly = Math.max(
+    ...generatedOccurrences.map((occurrence) => occurrence.ply)
+  );
+  const nextBuilderBootstrapManifest = materializeDynamicBootstrapManifest({
+    graphObjectId: builderBootstrapManifest.graphObjectId,
+    coverageMetadata: builderBootstrapManifest.coverageMetadata,
+    resolverInputs: builderBootstrapManifest.resolverInputs,
+    regimeDeclarations: builderBootstrapManifest.regimeDeclarations,
+    rootOccurrenceIds: builderBootstrapManifest.rootOccurrenceIds,
+    generatedOccurrences,
+    generatedTransitions,
+    maxMaterializedPly
+  });
+  const rootOccurrenceId = nextBuilderBootstrapManifest.rootOccurrenceIds[0];
+  const nextViewerSceneManifest = {
+    ...viewerSceneManifest,
+    runtime: {
+      ...viewerSceneManifest.runtime,
+      focusCandidateOccurrenceIds:
+        rootOccurrenceId === undefined
+          ? viewerSceneManifest.runtime.focusCandidateOccurrenceIds
+          : resolveDynamicFocusCandidates(
+              nextBuilderBootstrapManifest,
+              rootOccurrenceId
+            ),
+      maxNeighborhoodRadius: Math.max(
+        viewerSceneManifest.runtime.maxNeighborhoodRadius,
+        maxMaterializedPly
+      )
+    }
+  } satisfies ViewerSceneManifest;
+
+  return {
+    builderBootstrapManifest: nextBuilderBootstrapManifest,
+    viewerSceneManifest: nextViewerSceneManifest,
+    result: {
+      didExpand: true,
+      occurrenceDelta: newGeneratedOccurrences.length,
+      edgeDelta: newGeneratedTransitions.length
+    }
   };
 }
 
@@ -267,7 +531,7 @@ function buildDynamicBootstrapManifest(
 ): BuilderBootstrapManifest {
   const rootBoard = new Chess(options.fen);
   const rootStateKey = toCanonicalStateKey(rootBoard.fen());
-  const graphObjectId = `dynamic:${hashString(`${rootStateKey}|${options.maxDepth}|${options.maxBranching}`)}`;
+  const graphObjectId = `dynamic:${hashString(`${rootStateKey}|${options.maxBranching}`)}`;
   const rootOccurrenceId = `occ-${hashString(`${rootStateKey}|dynamic:root`)}`;
   const coverageMetadata = createDynamicCoverageMetadata(rootBoard, options.maxDepth);
   const resolverInputs = createDynamicResolverInputs();
@@ -375,6 +639,46 @@ function buildDynamicBootstrapManifest(
     }
   }
 
+  return materializeDynamicBootstrapManifest({
+    graphObjectId,
+    coverageMetadata,
+    resolverInputs,
+    regimeDeclarations,
+    rootOccurrenceIds: [rootOccurrenceId],
+    generatedOccurrences,
+    generatedTransitions,
+    maxMaterializedPly: Math.max(...generatedOccurrences.map((occurrence) => occurrence.ply)),
+    leafOccurrenceIds: occurrencesLeafIds(generatedOccurrences, outgoingCounts)
+  });
+}
+
+function materializeDynamicBootstrapManifest({
+  graphObjectId,
+  coverageMetadata,
+  resolverInputs,
+  regimeDeclarations,
+  rootOccurrenceIds,
+  generatedOccurrences,
+  generatedTransitions,
+  maxMaterializedPly,
+  leafOccurrenceIds
+}: {
+  graphObjectId: string;
+  coverageMetadata: BuilderCoverageMetadataRecord[];
+  resolverInputs: BuilderResolverInputRecord[];
+  regimeDeclarations: BuilderRegimeDeclaration[];
+  rootOccurrenceIds: string[];
+  generatedOccurrences: GeneratedOccurrence[];
+  generatedTransitions: GeneratedTransition[];
+  maxMaterializedPly: number;
+  leafOccurrenceIds?: string[];
+}) {
+  const rootOccurrenceId = rootOccurrenceIds[0];
+
+  if (!rootOccurrenceId) {
+    throw new Error('dynamic runtime materialization requires one root occurrence');
+  }
+
   const stateOccurrences = groupOccurrenceIdsByState(generatedOccurrences);
   const occurrenceScores = computeOccurrenceScores(generatedOccurrences, stateOccurrences);
   const occurrences = generatedOccurrences.map((occurrence) =>
@@ -389,10 +693,9 @@ function buildDynamicBootstrapManifest(
   const departureRules = generatedTransitions.map((transition) =>
     buildDepartureRuleRecord(transition)
   );
-  const rootOccurrenceIds = [rootOccurrenceId];
-  const leafOccurrenceIds = occurrences
-    .filter((occurrence) => (outgoingCounts.get(occurrence.occurrenceId) ?? 0) === 0)
-    .map((occurrence) => occurrence.occurrenceId);
+  const outgoingCounts = buildOutgoingCounts(occurrences, generatedTransitions);
+  const resolvedLeafOccurrenceIds =
+    leafOccurrenceIds ?? occurrencesLeafIds(generatedOccurrences, outgoingCounts);
   const priorityFrontierOccurrenceIds = occurrences
     .slice()
     .sort((left, right) => {
@@ -411,6 +714,9 @@ function buildDynamicBootstrapManifest(
       stateKey,
       occurrenceIds
     }));
+  const supportedMaterialSignatures = [...new Set(
+    generatedOccurrences.map((occurrence) => occurrence.materialSignature)
+  )].sort();
 
   return {
     schemaVersion: DYNAMIC_SCHEMA_VERSION,
@@ -423,15 +729,23 @@ function buildDynamicBootstrapManifest(
       pathKeyField: 'path',
       continuityKeyField: 'stateKey'
     },
-    coverageMetadata,
+    coverageMetadata: coverageMetadata.map((coverage) => ({
+      ...coverage,
+      occurrenceCount: occurrences.length,
+      maxPly: maxMaterializedPly,
+      supportedMaterialSignatures
+    })),
     resolverInputs,
     regimeDeclarations,
     anchors,
     rootOccurrenceIds,
-    leafOccurrenceIds,
+    leafOccurrenceIds: resolvedLeafOccurrenceIds,
     priorityFrontierOccurrenceIds,
     occurrences,
-    edges,
+    edges: generatedTransitions.map((transition) => ({
+      sourceOccurrenceId: transition.sourceOccurrenceId,
+      targetOccurrenceId: transition.targetOccurrenceId
+    })),
     transitions,
     departureRules,
     repeatedStateRelations,
@@ -445,7 +759,7 @@ function buildDynamicBootstrapManifest(
     embeddingConfig: {
       seed: 13,
       rootRingRadius: 0,
-      maxRadius: roundNumber(0.42 + (options.maxDepth * 0.38)),
+      maxRadius: roundNumber(0.42 + (maxMaterializedPly * 0.38)),
       radialScale: 0.38,
       moveAngleScale: 1,
       moveAngleDecay: 1,
@@ -453,6 +767,119 @@ function buildDynamicBootstrapManifest(
       phasePitch: 0.08,
       terminalPitch: 0.06
     }
+  } satisfies BuilderBootstrapManifest;
+}
+
+function buildOutgoingCounts(
+  occurrences: Array<{ occurrenceId: string }>,
+  generatedTransitions: GeneratedTransition[]
+) {
+  const outgoingCounts = new Map<string, number>();
+
+  for (const occurrence of occurrences) {
+    outgoingCounts.set(occurrence.occurrenceId, 0);
+  }
+
+  for (const transition of generatedTransitions) {
+    outgoingCounts.set(
+      transition.sourceOccurrenceId,
+      (outgoingCounts.get(transition.sourceOccurrenceId) ?? 0) + 1
+    );
+  }
+
+  return outgoingCounts;
+}
+
+function occurrencesLeafIds(
+  occurrences: Array<{ occurrenceId: string }>,
+  outgoingCounts: Map<string, number>
+) {
+  return occurrences
+    .filter((occurrence) => (outgoingCounts.get(occurrence.occurrenceId) ?? 0) === 0)
+    .map((occurrence) => occurrence.occurrenceId);
+}
+
+function reconstructDynamicOccurrenceState(
+  rootFen: string,
+  path: string[],
+  maxBranching: number
+) {
+  let board = new Chess(rootFen);
+  let sectorStart = -Math.PI;
+  let sectorEnd = Math.PI;
+
+  for (const segment of path.slice(1)) {
+    const moveUci = parseDynamicPathMove(segment);
+    const orderedMoves = orderMoves(board.moves({ verbose: true })).slice(
+      0,
+      maxBranching
+    );
+    const moveIndex = orderedMoves.findIndex((move) => toMoveUci(move) === moveUci);
+
+    if (moveIndex < 0) {
+      throw new Error(`cannot reconstruct dynamic occurrence path segment ${segment}`);
+    }
+
+    const matchedMove = orderedMoves[moveIndex];
+
+    if (!matchedMove) {
+      throw new Error(`dynamic occurrence path segment ${segment} resolved undefined move`);
+    }
+
+    const segmentSpan = (sectorEnd - sectorStart) / orderedMoves.length;
+    const nextSectorStart = sectorStart + (segmentSpan * moveIndex);
+
+    sectorStart = nextSectorStart;
+    sectorEnd = nextSectorStart + segmentSpan;
+    board = new Chess(matchedMove.after);
+  }
+
+  return {
+    board,
+    sectorStart,
+    sectorEnd
+  };
+}
+
+function parseDynamicPathMove(segment: string) {
+  const separatorIndex = segment.indexOf(':');
+
+  if (separatorIndex < 0 || separatorIndex === segment.length - 1) {
+    throw new Error(`invalid dynamic path segment: ${segment}`);
+  }
+
+  return segment.slice(separatorIndex + 1);
+}
+
+function toGeneratedOccurrence(
+  occurrence: BuilderOccurrenceRecord
+): GeneratedOccurrence {
+  return {
+    occurrenceId: occurrence.occurrenceId,
+    stateKey: occurrence.stateKey,
+    path: [...occurrence.path],
+    ply: occurrence.ply,
+    phaseLabel: occurrence.annotations.phaseLabel,
+    materialSignature: occurrence.annotations.materialSignature,
+    subtreeKey: occurrence.embedding.subtreeKey,
+    coordinate: [...occurrence.embedding.coordinate] as [number, number, number],
+    azimuth: occurrence.embedding.azimuth,
+    elevation: occurrence.embedding.elevation,
+    ballRadius: occurrence.embedding.ballRadius,
+    terminal: occurrence.terminal
+  };
+}
+
+function toGeneratedTransition(
+  transition: BuilderTransitionRecord
+): GeneratedTransition {
+  return {
+    sourceOccurrenceId: transition.sourceOccurrenceId,
+    targetOccurrenceId: transition.targetOccurrenceId,
+    moveUci: transition.moveUci,
+    ply: transition.ply,
+    moveFacts: transition.moveFacts,
+    moveFamily: transition.moveFamily
   };
 }
 

@@ -13,12 +13,12 @@ import {
   DEFAULT_VIEWER_RENDER_TUNING,
   clampViewerRenderTuning
 } from './viewer/renderTuning';
-import { resolveViewerRuntimeSource } from './viewer/dynamicRuntime';
-import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
 import {
-  createRuntimeExplorationKernel,
-  type RuntimeExplorationKernel
-} from './viewer/runtimeKernel';
+  createViewerRuntimeStore,
+  resolveViewerRuntimeSource,
+  type ViewerRuntimeStore
+} from './viewer/dynamicRuntime';
+import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
 import { buildRuntimeTranspositionSurface } from './viewer/transpositionSurface';
 import { ViewerShell } from './viewer/ViewerShell';
 
@@ -32,12 +32,8 @@ export default function App() {
     )
   );
   const { runtimeBootstrap, navigationEntryPoints } = runtimeSource;
-  const [runtimeKernel] = useState(() =>
-    createRuntimeExplorationKernel(
-      runtimeBootstrap.builderBootstrapManifest,
-      runtimeBootstrap.viewerSceneManifest
-    )
-  );
+  const [runtimeStore] = useState(() => createViewerRuntimeStore(runtimeSource));
+  const [runtimeRevision, setRuntimeRevision] = useState(0);
   const [activeEntryPointId, setActiveEntryPointId] = useState(() =>
     runtimeSource.initialEntryPointId
   );
@@ -60,9 +56,10 @@ export default function App() {
   const [boardReferenceOpen, setBoardReferenceOpen] = useState(false);
   const [orbitResetKey, setOrbitResetKey] = useState(0);
   const [renderTuning, setRenderTuning] = useState(DEFAULT_VIEWER_RENDER_TUNING);
+  const runtimeConfig = runtimeStore.getViewerSceneManifest().runtime;
   const refinementBudget = resolveCameraGrammarRefinementBudget(
     cameraDistance,
-    runtimeBootstrap.viewerSceneManifest.runtime
+    runtimeConfig
   );
   const [runtimeSnapshot, setRuntimeSnapshot] = useState(() =>
     inspectRuntimeView({
@@ -70,13 +67,13 @@ export default function App() {
       graphViewScope,
       neighborhoodRadius,
       refinementBudget,
-      runtimeKernel
+      runtimeStore
     })
   );
   const deferredRuntimeSnapshot = useDeferredValue(runtimeSnapshot);
-  const totalGraphOccurrenceCount =
-    runtimeBootstrap.builderBootstrapManifest.occurrences.length;
-  const totalGraphEdgeCount = runtimeBootstrap.builderBootstrapManifest.edges.length;
+  const builderBootstrapManifest = runtimeStore.getBuilderBootstrapManifest();
+  const totalGraphOccurrenceCount = builderBootstrapManifest.occurrences.length;
+  const totalGraphEdgeCount = builderBootstrapManifest.edges.length;
   const meetsN12Scale = totalGraphOccurrenceCount >= 1000;
 
   useEffect(() => {
@@ -87,7 +84,7 @@ export default function App() {
           graphViewScope,
           neighborhoodRadius,
           refinementBudget,
-          runtimeKernel
+          runtimeStore
         })
       );
     });
@@ -96,24 +93,25 @@ export default function App() {
     graphViewScope,
     neighborhoodRadius,
     refinementBudget,
-    runtimeKernel
+    runtimeRevision,
+    runtimeStore
   ]);
-  const carrierSurface = runtimeKernel.inspectCarrierSurface(
+  const carrierSurface = runtimeStore.inspectCarrierSurface(
     deferredRuntimeSnapshot.occurrences.map((occurrence) => occurrence.occurrenceId),
     {
       refinementBudget: deferredRuntimeSnapshot.refinementBudget
     }
   );
   const transpositionSurface = buildRuntimeTranspositionSurface(
-    runtimeBootstrap.builderBootstrapManifest,
+    builderBootstrapManifest,
     deferredRuntimeSnapshot,
     graphViewScope
   );
   const hoveredOccurrence = hoveredOccurrenceId
-    ? runtimeKernel.resolveOccurrence(hoveredOccurrenceId) ?? null
+    ? runtimeStore.resolveOccurrence(hoveredOccurrenceId) ?? null
     : null;
-  const baseFocusOptions = runtimeKernel.getFocusOptions();
-  const currentFocusOccurrence = runtimeKernel.resolveOccurrence(
+  const baseFocusOptions = runtimeStore.getFocusOptions();
+  const currentFocusOccurrence = runtimeStore.resolveOccurrence(
     deferredRuntimeSnapshot.focusOccurrenceId
   );
   const focusOptions = currentFocusOccurrence
@@ -124,7 +122,7 @@ export default function App() {
     : baseFocusOptions;
   const cameraGrammar = createCameraGrammarState({
     cameraDistance,
-    runtimeConfig: runtimeBootstrap.viewerSceneManifest.runtime,
+    runtimeConfig,
     runtimeSnapshot: deferredRuntimeSnapshot
   });
 
@@ -141,6 +139,12 @@ export default function App() {
   };
 
   const handleFocusOccurrenceChange = (occurrenceId: string) => {
+    const expansion = runtimeStore.expandFocusOccurrence(occurrenceId);
+
+    if (expansion.didExpand) {
+      setRuntimeRevision((currentRevision) => currentRevision + 1);
+    }
+
     setHoveredOccurrenceId(null);
     setFocusOccurrenceId(occurrenceId);
     setBoardReferenceOpen(true);
@@ -189,7 +193,7 @@ export default function App() {
       onNeighborhoodRadiusChange={handleNeighborhoodRadiusChange}
       orbitResetKey={orbitResetKey}
       renderTuning={renderTuning}
-      runtimeConfig={runtimeBootstrap.viewerSceneManifest.runtime}
+      runtimeConfig={runtimeConfig}
       runtimeSnapshot={deferredRuntimeSnapshot}
       sceneBootstrap={runtimeBootstrap.sceneBootstrap}
       neighborhoodRadius={neighborhoodRadius}
@@ -205,21 +209,21 @@ function inspectRuntimeView({
   graphViewScope,
   neighborhoodRadius,
   refinementBudget,
-  runtimeKernel
+  runtimeStore
 }: {
   focusOccurrenceId: string;
   graphViewScope: GraphViewScope;
   neighborhoodRadius: number;
   refinementBudget: number;
-  runtimeKernel: RuntimeExplorationKernel;
+  runtimeStore: ViewerRuntimeStore;
 }) {
   if (graphViewScope === 'whole-object') {
-    return runtimeKernel.inspectWholeGraph(focusOccurrenceId, {
+    return runtimeStore.inspectWholeGraph(focusOccurrenceId, {
       refinementBudget
     });
   }
 
-  return runtimeKernel.inspectNeighborhood(focusOccurrenceId, {
+  return runtimeStore.inspectNeighborhood(focusOccurrenceId, {
     radius: neighborhoodRadius,
     refinementBudget
   });

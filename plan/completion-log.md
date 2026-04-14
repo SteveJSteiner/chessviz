@@ -30,4 +30,6 @@ One line per committed DAG frontier event.
 2026-04-12 | commit a9af5cc | settled N11d opening/endgame table publication and advanced frontier to N11e
 2026-04-12 | commit 5b2e8d4 | settled N11e regime-backed runtime resolution/bootstrap and advanced frontier to N11f
 2026-04-12 | commit 8170cf0 | settled N11f runtime artifact boundary and hard-fail integrity and advanced frontier to N12
-2026-04-12 | commit pending | settled N12 anchored regime-backed entrypoints after live whole-object review and advanced frontier to N13
+2026-04-12 | commit 29e88f8 | settled N12 anchored regime-backed entrypoints after live whole-object review and advanced frontier to N13
+2026-04-13 | commit 5c2227c | reset frontier from N13 to N11g/N11h to re-plan live runtime expansion after browser-side generation exposed one-shot snapshot limits
+2026-04-13 | commit pending | settled N11g viewer-owned live graph store and focus-driven in-place expansion and advanced frontier to N11h
