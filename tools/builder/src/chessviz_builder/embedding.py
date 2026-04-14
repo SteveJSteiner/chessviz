@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from dataclasses import dataclass
 from hashlib import blake2s
 
 from .contracts import (
@@ -32,6 +33,14 @@ DEFAULT_EMBEDDING_CONFIG = EmbeddingConfig(
 )
 
 
+@dataclass(frozen=True)
+class _OccurrenceEmbeddingMetadata:
+    subtree_key: str
+    sector_key: str
+    declared_terminal_outcome: str | None
+    transition_count: int
+
+
 class HyperbolicStyleEmbeddingBuilderV1:
     def __init__(
         self,
@@ -48,23 +57,27 @@ class HyperbolicStyleEmbeddingBuilderV1:
         terminal_labels: TerminalLabelQuerySurface,
     ) -> EmbeddingArtifact:
         root_angles = _root_angles(ingested_corpus, self.config)
-        occurrence_to_game = {
-            occurrence.occurrence_id: game
+        occurrence_metadata_by_id = {
+            occurrence.occurrence_id: _embedding_metadata_for_occurrence(
+                occurrence.path,
+                game.declared_terminal_outcome,
+                len(game.transitions),
+                _sector_key_for_transitions(game.transitions),
+            )
             for game in ingested_corpus.games
             for occurrence in game.occurrences
         }
         records = []
 
         for node in dag.nodes:
-            game = occurrence_to_game[node.occurrence_id]
-            subtree_key = _subtree_key_for_path(node.path)
+            metadata = occurrence_metadata_by_id[node.occurrence_id]
             records.append(
                 _embedding_record(
                     node,
-                    subtree_key,
-                    root_angles[_sector_key_for_occurrence(node.path, game)],
-                    game.declared_terminal_outcome,
-                    len(game.transitions),
+                    metadata.subtree_key,
+                    root_angles[metadata.sector_key],
+                    metadata.declared_terminal_outcome,
+                    metadata.transition_count,
                     repeated_state_query_surface,
                     dag,
                     labels,
@@ -129,7 +142,12 @@ def _root_angles(
     config: EmbeddingConfig,
 ) -> dict[str, float]:
     ordered_sector_keys = tuple(
-        sorted({_sector_key_for_game(game) for game in ingested_corpus.games})
+        sorted(
+            {
+                _sector_key_for_transitions(game.transitions)
+                for game in ingested_corpus.games
+            }
+        )
     )
     sector_count = len(ordered_sector_keys)
     denominator = sector_count if sector_count else 1
@@ -150,18 +168,26 @@ def _subtree_key_for_path(path: tuple[str, ...]) -> str:
     return _move_uci_from_path_component(path[1])
 
 
-def _sector_key_for_occurrence(path: tuple[str, ...], game) -> str:
-    if len(path) == 1:
-        return _sector_key_for_game(game)
+def _embedding_metadata_for_occurrence(
+    path: tuple[str, ...],
+    declared_terminal_outcome: str | None,
+    transition_count: int,
+    root_sector_key: str,
+) -> _OccurrenceEmbeddingMetadata:
+    subtree_key = _subtree_key_for_path(path)
+    return _OccurrenceEmbeddingMetadata(
+        subtree_key=subtree_key,
+        sector_key=root_sector_key if len(path) == 1 else subtree_key,
+        declared_terminal_outcome=declared_terminal_outcome,
+        transition_count=transition_count,
+    )
 
-    return _subtree_key_for_path(path)
 
-
-def _sector_key_for_game(game) -> str:
-    if not game.transitions:
+def _sector_key_for_transitions(transitions) -> str:
+    if not transitions:
         return "root"
 
-    return game.transitions[0].move_uci
+    return transitions[0].move_uci
 
 
 def _move_uci_from_path_component(path_component: str) -> str:

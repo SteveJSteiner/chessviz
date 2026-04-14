@@ -25,14 +25,16 @@ class TransitionFactTests(unittest.TestCase):
         self.assertFalse(first_transition.move_facts.is_checkmate)
 
     def test_capture_and_castle_facts_are_available_without_reclassification(self) -> None:
-        game = DeclaredGameFixture(
-            game_id="capture-castle-probe",
-            moves_san=("e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Bxc6", "dxc6", "O-O"),
+        capture_castle_probe_fixture = DeclaredGameFixture(
+            "probe-capture-castle",
+            ("e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Bxc6", "dxc6", "O-O"),
         )
-        ingested_game = self.pipeline.corpus_ingestor._ingest_game(game)
+        ingested_fixture = self.pipeline.corpus_ingestor._ingest_game(
+            capture_castle_probe_fixture
+        )
 
-        capture_transition = ingested_game.transitions[6]
-        castle_transition = ingested_game.transitions[8]
+        capture_transition = ingested_fixture.transitions[6]
+        castle_transition = ingested_fixture.transitions[8]
 
         self.assertTrue(capture_transition.move_facts.is_capture)
         self.assertEqual(capture_transition.move_facts.moving_piece, "bishop")
@@ -45,12 +47,14 @@ class TransitionFactTests(unittest.TestCase):
         self.assertFalse(castle_transition.move_facts.is_capture)
 
     def test_checkmate_fact_is_available_on_transition(self) -> None:
-        game = DeclaredGameFixture(
-            game_id="checkmate-probe",
-            moves_san=("f3", "e5", "g4", "Qh4#"),
+        checkmate_probe_fixture = DeclaredGameFixture(
+            "probe-checkmate",
+            ("f3", "e5", "g4", "Qh4#"),
         )
-        ingested_game = self.pipeline.corpus_ingestor._ingest_game(game)
-        mate_transition = ingested_game.transitions[-1]
+        ingested_fixture = self.pipeline.corpus_ingestor._ingest_game(
+            checkmate_probe_fixture
+        )
+        mate_transition = ingested_fixture.transitions[-1]
 
         self.assertTrue(mate_transition.move_facts.is_check)
         self.assertTrue(mate_transition.move_facts.is_checkmate)

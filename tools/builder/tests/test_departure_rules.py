@@ -24,23 +24,25 @@ class DepartureRuleTests(unittest.TestCase):
         self.builder = TransitionDepartureRuleBuilder()
 
     def test_capture_departure_is_stronger_than_matched_quiet_control(self) -> None:
-        game = DeclaredGameFixture(
-            game_id="capture-quiet-match",
-            moves_san=("e4", "e5", "Bc4", "Nc6", "Bb5", "a6", "Bxc6", "dxc6"),
+        capture_probe_fixture = DeclaredGameFixture(
+            "probe-capture-quiet",
+            ("e4", "e5", "Bc4", "Nc6", "Bb5", "a6", "Bxc6", "dxc6"),
         )
-        ingested_game = self.pipeline.corpus_ingestor._ingest_game(game)
+        ingested_fixture = self.pipeline.corpus_ingestor._ingest_game(
+            capture_probe_fixture
+        )
         surface = self.builder.build(
-            IngestedCorpus(declaration=_probe_declaration(), games=(ingested_game,))
+            IngestedCorpus(declaration=_probe_declaration(), games=(ingested_fixture,))
         )
 
         quiet_transition = next(
             transition
-            for transition in ingested_game.transitions
+            for transition in ingested_fixture.transitions
             if transition.move_facts.san == "Bc4"
         )
         capture_transition = next(
             transition
-            for transition in ingested_game.transitions
+            for transition in ingested_fixture.transitions
             if transition.move_facts.san == "Bxc6"
         )
         quiet_rule = surface.by_edge(
@@ -65,24 +67,24 @@ class DepartureRuleTests(unittest.TestCase):
         self.assertGreater(capture_rule.curvature, quiet_rule.curvature)
 
     def test_rule_surface_preserves_castle_and_checkmate_classes(self) -> None:
-        castle_game = DeclaredGameFixture(
-            game_id="castle-probe",
-            moves_san=("e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Ba4", "Nf6", "O-O"),
+        castle_probe_fixture = DeclaredGameFixture(
+            "probe-castle",
+            ("e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Ba4", "Nf6", "O-O"),
         )
-        mate_game = DeclaredGameFixture(
-            game_id="mate-probe",
-            moves_san=("f3", "e5", "g4", "Qh4#"),
+        checkmate_probe_fixture = DeclaredGameFixture(
+            "probe-checkmate",
+            ("f3", "e5", "g4", "Qh4#"),
         )
-        ingested_games = (
-            self.pipeline.corpus_ingestor._ingest_game(castle_game),
-            self.pipeline.corpus_ingestor._ingest_game(mate_game),
+        ingested_fixtures = (
+            self.pipeline.corpus_ingestor._ingest_game(castle_probe_fixture),
+            self.pipeline.corpus_ingestor._ingest_game(checkmate_probe_fixture),
         )
         surface = self.builder.build(
-            IngestedCorpus(declaration=_probe_declaration(), games=ingested_games)
+            IngestedCorpus(declaration=_probe_declaration(), games=ingested_fixtures)
         )
 
-        castle_transition = ingested_games[0].transitions[-1]
-        mate_transition = ingested_games[1].transitions[-1]
+        castle_transition = ingested_fixtures[0].transitions[-1]
+        mate_transition = ingested_fixtures[1].transitions[-1]
         castle_rule = surface.by_edge(
             castle_transition.parent_occurrence_id,
             castle_transition.child_occurrence_id,

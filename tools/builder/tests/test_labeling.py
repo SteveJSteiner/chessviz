@@ -65,14 +65,16 @@ class OccurrenceLabelingTests(unittest.TestCase):
     def test_material_signature_changes_after_capture_without_altering_query_surface(
         self,
     ) -> None:
-        game = DeclaredGameFixture(
-            game_id="capture-material-signature-probe",
-            moves_san=("e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Bxc6", "dxc6"),
+        capture_signature_probe_fixture = DeclaredGameFixture(
+            "probe-capture-signature",
+            ("e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Bxc6", "dxc6"),
         )
-        ingested_game = self.pipeline.corpus_ingestor._ingest_game(game)
+        ingested_fixture = self.pipeline.corpus_ingestor._ingest_game(
+            capture_signature_probe_fixture
+        )
         ingested_corpus = IngestedCorpus(
             declaration=self.declaration,
-            games=(ingested_game,),
+            games=(ingested_fixture,),
         )
         repeated_state_query_surface = self.pipeline.repeated_state_query_builder.build(
             ingested_corpus
@@ -85,7 +87,7 @@ class OccurrenceLabelingTests(unittest.TestCase):
         labels = self.pipeline.labeler.label(dag)
 
         final_label = labels.by_occurrence_id(
-            ingested_game.occurrences[-1].occurrence_id
+            ingested_fixture.occurrences[-1].occurrence_id
         )
 
         self.assertIsNotNone(final_label)

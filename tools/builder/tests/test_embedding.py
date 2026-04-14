@@ -47,37 +47,62 @@ class EmbeddingArtifactTests(unittest.TestCase):
     ) -> None:
         dry_run = self.pipeline.dry_run(self.declaration)
         embedding = dry_run.embedding
-        leaf_records = {
-            game.game_id: embedding.by_occurrence_id(game.final_occurrence.occurrence_id)
+        terminal_leaf_records = {
+            game.declared_terminal_outcome: embedding.by_occurrence_id(
+                game.final_occurrence.occurrence_id
+            )
             for game in dry_run.ingested_corpus.games
+            if game.declared_terminal_outcome is not None
         }
+        white_win_leaf = terminal_leaf_records.get("white-win")
+        draw_leaf = terminal_leaf_records.get("draw")
+        black_win_leaf = terminal_leaf_records.get("black-win")
+        leaf_occurrence_ids = {
+            game.final_occurrence.occurrence_id for game in dry_run.ingested_corpus.games
+        }
+        repeated_leaf_relation = next(
+            (
+                relation
+                for relation in dry_run.repeated_state_query_surface.repeated_relations
+                if len(relation.occurrence_ids) == 2
+                and set(relation.occurrence_ids).issubset(leaf_occurrence_ids)
+            ),
+            None,
+        )
 
-        self.assertIsNotNone(leaf_records["scholars-mate-white"])
-        self.assertIsNotNone(leaf_records["repetition-draw"])
-        self.assertIsNotNone(leaf_records["fools-mate-black"])
-        self.assertIsNotNone(leaf_records["qgd-bogo-a"])
-        self.assertIsNotNone(leaf_records["qgd-bogo-b"])
-        assert leaf_records["scholars-mate-white"] is not None
-        assert leaf_records["repetition-draw"] is not None
-        assert leaf_records["fools-mate-black"] is not None
-        assert leaf_records["qgd-bogo-a"] is not None
-        assert leaf_records["qgd-bogo-b"] is not None
+        self.assertIsNotNone(white_win_leaf)
+        self.assertIsNotNone(draw_leaf)
+        self.assertIsNotNone(black_win_leaf)
+        self.assertIsNotNone(repeated_leaf_relation)
+        assert white_win_leaf is not None
+        assert draw_leaf is not None
+        assert black_win_leaf is not None
+        assert repeated_leaf_relation is not None
+        transposed_leaf_records = [
+            embedding.by_occurrence_id(occurrence_id)
+            for occurrence_id in repeated_leaf_relation.occurrence_ids
+        ]
+
+        self.assertTrue(all(record is not None for record in transposed_leaf_records))
+        first_transposed_leaf, second_transposed_leaf = transposed_leaf_records
+        assert first_transposed_leaf is not None
+        assert second_transposed_leaf is not None
 
         self.assertGreater(
-            leaf_records["scholars-mate-white"].coordinate[2],
-            leaf_records["repetition-draw"].coordinate[2],
+            white_win_leaf.coordinate[2],
+            draw_leaf.coordinate[2],
         )
         self.assertGreater(
-            leaf_records["repetition-draw"].coordinate[2],
-            leaf_records["fools-mate-black"].coordinate[2],
+            draw_leaf.coordinate[2],
+            black_win_leaf.coordinate[2],
         )
         self.assertNotEqual(
-            leaf_records["qgd-bogo-a"].coordinate,
-            leaf_records["qgd-bogo-b"].coordinate,
+            first_transposed_leaf.coordinate,
+            second_transposed_leaf.coordinate,
         )
         self.assertAlmostEqual(
-            leaf_records["qgd-bogo-a"].ball_radius,
-            leaf_records["qgd-bogo-b"].ball_radius,
+            first_transposed_leaf.ball_radius,
+            second_transposed_leaf.ball_radius,
             places=12,
         )
 

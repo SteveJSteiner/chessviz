@@ -59,18 +59,19 @@ test('keeps neighborhood topology stable across refinement budgets', () => {
   );
 });
 
-test('preserves the qgd-bogo-a root neighborhood across the 4.6 to 4.7 zoom threshold', () => {
+test('preserves the initial root neighborhood across the 4.6 to 4.7 zoom threshold', () => {
   const kernel = createRuntimeExplorationKernel(
     builderBootstrapManifest,
     viewerSceneManifest
   );
-  const focusOccurrenceId = builderBootstrapManifest.occurrences.find(
-    (occurrence) => occurrence.path[0] === 'game:qgd-bogo-a' && occurrence.ply === 0
-  )?.occurrenceId;
+  const focusOccurrenceId = builderBootstrapManifest.rootOccurrenceIds[0];
+  assert.ok(focusOccurrenceId);
+  const focusOccurrence = builderBootstrapManifest.occurrences.find(
+    (occurrence) => occurrence.occurrenceId === focusOccurrenceId
+  );
 
-  if (!focusOccurrenceId) {
-    throw new Error('expected qgd-bogo-a root occurrence in builder fixture');
-  }
+  assert.ok(focusOccurrence);
+  assert.equal(focusOccurrence?.ply, 0);
 
   const fartherBudget = resolveCameraGrammarRefinementBudget(
     4.7,
