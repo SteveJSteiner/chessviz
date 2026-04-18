@@ -42,7 +42,7 @@ export default function App() {
     activeEntryPointId
   );
   const [focusOccurrenceId, setFocusOccurrenceId] = useState(
-    activeNavigationEntryPoint.focusOccurrenceId
+    runtimeBootstrap.initialFocusOccurrenceId
   );
   const [graphViewScope, setGraphViewScope] =
     useState<GraphViewScope>('local-neighborhood');

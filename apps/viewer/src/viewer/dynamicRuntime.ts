@@ -37,6 +37,11 @@ const DEFAULT_DYNAMIC_DEPTH = 2;
 const DEFAULT_DYNAMIC_BRANCHING = 20;
 const MAX_DYNAMIC_DEPTH = 4;
 const MAX_DYNAMIC_BRANCHING = 32;
+const DYNAMIC_PATH_TOKEN_PATTERN = /[\s,>]+/;
+const DYNAMIC_MOVE_UCI_PATTERN = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
+const ADDITIVE_EXPANSION_MIN_SPREAD = Math.PI / 5;
+const ADDITIVE_EXPANSION_MAX_SPREAD = Math.PI * 0.9;
+const ADDITIVE_EXPANSION_STEP = Math.PI / 10;
 
 const PIECE_NAME_BY_SYMBOL: Record<PieceSymbol, string> = {
   p: 'pawn',
@@ -92,6 +97,7 @@ export type DynamicRuntimeOptions = {
   fen: string;
   maxDepth: number;
   maxBranching: number;
+  pathMoves: string[];
 };
 
 type GeneratedOccurrence = {
@@ -174,7 +180,8 @@ export function resolveDynamicRuntimeOptions(
       DEFAULT_DYNAMIC_BRANCHING,
       1,
       MAX_DYNAMIC_BRANCHING
-    )
+    ),
+    pathMoves: parseDynamicPathMoves(searchParams.get('path'))
   };
 }
 
@@ -182,22 +189,27 @@ export function createDynamicRuntimeSource(
   baseSceneManifest: ViewerSceneManifest,
   options: DynamicRuntimeOptions
 ): ViewerRuntimeSource {
-  const builderBootstrapManifest = buildDynamicBootstrapManifest(options);
-  const rootOccurrence = builderBootstrapManifest.occurrences[0];
+  let builderBootstrapManifest = buildDynamicBootstrapManifest(options);
+  const rootOccurrenceId = builderBootstrapManifest.rootOccurrenceIds[0];
+
+  if (!rootOccurrenceId) {
+    throw new Error('dynamic runtime generation produced no root occurrence');
+  }
+
+  let rootOccurrence = builderBootstrapManifest.occurrences.find(
+    (occurrence) => occurrence.occurrenceId === rootOccurrenceId
+  );
 
   if (!rootOccurrence) {
     throw new Error('dynamic runtime generation produced no root occurrence');
   }
 
-  const focusCandidateOccurrenceIds = resolveDynamicFocusCandidates(
-    builderBootstrapManifest,
-    rootOccurrence.occurrenceId
-  );
-  const viewerSceneManifest = {
+  let initialFocusOccurrenceId = rootOccurrence.occurrenceId;
+  let viewerSceneManifest = {
     ...baseSceneManifest,
     sceneId: 'dynamic-runtime-exploration',
     title: 'Dynamic Runtime Graph',
-    summary: `Browser-generated legal-move graph from ${rootOccurrence.stateKey}. Depth ${options.maxDepth}, branch cap ${options.maxBranching}.`,
+    summary: `Browser-generated legal-move graph from ${rootOccurrence.stateKey}. Depth ${options.maxDepth}, branch cap ${options.maxBranching}${options.pathMoves.length > 0 ? `, pre-expanded path ${options.pathMoves.join(' ')}` : ''}.`,
     runtime: {
       ...baseSceneManifest.runtime,
       graphObjectId: builderBootstrapManifest.graphObjectId,
@@ -212,8 +224,12 @@ export function createDynamicRuntimeSource(
         endgameTableManifest: 'not-used',
         middlegameProceduralPolicy: 'browser-legal-move-expansion'
       },
-      initialFocusOccurrenceId: rootOccurrence.occurrenceId,
-      focusCandidateOccurrenceIds,
+      initialFocusOccurrenceId,
+      focusCandidateOccurrenceIds: resolveDynamicFocusCandidates(
+        builderBootstrapManifest,
+        rootOccurrence.occurrenceId,
+        [initialFocusOccurrenceId]
+      ),
       defaultNeighborhoodRadius: Math.min(
         baseSceneManifest.runtime.defaultNeighborhoodRadius,
         options.maxDepth
@@ -224,6 +240,40 @@ export function createDynamicRuntimeSource(
       )
     }
   } satisfies ViewerSceneManifest;
+
+  if (options.pathMoves.length > 0) {
+    const materializedPath = materializeDynamicPath({
+      builderBootstrapManifest,
+      viewerSceneManifest,
+      rootOccurrenceId,
+      dynamicOptions: options
+    });
+
+    builderBootstrapManifest = materializedPath.builderBootstrapManifest;
+    viewerSceneManifest = materializedPath.viewerSceneManifest;
+    initialFocusOccurrenceId = materializedPath.focusOccurrenceId;
+    rootOccurrence = builderBootstrapManifest.occurrences.find(
+      (occurrence) => occurrence.occurrenceId === rootOccurrenceId
+    );
+
+    if (!rootOccurrence) {
+      throw new Error('dynamic runtime materialization lost the root occurrence');
+    }
+
+    viewerSceneManifest = {
+      ...viewerSceneManifest,
+      runtime: {
+        ...viewerSceneManifest.runtime,
+        initialFocusOccurrenceId,
+        focusCandidateOccurrenceIds: resolveDynamicFocusCandidates(
+          builderBootstrapManifest,
+          rootOccurrenceId,
+          [initialFocusOccurrenceId]
+        )
+      }
+    } satisfies ViewerSceneManifest;
+  }
+
   const sceneBootstrap = createSceneBootstrap(viewerSceneManifest);
   const navigationEntryPoints = [
     createDynamicNavigationEntryPoint(rootOccurrence, viewerSceneManifest)
@@ -234,7 +284,7 @@ export function createDynamicRuntimeSource(
       builderBootstrapManifest,
       viewerSceneManifest,
       sceneBootstrap,
-      initialFocusOccurrenceId: rootOccurrence.occurrenceId
+      initialFocusOccurrenceId
     },
     navigationEntryPoints,
     initialEntryPointId: 'middlegame',
@@ -263,6 +313,75 @@ function createArtifactRuntimeSource(
     ),
     mode: 'artifacts'
   };
+}
+
+function materializeDynamicPath({
+  builderBootstrapManifest,
+  viewerSceneManifest,
+  rootOccurrenceId,
+  dynamicOptions
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  viewerSceneManifest: ViewerSceneManifest;
+  rootOccurrenceId: string;
+  dynamicOptions: DynamicRuntimeOptions;
+}) {
+  let nextBuilderBootstrapManifest = builderBootstrapManifest;
+  let nextViewerSceneManifest = viewerSceneManifest;
+  let currentOccurrenceId = rootOccurrenceId;
+
+  for (const moveUci of dynamicOptions.pathMoves) {
+    let targetOccurrenceId = findDynamicTransitionTargetOccurrenceId(
+      nextBuilderBootstrapManifest,
+      currentOccurrenceId,
+      moveUci
+    );
+
+    if (!targetOccurrenceId) {
+      const expansion = expandDynamicOccurrenceMaterialization({
+        builderBootstrapManifest: nextBuilderBootstrapManifest,
+        viewerSceneManifest: nextViewerSceneManifest,
+        occurrenceId: currentOccurrenceId,
+        dynamicOptions
+      });
+
+      if (expansion) {
+        nextBuilderBootstrapManifest = expansion.builderBootstrapManifest;
+        nextViewerSceneManifest = expansion.viewerSceneManifest;
+        targetOccurrenceId = findDynamicTransitionTargetOccurrenceId(
+          nextBuilderBootstrapManifest,
+          currentOccurrenceId,
+          moveUci
+        );
+      }
+    }
+
+    if (!targetOccurrenceId) {
+      throw new Error(
+        `requested dynamic path move ${moveUci} is unavailable from ${currentOccurrenceId}; it may be illegal or outside branch cap ${dynamicOptions.maxBranching}`
+      );
+    }
+
+    currentOccurrenceId = targetOccurrenceId;
+  }
+
+  return {
+    builderBootstrapManifest: nextBuilderBootstrapManifest,
+    viewerSceneManifest: nextViewerSceneManifest,
+    focusOccurrenceId: currentOccurrenceId
+  };
+}
+
+function findDynamicTransitionTargetOccurrenceId(
+  builderBootstrapManifest: BuilderBootstrapManifest,
+  sourceOccurrenceId: string,
+  moveUci: string
+) {
+  return builderBootstrapManifest.transitions.find(
+    (transition) =>
+      transition.sourceOccurrenceId === sourceOccurrenceId &&
+      transition.moveUci === moveUci
+  )?.targetOccurrenceId;
 }
 
 export function createViewerRuntimeStore(
@@ -384,6 +503,15 @@ function expandDynamicOccurrenceMaterialization({
       `${transition.sourceOccurrenceId}:${transition.targetOccurrenceId}`
     )
   );
+  const childSpread =
+    focusOccurrence.ply === 0
+      ? Math.PI * 2
+      : resolveExpansionSpread(orderedMoves.length);
+  const childAzimuths = resolveExpansionAzimuths(
+    focusOccurrence.embedding.azimuth,
+    orderedMoves.length,
+    focusOccurrence.ply
+  );
   const newGeneratedOccurrences: GeneratedOccurrence[] = [];
   const newGeneratedTransitions: GeneratedTransition[] = [];
 
@@ -394,27 +522,23 @@ function expandDynamicOccurrenceMaterialization({
     const nextPly = focusOccurrence.ply + 1;
     const path = [...focusOccurrence.path, `${nextPly}:${moveUci}`];
     const occurrenceKey = `occ-${hashString(`${childStateKey}|${path.join('|')}`)}`;
-    const segmentSpan =
-      (reconstructedState.sectorEnd - reconstructedState.sectorStart) /
-      orderedMoves.length;
-    const sectorStart = reconstructedState.sectorStart + (segmentSpan * index);
-    const sectorEnd = sectorStart + segmentSpan;
     const subtreeKey =
       focusOccurrence.embedding.subtreeKey === 'root'
         ? moveUci
         : focusOccurrence.embedding.subtreeKey;
     const moveFacts = resolveMoveFacts(move, childBoard);
     const moveFamily = resolveMoveFamily(moveFacts);
+    const childAzimuth = childAzimuths[index] ?? focusOccurrence.embedding.azimuth;
 
     if (!existingOccurrenceIds.has(occurrenceKey)) {
       const phaseLabel = resolvePhaseLabel(childBoard, nextPly);
       const terminal = resolveTerminal(childBoard);
-      const coordinate = resolveCoordinate(
+      const coordinate = resolveAdditiveExpansionCoordinate(
         nextPly,
-        sectorStart,
-        sectorEnd,
+        childAzimuth,
         phaseLabel,
-        terminal !== null
+        terminal !== null,
+        childSpread
       );
 
       newGeneratedOccurrences.push({
@@ -426,7 +550,7 @@ function expandDynamicOccurrenceMaterialization({
         materialSignature: materialSignature(childBoard),
         subtreeKey,
         coordinate,
-        azimuth: roundNumber((sectorStart + sectorEnd) * 0.5),
+        azimuth: roundAngle(childAzimuth),
         elevation: roundNumber(
           Math.atan2(coordinate[1], Math.hypot(coordinate[0], coordinate[2]))
         ),
@@ -805,8 +929,6 @@ function reconstructDynamicOccurrenceState(
   maxBranching: number
 ) {
   let board = new Chess(rootFen);
-  let sectorStart = -Math.PI;
-  let sectorEnd = Math.PI;
 
   for (const segment of path.slice(1)) {
     const moveUci = parseDynamicPathMove(segment);
@@ -826,19 +948,30 @@ function reconstructDynamicOccurrenceState(
       throw new Error(`dynamic occurrence path segment ${segment} resolved undefined move`);
     }
 
-    const segmentSpan = (sectorEnd - sectorStart) / orderedMoves.length;
-    const nextSectorStart = sectorStart + (segmentSpan * moveIndex);
-
-    sectorStart = nextSectorStart;
-    sectorEnd = nextSectorStart + segmentSpan;
     board = new Chess(matchedMove.after);
   }
 
   return {
-    board,
-    sectorStart,
-    sectorEnd
+    board
   };
+}
+
+function parseDynamicPathMoves(pathValue: string | null) {
+  if (!pathValue) {
+    return [];
+  }
+
+  return pathValue
+    .split(DYNAMIC_PATH_TOKEN_PATTERN)
+    .map((segment) => segment.trim().toLowerCase())
+    .filter((segment) => segment.length > 0)
+    .map((segment) => {
+      if (!DYNAMIC_MOVE_UCI_PATTERN.test(segment)) {
+        throw new Error(`invalid dynamic path move: ${segment}`);
+      }
+
+      return segment;
+    });
 }
 
 function parseDynamicPathMove(segment: string) {
@@ -1091,8 +1224,12 @@ function createDynamicRegimeDeclarations(): BuilderRegimeDeclaration[] {
 
 function resolveDynamicFocusCandidates(
   builderBootstrapManifest: BuilderBootstrapManifest,
-  rootOccurrenceId: string
+  rootOccurrenceId: string,
+  preferredOccurrenceIds: string[] = []
 ) {
+  const occurrenceIdSet = new Set(
+    builderBootstrapManifest.occurrences.map((occurrence) => occurrence.occurrenceId)
+  );
   const rankedIds = builderBootstrapManifest.occurrences
     .slice()
     .sort((left, right) => {
@@ -1103,11 +1240,78 @@ function resolveDynamicFocusCandidates(
       return left.ply - right.ply;
     })
     .map((occurrence) => occurrence.occurrenceId);
-
-  return [rootOccurrenceId, ...rankedIds.filter((occurrenceId) => occurrenceId !== rootOccurrenceId)].slice(
-    0,
-    Math.min(16, rankedIds.length + 1)
+  const preferredIds = [...new Set(preferredOccurrenceIds)].filter(
+    (occurrenceId) =>
+      occurrenceId !== rootOccurrenceId && occurrenceIdSet.has(occurrenceId)
   );
+  const preferredIdSet = new Set(preferredIds);
+
+  return [
+    ...preferredIds,
+    rootOccurrenceId,
+    ...rankedIds.filter(
+      (occurrenceId) =>
+        occurrenceId !== rootOccurrenceId && !preferredIdSet.has(occurrenceId)
+    )
+  ].slice(0, Math.min(16, rankedIds.length + preferredIds.length + 1));
+}
+
+function resolveExpansionAzimuths(
+  parentAzimuth: number,
+  moveCount: number,
+  parentPly: number
+) {
+  if (moveCount <= 0) {
+    return [];
+  }
+
+  if (parentPly === 0) {
+    const segmentSpan = (Math.PI * 2) / moveCount;
+
+    return Array.from({ length: moveCount }, (_, index) =>
+      roundAngle(-Math.PI + (segmentSpan * (index + 0.5)))
+    );
+  }
+
+  if (moveCount === 1) {
+    return [roundAngle(parentAzimuth)];
+  }
+
+  const spread = resolveExpansionSpread(moveCount);
+  const step = spread / Math.max(1, moveCount - 1);
+  const start = parentAzimuth - (spread * 0.5);
+
+  return Array.from({ length: moveCount }, (_, index) =>
+    roundAngle(start + (step * index))
+  );
+}
+
+function resolveExpansionSpread(moveCount: number) {
+  return Math.min(
+    ADDITIVE_EXPANSION_MAX_SPREAD,
+    Math.max(
+      ADDITIVE_EXPANSION_MIN_SPREAD,
+      Math.max(0, moveCount - 1) * ADDITIVE_EXPANSION_STEP
+    )
+  );
+}
+
+function normalizeAngle(angle: number) {
+  let normalizedAngle = angle;
+
+  while (normalizedAngle <= -Math.PI) {
+    normalizedAngle += Math.PI * 2;
+  }
+
+  while (normalizedAngle > Math.PI) {
+    normalizedAngle -= Math.PI * 2;
+  }
+
+  return normalizedAngle;
+}
+
+function roundAngle(angle: number) {
+  return roundNumber(normalizeAngle(angle));
 }
 
 function computeOccurrenceScores(
@@ -1175,18 +1379,51 @@ function resolveCoordinate(
   }
 
   const angle = (sectorStart + sectorEnd) * 0.5;
-  const planarRadius = 0.42 + (depth * 0.38);
   const sectorSpan = sectorEnd - sectorStart;
+
+  return resolveCoordinateFromAzimuth(
+    depth,
+    angle,
+    phaseLabel,
+    isTerminal,
+    Math.min(0.08, sectorSpan * 0.08)
+  );
+}
+
+function resolveAdditiveExpansionCoordinate(
+  depth: number,
+  azimuth: number,
+  phaseLabel: string,
+  isTerminal: boolean,
+  spread: number
+) {
+  return resolveCoordinateFromAzimuth(
+    depth,
+    azimuth,
+    phaseLabel,
+    isTerminal,
+    Math.min(0.08, Math.max(0.035, spread * 0.08))
+  );
+}
+
+function resolveCoordinateFromAzimuth(
+  depth: number,
+  azimuth: number,
+  phaseLabel: string,
+  isTerminal: boolean,
+  lateralScale: number
+): [number, number, number] {
+  const planarRadius = 0.42 + (depth * 0.38);
   const phaseOffset =
     phaseLabel === 'opening' ? 0.08 : phaseLabel === 'endgame' ? -0.08 : 0;
   const y = roundNumber(
-    phaseOffset + (isTerminal ? -0.06 : 0) + (Math.sin(angle * 2) * Math.min(0.08, sectorSpan * 0.08))
+    phaseOffset + (isTerminal ? -0.06 : 0) + (Math.sin(azimuth * 2) * lateralScale)
   );
 
   return [
-    roundNumber(Math.sin(angle) * planarRadius),
+    roundNumber(Math.sin(azimuth) * planarRadius),
     y,
-    roundNumber(Math.cos(angle) * planarRadius)
+    roundNumber(Math.cos(azimuth) * planarRadius)
   ];
 }
 
