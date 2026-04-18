@@ -791,21 +791,29 @@ function resolveRenderDemandPolicy({
   const tier = resolveRenderDemandTier(refinementBudget, maxRefinementBudget);
   const tierDetailRadius =
     tier === 'structure' ? 1 : tier === 'tactical' ? 2 : 3;
-  const farViewBonus =
-    cameraDistance >= 4.8 ? 16 : cameraDistance >= 4.2 ? 8 : 0;
+  const wholeObjectBudgetScale =
+    cameraDistance >= 4.8 ? 1.08 : cameraDistance >= 4.2 ? 1 : 0.82;
 
   if (scope === 'whole-object') {
+    const baseOccurrenceTarget =
+      tier === 'structure' ? 48 : tier === 'tactical' ? 30 : 18;
+    const baseEdgeTarget =
+      tier === 'structure' ? 72 : tier === 'tactical' ? 42 : 24;
+
     return {
       renderSubsetPolicy: 'whole-object-focus-plus-budgeted-low-detail',
       residencyPolicy: 'hot-detail-visible-context-cold-stored',
       lodPolicy: 'focus-distance-salience-tiered',
       focusLevelPolicy: `${tier}-band-detail-radius-${tierDetailRadius}`,
       detailNeighborhoodRadius: tierDetailRadius,
-      visibleLowDetailOccurrenceTarget:
-        (tier === 'structure' ? 72 : tier === 'tactical' ? 48 : 32) + farViewBonus,
-      visibleEdgeTarget:
-        (tier === 'structure' ? 108 : tier === 'tactical' ? 72 : 48) +
-        Math.round(farViewBonus * 1.5)
+      visibleLowDetailOccurrenceTarget: Math.max(
+        12,
+        Math.round(baseOccurrenceTarget * wholeObjectBudgetScale)
+      ),
+      visibleEdgeTarget: Math.max(
+        18,
+        Math.round(baseEdgeTarget * wholeObjectBudgetScale)
+      )
     };
   }
 

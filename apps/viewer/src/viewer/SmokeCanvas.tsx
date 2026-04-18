@@ -1,11 +1,9 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import {
-  CatmullRomCurve3,
   CanvasTexture,
   DoubleSide,
   Quaternion as ThreeQuaternion,
-  TubeGeometry,
   Vector3 as ThreeVector3
 } from 'three';
 import type { CameraGrammarState } from './cameraGrammar.ts';
@@ -20,11 +18,10 @@ import {
 import { formatSubtreeLabel, formatTerminalOutcomeLabel } from './chessContext.ts';
 import {
   advanceCameraOrbitState,
+  normalizeCameraOrbitState,
   resolveOrbitUpVector,
-  resolveOrbitCameraPosition
 } from './cameraOrbit.ts';
 import {
-  clampLiveViewDistance,
   selectCarrierLabelSelections,
   selectOccurrenceLabelSelections
 } from './labelPolicy.ts';
@@ -35,43 +32,44 @@ import type {
   RuntimeCarrierRecord,
   RuntimeNeighborhoodOccurrence,
   RuntimeNeighborhoodSnapshot,
-  RuntimeTranspositionLink,
-  RuntimeTranspositionOccurrence,
-  RuntimeTranspositionSurfaceSnapshot,
   SceneBootstrap,
   Vector3
 } from './contracts';
 
 type SmokeCanvasProps = {
   cameraGrammar: CameraGrammarState;
-  cameraDistance: number;
+  cameraOrbit: CameraOrbitPreset;
+  cameraPosition: Vector3;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
-  onCameraDistanceChange: (distance: number) => void;
-  onCameraOrbitChange: (orbit: CameraOrbitPreset) => void;
+  onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
-  orbitPreset: CameraOrbitPreset;
-  orbitResetKey: number;
   renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
-  transpositionSurface: RuntimeTranspositionSurfaceSnapshot;
   hoveredOccurrenceId: string | null;
   runtimeSnapshot: RuntimeNeighborhoodSnapshot;
 };
 
+const CAMERA_POSE_MIN_REPORT_MS = 120;
+const CAMERA_POSE_MAX_REPORT_MS = 260;
+const CAMERA_POSE_POSITION_EPSILON = 0.22;
+const CAMERA_POSE_ORBIT_EPSILON = 0.08;
+
+const labelTextureCache = new Map<
+  string,
+  { texture: CanvasTexture; aspect: number }
+>();
+
 export function SmokeCanvas({
   cameraGrammar,
-  cameraDistance,
+  cameraOrbit,
+  cameraPosition,
   carrierSurface,
-  onCameraDistanceChange,
-  onCameraOrbitChange,
+  onCameraPoseChange,
   onFocusOccurrenceChange,
   onHoverOccurrenceChange,
-  orbitPreset,
-  orbitResetKey,
   renderTuning,
   sceneBootstrap,
-  transpositionSurface,
   hoveredOccurrenceId,
   runtimeSnapshot
 }: SmokeCanvasProps) {
@@ -88,28 +86,23 @@ export function SmokeCanvas({
         near: 0.1,
         far: 30
       }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       gl={{ antialias: true }}
     >
       <CameraRig
-        cameraFocus={cameraGrammar.lookAt}
-        cameraDistance={cameraDistance}
-        onCameraDistanceChange={onCameraDistanceChange}
-        onCameraOrbitChange={onCameraOrbitChange}
-        orbitPreset={orbitPreset}
-        orbitResetKey={orbitResetKey}
+        cameraOrbit={cameraOrbit}
+        cameraPosition={cameraPosition}
+        onCameraPoseChange={onCameraPoseChange}
+        travelSpeed={Math.max(
+          1.2,
+          Math.min(4.8, (cameraGrammar.cameraDistance * 0.82) + 0.65)
+        )}
       />
       <color attach="background" args={['#f5f1e8']} />
       <ambientLight intensity={0.72} />
       <hemisphereLight args={['#fff9ef', '#ddd3c2', 1.08]} />
       <directionalLight position={[2.4, 3.2, 3.8]} intensity={1.18} />
       <directionalLight position={[-2.8, 2.2, 1.4]} intensity={0.42} color="#f1dcc2" />
-      <TranspositionRelations
-        onFocusOccurrenceChange={onFocusOccurrenceChange}
-        onHoverOccurrenceChange={onHoverOccurrenceChange}
-        hoveredOccurrenceId={hoveredOccurrenceId}
-        transpositionSurface={transpositionSurface}
-      />
       <NeighborhoodCarriers
         carrierSurface={carrierSurface}
         focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
@@ -128,14 +121,14 @@ export function SmokeCanvas({
         />
       ))}
       <CarrierLabels
-        cameraDistance={cameraDistance}
+        cameraDistance={cameraGrammar.cameraDistance}
         carrierSurface={carrierSurface}
         focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
         occurrences={runtimeSnapshot.occurrences}
         renderTuning={renderTuning}
       />
       <OccurrenceDataLabels
-        cameraDistance={cameraDistance}
+        cameraDistance={cameraGrammar.cameraDistance}
         carrierSurface={carrierSurface}
         focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
         renderTuning={renderTuning}
@@ -145,240 +138,36 @@ export function SmokeCanvas({
   );
 }
 
-function TranspositionRelations({
-  hoveredOccurrenceId,
-  onFocusOccurrenceChange,
-  onHoverOccurrenceChange,
-  transpositionSurface
-}: {
-  hoveredOccurrenceId: string | null;
-  onFocusOccurrenceChange: (occurrenceId: string) => void;
-  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
-  transpositionSurface: RuntimeTranspositionSurfaceSnapshot;
-}) {
-  const ghostOccurrences = transpositionSurface.groups
-    .flatMap((group) => group.occurrences)
-    .filter((occurrence) => !occurrence.isVisibleInNeighborhood)
-    .sort((left, right) => {
-      if (left.isFocus !== right.isFocus) {
-        return left.isFocus ? -1 : 1;
-      }
-
-      if (left.subtreeKey !== right.subtreeKey) {
-        return left.subtreeKey.localeCompare(right.subtreeKey);
-      }
-
-      return left.ply - right.ply;
-    });
-  const orderedLinks = [...transpositionSurface.links].sort((left, right) => {
-    if (left.emphasis !== right.emphasis) {
-      return left.emphasis === 'context' ? -1 : 1;
-    }
-
-    return `${left.sourceOccurrenceId}|${left.targetOccurrenceId}`.localeCompare(
-      `${right.sourceOccurrenceId}|${right.targetOccurrenceId}`
-    );
-  });
-
-  return (
-    <group>
-      {orderedLinks.map((link) => (
-        <TranspositionRelationLink
-          key={`${link.sourceOccurrenceId}:${link.targetOccurrenceId}:transposition`}
-          link={link}
-        />
-      ))}
-      {ghostOccurrences.map((occurrence) => (
-        <TranspositionEchoOccurrence
-          key={`${occurrence.occurrenceId}:transposition-echo`}
-          isHovered={hoveredOccurrenceId === occurrence.occurrenceId}
-          occurrence={occurrence}
-          onFocusOccurrenceChange={onFocusOccurrenceChange}
-          onHoverOccurrenceChange={onHoverOccurrenceChange}
-        />
-      ))}
-    </group>
-  );
-}
-
-function TranspositionRelationLink({
-  link
-}: {
-  link: RuntimeTranspositionLink;
-}) {
-  const touchesGhost =
-    !link.sourceVisibleInNeighborhood || !link.targetVisibleInNeighborhood;
-  const scaledSamples = useMemo(
-    () => link.samples.map((sample) => scaleCoordinate(sample)),
-    [link.samples]
-  );
-  const curve = useMemo(
-    () =>
-      new CatmullRomCurve3(
-        scaledSamples.map(
-          (sample) => new ThreeVector3(sample[0], sample[1], sample[2])
-        ),
-        false,
-        'centripetal'
-      ),
-    [scaledSamples]
-  );
-  const coreRadius = touchesGhost ? 0.0085 : link.emphasis === 'focus' ? 0.007 : 0.005;
-  const haloRadius = coreRadius * 1.9;
-  const tubeSegments = Math.max(28, scaledSamples.length * 12);
-  const haloGeometry = useMemo(
-    () => new TubeGeometry(curve, tubeSegments, haloRadius, 10, false),
-    [curve, haloRadius, tubeSegments]
-  );
-  const coreGeometry = useMemo(
-    () => new TubeGeometry(curve, tubeSegments, coreRadius, 10, false),
-    [coreRadius, curve, tubeSegments]
-  );
-  const centerSample = scaledSamples[Math.floor(scaledSamples.length / 2)] ?? scaledSamples[0];
-  const coreColor = link.emphasis === 'focus' ? '#0f172a' : '#334155';
-  const haloColor = link.emphasis === 'focus' ? '#dbe7f6' : '#e2e8f0';
-
-  useEffect(
-    () => () => {
-      haloGeometry.dispose();
-      coreGeometry.dispose();
-    },
-    [coreGeometry, haloGeometry]
-  );
-
-  return (
-    <group>
-      <mesh renderOrder={4}>
-        <primitive attach="geometry" object={haloGeometry} />
-        <meshBasicMaterial
-          color={haloColor}
-          depthWrite={false}
-          opacity={touchesGhost ? 0.72 : 0.42}
-          transparent
-        />
-      </mesh>
-      <mesh renderOrder={5}>
-        <primitive attach="geometry" object={coreGeometry} />
-        <meshStandardMaterial
-          color={coreColor}
-          depthWrite={false}
-          emissive={coreColor}
-          emissiveIntensity={touchesGhost ? 0.36 : 0.18}
-          opacity={touchesGhost ? 0.92 : 0.78}
-          roughness={0.18}
-          transparent
-        />
-      </mesh>
-      {centerSample ? (
-        <mesh position={centerSample} renderOrder={6}>
-          <sphereGeometry args={[touchesGhost ? 0.019 : 0.014, 14, 14]} />
-          <meshBasicMaterial color="#d97706" depthWrite={false} transparent opacity={0.94} />
-        </mesh>
-      ) : null}
-    </group>
-  );
-}
-
-function TranspositionEchoOccurrence({
-  isHovered,
-  occurrence,
-  onFocusOccurrenceChange,
-  onHoverOccurrenceChange
-}: {
-  isHovered: boolean;
-  occurrence: RuntimeTranspositionOccurrence;
-  onFocusOccurrenceChange: (occurrenceId: string) => void;
-  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
-}) {
-  const radius = 0.05;
-
-  return (
-    <group
-      onClick={(event) => {
-        event.stopPropagation();
-        onFocusOccurrenceChange(occurrence.occurrenceId);
-      }}
-      onPointerOut={(event) => {
-        event.stopPropagation();
-        onHoverOccurrenceChange(null);
-        setCanvasPointerCursor(event, 'grab');
-      }}
-      onPointerOver={(event) => {
-        event.stopPropagation();
-        onHoverOccurrenceChange(occurrence.occurrenceId);
-        setCanvasPointerCursor(event, 'pointer');
-      }}
-      position={scaleCoordinate(occurrence.coordinate)}
-    >
-      <mesh renderOrder={7}>
-        <sphereGeometry args={[radius, 16, 16]} />
-        <meshStandardMaterial
-          color="#eff6ff"
-          emissive="#dbeafe"
-          emissiveIntensity={isHovered ? 0.72 : 0.4}
-          opacity={0.94}
-          roughness={0.18}
-          transparent
-        />
-      </mesh>
-      {isHovered ? (
-        <mesh renderOrder={8}>
-          <ringGeometry args={[radius * 1.88, radius * 2.08, 30]} />
-          <meshBasicMaterial
-            color="#38bdf8"
-            depthWrite={false}
-            opacity={0.92}
-            side={DoubleSide}
-            transparent
-          />
-        </mesh>
-      ) : null}
-      <mesh renderOrder={8}>
-        <ringGeometry args={[radius * 1.34, radius * 1.7, 28]} />
-        <meshBasicMaterial
-          color="#0f172a"
-          depthWrite={false}
-          opacity={0.86}
-          side={DoubleSide}
-          transparent
-        />
-      </mesh>
-      <mesh renderOrder={9}>
-        <sphereGeometry args={[radius * 0.22, 10, 10]} />
-        <meshBasicMaterial color="#d97706" depthWrite={false} transparent opacity={0.95} />
-      </mesh>
-    </group>
-  );
-}
-
 function CameraRig({
-  cameraFocus,
-  cameraDistance,
-  onCameraDistanceChange,
-  onCameraOrbitChange,
-  orbitPreset,
-  orbitResetKey
+  cameraOrbit,
+  cameraPosition,
+  onCameraPoseChange,
+  travelSpeed
 }: {
-  cameraFocus: Vector3;
-  cameraDistance: number;
-  onCameraDistanceChange: (distance: number) => void;
-  onCameraOrbitChange: (orbit: CameraOrbitPreset) => void;
-  orbitPreset: CameraOrbitPreset;
-  orbitResetKey: number;
+  cameraOrbit: CameraOrbitPreset;
+  cameraPosition: Vector3;
+  onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
+  travelSpeed: number;
 }) {
   const { camera, gl } = useThree();
-  const scaledFocus = scaleCoordinate(cameraFocus);
-  const orbitStateRef = useRef(orbitPreset);
+  const orbitStateRef = useRef(cameraOrbit);
+  const positionRef = useRef(cameraPosition);
   const dragStateRef = useRef({ active: false, pointerId: null as number | null, x: 0, y: 0 });
-  const cameraDistanceRef = useRef(cameraDistance);
+  const pressedKeysRef = useRef<Set<string>>(new Set());
+  const lastReportAtRef = useRef(0);
+  const viewDirtyRef = useRef(false);
+  const lastPublishedPoseRef = useRef({
+    position: roundVector3(cameraPosition),
+    orbit: roundOrbit(cameraOrbit)
+  });
 
   useEffect(() => {
-    cameraDistanceRef.current = cameraDistance;
-  }, [cameraDistance]);
+    orbitStateRef.current = cameraOrbit;
+  }, [cameraOrbit]);
 
   useEffect(() => {
-    orbitStateRef.current = orbitPreset;
-  }, [orbitPreset, orbitResetKey]);
+    positionRef.current = cameraPosition;
+  }, [cameraPosition]);
 
   useEffect(() => {
     const canvasElement = gl.domElement;
@@ -413,7 +202,7 @@ function CameraRig({
         event.clientX - dragState.x,
         event.clientY - dragState.y
       );
-      onCameraOrbitChange(orbitStateRef.current);
+      viewDirtyRef.current = true;
       dragStateRef.current = {
         ...dragState,
         x: event.clientX,
@@ -437,13 +226,28 @@ function CameraRig({
         y: 0
       };
       canvasElement.style.cursor = 'grab';
+      publishPose(true);
     };
 
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
-      onCameraDistanceChange(
-        clampLiveViewDistance(cameraDistanceRef.current + (event.deltaY * 0.0025))
+      const lookVector = resolveCameraLookVector(orbitStateRef.current);
+      const dollyStep = Math.max(0.16, travelSpeed * 0.18);
+
+      positionRef.current = addVector3(
+        positionRef.current,
+        scaleVector3(lookVector, -event.deltaY * 0.0028 * dollyStep)
       );
+      viewDirtyRef.current = true;
+      publishPose(false);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      pressedKeysRef.current.add(event.key.toLowerCase());
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      pressedKeysRef.current.delete(event.key.toLowerCase());
     };
 
     canvasElement.addEventListener('pointerdown', handlePointerDown);
@@ -451,6 +255,8 @@ function CameraRig({
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', stopDragging);
     window.addEventListener('pointercancel', stopDragging);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
 
     return () => {
       canvasElement.removeEventListener('pointerdown', handlePointerDown);
@@ -458,28 +264,183 @@ function CameraRig({
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', stopDragging);
       window.removeEventListener('pointercancel', stopDragging);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
       canvasElement.style.touchAction = previousTouchAction;
       canvasElement.style.cursor = previousCursor;
     };
-  }, [gl, onCameraDistanceChange, onCameraOrbitChange]);
+  }, [gl, onCameraPoseChange, travelSpeed]);
 
-  useFrame(() => {
-    const cameraPosition = resolveOrbitCameraPosition(
-      scaledFocus,
-      cameraDistance,
-      orbitStateRef.current
+  useFrame((_, delta) => {
+    const movement = resolveKeyboardMovement(
+      pressedKeysRef.current,
+      orbitStateRef.current,
+      Math.min(delta, 0.05) * travelSpeed
     );
+
+    if (movement) {
+      positionRef.current = addVector3(positionRef.current, movement);
+      viewDirtyRef.current = true;
+    }
+
+    const lookVector = resolveCameraLookVector(orbitStateRef.current);
     const cameraUp = resolveOrbitUpVector(orbitStateRef.current);
 
-    camera.position.set(...cameraPosition);
+    camera.position.set(...positionRef.current);
     camera.up.set(...cameraUp);
-    camera.lookAt(...scaledFocus);
+    camera.lookAt(
+      positionRef.current[0] + lookVector[0],
+      positionRef.current[1] + lookVector[1],
+      positionRef.current[2] + lookVector[2]
+    );
+    publishPose(false);
   });
+
+  function publishPose(force: boolean) {
+    if (!viewDirtyRef.current && !force) {
+      return;
+    }
+
+    const now = performance.now();
+    const interval = now - lastReportAtRef.current;
+
+    if (!force && interval < CAMERA_POSE_MIN_REPORT_MS) {
+      return;
+    }
+
+    const nextPosition = roundVector3(positionRef.current);
+    const nextOrbit = roundOrbit(orbitStateRef.current);
+    const lastPublishedPose = lastPublishedPoseRef.current;
+    const positionDelta = distanceBetweenVector3(
+      nextPosition,
+      lastPublishedPose.position
+    );
+    const orbitDelta = resolveOrbitDelta(nextOrbit, lastPublishedPose.orbit);
+
+    if (
+      !force &&
+      interval < CAMERA_POSE_MAX_REPORT_MS &&
+      positionDelta < CAMERA_POSE_POSITION_EPSILON &&
+      orbitDelta < CAMERA_POSE_ORBIT_EPSILON
+    ) {
+      return;
+    }
+
+    lastReportAtRef.current = now;
+    lastPublishedPoseRef.current = {
+      position: nextPosition,
+      orbit: nextOrbit
+    };
+    viewDirtyRef.current = false;
+    onCameraPoseChange(nextPosition, nextOrbit);
+  }
 
   return null;
 }
 
-function NeighborhoodNode({
+function resolveKeyboardMovement(
+  pressedKeys: Set<string>,
+  orbit: CameraOrbitPreset,
+  distance: number
+) {
+  const step = Math.max(0.02, distance);
+  const lookVector = resolveCameraLookVector(orbit);
+  const rightVector = normalizeMarkerTangent(
+    crossProduct(lookVector, resolveOrbitUpVector(orbit))
+  );
+  let movement: Vector3 = [0, 0, 0];
+
+  if (pressedKeys.has('w') || pressedKeys.has('arrowup')) {
+    movement = addVector3(movement, scaleVector3(lookVector, step));
+  }
+  if (pressedKeys.has('s') || pressedKeys.has('arrowdown')) {
+    movement = addVector3(movement, scaleVector3(lookVector, -step));
+  }
+  if (pressedKeys.has('a') || pressedKeys.has('arrowleft')) {
+    movement = addVector3(movement, scaleVector3(rightVector, -step));
+  }
+  if (pressedKeys.has('d') || pressedKeys.has('arrowright')) {
+    movement = addVector3(movement, scaleVector3(rightVector, step));
+  }
+  if (pressedKeys.has('q')) {
+    movement = addVector3(movement, [0, -step, 0]);
+  }
+  if (pressedKeys.has('e')) {
+    movement = addVector3(movement, [0, step, 0]);
+  }
+
+  return movement[0] === 0 && movement[1] === 0 && movement[2] === 0
+    ? null
+    : movement;
+}
+
+function resolveCameraLookVector(orbit: CameraOrbitPreset): Vector3 {
+  const normalizedOrbit = normalizeCameraOrbitState(orbit);
+  const planarDistance = Math.cos(normalizedOrbit.elevation);
+
+  return normalizeMarkerTangent([
+    -(Math.sin(normalizedOrbit.azimuth) * planarDistance),
+    -Math.sin(normalizedOrbit.elevation),
+    -(Math.cos(normalizedOrbit.azimuth) * planarDistance)
+  ]);
+}
+
+function addVector3(left: Vector3, right: Vector3): Vector3 {
+  return [left[0] + right[0], left[1] + right[1], left[2] + right[2]];
+}
+
+function scaleVector3(vector: Vector3, scale: number): Vector3 {
+  return [vector[0] * scale, vector[1] * scale, vector[2] * scale];
+}
+
+function crossProduct(left: Vector3, right: Vector3): Vector3 {
+  return [
+    (left[1] * right[2]) - (left[2] * right[1]),
+    (left[2] * right[0]) - (left[0] * right[2]),
+    (left[0] * right[1]) - (left[1] * right[0])
+  ];
+}
+
+function roundVector3(vector: Vector3): Vector3 {
+  return [roundNumber(vector[0]), roundNumber(vector[1]), roundNumber(vector[2])];
+}
+
+function roundOrbit(orbit: CameraOrbitPreset): CameraOrbitPreset {
+  const normalizedOrbit = normalizeCameraOrbitState(orbit);
+
+  return {
+    azimuth: roundNumber(normalizedOrbit.azimuth),
+    elevation: roundNumber(normalizedOrbit.elevation)
+  };
+}
+
+function roundNumber(value: number) {
+  return Number(value.toFixed(6));
+}
+
+function distanceBetweenVector3(left: Vector3, right: Vector3) {
+  return Math.hypot(
+    left[0] - right[0],
+    left[1] - right[1],
+    left[2] - right[2]
+  );
+}
+
+function resolveOrbitDelta(
+  left: CameraOrbitPreset,
+  right: CameraOrbitPreset
+) {
+  return Math.max(
+    Math.abs(resolveAngleDelta(left.azimuth, right.azimuth)),
+    Math.abs(left.elevation - right.elevation)
+  );
+}
+
+function resolveAngleDelta(left: number, right: number) {
+  return Math.atan2(Math.sin(left - right), Math.cos(left - right));
+}
+
+const NeighborhoodNode = memo(function NeighborhoodNode({
   accentColor,
   isHovered,
   onFocusOccurrenceChange,
@@ -581,7 +542,7 @@ function NeighborhoodNode({
       </mesh>
     </group>
   );
-}
+});
 
 function resolveOccurrenceLodRadiusScale(
   lod: RuntimeNeighborhoodOccurrence['lod']
@@ -635,7 +596,7 @@ function resolveOccurrenceRingOpacity(
   return 0.38;
 }
 
-function NeighborhoodCarriers({
+const NeighborhoodCarriers = memo(function NeighborhoodCarriers({
   carrierSurface,
   focusOccurrenceId,
   renderTuning
@@ -644,19 +605,25 @@ function NeighborhoodCarriers({
   focusOccurrenceId: string;
   renderTuning: ViewerRenderTuning;
 }) {
-  return [...carrierSurface.carriers]
-    .sort((left, right) => left.departureStrength - right.departureStrength)
-    .map((carrier) => (
-      <NeighborhoodCarrier
-        carrier={carrier}
-        focusOccurrenceId={focusOccurrenceId}
-        key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}`}
-        renderTuning={renderTuning}
-      />
-    ));
-}
+  const sortedCarriers = useMemo(
+    () =>
+      [...carrierSurface.carriers].sort(
+        (left, right) => left.departureStrength - right.departureStrength
+      ),
+    [carrierSurface.carriers]
+  );
 
-function NeighborhoodCarrier({
+  return sortedCarriers.map((carrier) => (
+    <NeighborhoodCarrier
+      carrier={carrier}
+      focusOccurrenceId={focusOccurrenceId}
+      key={`${carrier.sourceOccurrenceId}:${carrier.targetOccurrenceId}`}
+      renderTuning={renderTuning}
+    />
+  ));
+});
+
+const NeighborhoodCarrier = memo(function NeighborhoodCarrier({
   carrier,
   focusOccurrenceId,
   renderTuning
@@ -783,9 +750,9 @@ function NeighborhoodCarrier({
       ))}
     </group>
   );
-}
+});
 
-function CarrierLabels({
+const CarrierLabels = memo(function CarrierLabels({
   cameraDistance,
   carrierSurface,
   focusOccurrenceId,
@@ -830,9 +797,9 @@ function CarrierLabels({
       />
     );
   });
-}
+});
 
-function OccurrenceDataLabels({
+const OccurrenceDataLabels = memo(function OccurrenceDataLabels({
   cameraDistance,
   carrierSurface,
   focusOccurrenceId,
@@ -897,9 +864,9 @@ function OccurrenceDataLabels({
       />
     ];
   });
-}
+});
 
-function LabelSprite({
+const LabelSprite = memo(function LabelSprite({
   text,
   position,
   backgroundColor,
@@ -921,14 +888,12 @@ function LabelSprite({
     [backgroundColor, borderColor, text, textColor]
   );
 
-  useEffect(() => () => textureData.texture.dispose(), [textureData]);
-
   return (
     <sprite position={position} renderOrder={10} scale={[scale * textureData.aspect, scale, 1]}>
       <spriteMaterial depthWrite={false} map={textureData.texture} opacity={opacity} transparent />
     </sprite>
   );
-}
+});
 
 function createLabelTextureData(
   text: string,
@@ -936,6 +901,13 @@ function createLabelTextureData(
   borderColor: string,
   textColor = '#231f18'
 ) {
+  const cacheKey = `${text}|${backgroundColor}|${borderColor}|${textColor}`;
+  const cachedTexture = labelTextureCache.get(cacheKey);
+
+  if (cachedTexture) {
+    return cachedTexture;
+  }
+
   const pixelRatio = typeof window === 'undefined' ? 1 : Math.min(window.devicePixelRatio || 1, 2);
   const fontSize = 22;
   const paddingX = 8;
@@ -977,10 +949,14 @@ function createLabelTextureData(
   const texture = new CanvasTexture(canvas);
   texture.needsUpdate = true;
 
-  return {
+  const textureData = {
     texture,
     aspect: width / height
   };
+
+  labelTextureCache.set(cacheKey, textureData);
+
+  return textureData;
 }
 
 function drawRoundedRect(

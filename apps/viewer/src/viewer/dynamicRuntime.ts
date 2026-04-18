@@ -1,6 +1,4 @@
 import { Chess, DEFAULT_POSITION, type Move, type PieceSymbol, validateFen } from 'chess.js';
-import { createSceneBootstrap, materializeRuntimeBootstrap } from './bootstrap.ts';
-import { deriveCameraOrbitState } from './cameraOrbit.ts';
 import type {
   BuilderAnchorRecord,
   BuilderBootstrapManifest,
@@ -12,19 +10,11 @@ import type {
   BuilderRegimeDeclaration,
   BuilderResolverInputRecord,
   BuilderTransitionRecord,
-  NavigationEntryPoint,
-  NavigationEntryPointId,
-  RuntimeArtifactBundle,
   RuntimeGraphViewScope,
   RuntimeNeighborhoodSnapshot,
   SceneBootstrap,
   ViewerSceneManifest
 } from './contracts.ts';
-import { clampLiveViewDistance, LIVE_VIEW_DISTANCE } from './labelPolicy.ts';
-import {
-  createAnchoredNavigationEntryPoints,
-  resolveInitialNavigationEntryPointId
-} from './navigation.ts';
 import {
   createRuntimeExplorationKernel,
   type RuntimeExplorationKernel,
@@ -36,10 +26,10 @@ const DYNAMIC_SOURCE_VERSION = '2026-04-13.dynamic-js';
 const DYNAMIC_SOURCE_LOCATION = 'browser://viewer/dynamic-runtime';
 const DYNAMIC_COVERAGE_ID = 'coverage:dynamic-runtime';
 const DYNAMIC_RESOLVER_INPUT_ID = 'resolver:dynamic-runtime';
-const DEFAULT_DYNAMIC_DEPTH = 2;
-const DEFAULT_DYNAMIC_BRANCHING = 20;
+const DEFAULT_DYNAMIC_DEPTH = 3;
+const DEFAULT_DYNAMIC_BRANCHING = 12;
 const MAX_DYNAMIC_DEPTH = 4;
-const MAX_DYNAMIC_BRANCHING = 32;
+const MAX_DYNAMIC_BRANCHING = 20;
 const MAX_LOCAL_VIEW_AUTO_EXPANSION_PASSES = 6;
 const MAX_WHOLE_OBJECT_AUTO_EXPANSION_PASSES = 3;
 const LOCAL_VIEW_AUTO_EXPANSION_BATCH = 2;
@@ -77,10 +67,7 @@ type ViewerRuntimeBootstrap = {
 
 export type ViewerRuntimeSource = {
   runtimeBootstrap: ViewerRuntimeBootstrap;
-  navigationEntryPoints: NavigationEntryPoint[];
-  initialEntryPointId: NavigationEntryPointId;
-  mode: 'dynamic' | 'artifacts';
-  dynamicOptions?: DynamicRuntimeOptions;
+  dynamicOptions: DynamicRuntimeOptions;
 };
 
 export type ViewerRuntimeExpansionResult = {
@@ -158,18 +145,10 @@ type QueueEntry = {
 };
 
 export function resolveViewerRuntimeSource(
-  runtimeArtifactBundle: RuntimeArtifactBundle,
   locationSearch: string
 ): ViewerRuntimeSource {
-  const searchParams = new URLSearchParams(locationSearch);
-
-  if (searchParams.get('source') === 'artifacts') {
-    return createArtifactRuntimeSource(runtimeArtifactBundle);
-  }
-
   return createDynamicRuntimeSource(
-    runtimeArtifactBundle.viewerSceneManifest,
-    resolveDynamicRuntimeOptions(searchParams)
+    resolveDynamicRuntimeOptions(new URLSearchParams(locationSearch))
   );
 }
 
@@ -197,7 +176,6 @@ export function resolveDynamicRuntimeOptions(
 }
 
 export function createDynamicRuntimeSource(
-  baseSceneManifest: ViewerSceneManifest,
   options: DynamicRuntimeOptions
 ): ViewerRuntimeSource {
   let builderBootstrapManifest = buildDynamicBootstrapManifest(options);
@@ -207,50 +185,21 @@ export function createDynamicRuntimeSource(
     throw new Error('dynamic runtime generation produced no root occurrence');
   }
 
-  let rootOccurrence = builderBootstrapManifest.occurrences.find(
-    (occurrence) => occurrence.occurrenceId === rootOccurrenceId
-  );
-
-  if (!rootOccurrence) {
+  if (
+    !builderBootstrapManifest.occurrences.some(
+      (occurrence) => occurrence.occurrenceId === rootOccurrenceId
+    )
+  ) {
     throw new Error('dynamic runtime generation produced no root occurrence');
   }
 
-  let initialFocusOccurrenceId = rootOccurrence.occurrenceId;
-  let viewerSceneManifest = {
-    ...baseSceneManifest,
-    sceneId: 'dynamic-runtime-exploration',
-    title: 'Dynamic Runtime Graph',
-    summary: `Browser-generated legal-move graph from ${rootOccurrence.stateKey}. Depth ${options.maxDepth}, branch cap ${options.maxBranching}${options.pathMoves.length > 0 ? `, pre-expanded path ${options.pathMoves.join(' ')}` : ''}.`,
-    runtime: {
-      ...baseSceneManifest.runtime,
-      graphObjectId: builderBootstrapManifest.graphObjectId,
-      bootstrap: {
-        ...baseSceneManifest.runtime.bootstrap,
-        representationSchemaVersion: DYNAMIC_SCHEMA_VERSION,
-        seedSurface: 'browser-dynamic-fen',
-        focusCandidatesSource: 'browser-dynamic-salience',
-        entrypointDerivation: 'browser-dynamic-single-entry',
-        webCorpusManifest: 'not-used',
-        openingTableManifest: 'not-used',
-        endgameTableManifest: 'not-used',
-        middlegameProceduralPolicy: 'browser-legal-move-expansion'
-      },
-      initialFocusOccurrenceId,
-      focusCandidateOccurrenceIds: resolveDynamicFocusCandidates(
-        builderBootstrapManifest,
-        rootOccurrence.occurrenceId,
-        [initialFocusOccurrenceId]
-      ),
-      defaultNeighborhoodRadius: Math.min(
-        baseSceneManifest.runtime.defaultNeighborhoodRadius,
-        options.maxDepth
-      ),
-      maxNeighborhoodRadius: Math.max(
-        baseSceneManifest.runtime.maxNeighborhoodRadius,
-        options.maxDepth
-      )
-    }
-  } satisfies ViewerSceneManifest;
+  let initialFocusOccurrenceId = rootOccurrenceId;
+  let viewerSceneManifest = createDynamicViewerSceneManifest({
+    builderBootstrapManifest,
+    initialFocusOccurrenceId,
+    options,
+    preferredOccurrenceIds: [initialFocusOccurrenceId]
+  });
 
   if (options.pathMoves.length > 0) {
     const materializedPath = materializeDynamicPath({
@@ -263,32 +212,24 @@ export function createDynamicRuntimeSource(
     builderBootstrapManifest = materializedPath.builderBootstrapManifest;
     viewerSceneManifest = materializedPath.viewerSceneManifest;
     initialFocusOccurrenceId = materializedPath.focusOccurrenceId;
-    rootOccurrence = builderBootstrapManifest.occurrences.find(
-      (occurrence) => occurrence.occurrenceId === rootOccurrenceId
-    );
 
-    if (!rootOccurrence) {
+    if (
+      !builderBootstrapManifest.occurrences.some(
+        (occurrence) => occurrence.occurrenceId === rootOccurrenceId
+      )
+    ) {
       throw new Error('dynamic runtime materialization lost the root occurrence');
     }
 
-    viewerSceneManifest = {
-      ...viewerSceneManifest,
-      runtime: {
-        ...viewerSceneManifest.runtime,
-        initialFocusOccurrenceId,
-        focusCandidateOccurrenceIds: resolveDynamicFocusCandidates(
-          builderBootstrapManifest,
-          rootOccurrenceId,
-          [initialFocusOccurrenceId]
-        )
-      }
-    } satisfies ViewerSceneManifest;
+    viewerSceneManifest = createDynamicViewerSceneManifest({
+      builderBootstrapManifest,
+      initialFocusOccurrenceId,
+      options,
+      preferredOccurrenceIds: [initialFocusOccurrenceId]
+    });
   }
 
   const sceneBootstrap = createSceneBootstrap(viewerSceneManifest);
-  const navigationEntryPoints = [
-    createDynamicNavigationEntryPoint(rootOccurrence, viewerSceneManifest)
-  ];
 
   return {
     runtimeBootstrap: {
@@ -297,32 +238,7 @@ export function createDynamicRuntimeSource(
       sceneBootstrap,
       initialFocusOccurrenceId
     },
-    navigationEntryPoints,
-    initialEntryPointId: 'middlegame',
-    mode: 'dynamic',
     dynamicOptions: options
-  };
-}
-
-function createArtifactRuntimeSource(
-  runtimeArtifactBundle: RuntimeArtifactBundle
-): ViewerRuntimeSource {
-  const runtimeBootstrap = materializeRuntimeBootstrap(runtimeArtifactBundle);
-  const navigationEntryPoints = createAnchoredNavigationEntryPoints(runtimeBootstrap);
-
-  return {
-    runtimeBootstrap: {
-      builderBootstrapManifest: runtimeBootstrap.builderBootstrapManifest,
-      viewerSceneManifest: runtimeBootstrap.viewerSceneManifest,
-      sceneBootstrap: runtimeBootstrap.sceneBootstrap,
-      initialFocusOccurrenceId: runtimeBootstrap.initialFocusOccurrenceId
-    },
-    navigationEntryPoints,
-    initialEntryPointId: resolveInitialNavigationEntryPointId(
-      navigationEntryPoints,
-      runtimeBootstrap.initialFocusOccurrenceId
-    ),
-    mode: 'artifacts'
   };
 }
 
@@ -438,10 +354,6 @@ export function createViewerRuntimeStore(
     },
     materializeView(focusOccurrenceId, request) {
       let viewSnapshot = runtimeKernel.inspectView(focusOccurrenceId, request);
-
-      if (runtimeSource.mode !== 'dynamic' || !runtimeSource.dynamicOptions) {
-        return viewSnapshot;
-      }
 
       const maxPasses = resolveAutoExpansionPassLimit(
         request.scope,
@@ -662,6 +574,78 @@ function expandDynamicOccurrencesMaterialization({
   };
 }
 
+function createSceneBootstrap(
+  viewerSceneManifest: ViewerSceneManifest
+): SceneBootstrap {
+  return {
+    sceneId: viewerSceneManifest.sceneId,
+    title: viewerSceneManifest.title,
+    summary: viewerSceneManifest.summary,
+    accentColor: viewerSceneManifest.accentColor,
+    camera: viewerSceneManifest.camera
+  };
+}
+
+function createDynamicViewerSceneManifest({
+  builderBootstrapManifest,
+  initialFocusOccurrenceId,
+  options,
+  preferredOccurrenceIds = []
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  initialFocusOccurrenceId: string;
+  options: DynamicRuntimeOptions;
+  preferredOccurrenceIds?: string[];
+}): ViewerSceneManifest {
+  const rootOccurrenceId = builderBootstrapManifest.rootOccurrenceIds[0];
+
+  if (!rootOccurrenceId) {
+    throw new Error('dynamic runtime scene manifest requires one root occurrence');
+  }
+
+  return {
+    sceneId: 'dynamic-runtime-exploration',
+    title: 'Traversal Slice',
+    summary:
+      `Live legal-move graph from ${normalizeFenInput(options.fen)}. ` +
+      `Depth ${options.maxDepth}, branch cap ${options.maxBranching}` +
+      (options.pathMoves.length > 0
+        ? `, pre-expanded path ${options.pathMoves.join(' ')}`
+        : '') +
+      '.',
+    accentColor: '#0f766e',
+    camera: {
+      position: [0, 0.45, 4.2],
+      lookAt: [0, 0, 0],
+      fov: 48
+    },
+    runtime: {
+      graphObjectId: builderBootstrapManifest.graphObjectId,
+      bootstrap: {
+        representationSchemaVersion: DYNAMIC_SCHEMA_VERSION,
+        seedSurface: 'browser-dynamic-fen',
+        focusCandidatesSource: 'camera-tracked-live-occurrences',
+        entrypointDerivation: 'none',
+        webCorpusManifest: 'not-used',
+        openingTableManifest: 'not-used',
+        endgameTableManifest: 'not-used',
+        middlegameProceduralPolicy: 'browser-legal-move-expansion'
+      },
+      initialFocusOccurrenceId,
+      focusCandidateOccurrenceIds: resolveDynamicFocusCandidates(
+        builderBootstrapManifest,
+        rootOccurrenceId,
+        preferredOccurrenceIds
+      ),
+      defaultNeighborhoodRadius: Math.min(2, Math.max(1, options.maxDepth)),
+      maxNeighborhoodRadius: Math.max(4, options.maxDepth + 1),
+      defaultRefinementBudget: 8,
+      maxRefinementBudget: 12,
+      cacheCapacity: 24
+    }
+  } satisfies ViewerSceneManifest;
+}
+
 function collectDynamicOccurrenceExpansion({
   builderBootstrapManifest,
   focusOccurrence,
@@ -779,25 +763,6 @@ function collectDynamicOccurrenceExpansion({
   return {
     generatedOccurrences,
     generatedTransitions
-  };
-}
-
-function createDynamicNavigationEntryPoint(
-  rootOccurrence: BuilderOccurrenceRecord,
-  viewerSceneManifest: ViewerSceneManifest
-): NavigationEntryPoint {
-  return {
-    anchorId: 'entry:dynamic',
-    entryId: 'middlegame',
-    label: 'Dynamic',
-    description: 'Legal-move graph generated in the browser from the current FEN seed.',
-    regimeId: 'middlegame-procedural',
-    focusOccurrenceId: rootOccurrence.occurrenceId,
-    distance: clampLiveViewDistance(LIVE_VIEW_DISTANCE.default),
-    neighborhoodRadius: viewerSceneManifest.runtime.defaultNeighborhoodRadius,
-    orbit: deriveCameraOrbitState(viewerSceneManifest.camera.position),
-    subtreeKey: rootOccurrence.embedding.subtreeKey,
-    anchorPly: rootOccurrence.ply
   };
 }
 
