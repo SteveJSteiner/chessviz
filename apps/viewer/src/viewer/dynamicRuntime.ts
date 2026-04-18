@@ -15,6 +15,8 @@ import type {
   NavigationEntryPoint,
   NavigationEntryPointId,
   RuntimeArtifactBundle,
+  RuntimeGraphViewScope,
+  RuntimeNeighborhoodSnapshot,
   SceneBootstrap,
   ViewerSceneManifest
 } from './contracts.ts';
@@ -25,7 +27,8 @@ import {
 } from './navigation.ts';
 import {
   createRuntimeExplorationKernel,
-  type RuntimeExplorationKernel
+  type RuntimeExplorationKernel,
+  type RuntimeViewRequest
 } from './runtimeKernel.ts';
 
 const DYNAMIC_SCHEMA_VERSION = '2026-04-13.dynamic.v1';
@@ -37,6 +40,10 @@ const DEFAULT_DYNAMIC_DEPTH = 2;
 const DEFAULT_DYNAMIC_BRANCHING = 20;
 const MAX_DYNAMIC_DEPTH = 4;
 const MAX_DYNAMIC_BRANCHING = 32;
+const MAX_LOCAL_VIEW_AUTO_EXPANSION_PASSES = 6;
+const MAX_WHOLE_OBJECT_AUTO_EXPANSION_PASSES = 3;
+const LOCAL_VIEW_AUTO_EXPANSION_BATCH = 2;
+const WHOLE_OBJECT_AUTO_EXPANSION_BATCH = 6;
 const DYNAMIC_PATH_TOKEN_PATTERN = /[\s,>]+/;
 const DYNAMIC_MOVE_UCI_PATTERN = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
 const ADDITIVE_EXPANSION_MIN_SPREAD = Math.PI / 5;
@@ -85,6 +92,11 @@ export type ViewerRuntimeExpansionResult = {
 export type ViewerRuntimeStore = {
   inspectNeighborhood: RuntimeExplorationKernel['inspectNeighborhood'];
   inspectWholeGraph: RuntimeExplorationKernel['inspectWholeGraph'];
+  inspectView: RuntimeExplorationKernel['inspectView'];
+  materializeView: (
+    focusOccurrenceId: string,
+    request: RuntimeViewRequest
+  ) => RuntimeNeighborhoodSnapshot;
   inspectCarrierSurface: RuntimeExplorationKernel['inspectCarrierSurface'];
   resolveOccurrence: RuntimeExplorationKernel['resolveOccurrence'];
   getFocusOptions: RuntimeExplorationKernel['getFocusOptions'];
@@ -394,12 +406,76 @@ export function createViewerRuntimeStore(
     viewerSceneManifest
   );
 
+  const commitExpansion = (
+    expansion: {
+      builderBootstrapManifest: BuilderBootstrapManifest;
+      viewerSceneManifest: ViewerSceneManifest;
+      result: ViewerRuntimeExpansionResult;
+    } | null
+  ) => {
+    if (!expansion) {
+      return null;
+    }
+
+    builderBootstrapManifest = expansion.builderBootstrapManifest;
+    viewerSceneManifest = expansion.viewerSceneManifest;
+    runtimeKernel = createRuntimeExplorationKernel(
+      builderBootstrapManifest,
+      viewerSceneManifest
+    );
+
+    return expansion.result;
+  };
+
   return {
     inspectNeighborhood(focusOccurrenceId, request) {
       return runtimeKernel.inspectNeighborhood(focusOccurrenceId, request);
     },
     inspectWholeGraph(focusOccurrenceId, request) {
       return runtimeKernel.inspectWholeGraph(focusOccurrenceId, request);
+    },
+    inspectView(focusOccurrenceId, request) {
+      return runtimeKernel.inspectView(focusOccurrenceId, request);
+    },
+    materializeView(focusOccurrenceId, request) {
+      let viewSnapshot = runtimeKernel.inspectView(focusOccurrenceId, request);
+
+      if (runtimeSource.mode !== 'dynamic' || !runtimeSource.dynamicOptions) {
+        return viewSnapshot;
+      }
+
+      const maxPasses = resolveAutoExpansionPassLimit(
+        request.scope,
+        request.neighborhoodRadius
+      );
+
+      for (let passIndex = 0; passIndex < maxPasses; passIndex += 1) {
+        const frontierOccurrenceIds = selectAutoExpansionBatch(
+          viewSnapshot,
+          request.scope
+        );
+
+        if (frontierOccurrenceIds.length === 0) {
+          break;
+        }
+
+        const expansionResult = commitExpansion(
+          expandDynamicOccurrencesMaterialization({
+            builderBootstrapManifest,
+            viewerSceneManifest,
+            occurrenceIds: frontierOccurrenceIds,
+            dynamicOptions: runtimeSource.dynamicOptions
+          })
+        );
+
+        if (!expansionResult?.didExpand) {
+          break;
+        }
+
+        viewSnapshot = runtimeKernel.inspectView(focusOccurrenceId, request);
+      }
+
+      return viewSnapshot;
     },
     inspectCarrierSurface(occurrenceIds, request) {
       return runtimeKernel.inspectCarrierSurface(occurrenceIds, request);
@@ -425,12 +501,12 @@ export function createViewerRuntimeStore(
         };
       }
 
-      const expansion = expandDynamicOccurrenceMaterialization({
+      const expansion = commitExpansion(expandDynamicOccurrenceMaterialization({
         builderBootstrapManifest,
         viewerSceneManifest,
         occurrenceId,
         dynamicOptions: runtimeSource.dynamicOptions
-      });
+      }));
 
       if (!expansion) {
         return {
@@ -440,14 +516,7 @@ export function createViewerRuntimeStore(
         };
       }
 
-      builderBootstrapManifest = expansion.builderBootstrapManifest;
-      viewerSceneManifest = expansion.viewerSceneManifest;
-      runtimeKernel = createRuntimeExplorationKernel(
-        builderBootstrapManifest,
-        viewerSceneManifest
-      );
-
-      return expansion.result;
+      return expansion;
     }
   };
 }
@@ -463,35 +532,69 @@ function expandDynamicOccurrenceMaterialization({
   occurrenceId: string;
   dynamicOptions: DynamicRuntimeOptions;
 }) {
-  const focusOccurrence = builderBootstrapManifest.occurrences.find(
-    (occurrence) => occurrence.occurrenceId === occurrenceId
-  );
+  return expandDynamicOccurrencesMaterialization({
+    builderBootstrapManifest,
+    viewerSceneManifest,
+    occurrenceIds: [occurrenceId],
+    dynamicOptions
+  });
+}
 
-  if (
-    !focusOccurrence ||
-    focusOccurrence.terminal !== null
-  ) {
-    return null;
+function resolveAutoExpansionPassLimit(
+  scope: RuntimeGraphViewScope,
+  neighborhoodRadius: number
+) {
+  if (scope === 'whole-object') {
+    return MAX_WHOLE_OBJECT_AUTO_EXPANSION_PASSES;
   }
 
-  if (
-    builderBootstrapManifest.transitions.some(
-      (transition) => transition.sourceOccurrenceId === occurrenceId
-    )
-  ) {
-    return null;
+  return Math.max(
+    1,
+    Math.min(MAX_LOCAL_VIEW_AUTO_EXPANSION_PASSES, neighborhoodRadius + 1)
+  );
+}
+
+function selectAutoExpansionBatch(
+  runtimeSnapshot: RuntimeNeighborhoodSnapshot,
+  scope: RuntimeGraphViewScope
+) {
+  const frontierOccurrenceIds =
+    runtimeSnapshot.renderDemand.frontierExpansionOccurrenceIds;
+
+  if (scope === 'local-neighborhood') {
+    return frontierOccurrenceIds.slice(0, LOCAL_VIEW_AUTO_EXPANSION_BATCH);
   }
 
-  const reconstructedState = reconstructDynamicOccurrenceState(
-    dynamicOptions.fen,
-    focusOccurrence.path,
-    dynamicOptions.maxBranching
-  );
-  const orderedMoves = orderMoves(
-    reconstructedState.board.moves({ verbose: true })
-  ).slice(0, dynamicOptions.maxBranching);
+  if (frontierOccurrenceIds.length === 0) {
+    return frontierOccurrenceIds;
+  }
 
-  if (orderedMoves.length === 0) {
+  const deficit = Math.max(
+    runtimeSnapshot.renderDemand.policy.visibleLowDetailOccurrenceTarget -
+      runtimeSnapshot.renderDemand.visibleOccurrenceCount,
+    0
+  );
+  const batchSize =
+    deficit > 0
+      ? Math.min(WHOLE_OBJECT_AUTO_EXPANSION_BATCH, Math.max(1, deficit))
+      : Math.min(2, WHOLE_OBJECT_AUTO_EXPANSION_BATCH);
+
+  return frontierOccurrenceIds.slice(0, batchSize);
+}
+
+function expandDynamicOccurrencesMaterialization({
+  builderBootstrapManifest,
+  viewerSceneManifest,
+  occurrenceIds,
+  dynamicOptions
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  viewerSceneManifest: ViewerSceneManifest;
+  occurrenceIds: string[];
+  dynamicOptions: DynamicRuntimeOptions;
+}) {
+  const uniqueOccurrenceIds = [...new Set(occurrenceIds)];
+  if (uniqueOccurrenceIds.length === 0) {
     return null;
   }
 
@@ -503,76 +606,32 @@ function expandDynamicOccurrenceMaterialization({
       `${transition.sourceOccurrenceId}:${transition.targetOccurrenceId}`
     )
   );
-  const childSpread =
-    focusOccurrence.ply === 0
-      ? Math.PI * 2
-      : resolveExpansionSpread(orderedMoves.length);
-  const childAzimuths = resolveExpansionAzimuths(
-    focusOccurrence.embedding.azimuth,
-    orderedMoves.length,
-    focusOccurrence.ply
-  );
   const newGeneratedOccurrences: GeneratedOccurrence[] = [];
   const newGeneratedTransitions: GeneratedTransition[] = [];
 
-  for (const [index, move] of orderedMoves.entries()) {
-    const childBoard = new Chess(move.after);
-    const childStateKey = toCanonicalStateKey(childBoard.fen());
-    const moveUci = toMoveUci(move);
-    const nextPly = focusOccurrence.ply + 1;
-    const path = [...focusOccurrence.path, `${nextPly}:${moveUci}`];
-    const occurrenceKey = `occ-${hashString(`${childStateKey}|${path.join('|')}`)}`;
-    const subtreeKey =
-      focusOccurrence.embedding.subtreeKey === 'root'
-        ? moveUci
-        : focusOccurrence.embedding.subtreeKey;
-    const moveFacts = resolveMoveFacts(move, childBoard);
-    const moveFamily = resolveMoveFamily(moveFacts);
-    const childAzimuth = childAzimuths[index] ?? focusOccurrence.embedding.azimuth;
+  for (const occurrenceId of uniqueOccurrenceIds) {
+    const focusOccurrence = builderBootstrapManifest.occurrences.find(
+      (occurrence) => occurrence.occurrenceId === occurrenceId
+    );
 
-    if (!existingOccurrenceIds.has(occurrenceKey)) {
-      const phaseLabel = resolvePhaseLabel(childBoard, nextPly);
-      const terminal = resolveTerminal(childBoard);
-      const coordinate = resolveAdditiveExpansionCoordinate(
-        nextPly,
-        childAzimuth,
-        phaseLabel,
-        terminal !== null,
-        childSpread
-      );
-
-      newGeneratedOccurrences.push({
-        occurrenceId: occurrenceKey,
-        stateKey: childStateKey,
-        path,
-        ply: nextPly,
-        phaseLabel,
-        materialSignature: materialSignature(childBoard),
-        subtreeKey,
-        coordinate,
-        azimuth: roundAngle(childAzimuth),
-        elevation: roundNumber(
-          Math.atan2(coordinate[1], Math.hypot(coordinate[0], coordinate[2]))
-        ),
-        ballRadius: roundNumber(0.08 + (nextPly * 0.012)),
-        terminal
-      });
-      existingOccurrenceIds.add(occurrenceKey);
+    if (!focusOccurrence) {
+      continue;
     }
 
-    const transitionKey = `${occurrenceId}:${occurrenceKey}`;
+    const expansion = collectDynamicOccurrenceExpansion({
+      builderBootstrapManifest,
+      focusOccurrence,
+      dynamicOptions,
+      existingOccurrenceIds,
+      existingTransitionKeys
+    });
 
-    if (!existingTransitionKeys.has(transitionKey)) {
-      newGeneratedTransitions.push({
-        sourceOccurrenceId: occurrenceId,
-        targetOccurrenceId: occurrenceKey,
-        moveUci,
-        ply: nextPly,
-        moveFacts,
-        moveFamily
-      });
-      existingTransitionKeys.add(transitionKey);
+    if (!expansion) {
+      continue;
     }
+
+    newGeneratedOccurrences.push(...expansion.generatedOccurrences);
+    newGeneratedTransitions.push(...expansion.generatedTransitions);
   }
 
   if (newGeneratedTransitions.length === 0) {
@@ -627,6 +686,126 @@ function expandDynamicOccurrenceMaterialization({
       occurrenceDelta: newGeneratedOccurrences.length,
       edgeDelta: newGeneratedTransitions.length
     }
+  };
+}
+
+function collectDynamicOccurrenceExpansion({
+  builderBootstrapManifest,
+  focusOccurrence,
+  dynamicOptions,
+  existingOccurrenceIds,
+  existingTransitionKeys
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  focusOccurrence: BuilderOccurrenceRecord;
+  dynamicOptions: DynamicRuntimeOptions;
+  existingOccurrenceIds: Set<string>;
+  existingTransitionKeys: Set<string>;
+}) {
+  if (focusOccurrence.terminal !== null) {
+    return null;
+  }
+
+  if (
+    builderBootstrapManifest.transitions.some(
+      (transition) => transition.sourceOccurrenceId === focusOccurrence.occurrenceId
+    )
+  ) {
+    return null;
+  }
+
+  const reconstructedState = reconstructDynamicOccurrenceState(
+    dynamicOptions.fen,
+    focusOccurrence.path,
+    dynamicOptions.maxBranching
+  );
+  const orderedMoves = orderMoves(
+    reconstructedState.board.moves({ verbose: true })
+  ).slice(0, dynamicOptions.maxBranching);
+
+  if (orderedMoves.length === 0) {
+    return null;
+  }
+
+  const childSpread =
+    focusOccurrence.ply === 0
+      ? Math.PI * 2
+      : resolveExpansionSpread(orderedMoves.length);
+  const childAzimuths = resolveExpansionAzimuths(
+    focusOccurrence.embedding.azimuth,
+    orderedMoves.length,
+    focusOccurrence.ply
+  );
+  const generatedOccurrences: GeneratedOccurrence[] = [];
+  const generatedTransitions: GeneratedTransition[] = [];
+
+  for (const [index, move] of orderedMoves.entries()) {
+    const childBoard = new Chess(move.after);
+    const childStateKey = toCanonicalStateKey(childBoard.fen());
+    const moveUci = toMoveUci(move);
+    const nextPly = focusOccurrence.ply + 1;
+    const path = [...focusOccurrence.path, `${nextPly}:${moveUci}`];
+    const occurrenceKey = `occ-${hashString(`${childStateKey}|${path.join('|')}`)}`;
+    const subtreeKey =
+      focusOccurrence.embedding.subtreeKey === 'root'
+        ? moveUci
+        : focusOccurrence.embedding.subtreeKey;
+    const moveFacts = resolveMoveFacts(move, childBoard);
+    const moveFamily = resolveMoveFamily(moveFacts);
+    const childAzimuth = childAzimuths[index] ?? focusOccurrence.embedding.azimuth;
+
+    if (!existingOccurrenceIds.has(occurrenceKey)) {
+      const phaseLabel = resolvePhaseLabel(childBoard, nextPly);
+      const terminal = resolveTerminal(childBoard);
+      const coordinate = resolveAdditiveExpansionCoordinate(
+        nextPly,
+        childAzimuth,
+        phaseLabel,
+        terminal !== null,
+        childSpread
+      );
+
+      generatedOccurrences.push({
+        occurrenceId: occurrenceKey,
+        stateKey: childStateKey,
+        path,
+        ply: nextPly,
+        phaseLabel,
+        materialSignature: materialSignature(childBoard),
+        subtreeKey,
+        coordinate,
+        azimuth: roundAngle(childAzimuth),
+        elevation: roundNumber(
+          Math.atan2(coordinate[1], Math.hypot(coordinate[0], coordinate[2]))
+        ),
+        ballRadius: roundNumber(0.08 + (nextPly * 0.012)),
+        terminal
+      });
+      existingOccurrenceIds.add(occurrenceKey);
+    }
+
+    const dynamicTransitionKey = `${focusOccurrence.occurrenceId}:${occurrenceKey}`;
+
+    if (!existingTransitionKeys.has(dynamicTransitionKey)) {
+      generatedTransitions.push({
+        sourceOccurrenceId: focusOccurrence.occurrenceId,
+        targetOccurrenceId: occurrenceKey,
+        moveUci,
+        ply: nextPly,
+        moveFacts,
+        moveFamily
+      });
+      existingTransitionKeys.add(dynamicTransitionKey);
+    }
+  }
+
+  if (generatedTransitions.length === 0) {
+    return null;
+  }
+
+  return {
+    generatedOccurrences,
+    generatedTransitions
   };
 }
 

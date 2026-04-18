@@ -77,6 +77,8 @@ The system shall represent chess as a single continuous zoomable object in which
 ## 11. Camera behavior
 
 - **R37.** Camera movement shall afford navigation through the object rather than mere inspection of a static diagram.
+- **R37a.** The camera shall be able to rotate, move forward or backward, and zoom without first snapping to or remaining attached to a specific board occurrence.
+- **R37b.** Selecting or focusing an occurrence may update a secondary board reference or suggested target, but subsequent camera navigation shall remain independent of that occurrence unless the user explicitly requests retargeting.
 - **R38.** The camera shall be able to move so that detail comes into and out of focus continuously.
 - **R39.** The camera shall support reading entailed path direction toward later structure and terminal pull.
 

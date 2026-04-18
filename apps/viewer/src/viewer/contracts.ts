@@ -476,9 +476,37 @@ export interface RuntimeExplorationCacheStats {
   entryCount: number;
 }
 
+export type RuntimeGraphViewScope = 'local-neighborhood' | 'whole-object';
+
+export type RuntimeOccurrenceLod = 'focus' | 'detail' | 'context' | 'distant';
+
+export interface RuntimeRenderDemandPolicy {
+  renderSubsetPolicy: string;
+  residencyPolicy: string;
+  lodPolicy: string;
+  focusLevelPolicy: string;
+  detailNeighborhoodRadius: number;
+  visibleLowDetailOccurrenceTarget: number;
+  visibleEdgeTarget: number;
+}
+
+export interface RuntimeRenderDemandSnapshot {
+  scope: RuntimeGraphViewScope;
+  policy: RuntimeRenderDemandPolicy;
+  enumeratedOccurrenceCount: number;
+  enumeratedEdgeCount: number;
+  visibleOccurrenceCount: number;
+  visibleEdgeCount: number;
+  hotOccurrenceCount: number;
+  warmOccurrenceCount: number;
+  coldOccurrenceCount: number;
+  frontierExpansionOccurrenceIds: string[];
+}
+
 export interface RuntimeNeighborhoodOccurrence extends BuilderOccurrenceRecord {
   distance: number;
   isFocus: boolean;
+  lod: RuntimeOccurrenceLod;
 }
 
 export interface RuntimeNeighborhoodEdge extends BuilderEdgeRecord {
@@ -493,6 +521,7 @@ export interface RuntimeNeighborhoodSnapshot {
   objectIdentityStable: boolean;
   cacheState: 'hit' | 'miss';
   cacheStats: RuntimeExplorationCacheStats;
+  renderDemand: RuntimeRenderDemandSnapshot;
   occurrences: RuntimeNeighborhoodOccurrence[];
   edges: RuntimeNeighborhoodEdge[];
   repeatedStateRelations: BuilderRepeatedStateRelationRecord[];

@@ -3,6 +3,8 @@ import {
   createCameraGrammarState,
   resolveCameraGrammarRefinementBudget
 } from './viewer/cameraGrammar';
+import type { CameraOrbitPreset, RuntimeGraphViewScope } from './viewer/contracts';
+import { normalizeCameraOrbitState } from './viewer/cameraOrbit';
 import {
   clampLiveViewDistance
 } from './viewer/labelPolicy';
@@ -15,14 +17,13 @@ import {
 } from './viewer/renderTuning';
 import {
   createViewerRuntimeStore,
-  resolveViewerRuntimeSource,
-  type ViewerRuntimeStore
+  resolveViewerRuntimeSource
 } from './viewer/dynamicRuntime';
 import { runtimeArtifactBundle } from './viewer/runtimeArtifacts';
 import { buildRuntimeTranspositionSurface } from './viewer/transpositionSurface';
 import { ViewerShell } from './viewer/ViewerShell';
 
-export type GraphViewScope = 'local-neighborhood' | 'whole-object';
+export type GraphViewScope = RuntimeGraphViewScope;
 
 export default function App() {
   const [runtimeSource] = useState(() =>
@@ -33,7 +34,6 @@ export default function App() {
   );
   const { runtimeBootstrap, navigationEntryPoints } = runtimeSource;
   const [runtimeStore] = useState(() => createViewerRuntimeStore(runtimeSource));
-  const [runtimeRevision, setRuntimeRevision] = useState(0);
   const [activeEntryPointId, setActiveEntryPointId] = useState(() =>
     runtimeSource.initialEntryPointId
   );
@@ -52,6 +52,9 @@ export default function App() {
   const [cameraDistance, setCameraDistance] = useState<number>(
     activeNavigationEntryPoint.distance
   );
+  const [cameraDemandOrbit, setCameraDemandOrbit] = useState<CameraOrbitPreset>(() =>
+    quantizeCameraOrbit(activeNavigationEntryPoint.orbit)
+  );
   const [hoveredOccurrenceId, setHoveredOccurrenceId] = useState<string | null>(null);
   const [boardReferenceOpen, setBoardReferenceOpen] = useState(false);
   const [orbitResetKey, setOrbitResetKey] = useState(0);
@@ -62,12 +65,12 @@ export default function App() {
     runtimeConfig
   );
   const [runtimeSnapshot, setRuntimeSnapshot] = useState(() =>
-    inspectRuntimeView({
-      focusOccurrenceId,
-      graphViewScope,
+    runtimeStore.inspectView(focusOccurrenceId, {
+      scope: graphViewScope,
       neighborhoodRadius,
       refinementBudget,
-      runtimeStore
+      cameraDistance,
+      cameraOrbit: cameraDemandOrbit
     })
   );
   const deferredRuntimeSnapshot = useDeferredValue(runtimeSnapshot);
@@ -79,21 +82,22 @@ export default function App() {
   useEffect(() => {
     startTransition(() => {
       setRuntimeSnapshot(
-        inspectRuntimeView({
-          focusOccurrenceId,
-          graphViewScope,
+        runtimeStore.materializeView(focusOccurrenceId, {
+          scope: graphViewScope,
           neighborhoodRadius,
           refinementBudget,
-          runtimeStore
+          cameraDistance,
+          cameraOrbit: cameraDemandOrbit
         })
       );
     });
   }, [
+    cameraDemandOrbit,
+    cameraDistance,
     focusOccurrenceId,
     graphViewScope,
     neighborhoodRadius,
     refinementBudget,
-    runtimeRevision,
     runtimeStore
   ]);
   const carrierSurface = runtimeStore.inspectCarrierSurface(
@@ -111,9 +115,7 @@ export default function App() {
     ? runtimeStore.resolveOccurrence(hoveredOccurrenceId) ?? null
     : null;
   const baseFocusOptions = runtimeStore.getFocusOptions();
-  const currentFocusOccurrence = runtimeStore.resolveOccurrence(
-    deferredRuntimeSnapshot.focusOccurrenceId
-  );
+  const currentFocusOccurrence = runtimeStore.resolveOccurrence(focusOccurrenceId);
   const focusOptions = currentFocusOccurrence
     && !baseFocusOptions.some(
       (occurrence) => occurrence.occurrenceId === currentFocusOccurrence.occurrenceId
@@ -134,17 +136,12 @@ export default function App() {
     setHoveredOccurrenceId(null);
     setNeighborhoodRadius(entryPoint.neighborhoodRadius);
     setCameraDistance(entryPoint.distance);
+    setCameraDemandOrbit(quantizeCameraOrbit(entryPoint.orbit));
     setBoardReferenceOpen(true);
     setOrbitResetKey((currentKey) => currentKey + 1);
   };
 
   const handleFocusOccurrenceChange = (occurrenceId: string) => {
-    const expansion = runtimeStore.expandFocusOccurrence(occurrenceId);
-
-    if (expansion.didExpand) {
-      setRuntimeRevision((currentRevision) => currentRevision + 1);
-    }
-
     setHoveredOccurrenceId(null);
     setFocusOccurrenceId(occurrenceId);
     setBoardReferenceOpen(true);
@@ -167,6 +164,7 @@ export default function App() {
       cameraGrammar={cameraGrammar}
       carrierSurface={carrierSurface}
       cameraDistance={cameraDistance}
+      focusOccurrenceId={focusOccurrenceId}
       focusOptions={focusOptions}
       graphViewScope={graphViewScope}
       hoveredOccurrence={hoveredOccurrence}
@@ -176,6 +174,16 @@ export default function App() {
       onCameraDistanceChange={(distance) =>
         setCameraDistance(clampLiveViewDistance(distance))
       }
+      onCameraOrbitChange={(orbit) => {
+        const nextOrbit = quantizeCameraOrbit(orbit);
+
+        setCameraDemandOrbit((currentOrbit) =>
+          currentOrbit.azimuth === nextOrbit.azimuth &&
+          currentOrbit.elevation === nextOrbit.elevation
+            ? currentOrbit
+            : nextOrbit
+        );
+      }}
       onBoardReferenceOpenChange={setBoardReferenceOpen}
       onEntryPointChange={handleEntryPointChange}
       onGraphViewScopeChange={handleGraphViewScopeChange}
@@ -204,27 +212,15 @@ export default function App() {
   );
 }
 
-function inspectRuntimeView({
-  focusOccurrenceId,
-  graphViewScope,
-  neighborhoodRadius,
-  refinementBudget,
-  runtimeStore
-}: {
-  focusOccurrenceId: string;
-  graphViewScope: GraphViewScope;
-  neighborhoodRadius: number;
-  refinementBudget: number;
-  runtimeStore: ViewerRuntimeStore;
-}) {
-  if (graphViewScope === 'whole-object') {
-    return runtimeStore.inspectWholeGraph(focusOccurrenceId, {
-      refinementBudget
-    });
-  }
+function quantizeCameraOrbit(orbit: CameraOrbitPreset): CameraOrbitPreset {
+  const normalizedOrbit = normalizeCameraOrbitState(orbit);
 
-  return runtimeStore.inspectNeighborhood(focusOccurrenceId, {
-    radius: neighborhoodRadius,
-    refinementBudget
-  });
+  return {
+    azimuth: quantizeNumber(normalizedOrbit.azimuth, 0.22),
+    elevation: quantizeNumber(normalizedOrbit.elevation, 0.18)
+  };
+}
+
+function quantizeNumber(value: number, step: number) {
+  return Math.round(value / step) * step;
 }

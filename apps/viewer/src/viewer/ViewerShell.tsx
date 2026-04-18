@@ -1,5 +1,6 @@
 import type {
   BuilderOccurrenceRecord,
+  CameraOrbitPreset,
   NavigationEntryPoint,
   NavigationEntryPointId,
   RuntimeCarrierSurfaceSnapshot,
@@ -25,6 +26,7 @@ type ViewerShellProps = {
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   cameraDistance: number;
   entryPoints: NavigationEntryPoint[];
+  focusOccurrenceId: string;
   focusOptions: BuilderOccurrenceRecord[];
   graphViewScope: 'local-neighborhood' | 'whole-object';
   hoveredOccurrence: BuilderOccurrenceRecord | null;
@@ -43,6 +45,7 @@ type ViewerShellProps = {
   onRenderTuningChange: (partialTuning: Partial<ViewerRenderTuning>) => void;
   onResetRenderTuning: () => void;
   onCameraDistanceChange: (distance: number) => void;
+  onCameraOrbitChange: (orbit: CameraOrbitPreset) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onNeighborhoodRadiusChange: (radius: number) => void;
   renderTuning: ViewerRenderTuning;
@@ -164,6 +167,7 @@ export function ViewerShell({
   carrierSurface,
   cameraDistance,
   entryPoints,
+  focusOccurrenceId,
   focusOptions,
   graphViewScope,
   hoveredOccurrence,
@@ -182,6 +186,7 @@ export function ViewerShell({
   onRenderTuningChange,
   onResetRenderTuning,
   onCameraDistanceChange,
+  onCameraOrbitChange,
   onFocusOccurrenceChange,
   onNeighborhoodRadiusChange,
   renderTuning,
@@ -246,7 +251,7 @@ export function ViewerShell({
             <select
               onChange={(event) => onFocusOccurrenceChange(event.target.value)}
               style={controlInputStyle}
-              value={runtimeSnapshot.focusOccurrenceId}
+              value={focusOccurrenceId}
             >
               {focusOptions.map((occurrence) => (
                 <option key={occurrence.occurrenceId} value={occurrence.occurrenceId}>
@@ -278,16 +283,26 @@ export function ViewerShell({
             </div>
             <span style={{ fontSize: '0.82rem', color: '#6c6254' }}>
               {isWholeObjectView
-                ? `Rendering ${runtimeSnapshot.occurrences.length} of ${totalGraphOccurrenceCount} nodes in one view; neighborhood radius is bypassed.`
-                : 'Neighborhood mode limits the graph-radius view around the current focus. Whole-object mode is useful for inspecting distributed transposition clusters.'}
+                ? `Rendering ${runtimeSnapshot.renderDemand.visibleOccurrenceCount} visible nodes from ${totalGraphOccurrenceCount} stored nodes; neighborhood radius is bypassed.`
+                : 'Neighborhood mode keeps the ontology radius-bounded around the current focus while still allowing the live store to grow behind that window.'}
             </span>
           </label>
+
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>Render demand</div>
+            <p style={{ margin: '0.45rem 0 0' }}>
+              {runtimeSnapshot.renderDemand.visibleOccurrenceCount} visible nodes and {runtimeSnapshot.renderDemand.visibleEdgeCount} visible edges from {runtimeSnapshot.renderDemand.enumeratedOccurrenceCount} enumerated nodes for this view.
+            </p>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+              Hot {runtimeSnapshot.renderDemand.hotOccurrenceCount} · warm {runtimeSnapshot.renderDemand.warmOccurrenceCount} · cold {runtimeSnapshot.renderDemand.coldOccurrenceCount} · frontier demand {runtimeSnapshot.renderDemand.frontierExpansionOccurrenceIds.length}
+            </p>
+          </article>
 
           {isWholeObjectView ? (
             <article style={narrativeCardStyle}>
               <div style={{ fontWeight: 700 }}>Whole-object scope</div>
               <p style={{ margin: '0.45rem 0 0' }}>
-                This view keeps the current focus anchor but renders the entire graph object instead of a local radius window.
+                This view keeps the current focus anchor while showing a budgeted low-detail subset of the larger graph object and letting camera demand grow the store behind it.
               </p>
             </article>
           ) : (
@@ -320,7 +335,7 @@ export function ViewerShell({
               value={cameraDistance}
             />
             <span style={{ fontSize: '0.82rem', color: '#6c6254' }}>
-              Drag on the canvas to orbit. Scroll on the canvas or use this slider to zoom; distance now drives refinement and label reveal.
+              Drag on the canvas to orbit. Scroll on the canvas or use this slider to zoom; distance now drives refinement, label reveal, and whole-object low-detail demand.
             </span>
           </label>
 
@@ -444,7 +459,7 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>How to use it</div>
             <p style={{ margin: '0.4rem 0 0' }}>
-              Click a node in the canvas to move the reference board, drag to orbit, and scroll or use the distance slider to change label reveal.
+              Click a node in the canvas to retarget focus, drag to orbit, and scroll or use the distance slider to change label reveal. The live store now expands from view demand instead of requiring click-to-expand.
             </p>
           </article>
         </section>
@@ -456,6 +471,7 @@ export function ViewerShell({
           cameraDistance={cameraDistance}
           carrierSurface={carrierSurface}
           onCameraDistanceChange={onCameraDistanceChange}
+          onCameraOrbitChange={onCameraOrbitChange}
           onFocusOccurrenceChange={onFocusOccurrenceChange}
           onHoverOccurrenceChange={onHoverOccurrenceChange}
           orbitPreset={navigationEntryPoint.orbit}

@@ -47,6 +47,7 @@ type SmokeCanvasProps = {
   cameraDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   onCameraDistanceChange: (distance: number) => void;
+  onCameraOrbitChange: (orbit: CameraOrbitPreset) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
   orbitPreset: CameraOrbitPreset;
@@ -63,6 +64,7 @@ export function SmokeCanvas({
   cameraDistance,
   carrierSurface,
   onCameraDistanceChange,
+  onCameraOrbitChange,
   onFocusOccurrenceChange,
   onHoverOccurrenceChange,
   orbitPreset,
@@ -93,6 +95,7 @@ export function SmokeCanvas({
         cameraFocus={cameraGrammar.lookAt}
         cameraDistance={cameraDistance}
         onCameraDistanceChange={onCameraDistanceChange}
+        onCameraOrbitChange={onCameraOrbitChange}
         orbitPreset={orbitPreset}
         orbitResetKey={orbitResetKey}
       />
@@ -352,12 +355,14 @@ function CameraRig({
   cameraFocus,
   cameraDistance,
   onCameraDistanceChange,
+  onCameraOrbitChange,
   orbitPreset,
   orbitResetKey
 }: {
   cameraFocus: Vector3;
   cameraDistance: number;
   onCameraDistanceChange: (distance: number) => void;
+  onCameraOrbitChange: (orbit: CameraOrbitPreset) => void;
   orbitPreset: CameraOrbitPreset;
   orbitResetKey: number;
 }) {
@@ -408,6 +413,7 @@ function CameraRig({
         event.clientX - dragState.x,
         event.clientY - dragState.y
       );
+      onCameraOrbitChange(orbitStateRef.current);
       dragStateRef.current = {
         ...dragState,
         x: event.clientX,
@@ -455,7 +461,7 @@ function CameraRig({
       canvasElement.style.touchAction = previousTouchAction;
       canvasElement.style.cursor = previousCursor;
     };
-  }, [gl, onCameraDistanceChange]);
+  }, [gl, onCameraDistanceChange, onCameraOrbitChange]);
 
   useFrame(() => {
     const cameraPosition = resolveOrbitCameraPosition(
@@ -497,7 +503,11 @@ function NeighborhoodNode({
     radiusCap,
     renderTuning.nodeRadiusScale
   );
-  const radius = occurrence.isFocus ? presentation.radius * 1.06 : presentation.radius;
+  const radiusScale = resolveOccurrenceLodRadiusScale(occurrence.lod);
+  const fillOpacity = resolveOccurrenceLodOpacity(occurrence.lod, occurrence.isFocus);
+  const ringOpacity = resolveOccurrenceRingOpacity(occurrence.lod, occurrence.isFocus);
+  const radius =
+    (occurrence.isFocus ? presentation.radius * 1.06 : presentation.radius) * radiusScale;
 
   return (
     <group
@@ -523,7 +533,9 @@ function NeighborhoodNode({
           color={presentation.fillColor}
           emissive={occurrence.isFocus || isHovered ? presentation.fillColor : '#000000'}
           emissiveIntensity={occurrence.isFocus ? 0.2 : isHovered ? 0.1 : 0}
+          opacity={fillOpacity}
           roughness={0.3}
+          transparent={fillOpacity < 0.999}
         />
       </mesh>
       {isHovered && !occurrence.isFocus ? (
@@ -543,7 +555,7 @@ function NeighborhoodNode({
         <meshBasicMaterial
           color={presentation.phaseRingColor}
           depthWrite={false}
-          opacity={0.88}
+          opacity={Math.min(0.88, fillOpacity + 0.1)}
           side={DoubleSide}
           transparent
         />
@@ -562,13 +574,65 @@ function NeighborhoodNode({
         <meshBasicMaterial
           color={presentation.ringColor}
           depthWrite={false}
-          opacity={occurrence.isFocus ? 0.78 : 0.38}
+          opacity={ringOpacity}
           side={DoubleSide}
           transparent
         />
       </mesh>
     </group>
   );
+}
+
+function resolveOccurrenceLodRadiusScale(
+  lod: RuntimeNeighborhoodOccurrence['lod']
+) {
+  if (lod === 'distant') {
+    return 0.72;
+  }
+
+  if (lod === 'context') {
+    return 0.84;
+  }
+
+  return 1;
+}
+
+function resolveOccurrenceLodOpacity(
+  lod: RuntimeNeighborhoodOccurrence['lod'],
+  isFocus: boolean
+) {
+  if (isFocus) {
+    return 1;
+  }
+
+  if (lod === 'distant') {
+    return 0.58;
+  }
+
+  if (lod === 'context') {
+    return 0.76;
+  }
+
+  return 0.94;
+}
+
+function resolveOccurrenceRingOpacity(
+  lod: RuntimeNeighborhoodOccurrence['lod'],
+  isFocus: boolean
+) {
+  if (isFocus) {
+    return 0.78;
+  }
+
+  if (lod === 'distant') {
+    return 0.18;
+  }
+
+  if (lod === 'context') {
+    return 0.28;
+  }
+
+  return 0.38;
 }
 
 function NeighborhoodCarriers({

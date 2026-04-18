@@ -274,7 +274,8 @@ function createOccurrence({
       terminalAnchorId: terminal ? `terminal:${occurrenceId}` : null
     },
     distance,
-    isFocus
+    isFocus,
+    lod: isFocus ? 'focus' : distance <= 1 ? 'detail' : 'context'
   };
 }
 

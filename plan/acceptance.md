@@ -113,7 +113,7 @@ run_declaration:
 - **A11. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
 - **A12. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
 - **A13. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
-- **A14. Runtime local refinement continuity:** Entering a previously unseen local region by camera/view navigation refines continuously without switching object family, without bypassing the live legal-move generation path when runtime expansion is required, and without requiring explicit click-to-expand interaction as the gating mechanism.
+- **A14. Runtime local refinement continuity:** Entering a previously unseen local region by camera/view navigation refines continuously without switching object family, without bypassing the live legal-move generation path when runtime expansion is required, without requiring explicit click-to-expand interaction as the gating mechanism, and without requiring the camera to snap to or remain attached to a focused occurrence in order to continue navigation.
 - **A15. On-object labeling primacy:** Move, root, and terminal labels remain readable on the geometry itself without requiring a sidebar or legend lookup.
 - **A16. Reference-view subordination:** The focused board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry.
 - **A17. Branch-aware label density:** In declared high-branch runs, label selection or fade keeps the geometry readable without simultaneous all-edge text saturation.

@@ -58,6 +58,8 @@ This file contains design and process decisions only. It must not become a task 
 - **D20id. Additive stable embedding** — Expanding one frontier may add coordinates for new nodes but may not perturb already-placed nodes during normal exploration.
 - **D20ie. Camera-view-driven refinement is primary exploration** — Camera movement, zoom, and other navigation that would expose previously unseen local structure must be able to trigger generation and refinement directly; selecting a node may still retarget or accelerate exploration, but it is not a required prerequisite for graph growth.
 - **D20if. Seed URLs may carry path pre-expansion** — A seed FEN or state key plus an optional move path may pre-grow a line before interactive exploration begins.
+- **D20ig. Detached camera navigation is binding** — Camera rotation, forward or backward movement, and zoom are independent of occurrence focus; selecting a node may update a secondary board reference or suggested target, but it does not tether subsequent navigation to that occurrence.
+- **D20ih. Purge-first simplification is binding** — When viewer or runtime structure does not directly serve the detached-camera one-object requirements, it is simplified or removed rather than preserved alongside the target interaction model.
 - **D20j. Bootstrap comes from explicit seed state** — Any live bootstrap derives from the current seed board state plus runtime configuration, never from fixture or exported corpus truth.
 - **D20k. Fixture demotion is binding** — The existing fixture remains a unit-test or review input for identity, transposition, and DAG assembly checks and is excluded from required runtime graph genesis and settlement review.
 - **D20l. Settlement hard-fails on bypass or fracture** — Bypassing live runtime generation with canned corpus truth, or fracturing identity/anchoring/navigation/query semantics, is a hard failure.
@@ -95,7 +97,7 @@ This file contains design and process decisions only. It must not become a task 
 - **O1. Salience blend** — Relative weighting of frequency/eval/policy/centrality/terminal pull.
 - **O2. State-sameness rendering grammar** — Glow vs braid vs cross-fiber.
 - **O3. Carrier geometry details** — Rope surface/interior treatment and bundle behavior.
-- **O4. Camera grammar tuning** — Blend of path-following and context preservation.
+- **O4. Camera grammar tuning** — Blend of detached traversal, optional path-following retargeting, and context preservation.
 - **O5. Transposition reveal policy** — Reveal aggressiveness vs occurrence separation.
 - **O6. Middlegame partition features** — Material-only vs material + pawn/king/mobility factors.
 - **O7. Terminal color grammar** — Joint encoding of W/D/L, salience, and family cues.

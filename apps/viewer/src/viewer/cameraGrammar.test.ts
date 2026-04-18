@@ -99,6 +99,30 @@ function createRuntimeSnapshot(
       evictions: 0,
       entryCount: 1
     },
+    renderDemand: {
+      scope: 'local-neighborhood',
+      policy: {
+        renderSubsetPolicy: 'test-fixture',
+        residencyPolicy: 'test-fixture',
+        lodPolicy: 'test-fixture',
+        focusLevelPolicy: 'test-fixture',
+        detailNeighborhoodRadius: 2,
+        visibleLowDetailOccurrenceTarget: occurrences.length,
+        visibleEdgeTarget: 0
+      },
+      enumeratedOccurrenceCount: occurrences.length,
+      enumeratedEdgeCount: 0,
+      visibleOccurrenceCount: occurrences.length,
+      visibleEdgeCount: 0,
+      hotOccurrenceCount: occurrences.filter(
+        (occurrence) => occurrence.lod === 'focus' || occurrence.lod === 'detail'
+      ).length,
+      warmOccurrenceCount: occurrences.filter(
+        (occurrence) => occurrence.lod === 'context' || occurrence.lod === 'distant'
+      ).length,
+      coldOccurrenceCount: 0,
+      frontierExpansionOccurrenceIds: []
+    },
     occurrences,
     edges: [],
     repeatedStateRelations: [],
@@ -197,7 +221,8 @@ function createOccurrence({
       terminalAnchorId: terminal ? `terminal:${occurrenceId}` : null
     },
     distance,
-    isFocus
+    isFocus,
+    lod: isFocus ? 'focus' : distance <= 1 ? 'detail' : 'context'
   };
 }
 

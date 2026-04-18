@@ -192,7 +192,8 @@ function createOccurrence({
       terminalAnchorId: null
     },
     distance: isFocus ? 0 : 1,
-    isFocus
+    isFocus,
+    lod: isFocus ? 'focus' : 'detail'
   };
 }
 

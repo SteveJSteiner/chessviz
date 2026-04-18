@@ -130,6 +130,87 @@ test('expands frontier occurrences in place without changing graph identity', ()
   assert.equal(repeatedExpansion.didExpand, false);
 });
 
+test('materializes local neighborhood demand from the current view without explicit click expansion', () => {
+  const runtimeSource = createDynamicRuntimeSource(
+    runtimeArtifactBundle.viewerSceneManifest,
+    {
+      fen: DEFAULT_POSITION,
+      maxDepth: 1,
+      maxBranching: 20,
+      pathMoves: []
+    }
+  );
+  const runtimeStore = createViewerRuntimeStore(runtimeSource);
+  const rootOccurrenceId = runtimeStore.getBuilderBootstrapManifest().rootOccurrenceIds[0];
+  const beforeManifest = runtimeStore.getBuilderBootstrapManifest();
+  const viewState = resolveDynamicViewState(runtimeSource);
+
+  assert.ok(rootOccurrenceId);
+
+  if (!rootOccurrenceId) {
+    throw new Error('expected a dynamic root occurrence');
+  }
+
+  const runtimeSnapshot = runtimeStore.materializeView(rootOccurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 2,
+    refinementBudget: runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
+  const afterManifest = runtimeStore.getBuilderBootstrapManifest();
+
+  assert.ok(afterManifest.occurrences.length > beforeManifest.occurrences.length);
+  assert.ok(runtimeSnapshot.occurrences.some((occurrence) => occurrence.ply === 2));
+  assert.equal(runtimeSnapshot.renderDemand.scope, 'local-neighborhood');
+});
+
+test('retargeting focus expands a pursued line without changing neighborhood settings', () => {
+  const runtimeSource = createDynamicRuntimeSource(
+    runtimeArtifactBundle.viewerSceneManifest,
+    {
+      fen: DEFAULT_POSITION,
+      maxDepth: 1,
+      maxBranching: 20,
+      pathMoves: []
+    }
+  );
+  const runtimeStore = createViewerRuntimeStore(runtimeSource);
+  const beforeManifest = runtimeStore.getBuilderBootstrapManifest();
+  const viewState = resolveDynamicViewState(runtimeSource);
+  const focusOccurrence = beforeManifest.occurrences.find(
+    (occurrence) =>
+      occurrence.ply === 1 &&
+      occurrence.terminal === null &&
+      !beforeManifest.transitions.some(
+        (transition) => transition.sourceOccurrenceId === occurrence.occurrenceId
+      )
+  );
+
+  assert.ok(focusOccurrence);
+
+  if (!focusOccurrence) {
+    throw new Error('expected a frontier occurrence that can become the new focus');
+  }
+
+  const runtimeSnapshot = runtimeStore.materializeView(focusOccurrence.occurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 1,
+    refinementBudget: runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
+  const afterManifest = runtimeStore.getBuilderBootstrapManifest();
+
+  assert.ok(afterManifest.occurrences.length > beforeManifest.occurrences.length);
+  assert.ok(
+    runtimeSnapshot.occurrences.some(
+      (occurrence) =>
+        occurrence.distance === 1 && occurrence.ply === focusOccurrence.ply + 1
+    )
+  );
+});
+
 test('continues frontier expansion past the initial neighborhood-radius ceiling', () => {
   const runtimeSource = createDynamicRuntimeSource(
     runtimeArtifactBundle.viewerSceneManifest,
@@ -242,7 +323,7 @@ test('keeps existing embedding stable while additive expansion fans new children
   );
 });
 
-test('matches URL path pre-expansion with interactive focus-click expansion on the same object', () => {
+test('matches URL path pre-expansion with view-driven materialization on the same object', () => {
   const pathMoves = ['e2e4', 'e7e5', 'g1f3', 'b8c6'];
   const preexpandedSource = createDynamicRuntimeSource(
     runtimeArtifactBundle.viewerSceneManifest,
@@ -263,6 +344,7 @@ test('matches URL path pre-expansion with interactive focus-click expansion on t
     }
   );
   const interactiveStore = createViewerRuntimeStore(interactiveSource);
+  const viewState = resolveDynamicViewState(interactiveSource);
   let currentOccurrenceId =
     interactiveStore.getBuilderBootstrapManifest().rootOccurrenceIds[0];
 
@@ -272,6 +354,9 @@ test('matches URL path pre-expansion with interactive focus-click expansion on t
     throw new Error('expected a dynamic root occurrence');
   }
 
+  const refinementBudget =
+    interactiveStore.getViewerSceneManifest().runtime.defaultRefinementBudget;
+
   for (const moveUci of pathMoves) {
     let transition = findTransition(
       interactiveStore.getBuilderBootstrapManifest(),
@@ -280,9 +365,13 @@ test('matches URL path pre-expansion with interactive focus-click expansion on t
     );
 
     if (!transition) {
-      const expansion = interactiveStore.expandFocusOccurrence(currentOccurrenceId);
-
-      assert.equal(expansion.didExpand, true);
+      interactiveStore.materializeView(currentOccurrenceId, {
+        scope: 'local-neighborhood',
+        neighborhoodRadius: 1,
+        refinementBudget,
+        cameraDistance: viewState.cameraDistance,
+        cameraOrbit: viewState.cameraOrbit
+      });
       transition = findTransition(
         interactiveStore.getBuilderBootstrapManifest(),
         currentOccurrenceId,
@@ -314,6 +403,93 @@ test('matches URL path pre-expansion with interactive focus-click expansion on t
   assert.deepEqual(
     collectTransitionKeys(preexpandedManifest),
     collectTransitionKeys(interactiveManifest)
+  );
+});
+
+test('caps whole-object render demand and assigns low-detail residency tiers', () => {
+  const runtimeSource = createDynamicRuntimeSource(
+    runtimeArtifactBundle.viewerSceneManifest,
+    {
+      fen: DEFAULT_POSITION,
+      maxDepth: 2,
+      maxBranching: 20,
+      pathMoves: []
+    }
+  );
+  const runtimeStore = createViewerRuntimeStore(runtimeSource);
+  const viewState = resolveDynamicViewState(runtimeSource);
+  const rootOccurrenceId = runtimeStore.getBuilderBootstrapManifest().occurrences.find(
+    (occurrence) => occurrence.ply === 1
+  )?.occurrenceId;
+
+  assert.ok(rootOccurrenceId);
+
+  if (!rootOccurrenceId) {
+    throw new Error('expected a dynamic root occurrence');
+  }
+
+  const runtimeSnapshot = runtimeStore.inspectView(rootOccurrenceId, {
+    scope: 'whole-object',
+    neighborhoodRadius: 2,
+    refinementBudget: 3,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
+
+  assert.ok(
+    runtimeSnapshot.renderDemand.visibleOccurrenceCount <=
+      runtimeSnapshot.renderDemand.policy.visibleLowDetailOccurrenceTarget
+  );
+  assert.ok(
+    runtimeSnapshot.edges.length <= runtimeSnapshot.renderDemand.policy.visibleEdgeTarget
+  );
+  assert.ok(runtimeSnapshot.renderDemand.coldOccurrenceCount > 0);
+  assert.ok(
+    runtimeSnapshot.occurrences.some((occurrence) => occurrence.lod === 'distant')
+  );
+});
+
+test('reorders local frontier demand when the camera orbits to a different side', () => {
+  const runtimeSource = createDynamicRuntimeSource(
+    runtimeArtifactBundle.viewerSceneManifest,
+    {
+      fen: DEFAULT_POSITION,
+      maxDepth: 1,
+      maxBranching: 20,
+      pathMoves: []
+    }
+  );
+  const runtimeStore = createViewerRuntimeStore(runtimeSource);
+  const rootOccurrenceId = runtimeStore.getBuilderBootstrapManifest().rootOccurrenceIds[0];
+  const viewState = resolveDynamicViewState(runtimeSource);
+
+  assert.ok(rootOccurrenceId);
+
+  if (!rootOccurrenceId) {
+    throw new Error('expected a dynamic root occurrence');
+  }
+
+  const forwardView = runtimeStore.inspectView(rootOccurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 2,
+    refinementBudget: runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
+  const oppositeView = runtimeStore.inspectView(rootOccurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 2,
+    refinementBudget: runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: {
+      azimuth: viewState.cameraOrbit.azimuth + Math.PI,
+      elevation: viewState.cameraOrbit.elevation
+    }
+  });
+
+  assert.notEqual(
+    forwardView.renderDemand.frontierExpansionOccurrenceIds[0],
+    oppositeView.renderDemand.frontierExpansionOccurrenceIds[0]
   );
 });
 
@@ -403,4 +579,16 @@ function normalizeAngle(angle: number) {
   }
 
   return normalized;
+}
+
+function resolveDynamicViewState(
+  runtimeSource: ReturnType<typeof createDynamicRuntimeSource>
+) {
+  return {
+    cameraDistance: runtimeSource.navigationEntryPoints[0]?.distance ?? 4.2,
+    cameraOrbit: runtimeSource.navigationEntryPoints[0]?.orbit ?? {
+      azimuth: 0,
+      elevation: 0
+    }
+  };
 }
