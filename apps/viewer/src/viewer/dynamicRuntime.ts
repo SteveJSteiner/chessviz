@@ -102,7 +102,6 @@ export type ViewerRuntimeStore = {
   getFocusOptions: RuntimeExplorationKernel['getFocusOptions'];
   getBuilderBootstrapManifest: () => BuilderBootstrapManifest;
   getViewerSceneManifest: () => ViewerSceneManifest;
-  expandFocusOccurrence: (occurrenceId: string) => ViewerRuntimeExpansionResult;
 };
 
 export type DynamicRuntimeOptions = {
@@ -491,32 +490,6 @@ export function createViewerRuntimeStore(
     },
     getViewerSceneManifest() {
       return viewerSceneManifest;
-    },
-    expandFocusOccurrence(occurrenceId) {
-      if (runtimeSource.mode !== 'dynamic' || !runtimeSource.dynamicOptions) {
-        return {
-          didExpand: false,
-          occurrenceDelta: 0,
-          edgeDelta: 0
-        };
-      }
-
-      const expansion = commitExpansion(expandDynamicOccurrenceMaterialization({
-        builderBootstrapManifest,
-        viewerSceneManifest,
-        occurrenceId,
-        dynamicOptions: runtimeSource.dynamicOptions
-      }));
-
-      if (!expansion) {
-        return {
-          didExpand: false,
-          occurrenceDelta: 0,
-          edgeDelta: 0
-        };
-      }
-
-      return expansion;
     }
   };
 }
@@ -820,7 +793,6 @@ function createDynamicNavigationEntryPoint(
     description: 'Legal-move graph generated in the browser from the current FEN seed.',
     regimeId: 'middlegame-procedural',
     focusOccurrenceId: rootOccurrence.occurrenceId,
-    focus: rootOccurrence.embedding.coordinate,
     distance: clampLiveViewDistance(LIVE_VIEW_DISTANCE.default),
     neighborhoodRadius: viewerSceneManifest.runtime.defaultNeighborhoodRadius,
     orbit: deriveCameraOrbitState(viewerSceneManifest.camera.position),

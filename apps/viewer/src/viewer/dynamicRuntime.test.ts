@@ -77,6 +77,9 @@ test('expands frontier occurrences in place without changing graph identity', ()
   );
   const runtimeStore = createViewerRuntimeStore(runtimeSource);
   const beforeManifest = runtimeStore.getBuilderBootstrapManifest();
+  const viewState = resolveDynamicViewState(runtimeSource);
+  const refinementBudget =
+    runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget;
   const frontierOccurrence = beforeManifest.occurrences.find(
     (occurrence) =>
       occurrence.ply === 1 &&
@@ -92,17 +95,23 @@ test('expands frontier occurrences in place without changing graph identity', ()
     throw new Error('expected a non-terminal frontier occurrence to expand');
   }
 
-  const expansion = runtimeStore.expandFocusOccurrence(frontierOccurrence.occurrenceId);
-
-  assert.equal(expansion.didExpand, true);
-  assert.ok(expansion.occurrenceDelta > 0);
-  assert.equal(expansion.edgeDelta, expansion.occurrenceDelta);
+  runtimeStore.materializeView(frontierOccurrence.occurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 1,
+    refinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
 
   const afterManifest = runtimeStore.getBuilderBootstrapManifest();
 
   assert.equal(afterManifest.graphObjectId, beforeManifest.graphObjectId);
   assert.ok(afterManifest.occurrences.length > beforeManifest.occurrences.length);
   assert.ok(afterManifest.edges.length > beforeManifest.edges.length);
+  assert.equal(
+    afterManifest.occurrences.length - beforeManifest.occurrences.length,
+    afterManifest.edges.length - beforeManifest.edges.length
+  );
 
   const expandedSnapshot = runtimeStore.inspectNeighborhood(
     frontierOccurrence.occurrenceId,
@@ -123,11 +132,21 @@ test('expands frontier occurrences in place without changing graph identity', ()
     )
   );
 
-  const repeatedExpansion = runtimeStore.expandFocusOccurrence(
-    frontierOccurrence.occurrenceId
-  );
+  const stabilizedOccurrenceCount = afterManifest.occurrences.length;
+  const stabilizedEdgeCount = afterManifest.edges.length;
 
-  assert.equal(repeatedExpansion.didExpand, false);
+  runtimeStore.materializeView(frontierOccurrence.occurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 1,
+    refinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
+
+  const repeatedManifest = runtimeStore.getBuilderBootstrapManifest();
+
+  assert.equal(repeatedManifest.occurrences.length, stabilizedOccurrenceCount);
+  assert.equal(repeatedManifest.edges.length, stabilizedEdgeCount);
 });
 
 test('materializes local neighborhood demand from the current view without explicit click expansion', () => {
@@ -237,16 +256,28 @@ test('continues frontier expansion past the initial neighborhood-radius ceiling'
 
   assert.ok(focusOccurrence);
 
+  const viewState = resolveDynamicViewState(runtimeSource);
+  const refinementBudget =
+    runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget;
+
   for (let expansionIndex = 0; expansionIndex < 3; expansionIndex += 1) {
     if (!focusOccurrence) {
       throw new Error('expected an expandable frontier occurrence while deepening the line');
     }
 
-    const expansion = runtimeStore.expandFocusOccurrence(focusOccurrence.occurrenceId);
+    const beforeIterationManifest = runtimeStore.getBuilderBootstrapManifest();
 
-    assert.equal(expansion.didExpand, true);
+    runtimeStore.materializeView(focusOccurrence.occurrenceId, {
+      scope: 'local-neighborhood',
+      neighborhoodRadius: 1,
+      refinementBudget,
+      cameraDistance: viewState.cameraDistance,
+      cameraOrbit: viewState.cameraOrbit
+    });
 
     const manifest = runtimeStore.getBuilderBootstrapManifest();
+
+    assert.ok(manifest.occurrences.length > beforeIterationManifest.occurrences.length);
     const nextFocusOccurrenceId = manifest.transitions
       .filter((transition) => transition.sourceOccurrenceId === focusOccurrence?.occurrenceId)
       .map((transition) => transition.targetOccurrenceId)
@@ -291,12 +322,21 @@ test('keeps existing embedding stable while additive expansion fans new children
       occurrence.embedding.coordinate
     ])
   );
+  const viewState = resolveDynamicViewState(runtimeSource);
+  const refinementBudget =
+    runtimeStore.getViewerSceneManifest().runtime.defaultRefinementBudget;
 
-  const expansion = runtimeStore.expandFocusOccurrence(focusOccurrenceId);
-
-  assert.equal(expansion.didExpand, true);
+  runtimeStore.materializeView(focusOccurrenceId, {
+    scope: 'local-neighborhood',
+    neighborhoodRadius: 1,
+    refinementBudget,
+    cameraDistance: viewState.cameraDistance,
+    cameraOrbit: viewState.cameraOrbit
+  });
 
   const afterManifest = runtimeStore.getBuilderBootstrapManifest();
+
+  assert.ok(afterManifest.occurrences.length > beforeManifest.occurrences.length);
 
   for (const occurrence of beforeManifest.occurrences) {
     const afterOccurrence = afterManifest.occurrences.find(

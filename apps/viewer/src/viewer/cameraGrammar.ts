@@ -70,6 +70,10 @@ export function resolveCameraGrammarRefinementBudget(
   return budgetTargets.contextual;
 }
 
+// The live viewer still derives its suggested look-at from the current
+// neighborhood anchor and nearby context. N11h locks the requirement that
+// orbit and zoom remain available after that explicit retarget instead of
+// relying on click-to-expand or persistent snap-to behavior.
 export function createCameraGrammarState({
   cameraDistance,
   runtimeConfig,

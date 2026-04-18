@@ -399,7 +399,6 @@ function buildTranspositionReviewContext({
     description:
       'Known repeated-state case used for N13 supporting evidence; local scope keeps the focus neighborhood while whole-object scope confirms the relation stays on the shared graph.',
     focusOccurrenceId: focusOccurrence.occurrenceId,
-    focus: focusOccurrence.embedding.coordinate,
     neighborhoodRadius: 1,
     subtreeKey: focusOccurrence.embedding.subtreeKey,
     anchorPly: focusOccurrence.ply
@@ -1116,7 +1115,9 @@ function renderScenePanel(
     .sort((left, right) => right.depth - left.depth)
     .map((label) => label.markup)
     .join('');
-  const focusPoint = projector.project(scaleCoordinate(reviewScene.navigationEntryPoint.focus));
+  const focusPoint = projector.project(
+    scaleCoordinate(reviewScene.cameraGrammar.focusCoordinate)
+  );
   const clipId = `${panelId}-clip`;
 
   return [

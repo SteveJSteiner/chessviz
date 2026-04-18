@@ -247,7 +247,7 @@ export function ViewerShell({
           </article>
 
           <label style={controlLabelStyle}>
-            Focus occurrence
+            Neighborhood anchor
             <select
               onChange={(event) => onFocusOccurrenceChange(event.target.value)}
               style={controlInputStyle}
@@ -432,7 +432,7 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>Single-position reference</div>
             <p style={{ margin: '0.4rem 0 0' }}>
-              Use the geometry to read structure. This board only confirms the currently focused node.
+              Use the geometry to read structure. This board only confirms the currently selected anchor.
             </p>
           </article>
           {focusParsedStateKey && focusOccurrence ? (
@@ -459,7 +459,7 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>How to use it</div>
             <p style={{ margin: '0.4rem 0 0' }}>
-              Click a node in the canvas to retarget focus, drag to orbit, and scroll or use the distance slider to change label reveal. The live store now expands from view demand instead of requiring click-to-expand.
+              Click a node in the canvas to retarget the current neighborhood anchor, then keep orbiting or zooming without further snap-to interaction. The live store expands from view demand instead of requiring a separate click-to-expand step.
             </p>
           </article>
         </section>

@@ -113,9 +113,9 @@ run_declaration:
 - **A11. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
 - **A12. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
 - **A13. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
-- **A14. Runtime local refinement continuity:** Entering a previously unseen local region by camera/view navigation refines continuously without switching object family, without bypassing the live legal-move generation path when runtime expansion is required, without requiring explicit click-to-expand interaction as the gating mechanism, and without requiring the camera to snap to or remain attached to a focused occurrence in order to continue navigation.
+- **A14. Runtime local refinement continuity:** Entering a previously unseen local region by camera/view navigation refines continuously without switching object family, without bypassing the live legal-move generation path when runtime expansion is required, without requiring explicit click-to-expand interaction as the gating mechanism, and without requiring the camera to snap to or remain attached to a focused occurrence in order to continue navigation after an explicit neighborhood-anchor retarget.
 - **A15. On-object labeling primacy:** Move, root, and terminal labels remain readable on the geometry itself without requiring a sidebar or legend lookup.
-- **A16. Reference-view subordination:** The focused board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry.
+- **A16. Reference-view subordination:** The selected board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry, and selecting a new reference or neighborhood anchor does not become a prerequisite for continued orbit or zoom.
 - **A17. Branch-aware label density:** In declared high-branch runs, label selection or fade keeps the geometry readable without simultaneous all-edge text saturation.
 - **A18. Runtime truth surface only:** Acceptance runs and browser/runtime fetch paths use the browser-generated graph plus any optional declared opening/endgame web assets; fixture data is absent from required runtime truth.
 - **A19. Runtime asset boundary:** No foreign binary opening-book or tablebase formats are committed as runtime truth artifacts or loaded by the web runtime.
@@ -124,15 +124,18 @@ run_declaration:
 - **A22. Focus-level budget semantics:** For declared camera/view states, the runtime maps view distance and orientation to a bounded local ply horizon and parallel visible position budget that remain legible and reproducible under the declared run budgets.
 - **A23. Render-demand enumeration continuity:** The runtime can determine the renderable occurrence, edge, and LOD subset for the current camera/view state fast enough to drive generation and rendering without full-graph traversal becoming the gating bottleneck.
 - **A24. Distant-detail accumulation:** Structure-zoom runs can keep a declared large low-detail visible subset available under the memory envelope while near-focus detail remains available for refinement on the same represented object.
+- **A25. Traversal-first object read:** In a declared live run, a reviewer can move through the represented object with detached camera travel, identify at least one promising, forcing, or otherwise high-salience continuation from geometry, label persistence, and reveal behavior before consulting the board reference, and then confirm that continuation on the same object without ontology swap.
+- **A26. Procedural reveal under flight:** During detached forward or backward travel plus zoom, previously unseen local occurrence and move detail materializes along the pursued path on demand without requiring explicit anchor switching or click-to-expand as the gating interaction.
+- **A27. Close-approach confirmation:** At close traversal, the approached local structure presents a readable board-detail proxy or equivalent positional confirmation while distal object context remains recoverable on the same represented object, and the secondary board reference remains confirmation rather than the primary discovery surface.
 
 ## Visual evidence requirements
 
-- **V1. Human review gate:** Checks `A1` through `A8`, `A11` through `A17`, and `A22` through `A24` require human-reviewed render evidence.
+- **V1. Human review gate:** Checks `A1` through `A8`, `A11` through `A17`, and `A22` through `A27` require human-reviewed render evidence.
 - **V2. Evidence artifact:** Each reviewed run records at least one screenshot or screen capture for each exercised visual regime plus a short verdict of what did and did not read.
 - **V3. Automation role:** Automated assertions may support those checks but cannot produce a pass on their own.
 
 ## Recording protocol
 
-- Record pass/fail for A1-A24 and B1-B7 in commit artifacts tied to N14 settlement.
+- Record pass/fail for A1-A27 and B1-B7 in commit artifacts tied to N14 settlement.
 - Record the human review artifacts required by V1-V3 in the same commit artifacts for any visual-node settlement claim.
 - Any budget change requires updating this file in the same commit as the decision update.

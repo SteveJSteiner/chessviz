@@ -52,7 +52,7 @@ export default function App() {
   const [cameraDistance, setCameraDistance] = useState<number>(
     activeNavigationEntryPoint.distance
   );
-  const [cameraDemandOrbit, setCameraDemandOrbit] = useState<CameraOrbitPreset>(() =>
+  const [cameraOrbit, setCameraOrbit] = useState<CameraOrbitPreset>(() =>
     quantizeCameraOrbit(activeNavigationEntryPoint.orbit)
   );
   const [hoveredOccurrenceId, setHoveredOccurrenceId] = useState<string | null>(null);
@@ -70,7 +70,7 @@ export default function App() {
       neighborhoodRadius,
       refinementBudget,
       cameraDistance,
-      cameraOrbit: cameraDemandOrbit
+      cameraOrbit
     })
   );
   const deferredRuntimeSnapshot = useDeferredValue(runtimeSnapshot);
@@ -87,12 +87,12 @@ export default function App() {
           neighborhoodRadius,
           refinementBudget,
           cameraDistance,
-          cameraOrbit: cameraDemandOrbit
+          cameraOrbit
         })
       );
     });
   }, [
-    cameraDemandOrbit,
+    cameraOrbit,
     cameraDistance,
     focusOccurrenceId,
     graphViewScope,
@@ -136,7 +136,7 @@ export default function App() {
     setHoveredOccurrenceId(null);
     setNeighborhoodRadius(entryPoint.neighborhoodRadius);
     setCameraDistance(entryPoint.distance);
-    setCameraDemandOrbit(quantizeCameraOrbit(entryPoint.orbit));
+    setCameraOrbit(quantizeCameraOrbit(entryPoint.orbit));
     setBoardReferenceOpen(true);
     setOrbitResetKey((currentKey) => currentKey + 1);
   };
@@ -177,7 +177,7 @@ export default function App() {
       onCameraOrbitChange={(orbit) => {
         const nextOrbit = quantizeCameraOrbit(orbit);
 
-        setCameraDemandOrbit((currentOrbit) =>
+        setCameraOrbit((currentOrbit) =>
           currentOrbit.azimuth === nextOrbit.azimuth &&
           currentOrbit.elevation === nextOrbit.elevation
             ? currentOrbit

@@ -3,19 +3,19 @@
 This file states the current active node, why it is current, and what must be true to settle it and advance.
 
 ## Current active node
-- **Node:** N11h
+- **Node:** N11i
 
 ## Why this is current
-- The N11g settlement commit lands the long-lived browser-side graph store the runtime had been missing: selecting a non-terminal frontier occurrence now expands legal moves into the same represented object instead of replacing startup materialization.
-- Live review in the dev viewer confirmed that node selection grows the graph without full-page restart and that the returned deltas add new occurrences or transitions to the existing object, but it also exposed that the current navigation model is still semantically too node-bound.
-- The earlier N11h framing proved premature: even with camera-demand plumbing underway, the forcing function is still wrong if camera rotation, forward movement, and zoom remain effectively tethered to a focused occurrence or board reference.
-- The next honest frontier remains N11h, but N11h is now a replanning and purge node: before more runtime implementation, the plan must lock detached camera navigation independent of node snapping, separate board reference from camera control, and remove or simplify runtime/viewer structure that does not serve that requirement set.
+- N11h is now settled: requirements, decisions, acceptance, roadmap, and continuation all lock detached camera navigation independent of node snapping, the recent camera-demand seams were audited and simplified, and the plan now reserves N11j as the traversal-proof review node instead of pretending that infrastructure alone answers the geometry-first question.
+- The next honest frontier is N11i because the live viewer still lacks detached forward or backward travel through the generated object; camera motion does not yet provide the traversal-first proof that procedural reveal and geometric salience can carry the chess read before the board reference is consulted.
+- N11i is the implementation node for that missing behavior: detached traversal, camera-view-driven graph expansion, additive stable embedding under growth, and compressed residency on the same live JS-generated object.
+- N11j remains reserved as the follow-on review node that will judge whether the resulting traversal slice actually escapes the old JSON-render dead end in practice.
 
 ## Settle-and-advance conditions
-- Requirements, decisions, acceptance, roadmap, and this file explicitly state that camera rotation, forward or backward movement, and zoom remain available without snapping to or staying attached to a specific occurrence, while board reference and focus remain secondary.
-- The viewer/runtime surfaces touched by the recent camera-demand work are audited against that requirement set, and non-serving structure is simplified or removed instead of preserved beside the target interaction model.
-- The roadmap isolates detached camera-view-driven generation, additive embedding, render-demand enumeration, and compressed residency as follow-on node N11i rather than mixing that implementation work into the replanning node.
-- A commit records N11h settlement and updates both `plan/completion-log.md` and this file to N11i.
+- Detached forward or backward travel, orbit, and zoom work on the live JS-generated object without requiring anchor switching, click-to-expand, or camera snapping to a focused occurrence.
+- Camera/view navigation materializes additional graph detail along the pursued path on demand, additive embedding keeps already placed structure stable within declared tolerance, and graph horizon remains separable from current neighborhood or visible scope.
+- The live store exposes enough shared or compressed residency that larger low-detail visible subsets remain feasible while near-traversal detail stays available on the same represented object.
+- A commit records N11i settlement and updates both `plan/completion-log.md` and this file to N11j.
 
 ## Advancement rule
 - Formal frontier events are tracked in `plan/completion-log.md` against the commit that records the exact continuation state transition.

@@ -36,7 +36,6 @@ export interface NavigationEntryPoint {
   description: string;
   regimeId: BuilderRegimeId;
   focusOccurrenceId: string;
-  focus: Vector3;
   distance: number;
   neighborhoodRadius: number;
   orbit: CameraOrbitPreset;

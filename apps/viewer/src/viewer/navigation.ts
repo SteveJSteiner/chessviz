@@ -141,7 +141,6 @@ function buildEntryPoint({
     description,
     regimeId: resolvedOccurrence.resolvedRegimeId,
     focusOccurrenceId: occurrence.occurrenceId,
-    focus: occurrence.embedding.coordinate,
     distance: clampLiveViewDistance(distance),
     neighborhoodRadius,
     orbit,

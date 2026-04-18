@@ -51,6 +51,7 @@ The system shall represent chess as a single continuous zoomable object in which
 - **R24.** More salient paths shall remain legible at coarser zoom levels.
 - **R25.** Less salient but still legal structure shall remain available at close zoom rather than dominating the large-scale view.
 - **R26.** Salience shall be able to affect thickness, persistence across zoom, brightness, or other optical weight without removing legality from the underlying object.
+- **R26a.** At comparable local scale, higher-salience continuations shall be more discoverable under traversal than lower-salience alternatives.
 
 ## 8. Coarse organization by region of chess
 
@@ -78,9 +79,11 @@ The system shall represent chess as a single continuous zoomable object in which
 
 - **R37.** Camera movement shall afford navigation through the object rather than mere inspection of a static diagram.
 - **R37a.** The camera shall be able to rotate, move forward or backward, and zoom without first snapping to or remaining attached to a specific board occurrence.
-- **R37b.** Selecting or focusing an occurrence may update a secondary board reference or suggested target, but subsequent camera navigation shall remain independent of that occurrence unless the user explicitly requests retargeting.
+- **R37b.** Selecting or focusing an occurrence may update a secondary board reference or the current neighborhood anchor, but subsequent camera navigation shall remain independent of that occurrence unless the user explicitly requests retargeting.
+- **R37c.** Detached traversal through the object shall procedurally reveal additional local occurrence and move detail along the pursued path without requiring anchor switching or board-reference inspection as the gating interaction.
 - **R38.** The camera shall be able to move so that detail comes into and out of focus continuously.
 - **R39.** The camera shall support reading entailed path direction toward later structure and terminal pull.
+- **R39a.** A user shall be able to pursue a geometrically signaled continuation through camera travel and zoom, then use the secondary board reference only to confirm the approached position rather than to discover the line in the first place.
 
 ## 12. Spatial geometry
 
