@@ -36,9 +36,16 @@ run_declaration:
     expansion_policy:
     pruning_policy:
     scoring_policy:
+    render_subset_policy:
+    residency_policy:
+    lod_policy:
+    focus_level_policy:
     runtime_config_hash:
     max_depth:
     max_branching:
+    max_local_ply_from_focus:
+    visible_low_detail_occurrence_target:
+    visible_edge_target:
   optional_assets:
     opening_table:
       asset_set: omitted
@@ -87,7 +94,9 @@ run_declaration:
 - **B2. Peak memory budget:** process RSS <= declared envelope for acceptance run.
 - **B3. Load budget:** initial scene build completes within declared acceptance timeout.
 - **B4. Zoom continuity budget:** no ontology swap events across full tested zoom range.
-- **B5. Local refinement budget:** entering a previously unseen local neighborhood reaches the declared refinement target within the acceptance-timeout envelope without blocking navigation continuity.
+- **B5. Local refinement budget:** entering a previously unseen local neighborhood by camera/view navigation reaches the declared refinement target within the acceptance-timeout envelope without blocking navigation continuity or requiring a click-to-expand step.
+- **B6. Render-subset enumeration budget:** determining the occurrence, edge, and LOD subset required for the current camera/view state completes within the declared latency envelope for the acceptance run.
+- **B7. Visible low-detail scale budget:** at structure zoom, the renderer sustains the declared visible low-detail occurrence and edge targets within the frame-time and memory envelopes.
 
 ## Acceptance checks
 
@@ -104,7 +113,7 @@ run_declaration:
 - **A11. Structure-zoom path legibility:** At structure zoom, known move families remain classifiable from coarse path geometry.
 - **A12. Medium-zoom tactical residue:** At medium zoom, tactical residue becomes visible without changing the coarse move-family reading.
 - **A13. Close-zoom contextual residue:** At close zoom, fine contextual residue becomes visible without causing a previously correct coarse classification to become false.
-- **A14. Runtime local refinement continuity:** Entering a previously unseen local region refines continuously under navigation without switching object family and without bypassing the live legal-move generation path when runtime expansion is required.
+- **A14. Runtime local refinement continuity:** Entering a previously unseen local region by camera/view navigation refines continuously without switching object family, without bypassing the live legal-move generation path when runtime expansion is required, and without requiring explicit click-to-expand interaction as the gating mechanism.
 - **A15. On-object labeling primacy:** Move, root, and terminal labels remain readable on the geometry itself without requiring a sidebar or legend lookup.
 - **A16. Reference-view subordination:** The focused board reference stays secondary; collapsing or ignoring it does not prevent reading the local geometry.
 - **A17. Branch-aware label density:** In declared high-branch runs, label selection or fade keeps the geometry readable without simultaneous all-edge text saturation.
@@ -112,15 +121,18 @@ run_declaration:
 - **A19. Runtime asset boundary:** No foreign binary opening-book or tablebase formats are committed as runtime truth artifacts or loaded by the web runtime.
 - **A20. Hard-fail integrity:** Acceptance fails when live runtime graph generation is bypassed by canned corpus truth, optional assets are treated as mandatory runtime prerequisites, or overlays fracture identity, anchoring, navigation, or query continuity.
 - **A21. Entrypoint derivation boundary:** Focus presets, anchors, and bootstrap focus candidates are derived from generated graph state or declared overlay annotations rather than from phase labels embedded in fixture manifests.
+- **A22. Focus-level budget semantics:** For declared camera/view states, the runtime maps view distance and orientation to a bounded local ply horizon and parallel visible position budget that remain legible and reproducible under the declared run budgets.
+- **A23. Render-demand enumeration continuity:** The runtime can determine the renderable occurrence, edge, and LOD subset for the current camera/view state fast enough to drive generation and rendering without full-graph traversal becoming the gating bottleneck.
+- **A24. Distant-detail accumulation:** Structure-zoom runs can keep a declared large low-detail visible subset available under the memory envelope while near-focus detail remains available for refinement on the same represented object.
 
 ## Visual evidence requirements
 
-- **V1. Human review gate:** Checks `A1` through `A8` and `A11` through `A17` require human-reviewed render evidence.
+- **V1. Human review gate:** Checks `A1` through `A8`, `A11` through `A17`, and `A22` through `A24` require human-reviewed render evidence.
 - **V2. Evidence artifact:** Each reviewed run records at least one screenshot or screen capture for each exercised visual regime plus a short verdict of what did and did not read.
 - **V3. Automation role:** Automated assertions may support those checks but cannot produce a pass on their own.
 
 ## Recording protocol
 
-- Record pass/fail for A1-A21 and B1-B5 in commit artifacts tied to N14 settlement.
+- Record pass/fail for A1-A24 and B1-B7 in commit artifacts tied to N14 settlement.
 - Record the human review artifacts required by V1-V3 in the same commit artifacts for any visual-node settlement claim.
 - Any budget change requires updating this file in the same commit as the decision update.
