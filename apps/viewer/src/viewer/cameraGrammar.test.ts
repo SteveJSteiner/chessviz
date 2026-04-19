@@ -123,6 +123,7 @@ function createRuntimeSnapshot(
       coldOccurrenceCount: 0,
       frontierExpansionOccurrenceIds: []
     },
+    ambientOccurrences: [],
     occurrences,
     edges: [],
     repeatedStateRelations: [],

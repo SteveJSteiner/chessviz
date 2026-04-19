@@ -1,5 +1,6 @@
 import type {
   BuilderOccurrenceRecord,
+  CameraNavigationMode,
   CameraOrbitPreset,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeExplorationConfig,
@@ -18,9 +19,12 @@ import { SmokeCanvas } from './SmokeCanvas';
 
 type ViewerShellProps = {
   boardReferenceOpen: boolean;
+  cameraNavigationMode: CameraNavigationMode;
   cameraGrammar: CameraGrammarState;
   cameraOrbit: CameraOrbitPreset;
   cameraPosition: Vector3;
+  cameraSetPoint: Vector3;
+  cameraSetPointDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
   cameraDistance: number;
   focusOccurrence: BuilderOccurrenceRecord | null;
@@ -30,8 +34,13 @@ type ViewerShellProps = {
   sceneBootstrap: SceneBootstrap;
   onBoardReferenceOpenChange: (open: boolean) => void;
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
-  onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
+  onCameraPoseChange: (
+    position: Vector3,
+    orbit: CameraOrbitPreset,
+    pivotDistance: number
+  ) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onNavigationModeChange: (mode: CameraNavigationMode) => void;
   onResetCameraPose: () => void;
   renderTuning: ViewerRenderTuning;
   totalGraphEdgeCount: number;
@@ -103,11 +112,25 @@ const detailsStyle = {
   marginTop: '1rem'
 } as const;
 
+const modeButtonStyle = {
+  marginTop: '0.75rem',
+  padding: '0.5rem 0.75rem',
+  borderRadius: '999px',
+  border: '1px solid rgba(31, 41, 51, 0.16)',
+  background: 'rgba(255, 255, 255, 0.92)',
+  color: '#1f2933',
+  cursor: 'pointer',
+  fontWeight: 600
+} as const;
+
 export function ViewerShell({
   boardReferenceOpen,
+  cameraNavigationMode,
   cameraGrammar,
   cameraOrbit,
   cameraPosition,
+  cameraSetPoint,
+  cameraSetPointDistance,
   carrierSurface,
   cameraDistance,
   focusOccurrence,
@@ -119,6 +142,7 @@ export function ViewerShell({
   onHoverOccurrenceChange,
   onCameraPoseChange,
   onFocusOccurrenceChange,
+  onNavigationModeChange,
   onResetCameraPose,
   renderTuning,
   totalGraphEdgeCount,
@@ -159,8 +183,34 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>Flight controls</div>
             <p style={{ margin: '0.45rem 0 0' }}>
-              Drag to rotate. Scroll to dolly forward or backward. Use W/S to move through the structure, A/D to turn left or right, Q/E to pitch up or down, press Space to reset around the tracked node, and click any node to recenter on it.
+              Drag always orbits around the current set point. Use W/S for forward or back, A/D for left or right, R/F for rise or fall, the left and right arrows for yaw, the up and down arrows for pitch, Q/E for roll, Tab to switch navigation frame, Space to reset around the tracked node, and click any node to recenter on it.
             </p>
+          </article>
+
+          <article style={narrativeCardStyle}>
+            <div style={{ fontWeight: 700 }}>Navigation frame</div>
+            <p style={{ margin: '0.45rem 0 0' }}>
+              Active mode: {formatNavigationModeLabel(cameraNavigationMode)}. Camera-relative mode moves and turns in place from the camera frame. Set-point-relative mode pans and dollies around the continuously maintained look-at pivot.
+            </p>
+            <p style={{ margin: '0.45rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
+              Current set point [{cameraSetPoint.map((value) => value.toFixed(2)).join(', ')}] · pivot distance {cameraSetPointDistance.toFixed(2)}
+            </p>
+            <button
+              onClick={() =>
+                onNavigationModeChange(
+                  cameraNavigationMode === 'camera-relative'
+                    ? 'set-point-relative'
+                    : 'camera-relative'
+                )
+              }
+              style={modeButtonStyle}
+              type="button"
+            >
+              Switch to{' '}
+              {cameraNavigationMode === 'camera-relative'
+                ? 'Set-Point-Relative Mode'
+                : 'Camera-Relative Mode'}
+            </button>
           </article>
 
           <article style={narrativeCardStyle}>
@@ -216,7 +266,7 @@ export function ViewerShell({
                 : 'No occurrence is currently tracked.'}
             </p>
             <p style={{ margin: '0.4rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
-              Camera position [{cameraPosition.map((value) => value.toFixed(2)).join(', ')}] · orbit [{cameraOrbit.azimuth.toFixed(2)}, {cameraOrbit.elevation.toFixed(2)}]. Click a node to recenter on it, use Space if you need a clean recovery pose, and keep flying once the geometry has the read.
+              Camera position [{cameraPosition.map((value) => value.toFixed(2)).join(', ')}] · orbit [{cameraOrbit.azimuth.toFixed(2)}, {cameraOrbit.elevation.toFixed(2)}, {(cameraOrbit.roll ?? 0).toFixed(2)}]. Click a node to recenter on it, use Space if you need a clean recovery pose, and keep flying once the geometry has the read.
             </p>
           </article>
         </section>
@@ -225,12 +275,15 @@ export function ViewerShell({
       <section style={canvasStyle}>
         <SmokeCanvas
           cameraGrammar={cameraGrammar}
+          navigationMode={cameraNavigationMode}
           cameraOrbit={cameraOrbit}
           cameraPosition={cameraPosition}
+          pivotDistance={cameraSetPointDistance}
           carrierSurface={carrierSurface}
           onCameraPoseChange={onCameraPoseChange}
           onFocusOccurrenceChange={onFocusOccurrenceChange}
           onHoverOccurrenceChange={onHoverOccurrenceChange}
+          onNavigationModeChange={onNavigationModeChange}
           onResetCameraPose={onResetCameraPose}
           renderTuning={renderTuning}
           hoveredOccurrenceId={hoveredOccurrence?.occurrenceId ?? null}
@@ -240,4 +293,10 @@ export function ViewerShell({
       </section>
     </main>
   );
+}
+
+function formatNavigationModeLabel(mode: CameraNavigationMode) {
+  return mode === 'camera-relative'
+    ? 'Camera-relative'
+    : 'Set-point-relative';
 }

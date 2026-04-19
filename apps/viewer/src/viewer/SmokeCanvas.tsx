@@ -19,9 +19,13 @@ import { formatSubtreeLabel, formatTerminalOutcomeLabel } from './chessContext.t
 import {
   advanceCameraOrbitState,
   normalizeCameraOrbitState,
+  resolveCameraRelativeTranslation,
+  resolveCameraRightVector,
+  resolveCameraSetPoint,
   resolveCameraLookVector,
   resolveDetachedKeyboardOrbit,
-  resolveDetachedKeyboardTranslation,
+  resolveDetachedKeyboardTranslationIntent,
+  resolveOrbitCameraPosition,
   resolveOrbitUpVector,
 } from './cameraOrbit.ts';
 import {
@@ -30,6 +34,7 @@ import {
 } from './labelPolicy.ts';
 import type { ViewerRenderTuning } from './renderTuning.ts';
 import type {
+  CameraNavigationMode,
   CameraOrbitPreset,
   RuntimeCarrierSurfaceSnapshot,
   RuntimeCarrierRecord,
@@ -43,10 +48,17 @@ type SmokeCanvasProps = {
   cameraGrammar: CameraGrammarState;
   cameraOrbit: CameraOrbitPreset;
   cameraPosition: Vector3;
+  navigationMode: CameraNavigationMode;
+  pivotDistance: number;
   carrierSurface: RuntimeCarrierSurfaceSnapshot;
-  onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
+  onCameraPoseChange: (
+    position: Vector3,
+    orbit: CameraOrbitPreset,
+    pivotDistance: number
+  ) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
+  onNavigationModeChange: (mode: CameraNavigationMode) => void;
   onResetCameraPose: () => void;
   renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
@@ -60,6 +72,9 @@ const CAMERA_POSE_POSITION_EPSILON = 0.22;
 const CAMERA_POSE_ORBIT_EPSILON = 0.08;
 const KEYBOARD_TURN_RATE = 1.9;
 const KEYBOARD_PITCH_RATE = 1.45;
+const KEYBOARD_ROLL_RATE = 1.55;
+const AMBIENT_OCCURRENCE_VISIBILITY_SCALE = 0.38;
+const AMBIENT_OCCURRENCE_RADIUS_SCALE = 0.82;
 const DETACHED_CONTROL_KEYS = new Set([
   'w',
   'a',
@@ -67,6 +82,8 @@ const DETACHED_CONTROL_KEYS = new Set([
   'd',
   'q',
   'e',
+  'r',
+  'f',
   'arrowup',
   'arrowdown',
   'arrowleft',
@@ -82,21 +99,19 @@ export function SmokeCanvas({
   cameraGrammar,
   cameraOrbit,
   cameraPosition,
+  navigationMode,
+  pivotDistance,
   carrierSurface,
   onCameraPoseChange,
   onFocusOccurrenceChange,
   onHoverOccurrenceChange,
+  onNavigationModeChange,
   onResetCameraPose,
   renderTuning,
   sceneBootstrap,
   hoveredOccurrenceId,
   runtimeSnapshot
 }: SmokeCanvasProps) {
-  const occurrenceRadiusCaps = useMemo(
-    () => buildOccurrenceRadiusCaps(runtimeSnapshot.occurrences),
-    [runtimeSnapshot.occurrences]
-  );
-
   return (
     <Canvas
       camera={{
@@ -111,8 +126,11 @@ export function SmokeCanvas({
       <CameraRig
         cameraOrbit={cameraOrbit}
         cameraPosition={cameraPosition}
+        navigationMode={navigationMode}
         onCameraPoseChange={onCameraPoseChange}
+        onNavigationModeChange={onNavigationModeChange}
         onResetCameraPose={onResetCameraPose}
+        pivotDistance={pivotDistance}
         travelSpeed={Math.max(
           1.2,
           Math.min(4.8, (cameraGrammar.cameraDistance * 0.82) + 0.65)
@@ -123,14 +141,74 @@ export function SmokeCanvas({
       <hemisphereLight args={['#fff9ef', '#ddd3c2', 1.08]} />
       <directionalLight position={[2.4, 3.2, 3.8]} intensity={1.18} />
       <directionalLight position={[-2.8, 2.2, 1.4]} intensity={0.42} color="#f1dcc2" />
-      <NeighborhoodCarriers
+      <SceneLayers
+        accentColor={sceneBootstrap.accentColor}
+        cameraDistance={cameraGrammar.cameraDistance}
         carrierSurface={carrierSurface}
         focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
+        hoveredOccurrenceId={hoveredOccurrenceId}
+        onFocusOccurrenceChange={onFocusOccurrenceChange}
+        onHoverOccurrenceChange={onHoverOccurrenceChange}
+        renderTuning={renderTuning}
+        runtimeSnapshot={runtimeSnapshot}
+      />
+    </Canvas>
+  );
+}
+
+const SceneLayers = memo(function SceneLayers({
+  accentColor,
+  cameraDistance,
+  carrierSurface,
+  focusOccurrenceId,
+  hoveredOccurrenceId,
+  onFocusOccurrenceChange,
+  onHoverOccurrenceChange,
+  renderTuning,
+  runtimeSnapshot
+}: {
+  accentColor: string;
+  cameraDistance: number;
+  carrierSurface: RuntimeCarrierSurfaceSnapshot;
+  focusOccurrenceId: string;
+  hoveredOccurrenceId: string | null;
+  onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onHoverOccurrenceChange: (occurrenceId: string | null) => void;
+  renderTuning: ViewerRenderTuning;
+  runtimeSnapshot: RuntimeNeighborhoodSnapshot;
+}) {
+  const sceneOccurrences = useMemo(
+    () => [...runtimeSnapshot.ambientOccurrences, ...runtimeSnapshot.occurrences],
+    [runtimeSnapshot.ambientOccurrences, runtimeSnapshot.occurrences]
+  );
+  const occurrenceRadiusCaps = useMemo(
+    () => buildOccurrenceRadiusCaps(sceneOccurrences),
+    [sceneOccurrences]
+  );
+
+  return (
+    <>
+      <NeighborhoodCarriers
+        carrierSurface={carrierSurface}
+        focusOccurrenceId={focusOccurrenceId}
         renderTuning={renderTuning}
       />
+      {runtimeSnapshot.ambientOccurrences.map((occurrence) => (
+        <NeighborhoodNode
+          accentColor={accentColor}
+          interactionMode="ambient"
+          isHovered={false}
+          key={`ambient:${occurrence.occurrenceId}`}
+          onFocusOccurrenceChange={onFocusOccurrenceChange}
+          onHoverOccurrenceChange={onHoverOccurrenceChange}
+          occurrence={occurrence}
+          radiusCap={occurrenceRadiusCaps.get(occurrence.occurrenceId)}
+          renderTuning={renderTuning}
+        />
+      ))}
       {runtimeSnapshot.occurrences.map((occurrence) => (
         <NeighborhoodNode
-          accentColor={sceneBootstrap.accentColor}
+          accentColor={accentColor}
           isHovered={hoveredOccurrenceId === occurrence.occurrenceId}
           key={occurrence.occurrenceId}
           onFocusOccurrenceChange={onFocusOccurrenceChange}
@@ -141,46 +219,59 @@ export function SmokeCanvas({
         />
       ))}
       <CarrierLabels
-        cameraDistance={cameraGrammar.cameraDistance}
+        cameraDistance={cameraDistance}
         carrierSurface={carrierSurface}
-        focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
+        focusOccurrenceId={focusOccurrenceId}
         occurrences={runtimeSnapshot.occurrences}
         renderTuning={renderTuning}
       />
       <OccurrenceDataLabels
-        cameraDistance={cameraGrammar.cameraDistance}
+        cameraDistance={cameraDistance}
         carrierSurface={carrierSurface}
-        focusOccurrenceId={runtimeSnapshot.focusOccurrenceId}
+        focusOccurrenceId={focusOccurrenceId}
         renderTuning={renderTuning}
         runtimeSnapshot={runtimeSnapshot}
       />
-    </Canvas>
+    </>
   );
-}
+});
 
 function CameraRig({
   cameraOrbit,
   cameraPosition,
+  navigationMode,
   onCameraPoseChange,
+  onNavigationModeChange,
   onResetCameraPose,
+  pivotDistance,
   travelSpeed
 }: {
   cameraOrbit: CameraOrbitPreset;
   cameraPosition: Vector3;
-  onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
+  navigationMode: CameraNavigationMode;
+  onCameraPoseChange: (
+    position: Vector3,
+    orbit: CameraOrbitPreset,
+    pivotDistance: number
+  ) => void;
+  onNavigationModeChange: (mode: CameraNavigationMode) => void;
   onResetCameraPose: () => void;
+  pivotDistance: number;
   travelSpeed: number;
 }) {
   const { camera, gl } = useThree();
   const orbitStateRef = useRef(cameraOrbit);
   const positionRef = useRef(cameraPosition);
+  const navigationModeRef = useRef(navigationMode);
+  const pivotDistanceRef = useRef(pivotDistance);
   const dragStateRef = useRef({ active: false, pointerId: null as number | null, x: 0, y: 0 });
   const pressedKeysRef = useRef<Set<string>>(new Set());
   const lastReportAtRef = useRef(0);
   const viewDirtyRef = useRef(false);
   const lastPublishedPoseRef = useRef({
     position: roundVector3(cameraPosition),
-    orbit: roundOrbit(cameraOrbit)
+    orbit: roundOrbit(cameraOrbit),
+    pivotDistance: roundNumber(pivotDistance)
   });
 
   useEffect(() => {
@@ -190,6 +281,14 @@ function CameraRig({
   useEffect(() => {
     positionRef.current = cameraPosition;
   }, [cameraPosition]);
+
+  useEffect(() => {
+    navigationModeRef.current = navigationMode;
+  }, [navigationMode]);
+
+  useEffect(() => {
+    pivotDistanceRef.current = pivotDistance;
+  }, [pivotDistance]);
 
   useEffect(() => {
     const canvasElement = gl.domElement;
@@ -219,10 +318,22 @@ function CameraRig({
         return;
       }
 
-      orbitStateRef.current = advanceCameraOrbitState(
+      const setPoint = resolveCameraSetPoint(
+        positionRef.current,
+        orbitStateRef.current,
+        pivotDistanceRef.current
+      );
+      const nextOrbit = advanceCameraOrbitState(
         orbitStateRef.current,
         event.clientX - dragState.x,
         event.clientY - dragState.y
+      );
+
+      orbitStateRef.current = nextOrbit;
+      positionRef.current = resolveOrbitCameraPosition(
+        setPoint,
+        pivotDistanceRef.current,
+        nextOrbit
       );
       viewDirtyRef.current = true;
       dragStateRef.current = {
@@ -253,13 +364,30 @@ function CameraRig({
 
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
-      const lookVector = resolveCameraLookVector(orbitStateRef.current);
       const dollyStep = Math.max(0.16, travelSpeed * 0.18);
+      const forwardStep = -event.deltaY * 0.0028 * dollyStep;
 
-      positionRef.current = addVector3(
-        positionRef.current,
-        scaleVector3(lookVector, -event.deltaY * 0.0028 * dollyStep)
-      );
+      if (navigationModeRef.current === 'set-point-relative') {
+        const setPoint = resolveCameraSetPoint(
+          positionRef.current,
+          orbitStateRef.current,
+          pivotDistanceRef.current
+        );
+
+        pivotDistanceRef.current = Math.max(0.1, pivotDistanceRef.current - forwardStep);
+        positionRef.current = resolveOrbitCameraPosition(
+          setPoint,
+          pivotDistanceRef.current,
+          orbitStateRef.current
+        );
+      } else {
+        const lookVector = resolveCameraLookVector(orbitStateRef.current);
+
+        positionRef.current = addVector3(
+          positionRef.current,
+          scaleVector3(lookVector, forwardStep)
+        );
+      }
       viewDirtyRef.current = true;
       publishPose(false);
     };
@@ -270,6 +398,22 @@ function CameraRig({
 
         if (!event.repeat) {
           onResetCameraPose();
+        }
+
+        return;
+      }
+
+      if (event.code === 'Tab') {
+        event.preventDefault();
+
+        if (!event.repeat) {
+          const nextMode =
+            navigationModeRef.current === 'camera-relative'
+              ? 'set-point-relative'
+              : 'camera-relative';
+
+          navigationModeRef.current = nextMode;
+          onNavigationModeChange(nextMode);
         }
 
         return;
@@ -306,34 +450,91 @@ function CameraRig({
       canvasElement.style.touchAction = previousTouchAction;
       canvasElement.style.cursor = previousCursor;
     };
-  }, [gl, onCameraPoseChange, onResetCameraPose, travelSpeed]);
+  }, [gl, onCameraPoseChange, onNavigationModeChange, onResetCameraPose, travelSpeed]);
 
   useFrame((_, delta) => {
     const frameDelta = Math.min(delta, 0.05);
+    const activeNavigationMode = navigationModeRef.current;
     const nextOrbit = resolveDetachedKeyboardOrbit(
       pressedKeysRef.current,
       orbitStateRef.current,
       frameDelta * KEYBOARD_TURN_RATE,
-      frameDelta * KEYBOARD_PITCH_RATE
+      frameDelta * KEYBOARD_PITCH_RATE,
+      frameDelta * KEYBOARD_ROLL_RATE
     );
 
     if (
       nextOrbit.azimuth !== orbitStateRef.current.azimuth ||
-      nextOrbit.elevation !== orbitStateRef.current.elevation
+      nextOrbit.elevation !== orbitStateRef.current.elevation ||
+      (nextOrbit.roll ?? 0) !== (orbitStateRef.current.roll ?? 0)
     ) {
-      orbitStateRef.current = nextOrbit;
+      if (activeNavigationMode === 'set-point-relative') {
+        const setPoint = resolveCameraSetPoint(
+          positionRef.current,
+          orbitStateRef.current,
+          pivotDistanceRef.current
+        );
+
+        orbitStateRef.current = nextOrbit;
+        positionRef.current = resolveOrbitCameraPosition(
+          setPoint,
+          pivotDistanceRef.current,
+          nextOrbit
+        );
+      } else {
+        orbitStateRef.current = nextOrbit;
+      }
       viewDirtyRef.current = true;
     }
 
-    const movement = resolveDetachedKeyboardTranslation(
+    const translationIntent = resolveDetachedKeyboardTranslationIntent(
       pressedKeysRef.current,
-      orbitStateRef.current,
       frameDelta * travelSpeed
     );
 
-    if (movement) {
-      positionRef.current = addVector3(positionRef.current, movement);
-      viewDirtyRef.current = true;
+    if (translationIntent) {
+      if (activeNavigationMode === 'set-point-relative') {
+        const panMovement = addVector3(
+          scaleVector3(
+            resolveCameraRightVector(orbitStateRef.current),
+            translationIntent.lateral
+          ),
+          scaleVector3(
+            resolveOrbitUpVector(orbitStateRef.current),
+            translationIntent.vertical
+          )
+        );
+
+        if (panMovement[0] !== 0 || panMovement[1] !== 0 || panMovement[2] !== 0) {
+          positionRef.current = addVector3(positionRef.current, panMovement);
+          viewDirtyRef.current = true;
+        }
+
+        if (translationIntent.forward !== 0) {
+          const setPoint = resolveCameraSetPoint(
+            positionRef.current,
+            orbitStateRef.current,
+            pivotDistanceRef.current
+          );
+
+          pivotDistanceRef.current = Math.max(
+            0.1,
+            pivotDistanceRef.current - translationIntent.forward
+          );
+          positionRef.current = resolveOrbitCameraPosition(
+            setPoint,
+            pivotDistanceRef.current,
+            orbitStateRef.current
+          );
+          viewDirtyRef.current = true;
+        }
+      } else {
+        positionRef.current = addVector3(
+          positionRef.current,
+          resolveCameraRelativeTranslation(orbitStateRef.current, translationIntent)
+        );
+        viewDirtyRef.current = true;
+      }
     }
 
     const lookVector = resolveCameraLookVector(orbitStateRef.current);
@@ -363,18 +564,23 @@ function CameraRig({
 
     const nextPosition = roundVector3(positionRef.current);
     const nextOrbit = roundOrbit(orbitStateRef.current);
+    const nextPivotDistance = roundNumber(pivotDistanceRef.current);
     const lastPublishedPose = lastPublishedPoseRef.current;
     const positionDelta = distanceBetweenVector3(
       nextPosition,
       lastPublishedPose.position
     );
     const orbitDelta = resolveOrbitDelta(nextOrbit, lastPublishedPose.orbit);
+    const pivotDistanceDelta = Math.abs(
+      nextPivotDistance - lastPublishedPose.pivotDistance
+    );
 
     if (
       !force &&
       interval < CAMERA_POSE_MAX_REPORT_MS &&
       positionDelta < CAMERA_POSE_POSITION_EPSILON &&
-      orbitDelta < CAMERA_POSE_ORBIT_EPSILON
+      orbitDelta < CAMERA_POSE_ORBIT_EPSILON &&
+      pivotDistanceDelta < CAMERA_POSE_ORBIT_EPSILON
     ) {
       return;
     }
@@ -382,10 +588,11 @@ function CameraRig({
     lastReportAtRef.current = now;
     lastPublishedPoseRef.current = {
       position: nextPosition,
-      orbit: nextOrbit
+      orbit: nextOrbit,
+      pivotDistance: nextPivotDistance
     };
     viewDirtyRef.current = false;
-    onCameraPoseChange(nextPosition, nextOrbit);
+    onCameraPoseChange(nextPosition, nextOrbit, nextPivotDistance);
   }
 
   return null;
@@ -408,7 +615,8 @@ function roundOrbit(orbit: CameraOrbitPreset): CameraOrbitPreset {
 
   return {
     azimuth: roundNumber(normalizedOrbit.azimuth),
-    elevation: roundNumber(normalizedOrbit.elevation)
+    elevation: roundNumber(normalizedOrbit.elevation),
+    roll: roundNumber(normalizedOrbit.roll ?? 0)
   };
 }
 
@@ -430,7 +638,8 @@ function resolveOrbitDelta(
 ) {
   return Math.max(
     Math.abs(resolveAngleDelta(left.azimuth, right.azimuth)),
-    Math.abs(left.elevation - right.elevation)
+    Math.abs(left.elevation - right.elevation),
+    Math.abs(resolveAngleDelta(left.roll ?? 0, right.roll ?? 0))
   );
 }
 
@@ -441,6 +650,7 @@ function resolveAngleDelta(left: number, right: number) {
 const NeighborhoodNode = memo(function NeighborhoodNode({
   accentColor,
   isHovered,
+  interactionMode = 'interactive',
   onFocusOccurrenceChange,
   onHoverOccurrenceChange,
   occurrence,
@@ -449,6 +659,7 @@ const NeighborhoodNode = memo(function NeighborhoodNode({
 }: {
   accentColor: string;
   isHovered: boolean;
+  interactionMode?: 'interactive' | 'ambient';
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
   occurrence: RuntimeNeighborhoodOccurrence;
@@ -462,28 +673,48 @@ const NeighborhoodNode = memo(function NeighborhoodNode({
     radiusCap,
     renderTuning.nodeRadiusScale
   );
+  const isAmbient = interactionMode === 'ambient';
   const radiusScale = resolveOccurrenceLodRadiusScale(occurrence.lod);
-  const fillOpacity = resolveOccurrenceLodOpacity(occurrence.lod, occurrence.isFocus);
-  const ringOpacity = resolveOccurrenceRingOpacity(occurrence.lod, occurrence.isFocus);
+  const visibilityScale = isAmbient ? AMBIENT_OCCURRENCE_VISIBILITY_SCALE : 1;
+  const fillOpacity =
+    resolveOccurrenceLodOpacity(occurrence.lod, occurrence.isFocus) * visibilityScale;
+  const ringOpacity =
+    resolveOccurrenceRingOpacity(occurrence.lod, occurrence.isFocus) * visibilityScale;
   const radius =
-    (occurrence.isFocus ? presentation.radius * 1.06 : presentation.radius) * radiusScale;
+    (occurrence.isFocus ? presentation.radius * 1.06 : presentation.radius) *
+    radiusScale *
+    (isAmbient ? AMBIENT_OCCURRENCE_RADIUS_SCALE : 1);
+  const centerMarkOpacity = isAmbient ? 0.42 : 1;
+  const phaseRingOpacity = Math.min(0.88, fillOpacity + (isAmbient ? 0.04 : 0.1));
 
   return (
     <group
-      onClick={(event) => {
-        event.stopPropagation();
-        onFocusOccurrenceChange(occurrence.occurrenceId);
-      }}
-      onPointerOut={(event) => {
-        event.stopPropagation();
-        onHoverOccurrenceChange(null);
-        setCanvasPointerCursor(event, 'grab');
-      }}
-      onPointerOver={(event) => {
-        event.stopPropagation();
-        onHoverOccurrenceChange(occurrence.occurrenceId);
-        setCanvasPointerCursor(event, 'pointer');
-      }}
+      onClick={
+        isAmbient
+          ? undefined
+          : (event) => {
+              event.stopPropagation();
+              onFocusOccurrenceChange(occurrence.occurrenceId);
+            }
+      }
+      onPointerOut={
+        isAmbient
+          ? undefined
+          : (event) => {
+              event.stopPropagation();
+              onHoverOccurrenceChange(null);
+              setCanvasPointerCursor(event, 'grab');
+            }
+      }
+      onPointerOver={
+        isAmbient
+          ? undefined
+          : (event) => {
+              event.stopPropagation();
+              onHoverOccurrenceChange(occurrence.occurrenceId);
+              setCanvasPointerCursor(event, 'pointer');
+            }
+      }
       position={position}
     >
       <mesh>
@@ -491,7 +722,9 @@ const NeighborhoodNode = memo(function NeighborhoodNode({
         <meshStandardMaterial
           color={presentation.fillColor}
           emissive={occurrence.isFocus || isHovered ? presentation.fillColor : '#000000'}
-          emissiveIntensity={occurrence.isFocus ? 0.2 : isHovered ? 0.1 : 0}
+          emissiveIntensity={
+            isAmbient ? 0.03 : occurrence.isFocus ? 0.2 : isHovered ? 0.1 : 0
+          }
           opacity={fillOpacity}
           roughness={0.3}
           transparent={fillOpacity < 0.999}
@@ -514,7 +747,7 @@ const NeighborhoodNode = memo(function NeighborhoodNode({
         <meshBasicMaterial
           color={presentation.phaseRingColor}
           depthWrite={false}
-          opacity={Math.min(0.88, fillOpacity + 0.1)}
+          opacity={phaseRingOpacity}
           side={DoubleSide}
           transparent
         />
@@ -524,8 +757,10 @@ const NeighborhoodNode = memo(function NeighborhoodNode({
         <meshStandardMaterial
           color={presentation.centerMarkColor}
           emissive={presentation.centerMarkColor}
-          emissiveIntensity={0.12}
+          emissiveIntensity={isAmbient ? 0.05 : 0.12}
+          opacity={centerMarkOpacity}
           roughness={0.22}
+          transparent={centerMarkOpacity < 0.999}
         />
       </mesh>
       <mesh>

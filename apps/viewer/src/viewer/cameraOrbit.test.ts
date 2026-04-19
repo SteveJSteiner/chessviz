@@ -4,6 +4,7 @@ import {
   CAMERA_ORBIT_LIMITS,
   advanceCameraOrbitState,
   deriveCameraOrbitState,
+  resolveCameraSetPoint,
   resolveCameraLookVector,
   resolveDetachedKeyboardOrbit,
   resolveDetachedKeyboardTranslation,
@@ -18,6 +19,7 @@ test('derives the default orbit from the scene camera offset', () => {
   assert.equal(orbitState.azimuth, 0);
   assert.ok(orbitState.elevation > 0);
   assert.ok(orbitState.elevation < CAMERA_ORBIT_LIMITS.maxElevation);
+  assert.equal(orbitState.roll, 0);
 });
 
 test('advances the orbit by drag delta without hitting a vertical wall', () => {
@@ -75,22 +77,57 @@ test('resolves the detached look vector from orbit state', () => {
   assert.deepEqual(left.map((value) => round(value)), [-1, 0, 0]);
 });
 
-test('maps detached keyboard rotation to yaw on A/D and pitch on Q/E', () => {
+test('maps detached keyboard rotation to yaw on arrows and pitch from the camera frame', () => {
   const rotated = resolveDetachedKeyboardOrbit(
-    new Set(['a', 'q']),
+    new Set(['arrowleft', 'arrowup']),
     {
       azimuth: 0,
-      elevation: 0
+      elevation: 0,
+      roll: 0
     },
     0.2,
-    0.1
+    0.1,
+    0.15
   );
 
   assert.equal(round(rotated.azimuth), 0.2);
   assert.equal(round(rotated.elevation), -0.1);
+  assert.equal(round(rotated.roll ?? 0), 0);
 });
 
-test('maps detached keyboard translation to forward and reverse only', () => {
+test('maps detached keyboard Q/E to roll left and right', () => {
+  const rolledLeft = resolveDetachedKeyboardOrbit(
+    new Set(['q']),
+    {
+      azimuth: 0,
+      elevation: 0,
+      roll: 0
+    },
+    0.2,
+    0.1,
+    0.15
+  );
+  const rolledRight = resolveDetachedKeyboardOrbit(
+    new Set(['e']),
+    {
+      azimuth: 0,
+      elevation: 0,
+      roll: 0
+    },
+    0.2,
+    0.1,
+    0.15
+  );
+
+  assert.equal(round(rolledLeft.azimuth), 0);
+  assert.equal(round(rolledLeft.elevation), 0);
+  assert.equal(round(rolledLeft.roll ?? 0), 0.15);
+  assert.equal(round(rolledRight.azimuth), 0);
+  assert.equal(round(rolledRight.elevation), 0);
+  assert.equal(round(rolledRight.roll ?? 0), -0.15);
+});
+
+test('maps detached keyboard translation onto the camera x y and z axes', () => {
   const forward = resolveDetachedKeyboardTranslation(
     new Set(['w']),
     {
@@ -99,8 +136,24 @@ test('maps detached keyboard translation to forward and reverse only', () => {
     },
     0.5
   );
-  const noStrafe = resolveDetachedKeyboardTranslation(
+  const left = resolveDetachedKeyboardTranslation(
     new Set(['a']),
+    {
+      azimuth: 0,
+      elevation: 0
+    },
+    0.5
+  );
+  const rise = resolveDetachedKeyboardTranslation(
+    new Set(['r']),
+    {
+      azimuth: 0,
+      elevation: 0
+    },
+    0.5
+  );
+  const noRotationTranslation = resolveDetachedKeyboardTranslation(
+    new Set(['arrowup', 'q']),
     {
       azimuth: 0,
       elevation: 0
@@ -109,7 +162,22 @@ test('maps detached keyboard translation to forward and reverse only', () => {
   );
 
   assert.deepEqual(forward?.map((value) => round(value)), [0, 0, -0.5]);
-  assert.equal(noStrafe, null);
+  assert.deepEqual(left?.map((value) => round(value)), [-0.5, 0, 0]);
+  assert.deepEqual(rise?.map((value) => round(value)), [0, 0.5, 0]);
+  assert.equal(noRotationTranslation, null);
+});
+
+test('resolves the current set point from camera position, look, and pivot distance', () => {
+  const setPoint = resolveCameraSetPoint(
+    [1, 2, 3],
+    {
+      azimuth: 0,
+      elevation: 0
+    },
+    2
+  );
+
+  assert.deepEqual(setPoint.map((value) => round(value)), [1, 2, 1]);
 });
 
 test('resolves a continuous up vector across the vertical pole', () => {
@@ -125,6 +193,16 @@ test('resolves a continuous up vector across the vertical pole', () => {
   assert.ok(magnitude(nearPoleUp) > 0.99);
   assert.ok(magnitude(overPoleUp) > 0.99);
   assert.ok(dotProduct(nearPoleUp, overPoleUp) > 0.95);
+});
+
+test('applies roll around the look vector when resolving the up vector', () => {
+  const rolledUp = resolveOrbitUpVector({
+    azimuth: 0,
+    elevation: 0,
+    roll: Math.PI / 2
+  });
+
+  assert.deepEqual(rolledUp.map((value) => round(value)), [1, 0, 0]);
 });
 
 function round(value: number) {

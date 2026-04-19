@@ -27,7 +27,10 @@ export type PublishedTableRegimeId = Exclude<
 export interface CameraOrbitPreset {
   azimuth: number;
   elevation: number;
+  roll?: number;
 }
+
+export type CameraNavigationMode = 'camera-relative' | 'set-point-relative';
 
 export interface NavigationEntryPoint {
   anchorId: string;
@@ -521,6 +524,7 @@ export interface RuntimeNeighborhoodSnapshot {
   cacheState: 'hit' | 'miss';
   cacheStats: RuntimeExplorationCacheStats;
   renderDemand: RuntimeRenderDemandSnapshot;
+  ambientOccurrences: RuntimeNeighborhoodOccurrence[];
   occurrences: RuntimeNeighborhoodOccurrence[];
   edges: RuntimeNeighborhoodEdge[];
   repeatedStateRelations: BuilderRepeatedStateRelationRecord[];

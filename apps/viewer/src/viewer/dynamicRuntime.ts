@@ -34,6 +34,8 @@ const MAX_LOCAL_VIEW_AUTO_EXPANSION_PASSES = 6;
 const MAX_WHOLE_OBJECT_AUTO_EXPANSION_PASSES = 3;
 const LOCAL_VIEW_AUTO_EXPANSION_BATCH = 2;
 const WHOLE_OBJECT_AUTO_EXPANSION_BATCH = 6;
+const MAX_DYNAMIC_RUNTIME_OCCURRENCES = 1536;
+const MAX_DYNAMIC_NAVIGATION_RETENTION_RADIUS = 2;
 const DYNAMIC_PATH_TOKEN_PATTERN = /[\s,>]+/;
 const DYNAMIC_MOVE_UCI_PATTERN = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
 const ADDITIVE_EXPANSION_MIN_SPREAD = Math.PI / 5;
@@ -386,6 +388,25 @@ export function createViewerRuntimeStore(
         viewSnapshot = runtimeKernel.inspectView(focusOccurrenceId, request);
       }
 
+      const pruneUpdate = pruneDynamicMaterialization({
+        builderBootstrapManifest,
+        viewerSceneManifest,
+        focusOccurrenceId,
+        retainedOccurrenceIds: viewSnapshot.occurrences.map(
+          (occurrence) => occurrence.occurrenceId
+        )
+      });
+
+      if (pruneUpdate) {
+        builderBootstrapManifest = pruneUpdate.builderBootstrapManifest;
+        viewerSceneManifest = pruneUpdate.viewerSceneManifest;
+        runtimeKernel = createRuntimeExplorationKernel(
+          builderBootstrapManifest,
+          viewerSceneManifest
+        );
+        viewSnapshot = runtimeKernel.inspectView(focusOccurrenceId, request);
+      }
+
       return viewSnapshot;
     },
     inspectCarrierSurface(occurrenceIds, request) {
@@ -504,7 +525,6 @@ function expandDynamicOccurrencesMaterialization({
     }
 
     const expansion = collectDynamicOccurrenceExpansion({
-      builderBootstrapManifest,
       focusOccurrence,
       dynamicOptions,
       existingOccurrenceIds,
@@ -572,6 +592,210 @@ function expandDynamicOccurrencesMaterialization({
       edgeDelta: newGeneratedTransitions.length
     }
   };
+}
+
+function pruneDynamicMaterialization({
+  builderBootstrapManifest,
+  viewerSceneManifest,
+  focusOccurrenceId,
+  retainedOccurrenceIds
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  viewerSceneManifest: ViewerSceneManifest;
+  focusOccurrenceId: string;
+  retainedOccurrenceIds: string[];
+}) {
+  if (builderBootstrapManifest.occurrences.length <= MAX_DYNAMIC_RUNTIME_OCCURRENCES) {
+    return null;
+  }
+
+  const retainedOccurrenceIdSet = buildDynamicRetentionSet({
+    builderBootstrapManifest,
+    focusOccurrenceId,
+    retainedOccurrenceIds
+  });
+
+  if (retainedOccurrenceIdSet.size >= builderBootstrapManifest.occurrences.length) {
+    return null;
+  }
+
+  const retainedOccurrences = builderBootstrapManifest.occurrences.filter((occurrence) =>
+    retainedOccurrenceIdSet.has(occurrence.occurrenceId)
+  );
+  const retainedTransitions = builderBootstrapManifest.transitions.filter(
+    (transition) =>
+      retainedOccurrenceIdSet.has(transition.sourceOccurrenceId) &&
+      retainedOccurrenceIdSet.has(transition.targetOccurrenceId)
+  );
+  const maxMaterializedPly = Math.max(
+    ...retainedOccurrences.map((occurrence) => occurrence.ply)
+  );
+  const nextBuilderBootstrapManifest = materializeDynamicBootstrapManifest({
+    graphObjectId: builderBootstrapManifest.graphObjectId,
+    coverageMetadata: builderBootstrapManifest.coverageMetadata,
+    resolverInputs: builderBootstrapManifest.resolverInputs,
+    regimeDeclarations: builderBootstrapManifest.regimeDeclarations,
+    rootOccurrenceIds: builderBootstrapManifest.rootOccurrenceIds,
+    generatedOccurrences: retainedOccurrences.map(toGeneratedOccurrence),
+    generatedTransitions: retainedTransitions.map(toGeneratedTransition),
+    maxMaterializedPly
+  });
+  const rootOccurrenceId = nextBuilderBootstrapManifest.rootOccurrenceIds[0];
+  const nextViewerSceneManifest = {
+    ...viewerSceneManifest,
+    runtime: {
+      ...viewerSceneManifest.runtime,
+      focusCandidateOccurrenceIds:
+        rootOccurrenceId === undefined
+          ? viewerSceneManifest.runtime.focusCandidateOccurrenceIds
+          : resolveDynamicFocusCandidates(
+              nextBuilderBootstrapManifest,
+              rootOccurrenceId,
+              [focusOccurrenceId]
+            )
+    }
+  } satisfies ViewerSceneManifest;
+
+  return {
+    builderBootstrapManifest: nextBuilderBootstrapManifest,
+    viewerSceneManifest: nextViewerSceneManifest
+  };
+}
+
+function buildDynamicRetentionSet({
+  builderBootstrapManifest,
+  focusOccurrenceId,
+  retainedOccurrenceIds
+}: {
+  builderBootstrapManifest: BuilderBootstrapManifest;
+  focusOccurrenceId: string;
+  retainedOccurrenceIds: string[];
+}) {
+  const retainedOccurrenceIdSet = new Set<string>(retainedOccurrenceIds);
+  const parentByOccurrenceId = buildDynamicParentByOccurrenceId(
+    builderBootstrapManifest.transitions
+  );
+  const adjacencyByOccurrenceId = buildDynamicAdjacencyByOccurrenceId(
+    builderBootstrapManifest.transitions
+  );
+
+  retainedOccurrenceIdSet.add(focusOccurrenceId);
+  builderBootstrapManifest.rootOccurrenceIds.forEach((occurrenceId) => {
+    retainedOccurrenceIdSet.add(occurrenceId);
+  });
+  collectDynamicRetentionNeighborhoodOccurrenceIds({
+    focusOccurrenceId,
+    adjacencyByOccurrenceId,
+    radius: MAX_DYNAMIC_NAVIGATION_RETENTION_RADIUS
+  }).forEach((occurrenceId) => {
+    retainedOccurrenceIdSet.add(occurrenceId);
+  });
+
+  const pendingOccurrenceIds = [...retainedOccurrenceIdSet];
+
+  while (pendingOccurrenceIds.length > 0) {
+    const occurrenceId = pendingOccurrenceIds.pop();
+
+    if (!occurrenceId) {
+      continue;
+    }
+
+    const parentOccurrenceId = parentByOccurrenceId.get(occurrenceId);
+
+    if (!parentOccurrenceId || retainedOccurrenceIdSet.has(parentOccurrenceId)) {
+      continue;
+    }
+
+    retainedOccurrenceIdSet.add(parentOccurrenceId);
+    pendingOccurrenceIds.push(parentOccurrenceId);
+  }
+
+  return retainedOccurrenceIdSet;
+}
+
+function buildDynamicAdjacencyByOccurrenceId(
+  transitions: BuilderTransitionRecord[]
+) {
+  const adjacencyByOccurrenceId = new Map<string, Set<string>>();
+
+  for (const transition of transitions) {
+    const sourceAdjacency =
+      adjacencyByOccurrenceId.get(transition.sourceOccurrenceId) ?? new Set<string>();
+    sourceAdjacency.add(transition.targetOccurrenceId);
+    adjacencyByOccurrenceId.set(transition.sourceOccurrenceId, sourceAdjacency);
+
+    const targetAdjacency =
+      adjacencyByOccurrenceId.get(transition.targetOccurrenceId) ?? new Set<string>();
+    targetAdjacency.add(transition.sourceOccurrenceId);
+    adjacencyByOccurrenceId.set(transition.targetOccurrenceId, targetAdjacency);
+  }
+
+  return adjacencyByOccurrenceId;
+}
+
+function collectDynamicRetentionNeighborhoodOccurrenceIds({
+  focusOccurrenceId,
+  adjacencyByOccurrenceId,
+  radius
+}: {
+  focusOccurrenceId: string;
+  adjacencyByOccurrenceId: Map<string, Set<string>>;
+  radius: number;
+}) {
+  const retainedOccurrenceIds: string[] = [];
+  const visitedOccurrenceIds = new Set<string>([focusOccurrenceId]);
+  const pendingOccurrences = [{ occurrenceId: focusOccurrenceId, distance: 0 }];
+  let queueIndex = 0;
+
+  while (queueIndex < pendingOccurrences.length) {
+    const currentEntry = pendingOccurrences[queueIndex];
+    queueIndex += 1;
+
+    if (!currentEntry) {
+      continue;
+    }
+
+    retainedOccurrenceIds.push(currentEntry.occurrenceId);
+
+    if (currentEntry.distance >= radius) {
+      continue;
+    }
+
+    const adjacentOccurrenceIds = adjacencyByOccurrenceId.get(currentEntry.occurrenceId);
+
+    if (!adjacentOccurrenceIds) {
+      continue;
+    }
+
+    for (const adjacentOccurrenceId of adjacentOccurrenceIds) {
+      if (visitedOccurrenceIds.has(adjacentOccurrenceId)) {
+        continue;
+      }
+
+      visitedOccurrenceIds.add(adjacentOccurrenceId);
+      pendingOccurrences.push({
+        occurrenceId: adjacentOccurrenceId,
+        distance: currentEntry.distance + 1
+      });
+    }
+  }
+
+  return retainedOccurrenceIds;
+}
+
+function buildDynamicParentByOccurrenceId(
+  transitions: BuilderTransitionRecord[]
+) {
+  return transitions.reduce<Map<string, string>>((parentByOccurrenceId, transition) => {
+    if (!parentByOccurrenceId.has(transition.targetOccurrenceId)) {
+      parentByOccurrenceId.set(
+        transition.targetOccurrenceId,
+        transition.sourceOccurrenceId
+      );
+    }
+
+    return parentByOccurrenceId;
+  }, new Map());
 }
 
 function createSceneBootstrap(
@@ -647,27 +871,17 @@ function createDynamicViewerSceneManifest({
 }
 
 function collectDynamicOccurrenceExpansion({
-  builderBootstrapManifest,
   focusOccurrence,
   dynamicOptions,
   existingOccurrenceIds,
   existingTransitionKeys
 }: {
-  builderBootstrapManifest: BuilderBootstrapManifest;
   focusOccurrence: BuilderOccurrenceRecord;
   dynamicOptions: DynamicRuntimeOptions;
   existingOccurrenceIds: Set<string>;
   existingTransitionKeys: Set<string>;
 }) {
   if (focusOccurrence.terminal !== null) {
-    return null;
-  }
-
-  if (
-    builderBootstrapManifest.transitions.some(
-      (transition) => transition.sourceOccurrenceId === focusOccurrence.occurrenceId
-    )
-  ) {
     return null;
   }
 
