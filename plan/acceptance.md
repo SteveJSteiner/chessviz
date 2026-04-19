@@ -1,6 +1,6 @@
 # Operational Acceptance (File Contract: measurable acceptance only)
 
-This file contains explicit, testable acceptance checks and budgets for the live traversal slice.
+This file contains explicit, testable acceptance checks and budgets for detached traversal through the represented structure.
 
 ## Declared run surface
 
@@ -18,14 +18,14 @@ This file contains explicit, testable acceptance checks and budgets for the live
 
 - **A1. Dynamic-only truth:** The viewer starts from runtime generation rather than committed scene/bootstrap artifacts.
 - **A2. Detached traversal:** Drag orbit, forward or backward travel, dolly, and drift all remain available without snapping to a selected occurrence.
-- **A3. Procedural reveal under flight:** Moving toward a branch causes additional nearby boards and carriers to materialize ahead on the same object.
+- **A3. Procedural reveal under flight:** Moving toward a branch causes additional nearby boards and carriers to materialize ahead within the same represented continuity.
 - **A4. Geometry-first reading:** At least one promising, forcing, or capture-heavy continuation is discoverable from carrier geometry and salience before opening the board.
 - **A5. Secondary board confirmation:** The board reference confirms the tracked occurrence after traversal; it is not the interface required to discover the line.
-- **A6. Larger live graph:** The live generated object feels spatially navigable rather than like a small labeled knot.
+- **A6. Larger live graph:** The runtime-generated view feels spatially navigable rather than like a small labeled knot.
 
 ## Human review question
 
-- **Q1.** Can a human fly through the object, pick out a promising or forcing line, and then open the board only to confirm it?
+- **Q1.** Can a human traverse the represented structure, pick out a promising or forcing line, and then open the board only to confirm it?
 
 Pass:
 The geometry leads, camera travel reveals structure, salient lines pull attention, and the board is only confirmation.

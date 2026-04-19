@@ -133,7 +133,7 @@ export function ViewerShell({
     <main style={shellStyle}>
       <section style={panelStyle}>
         <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700 }}>
-          Live Traversal Slice
+          Detached Traversal View
         </p>
         <h1 style={headingStyle}>{sceneBootstrap.title}</h1>
         <p>{sceneBootstrap.summary}</p>
@@ -142,12 +142,12 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>Honest target</div>
             <p style={{ margin: '0.45rem 0 0' }}>
-              Fly through the object, let motion reveal local branches ahead, and read promising or forcing continuations from geometry before opening the board.
+              Traverse the represented structure, let motion reveal local branches ahead, and read promising or forcing continuations from geometry before opening the board.
             </p>
           </article>
 
           <article style={narrativeCardStyle}>
-            <div style={{ fontWeight: 700 }}>Object scale</div>
+            <div style={{ fontWeight: 700 }}>Current runtime scale</div>
             <p style={{ margin: '0.45rem 0 0' }}>
               Runtime store currently holds {totalGraphOccurrenceCount} materialized nodes and {totalGraphEdgeCount} materialized edges. Current reveal renders {runtimeSnapshot.renderDemand.visibleOccurrenceCount} nodes and {runtimeSnapshot.renderDemand.visibleEdgeCount} edges from {runtimeSnapshot.renderDemand.enumeratedOccurrenceCount} enumerated candidates.
             </p>
