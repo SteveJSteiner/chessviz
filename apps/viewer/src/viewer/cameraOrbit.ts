@@ -40,6 +40,17 @@ export function advanceCameraOrbitState(
   });
 }
 
+export function resolveCameraLookVector(orbitState: CameraOrbitState): Vector3 {
+  const normalizedOrbitState = normalizeCameraOrbitState(orbitState);
+  const planarDistance = Math.cos(normalizedOrbitState.elevation);
+
+  return normalizeVector([
+    -(Math.sin(normalizedOrbitState.azimuth) * planarDistance),
+    -Math.sin(normalizedOrbitState.elevation),
+    -(Math.cos(normalizedOrbitState.azimuth) * planarDistance)
+  ]);
+}
+
 export function normalizeCameraOrbitState(
   orbitState: CameraOrbitState
 ): CameraOrbitState {
@@ -78,6 +89,59 @@ export function resolveOrbitUpVector(orbitState: CameraOrbitState): Vector3 {
   return normalizeVector(upVector);
 }
 
+export function resolveDetachedKeyboardOrbit(
+  pressedKeys: ReadonlySet<string>,
+  orbitState: CameraOrbitState,
+  turnStep: number,
+  pitchStep: number
+): CameraOrbitState {
+  let azimuth = orbitState.azimuth;
+  let elevation = orbitState.elevation;
+
+  if (pressedKeys.has('a') || pressedKeys.has('arrowleft')) {
+    azimuth += turnStep;
+  }
+  if (pressedKeys.has('d') || pressedKeys.has('arrowright')) {
+    azimuth -= turnStep;
+  }
+  if (pressedKeys.has('q')) {
+    elevation -= pitchStep;
+  }
+  if (pressedKeys.has('e')) {
+    elevation += pitchStep;
+  }
+
+  if (azimuth === orbitState.azimuth && elevation === orbitState.elevation) {
+    return orbitState;
+  }
+
+  return normalizeCameraOrbitState({
+    azimuth,
+    elevation
+  });
+}
+
+export function resolveDetachedKeyboardTranslation(
+  pressedKeys: ReadonlySet<string>,
+  orbitState: CameraOrbitState,
+  distance: number
+): Vector3 | null {
+  const step = Math.max(0.02, distance);
+  const lookVector = resolveCameraLookVector(orbitState);
+  let movement: Vector3 = [0, 0, 0];
+
+  if (pressedKeys.has('w') || pressedKeys.has('arrowup')) {
+    movement = addVector3(movement, scaleVector3(lookVector, step));
+  }
+  if (pressedKeys.has('s') || pressedKeys.has('arrowdown')) {
+    movement = addVector3(movement, scaleVector3(lookVector, -step));
+  }
+
+  return movement[0] === 0 && movement[1] === 0 && movement[2] === 0
+    ? null
+    : movement;
+}
+
 function magnitude(vector: Vector3) {
   return Math.hypot(vector[0], vector[1], vector[2]);
 }
@@ -106,4 +170,12 @@ function normalizeVector(vector: Vector3): Vector3 {
   }
 
   return [vector[0] / length, vector[1] / length, vector[2] / length];
+}
+
+function addVector3(left: Vector3, right: Vector3): Vector3 {
+  return [left[0] + right[0], left[1] + right[1], left[2] + right[2]];
+}
+
+function scaleVector3(vector: Vector3, scale: number): Vector3 {
+  return [vector[0] * scale, vector[1] * scale, vector[2] * scale];
 }

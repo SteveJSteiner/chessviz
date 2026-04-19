@@ -1,5 +1,6 @@
 import type {
   BuilderBootstrapManifest,
+  BuilderEdgeRecord,
   BuilderOccurrenceRecord,
   BuilderTransitionRecord,
   RuntimeCarrierBandState,
@@ -22,7 +23,7 @@ type RuntimeCarrierSurfaceArgs = {
   occurrenceById: Map<string, BuilderOccurrenceRecord>;
   transitionByKey: Map<string, BuilderTransitionRecord>;
   selectedOccurrenceIds: string[];
-  selectedOccurrenceIdSet: Set<string>;
+  selectedEdges: BuilderEdgeRecord[];
   refinementBudget: number;
   maxRefinementBudget: number;
 };
@@ -44,10 +45,17 @@ export function buildRuntimeCarrierSurface({
   occurrenceById,
   transitionByKey,
   selectedOccurrenceIds,
-  selectedOccurrenceIdSet,
+  selectedEdges,
   refinementBudget,
   maxRefinementBudget
 }: RuntimeCarrierSurfaceArgs): RuntimeCarrierSurfaceSnapshot {
+  const selectedOccurrenceIdSet = new Set(selectedOccurrenceIds);
+  const selectedEdgeKeySet = new Set(
+    selectedEdges.map((edge) =>
+      transitionKey(edge.sourceOccurrenceId, edge.targetOccurrenceId)
+    )
+  );
+
   return {
     graphObjectId: builderBootstrapManifest.graphObjectId,
     occurrenceIds: selectedOccurrenceIds,
@@ -56,7 +64,10 @@ export function buildRuntimeCarrierSurface({
       .filter(
         (rule) =>
           selectedOccurrenceIdSet.has(rule.sourceOccurrenceId) &&
-          selectedOccurrenceIdSet.has(rule.targetOccurrenceId)
+          selectedOccurrenceIdSet.has(rule.targetOccurrenceId) &&
+          selectedEdgeKeySet.has(
+            transitionKey(rule.sourceOccurrenceId, rule.targetOccurrenceId)
+          )
       )
       .map((rule) => {
         const sourceOccurrence = occurrenceById.get(rule.sourceOccurrenceId);

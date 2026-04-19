@@ -47,6 +47,7 @@ export type RuntimeViewRequest = {
 
 type CarrierSurfaceRequest = {
   refinementBudget: number;
+  selectedEdges: BuilderEdgeRecord[];
 };
 
 type QuerySurface = {
@@ -349,6 +350,7 @@ export function createRuntimeExplorationKernel(
             });
       const selection = createViewSelection({
         builderBootstrapManifest,
+        adjacencyByOccurrenceId,
         occurrenceById,
         outgoingTransitionCountByOccurrenceId,
         priorityFrontierSet,
@@ -404,7 +406,6 @@ export function createRuntimeExplorationKernel(
     },
     inspectCarrierSurface(occurrenceIds, request) {
       const selectedOccurrenceIds = [...new Set(occurrenceIds)];
-      const selectedOccurrenceIdSet = new Set(selectedOccurrenceIds);
       const refinementBudget = clamp(
         request.refinementBudget,
         1,
@@ -416,7 +417,7 @@ export function createRuntimeExplorationKernel(
         occurrenceById,
         transitionByKey,
         selectedOccurrenceIds,
-        selectedOccurrenceIdSet,
+        selectedEdges: request.selectedEdges,
         refinementBudget,
         maxRefinementBudget: viewerSceneManifest.runtime.maxRefinementBudget
       });
@@ -610,6 +611,7 @@ function createFullVisibilitySelection({
     detailNeighborhoodRadius: policy.detailNeighborhoodRadius
   });
   const selectedEdges = selectViewEdges({
+    scope,
     edges: builderBootstrapManifest.edges,
     selectedOccurrenceIds,
     occurrenceById,
@@ -665,6 +667,7 @@ function createFullVisibilitySelection({
 
 function createViewSelection({
   builderBootstrapManifest,
+  adjacencyByOccurrenceId,
   occurrenceById,
   outgoingTransitionCountByOccurrenceId,
   priorityFrontierSet,
@@ -678,6 +681,7 @@ function createViewSelection({
   distanceByOccurrenceId
 }: {
   builderBootstrapManifest: BuilderBootstrapManifest;
+  adjacencyByOccurrenceId: Map<string, Set<string>>;
   occurrenceById: Map<string, BuilderOccurrenceRecord>;
   outgoingTransitionCountByOccurrenceId: Map<string, number>;
   priorityFrontierSet: Set<string>;
@@ -704,12 +708,10 @@ function createViewSelection({
     scope === 'whole-object'
       ? selectWholeObjectOccurrenceIds({
           orderedOccurrenceIds,
+          adjacencyByOccurrenceId,
           occurrenceById,
           priorityFrontierSet,
           focusOccurrenceId,
-          focusCoordinate,
-          cameraFacingVector,
-          cameraDistance: cameraView.distance,
           distanceByOccurrenceId,
           detailNeighborhoodRadius: policy.detailNeighborhoodRadius,
           visibleLowDetailOccurrenceTarget: policy.visibleLowDetailOccurrenceTarget
@@ -722,6 +724,7 @@ function createViewSelection({
     detailNeighborhoodRadius: policy.detailNeighborhoodRadius
   });
   const selectedEdges = selectViewEdges({
+    scope,
     edges: builderBootstrapManifest.edges,
     selectedOccurrenceIds,
     occurrenceById,
@@ -791,14 +794,13 @@ function resolveRenderDemandPolicy({
   const tier = resolveRenderDemandTier(refinementBudget, maxRefinementBudget);
   const tierDetailRadius =
     tier === 'structure' ? 1 : tier === 'tactical' ? 2 : 3;
-  const wholeObjectBudgetScale =
-    cameraDistance >= 4.8 ? 1.08 : cameraDistance >= 4.2 ? 1 : 0.82;
+  const wholeObjectBudgetScale = cameraDistance > 0 ? 1 : 1;
 
   if (scope === 'whole-object') {
     const baseOccurrenceTarget =
-      tier === 'structure' ? 48 : tier === 'tactical' ? 30 : 18;
+      tier === 'structure' ? 52 : tier === 'tactical' ? 60 : 68;
     const baseEdgeTarget =
-      tier === 'structure' ? 72 : tier === 'tactical' ? 42 : 24;
+      tier === 'structure' ? 50 : tier === 'tactical' ? 54 : 58;
 
     return {
       renderSubsetPolicy: 'whole-object-focus-plus-budgeted-low-detail',
@@ -937,23 +939,19 @@ function normalizeDirection(direction: [number, number, number]) {
 
 function selectWholeObjectOccurrenceIds({
   orderedOccurrenceIds,
+  adjacencyByOccurrenceId,
   occurrenceById,
   priorityFrontierSet,
   focusOccurrenceId,
-  focusCoordinate,
-  cameraFacingVector,
-  cameraDistance,
   distanceByOccurrenceId,
   detailNeighborhoodRadius,
   visibleLowDetailOccurrenceTarget
 }: {
   orderedOccurrenceIds: string[];
+  adjacencyByOccurrenceId: Map<string, Set<string>>;
   occurrenceById: Map<string, BuilderOccurrenceRecord>;
   priorityFrontierSet: Set<string>;
   focusOccurrenceId: string;
-  focusCoordinate: BuilderOccurrenceRecord['embedding']['coordinate'];
-  cameraFacingVector: [number, number, number];
-  cameraDistance: number;
   distanceByOccurrenceId: Map<string, number>;
   detailNeighborhoodRadius: number;
   visibleLowDetailOccurrenceTarget: number;
@@ -970,38 +968,366 @@ function selectWholeObjectOccurrenceIds({
     selectedOccurrenceIds.push(occurrenceId);
   };
 
-  for (const occurrenceId of orderedOccurrenceIds) {
-    const distance = distanceByOccurrenceId.get(occurrenceId) ?? Number.POSITIVE_INFINITY;
-    if (
-      occurrenceId === focusOccurrenceId ||
-      (Number.isFinite(distance) && distance <= detailNeighborhoodRadius)
-    ) {
-      addOccurrenceId(occurrenceId);
+  addOccurrenceId(focusOccurrenceId);
+
+  const coarseScaffoldTarget = Math.min(
+    visibleLowDetailOccurrenceTarget,
+    WHOLE_OBJECT_COARSE_SCAFFOLD_TARGET
+  );
+  const detailOccurrenceIds = orderedOccurrenceIds.filter((occurrenceId) => {
+    if (occurrenceId === focusOccurrenceId) {
+      return false;
     }
+
+    const distance = distanceByOccurrenceId.get(occurrenceId) ?? Number.POSITIVE_INFINITY;
+    return Number.isFinite(distance) && distance <= 1;
+  });
+  const detailOccurrenceTarget = resolveWholeObjectDetailOccurrenceTarget(
+    1,
+    coarseScaffoldTarget
+  );
+
+  for (const occurrenceId of detailOccurrenceIds) {
+    if (selectedOccurrenceIds.length >= detailOccurrenceTarget + 1) {
+      break;
+    }
+
+    const connectorOccurrenceIds = resolveConnectorOccurrenceIds({
+      occurrenceId,
+      selectedOccurrenceIdSet,
+      adjacencyByOccurrenceId,
+      occurrenceById,
+      focusOccurrenceId,
+      distanceByOccurrenceId,
+      priorityFrontierSet
+    });
+
+    if (
+      connectorOccurrenceIds.length === 0 ||
+      selectedOccurrenceIds.length + connectorOccurrenceIds.length >
+        detailOccurrenceTarget + 1
+    ) {
+      continue;
+    }
+
+    connectorOccurrenceIds.forEach(addOccurrenceId);
   }
 
-  const viewRankedOccurrenceIds = [...orderedOccurrenceIds].sort((left, right) => {
-    const scoreDifference =
-      scoreOccurrenceForView({
-        occurrenceId: right,
+  const candidateBucketsBySubtreeKey = orderedOccurrenceIds.reduce<Map<string, string[]>>(
+    (buckets, occurrenceId) => {
+      if (selectedOccurrenceIdSet.has(occurrenceId)) {
+        return buckets;
+      }
+
+      const subtreeKey =
+        occurrenceById.get(occurrenceId)?.embedding.subtreeKey ?? occurrenceId;
+      const bucket = buckets.get(subtreeKey);
+
+      if (bucket) {
+        bucket.push(occurrenceId);
+      } else {
+        buckets.set(subtreeKey, [occurrenceId]);
+      }
+
+      return buckets;
+    },
+    new Map()
+  );
+  const orderedSubtreeKeys = [...candidateBucketsBySubtreeKey.keys()].sort(
+    (left, right) => {
+      const leftOccurrenceId = candidateBucketsBySubtreeKey.get(left)?.[0];
+      const rightOccurrenceId = candidateBucketsBySubtreeKey.get(right)?.[0];
+      const scoreDifference =
+        scoreWholeObjectCandidateOccurrence(
+          rightOccurrenceId,
+          occurrenceById,
+          focusOccurrenceId,
+          distanceByOccurrenceId,
+          priorityFrontierSet
+        ) -
+        scoreWholeObjectCandidateOccurrence(
+          leftOccurrenceId,
+          occurrenceById,
+          focusOccurrenceId,
+          distanceByOccurrenceId,
+          priorityFrontierSet
+        );
+
+      if (scoreDifference !== 0) {
+        return scoreDifference;
+      }
+
+      return left.localeCompare(right);
+    }
+  );
+
+  fillWholeObjectScaffold({
+    selectedOccurrenceIds,
+    selectedOccurrenceIdSet,
+    candidateBucketsBySubtreeKey,
+    orderedSubtreeKeys,
+    adjacencyByOccurrenceId,
+    occurrenceById,
+    focusOccurrenceId,
+    distanceByOccurrenceId,
+    priorityFrontierSet,
+    addOccurrenceId,
+    visibleOccurrenceTarget: coarseScaffoldTarget
+  });
+
+  if (visibleLowDetailOccurrenceTarget > coarseScaffoldTarget && detailNeighborhoodRadius > 1) {
+    const supplementalDetailOccurrenceIds = orderedOccurrenceIds.filter((occurrenceId) => {
+      if (selectedOccurrenceIdSet.has(occurrenceId)) {
+        return false;
+      }
+
+      const distance = distanceByOccurrenceId.get(occurrenceId) ?? Number.POSITIVE_INFINITY;
+      return Number.isFinite(distance) && distance <= detailNeighborhoodRadius;
+    });
+
+    for (const occurrenceId of supplementalDetailOccurrenceIds) {
+      if (selectedOccurrenceIds.length >= visibleLowDetailOccurrenceTarget) {
+        break;
+      }
+
+      const connectorOccurrenceIds = resolveConnectorOccurrenceIds({
+        occurrenceId,
+        selectedOccurrenceIdSet,
+        adjacencyByOccurrenceId,
         occurrenceById,
         focusOccurrenceId,
-        focusCoordinate,
-        cameraFacingVector,
-        cameraDistance,
-        distanceByOccurrenceId,
-        priorityFrontierSet
-      }) -
-      scoreOccurrenceForView({
-        occurrenceId: left,
-        occurrenceById,
-        focusOccurrenceId,
-        focusCoordinate,
-        cameraFacingVector,
-        cameraDistance,
         distanceByOccurrenceId,
         priorityFrontierSet
       });
+
+      if (
+        connectorOccurrenceIds.length === 0 ||
+        selectedOccurrenceIds.length + connectorOccurrenceIds.length >
+          visibleLowDetailOccurrenceTarget
+      ) {
+        continue;
+      }
+
+      connectorOccurrenceIds.forEach(addOccurrenceId);
+    }
+  }
+
+  fillWholeObjectScaffold({
+    selectedOccurrenceIds,
+    selectedOccurrenceIdSet,
+    candidateBucketsBySubtreeKey,
+    orderedSubtreeKeys,
+    adjacencyByOccurrenceId,
+    occurrenceById,
+    focusOccurrenceId,
+    distanceByOccurrenceId,
+    priorityFrontierSet,
+    addOccurrenceId,
+    visibleOccurrenceTarget: visibleLowDetailOccurrenceTarget
+  });
+
+  return selectedOccurrenceIds;
+}
+
+function resolveConnectorOccurrenceIds({
+  occurrenceId,
+  selectedOccurrenceIdSet,
+  adjacencyByOccurrenceId,
+  occurrenceById,
+  focusOccurrenceId,
+  distanceByOccurrenceId,
+  priorityFrontierSet
+}: {
+  occurrenceId: string;
+  selectedOccurrenceIdSet: Set<string>;
+  adjacencyByOccurrenceId: Map<string, Set<string>>;
+  occurrenceById: Map<string, BuilderOccurrenceRecord>;
+  focusOccurrenceId: string;
+  distanceByOccurrenceId: Map<string, number>;
+  priorityFrontierSet: Set<string>;
+}) {
+  if (selectedOccurrenceIdSet.has(occurrenceId)) {
+    return [];
+  }
+
+  const connectorOccurrenceIds: string[] = [];
+  let currentOccurrenceId = occurrenceId;
+
+  while (!selectedOccurrenceIdSet.has(currentOccurrenceId)) {
+    connectorOccurrenceIds.push(currentOccurrenceId);
+
+    const currentDistance =
+      distanceByOccurrenceId.get(currentOccurrenceId) ?? Number.POSITIVE_INFINITY;
+    if (!Number.isFinite(currentDistance) || currentOccurrenceId === focusOccurrenceId) {
+      break;
+    }
+
+    const predecessorOccurrenceId = resolveConnectorPredecessorOccurrenceId({
+      occurrenceId: currentOccurrenceId,
+      selectedOccurrenceIdSet,
+      adjacencyByOccurrenceId,
+      occurrenceById,
+      focusOccurrenceId,
+      distanceByOccurrenceId,
+      priorityFrontierSet
+    });
+
+    if (!predecessorOccurrenceId) {
+      return [];
+    }
+
+    currentOccurrenceId = predecessorOccurrenceId;
+  }
+
+  return connectorOccurrenceIds.reverse();
+}
+
+function resolveWholeObjectDetailOccurrenceTarget(
+  detailNeighborhoodRadius: number,
+  visibleLowDetailOccurrenceTarget: number
+) {
+  const baseTarget =
+    detailNeighborhoodRadius <= 1 ? 12 : detailNeighborhoodRadius === 2 ? 20 : 28;
+
+  return Math.min(baseTarget, Math.max(1, visibleLowDetailOccurrenceTarget - 1));
+}
+
+const WHOLE_OBJECT_COARSE_SCAFFOLD_TARGET = 52;
+const WHOLE_OBJECT_COARSE_EDGE_TARGET = 50;
+
+function fillWholeObjectScaffold({
+  selectedOccurrenceIds,
+  selectedOccurrenceIdSet,
+  candidateBucketsBySubtreeKey,
+  orderedSubtreeKeys,
+  adjacencyByOccurrenceId,
+  occurrenceById,
+  focusOccurrenceId,
+  distanceByOccurrenceId,
+  priorityFrontierSet,
+  addOccurrenceId,
+  visibleOccurrenceTarget
+}: {
+  selectedOccurrenceIds: string[];
+  selectedOccurrenceIdSet: Set<string>;
+  candidateBucketsBySubtreeKey: Map<string, string[]>;
+  orderedSubtreeKeys: string[];
+  adjacencyByOccurrenceId: Map<string, Set<string>>;
+  occurrenceById: Map<string, BuilderOccurrenceRecord>;
+  focusOccurrenceId: string;
+  distanceByOccurrenceId: Map<string, number>;
+  priorityFrontierSet: Set<string>;
+  addOccurrenceId: (occurrenceId: string) => void;
+  visibleOccurrenceTarget: number;
+}) {
+  while (selectedOccurrenceIds.length < visibleOccurrenceTarget) {
+    let addedOccurrence = false;
+
+    for (const subtreeKey of orderedSubtreeKeys) {
+      const bucket = candidateBucketsBySubtreeKey.get(subtreeKey);
+
+      if (!bucket || bucket.length === 0) {
+        continue;
+      }
+
+      while (bucket.length > 0) {
+        const candidateOccurrenceId = bucket.shift();
+
+        if (!candidateOccurrenceId || selectedOccurrenceIdSet.has(candidateOccurrenceId)) {
+          continue;
+        }
+
+        const connectorOccurrenceIds = resolveConnectorOccurrenceIds({
+          occurrenceId: candidateOccurrenceId,
+          selectedOccurrenceIdSet,
+          adjacencyByOccurrenceId,
+          occurrenceById,
+          focusOccurrenceId,
+          distanceByOccurrenceId,
+          priorityFrontierSet
+        });
+
+        if (
+          connectorOccurrenceIds.length === 0 ||
+          selectedOccurrenceIds.length + connectorOccurrenceIds.length >
+            visibleOccurrenceTarget
+        ) {
+          continue;
+        }
+
+        connectorOccurrenceIds.forEach(addOccurrenceId);
+        addedOccurrence = true;
+        break;
+      }
+
+      if (selectedOccurrenceIds.length >= visibleOccurrenceTarget) {
+        break;
+      }
+    }
+
+    if (!addedOccurrence) {
+      break;
+    }
+  }
+}
+
+function resolveConnectorPredecessorOccurrenceId({
+  occurrenceId,
+  selectedOccurrenceIdSet,
+  adjacencyByOccurrenceId,
+  occurrenceById,
+  focusOccurrenceId,
+  distanceByOccurrenceId,
+  priorityFrontierSet
+}: {
+  occurrenceId: string;
+  selectedOccurrenceIdSet: Set<string>;
+  adjacencyByOccurrenceId: Map<string, Set<string>>;
+  occurrenceById: Map<string, BuilderOccurrenceRecord>;
+  focusOccurrenceId: string;
+  distanceByOccurrenceId: Map<string, number>;
+  priorityFrontierSet: Set<string>;
+}) {
+  const currentDistance =
+    distanceByOccurrenceId.get(occurrenceId) ?? Number.POSITIVE_INFINITY;
+  if (!Number.isFinite(currentDistance) || currentDistance <= 0) {
+    return null;
+  }
+
+  const predecessorOccurrenceIds = [
+    ...(adjacencyByOccurrenceId.get(occurrenceId) ?? new Set<string>())
+  ].filter(
+    (candidateOccurrenceId) =>
+      (distanceByOccurrenceId.get(candidateOccurrenceId) ?? Number.POSITIVE_INFINITY) ===
+      currentDistance - 1
+  );
+
+  if (predecessorOccurrenceIds.length === 0) {
+    return null;
+  }
+
+  predecessorOccurrenceIds.sort((left, right) => {
+    const leftSelected = selectedOccurrenceIdSet.has(left) ? 0 : 1;
+    const rightSelected = selectedOccurrenceIdSet.has(right) ? 0 : 1;
+    if (leftSelected !== rightSelected) {
+      return leftSelected - rightSelected;
+    }
+
+    const scoreDifference =
+      scoreWholeObjectCandidateOccurrence(
+        right,
+        occurrenceById,
+        focusOccurrenceId,
+        distanceByOccurrenceId,
+        priorityFrontierSet
+      ) -
+      scoreWholeObjectCandidateOccurrence(
+        left,
+        occurrenceById,
+        focusOccurrenceId,
+        distanceByOccurrenceId,
+        priorityFrontierSet
+      );
 
     if (scoreDifference !== 0) {
       return scoreDifference;
@@ -1010,15 +1336,37 @@ function selectWholeObjectOccurrenceIds({
     return left.localeCompare(right);
   });
 
-  for (const occurrenceId of viewRankedOccurrenceIds) {
-    if (selectedOccurrenceIds.length >= visibleLowDetailOccurrenceTarget) {
-      break;
-    }
+  return predecessorOccurrenceIds[0] ?? null;
+}
 
-    addOccurrenceId(occurrenceId);
+function scoreWholeObjectCandidateOccurrence(
+  occurrenceId: string | undefined,
+  occurrenceById: Map<string, BuilderOccurrenceRecord>,
+  focusOccurrenceId: string,
+  distanceByOccurrenceId: Map<string, number>,
+  priorityFrontierSet: Set<string>
+) {
+  if (!occurrenceId) {
+    return Number.NEGATIVE_INFINITY;
   }
 
-  return selectedOccurrenceIds;
+  if (occurrenceId === focusOccurrenceId) {
+    return 14;
+  }
+
+  const occurrence = occurrenceById.get(occurrenceId);
+  if (!occurrence) {
+    return Number.NEGATIVE_INFINITY;
+  }
+
+  const distance = distanceByOccurrenceId.get(occurrenceId) ?? Number.POSITIVE_INFINITY;
+  const distanceScore = Number.isFinite(distance) ? Math.max(0, 12 - (distance * 2.2)) : 0;
+  const salienceScore = occurrence.salience.normalizedScore * 3.2;
+  const priorityScore = priorityFrontierSet.has(occurrenceId) ? 0.8 : 0;
+  const branchAnchorScore = occurrence.ply === 1 ? 1 : 0;
+  const terminalScore = occurrence.terminal ? 0.45 : 0;
+
+  return distanceScore + salienceScore + priorityScore + branchAnchorScore + terminalScore;
 }
 
 function buildOccurrenceLodMap({
@@ -1056,6 +1404,7 @@ function buildOccurrenceLodMap({
 }
 
 function selectViewEdges({
+  scope,
   edges,
   selectedOccurrenceIds,
   occurrenceById,
@@ -1067,6 +1416,7 @@ function selectViewEdges({
   focusOccurrenceId,
   visibleEdgeTarget
 }: {
+  scope: RuntimeGraphViewScope;
   edges: BuilderEdgeRecord[];
   selectedOccurrenceIds: string[];
   occurrenceById: Map<string, BuilderOccurrenceRecord>;
@@ -1087,6 +1437,53 @@ function selectViewEdges({
 
   if (!Number.isFinite(visibleEdgeTarget) || candidateEdges.length <= visibleEdgeTarget) {
     return candidateEdges;
+  }
+
+  if (scope === 'whole-object') {
+    const coarseOccurrenceIdSet = new Set(
+      selectedOccurrenceIds.slice(0, WHOLE_OBJECT_COARSE_SCAFFOLD_TARGET)
+    );
+    const coarseCandidateEdges = candidateEdges.filter(
+      (edge) =>
+        coarseOccurrenceIdSet.has(edge.sourceOccurrenceId) &&
+        coarseOccurrenceIdSet.has(edge.targetOccurrenceId)
+    );
+    const sortedCoarseEdges = sortWholeObjectEdges(
+      coarseCandidateEdges,
+      occurrenceById,
+      distanceByOccurrenceId,
+      priorityFrontierSet,
+      focusOccurrenceId
+    );
+    const coarseEdges = sortedCoarseEdges.slice(
+      0,
+      Math.min(visibleEdgeTarget, WHOLE_OBJECT_COARSE_EDGE_TARGET)
+    );
+
+    if (visibleEdgeTarget <= WHOLE_OBJECT_COARSE_EDGE_TARGET) {
+      return coarseEdges;
+    }
+
+    const coarseEdgeKeySet = new Set(
+      coarseEdges.map((edge) => transitionKey(edge.sourceOccurrenceId, edge.targetOccurrenceId))
+    );
+    const remainingEdges = sortWholeObjectEdges(
+      candidateEdges.filter(
+        (edge) =>
+          !coarseEdgeKeySet.has(
+            transitionKey(edge.sourceOccurrenceId, edge.targetOccurrenceId)
+          )
+      ),
+      occurrenceById,
+      distanceByOccurrenceId,
+      priorityFrontierSet,
+      focusOccurrenceId
+    );
+
+    return [
+      ...coarseEdges,
+      ...remainingEdges.slice(0, visibleEdgeTarget - coarseEdges.length)
+    ];
   }
 
   return [...candidateEdges]
@@ -1122,6 +1519,40 @@ function selectViewEdges({
       );
     })
     .slice(0, visibleEdgeTarget);
+}
+
+function sortWholeObjectEdges(
+  edges: BuilderEdgeRecord[],
+  occurrenceById: Map<string, BuilderOccurrenceRecord>,
+  distanceByOccurrenceId: Map<string, number>,
+  priorityFrontierSet: Set<string>,
+  focusOccurrenceId: string
+) {
+  return [...edges].sort((left, right) => {
+    const scoreDifference =
+      scoreWholeObjectEdge({
+        edge: right,
+        occurrenceById,
+        distanceByOccurrenceId,
+        priorityFrontierSet,
+        focusOccurrenceId
+      }) -
+      scoreWholeObjectEdge({
+        edge: left,
+        occurrenceById,
+        distanceByOccurrenceId,
+        priorityFrontierSet,
+        focusOccurrenceId
+      });
+
+    if (scoreDifference !== 0) {
+      return scoreDifference;
+    }
+
+    return `${left.sourceOccurrenceId}|${left.targetOccurrenceId}`.localeCompare(
+      `${right.sourceOccurrenceId}|${right.targetOccurrenceId}`
+    );
+  });
 }
 
 function scoreEdge({
@@ -1180,6 +1611,46 @@ function scoreEdge({
     (Number.isFinite(minimumDistance) ? Math.max(0, 8 - minimumDistance) : 0) +
     (Math.max(sourceSalience, targetSalience) * 3) +
     ((sourceViewScore + targetViewScore) * 0.35)
+  );
+}
+
+function scoreWholeObjectEdge({
+  edge,
+  occurrenceById,
+  distanceByOccurrenceId,
+  priorityFrontierSet,
+  focusOccurrenceId
+}: {
+  edge: BuilderEdgeRecord;
+  occurrenceById: Map<string, BuilderOccurrenceRecord>;
+  distanceByOccurrenceId: Map<string, number>;
+  priorityFrontierSet: Set<string>;
+  focusOccurrenceId: string;
+}) {
+  const minimumDistance = Math.min(
+    distanceByOccurrenceId.get(edge.sourceOccurrenceId) ?? Number.POSITIVE_INFINITY,
+    distanceByOccurrenceId.get(edge.targetOccurrenceId) ?? Number.POSITIVE_INFINITY
+  );
+  const maximumSalience = Math.max(
+    occurrenceById.get(edge.sourceOccurrenceId)?.salience.normalizedScore ?? 0,
+    occurrenceById.get(edge.targetOccurrenceId)?.salience.normalizedScore ?? 0
+  );
+  const focusAdjacent =
+    edge.sourceOccurrenceId === focusOccurrenceId ||
+    edge.targetOccurrenceId === focusOccurrenceId;
+  const frontierAdjacent =
+    priorityFrontierSet.has(edge.sourceOccurrenceId) ||
+    priorityFrontierSet.has(edge.targetOccurrenceId);
+  const rootAdjacent =
+    (occurrenceById.get(edge.sourceOccurrenceId)?.ply ?? 1) <= 1 ||
+    (occurrenceById.get(edge.targetOccurrenceId)?.ply ?? 1) <= 1;
+
+  return (
+    (focusAdjacent ? 5 : 0) +
+    (Number.isFinite(minimumDistance) ? Math.max(0, 10 - (minimumDistance * 2.4)) : 0) +
+    (maximumSalience * 3.1) +
+    (frontierAdjacent ? 0.7 : 0) +
+    (rootAdjacent ? 0.45 : 0)
   );
 }
 

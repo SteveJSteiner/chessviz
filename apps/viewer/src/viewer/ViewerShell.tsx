@@ -32,6 +32,7 @@ type ViewerShellProps = {
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
   onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
+  onResetCameraPose: () => void;
   renderTuning: ViewerRenderTuning;
   totalGraphEdgeCount: number;
   totalGraphOccurrenceCount: number;
@@ -118,6 +119,7 @@ export function ViewerShell({
   onHoverOccurrenceChange,
   onCameraPoseChange,
   onFocusOccurrenceChange,
+  onResetCameraPose,
   renderTuning,
   totalGraphEdgeCount,
   totalGraphOccurrenceCount
@@ -157,7 +159,7 @@ export function ViewerShell({
           <article style={narrativeCardStyle}>
             <div style={{ fontWeight: 700 }}>Flight controls</div>
             <p style={{ margin: '0.45rem 0 0' }}>
-              Drag to orbit. Scroll to dolly forward or backward. Use W/S to move through the structure, A/D to strafe, and Q/E to rise or drop without retargeting the tracked position.
+              Drag to rotate. Scroll to dolly forward or backward. Use W/S to move through the structure, A/D to turn left or right, Q/E to pitch up or down, press Space to reset around the tracked node, and click any node to recenter on it.
             </p>
           </article>
 
@@ -214,7 +216,7 @@ export function ViewerShell({
                 : 'No occurrence is currently tracked.'}
             </p>
             <p style={{ margin: '0.4rem 0 0', fontSize: '0.83rem', color: '#6c6254' }}>
-              Camera position [{cameraPosition.map((value) => value.toFixed(2)).join(', ')}] · orbit [{cameraOrbit.azimuth.toFixed(2)}, {cameraOrbit.elevation.toFixed(2)}]. Click a node only if you want to inspect it directly; continued movement stays detached.
+              Camera position [{cameraPosition.map((value) => value.toFixed(2)).join(', ')}] · orbit [{cameraOrbit.azimuth.toFixed(2)}, {cameraOrbit.elevation.toFixed(2)}]. Click a node to recenter on it, use Space if you need a clean recovery pose, and keep flying once the geometry has the read.
             </p>
           </article>
         </section>
@@ -229,6 +231,7 @@ export function ViewerShell({
           onCameraPoseChange={onCameraPoseChange}
           onFocusOccurrenceChange={onFocusOccurrenceChange}
           onHoverOccurrenceChange={onHoverOccurrenceChange}
+          onResetCameraPose={onResetCameraPose}
           renderTuning={renderTuning}
           hoveredOccurrenceId={hoveredOccurrence?.occurrenceId ?? null}
           runtimeSnapshot={runtimeSnapshot}

@@ -10,7 +10,12 @@ import {
   resolveCameraGrammarRefinementBudget
 } from './viewer/cameraGrammar';
 import { scaleCoordinate } from './viewer/carrierPresentation';
-import { deriveCameraOrbitState, normalizeCameraOrbitState } from './viewer/cameraOrbit';
+import {
+  deriveCameraOrbitState,
+  normalizeCameraOrbitState,
+  resolveCameraLookVector,
+  resolveOrbitCameraPosition
+} from './viewer/cameraOrbit';
 import type {
   BuilderOccurrenceRecord,
   CameraOrbitPreset,
@@ -33,6 +38,14 @@ import { ViewerShell } from './viewer/ViewerShell';
 
 const VIEW_SCOPE: RuntimeGraphViewScope = 'whole-object';
 const FOCUS_SWITCH_HYSTERESIS = 0.28;
+const MANUAL_FOCUS_RELEASE_POSITION = 0.4;
+const MANUAL_FOCUS_RELEASE_ORBIT = 0.18;
+
+type ManualFocusHold = {
+  occurrenceId: string;
+  position: Vector3;
+  orbit: CameraOrbitPreset;
+};
 
 export default function App() {
   const [runtimeSource] = useState(() =>
@@ -48,6 +61,8 @@ export default function App() {
   const [cameraPose, setCameraPose] = useState(() =>
     createInitialDetachedCameraPose(runtimeBootstrap.sceneBootstrap)
   );
+  const [manualFocusHold, setManualFocusHold] =
+    useState<ManualFocusHold | null>(null);
   const deferredCameraPose = useDeferredValue(cameraPose);
   const runtimeConfig = runtimeStore.getViewerSceneManifest().runtime;
   const builderBootstrapManifest = runtimeStore.getBuilderBootstrapManifest();
@@ -83,6 +98,15 @@ export default function App() {
   });
 
   useEffect(() => {
+    if (manualFocusHold) {
+      if (!hasCameraPoseEscapedManualFocusHold(deferredCameraPose, manualFocusHold)) {
+        return;
+      }
+
+      setManualFocusHold(null);
+      return;
+    }
+
     const nextFocusOccurrenceId = resolveTraversalFocusOccurrenceId({
       occurrences: builderBootstrapManifest.occurrences,
       currentFocusOccurrenceId: focusOccurrenceId,
@@ -97,7 +121,8 @@ export default function App() {
   }, [
     builderBootstrapManifest.occurrences,
     deferredCameraPose,
-    focusOccurrenceId
+    focusOccurrenceId,
+    manualFocusHold
   ]);
 
   useEffect(() => {
@@ -128,7 +153,8 @@ export default function App() {
           (occurrence) => occurrence.occurrenceId
         ),
         {
-          refinementBudget: deferredRuntimeSnapshot.refinementBudget
+          refinementBudget: deferredRuntimeSnapshot.refinementBudget,
+          selectedEdges: deferredRuntimeSnapshot.edges
         }
       ),
     [deferredRuntimeSnapshot, runtimeStore]
@@ -136,6 +162,61 @@ export default function App() {
   const hoveredOccurrence = hoveredOccurrenceId
     ? runtimeStore.resolveOccurrence(hoveredOccurrenceId) ?? null
     : null;
+  const initialFocusOccurrence =
+    runtimeStore.resolveOccurrence(runtimeBootstrap.initialFocusOccurrenceId) ??
+    builderBootstrapManifest.occurrences[0] ??
+    null;
+
+  const handleFocusOccurrenceChange = (occurrenceId: string) => {
+    const targetOccurrence = runtimeStore.resolveOccurrence(occurrenceId);
+
+    setHoveredOccurrenceId(null);
+    setFocusOccurrenceId(occurrenceId);
+    setBoardReferenceOpen(true);
+
+    if (!targetOccurrence) {
+      setManualFocusHold(null);
+      return;
+    }
+
+    const nextPose = createCenteredCameraPose({
+      occurrence: targetOccurrence,
+      orbit: cameraPose.orbit,
+      distance: resolveTrackedCameraDistance(
+        cameraPose.position,
+        focusOccurrence,
+        runtimeBootstrap.sceneBootstrap
+      )
+    });
+
+    setManualFocusHold({
+      occurrenceId,
+      position: nextPose.position,
+      orbit: nextPose.orbit
+    });
+    setCameraPose(nextPose);
+  };
+
+  const handleResetCameraPose = () => {
+    const resetOccurrence = focusOccurrence ?? initialFocusOccurrence;
+    if (!resetOccurrence) {
+      return;
+    }
+
+    const nextPose = createResetCameraPose(
+      resetOccurrence,
+      runtimeBootstrap.sceneBootstrap
+    );
+
+    setHoveredOccurrenceId(null);
+    setFocusOccurrenceId(resetOccurrence.occurrenceId);
+    setManualFocusHold({
+      occurrenceId: resetOccurrence.occurrenceId,
+      position: nextPose.position,
+      orbit: nextPose.orbit
+    });
+    setCameraPose(nextPose);
+  };
 
   return (
     <ViewerShell
@@ -154,12 +235,9 @@ export default function App() {
           orbit: quantizeCameraOrbit(orbit)
         })
       }
-      onFocusOccurrenceChange={(occurrenceId) => {
-        setHoveredOccurrenceId(null);
-        setFocusOccurrenceId(occurrenceId);
-        setBoardReferenceOpen(true);
-      }}
+      onFocusOccurrenceChange={handleFocusOccurrenceChange}
       onHoverOccurrenceChange={setHoveredOccurrenceId}
+      onResetCameraPose={handleResetCameraPose}
       renderTuning={DEFAULT_VIEWER_RENDER_TUNING}
       runtimeConfig={runtimeConfig}
       runtimeSnapshot={deferredRuntimeSnapshot}
@@ -173,16 +251,90 @@ export default function App() {
 function createInitialDetachedCameraPose(
   sceneBootstrap: SceneBootstrap
 ): { position: Vector3; orbit: CameraOrbitPreset } {
+  const orbit = resolveDefaultDetachedOrbit(sceneBootstrap);
+
   return {
     position: [...sceneBootstrap.camera.position] as Vector3,
-    orbit: quantizeCameraOrbit(
-      deriveCameraOrbitState([
-        sceneBootstrap.camera.position[0] - sceneBootstrap.camera.lookAt[0],
-        sceneBootstrap.camera.position[1] - sceneBootstrap.camera.lookAt[1],
-        sceneBootstrap.camera.position[2] - sceneBootstrap.camera.lookAt[2]
-      ])
-    )
+    orbit
   };
+}
+
+function createCenteredCameraPose({
+  occurrence,
+  orbit,
+  distance
+}: {
+  occurrence: BuilderOccurrenceRecord;
+  orbit: CameraOrbitPreset;
+  distance: number;
+}): { position: Vector3; orbit: CameraOrbitPreset } {
+  const nextOrbit = quantizeCameraOrbit(orbit);
+  const targetPosition = scaleCoordinate(occurrence.embedding.coordinate);
+
+  return {
+    position: resolveOrbitCameraPosition(targetPosition, Math.max(distance, 0.2), nextOrbit),
+    orbit: nextOrbit
+  };
+}
+
+function createResetCameraPose(
+  occurrence: BuilderOccurrenceRecord,
+  sceneBootstrap: SceneBootstrap
+): { position: Vector3; orbit: CameraOrbitPreset } {
+  const orbit = resolveDefaultDetachedOrbit(sceneBootstrap);
+  const targetPosition = scaleCoordinate(occurrence.embedding.coordinate);
+
+  return {
+    position: resolveOrbitCameraPosition(
+      targetPosition,
+      resolveDefaultDetachedDistance(sceneBootstrap),
+      orbit
+    ),
+    orbit
+  };
+}
+
+function resolveDefaultDetachedOrbit(
+  sceneBootstrap: SceneBootstrap
+): CameraOrbitPreset {
+  return quantizeCameraOrbit(
+    deriveCameraOrbitState([
+      sceneBootstrap.camera.position[0] - sceneBootstrap.camera.lookAt[0],
+      sceneBootstrap.camera.position[1] - sceneBootstrap.camera.lookAt[1],
+      sceneBootstrap.camera.position[2] - sceneBootstrap.camera.lookAt[2]
+    ])
+  );
+}
+
+function resolveDefaultDetachedDistance(sceneBootstrap: SceneBootstrap) {
+  return distanceBetween(sceneBootstrap.camera.position, sceneBootstrap.camera.lookAt);
+}
+
+function resolveTrackedCameraDistance(
+  cameraPosition: Vector3,
+  focusOccurrence: BuilderOccurrenceRecord | null,
+  sceneBootstrap: SceneBootstrap
+) {
+  if (!focusOccurrence) {
+    return resolveDefaultDetachedDistance(sceneBootstrap);
+  }
+
+  return distanceBetween(
+    cameraPosition,
+    scaleCoordinate(focusOccurrence.embedding.coordinate)
+  );
+}
+
+function hasCameraPoseEscapedManualFocusHold(
+  cameraPose: { position: Vector3; orbit: CameraOrbitPreset },
+  manualFocusHold: ManualFocusHold
+) {
+  return (
+    distanceBetween(cameraPose.position, manualFocusHold.position) >
+      MANUAL_FOCUS_RELEASE_POSITION ||
+    resolveOrbitDelta(cameraPose.orbit, manualFocusHold.orbit) >
+      MANUAL_FOCUS_RELEASE_ORBIT
+  );
 }
 
 function resolveTraversalFocusOccurrenceId({
@@ -196,7 +348,7 @@ function resolveTraversalFocusOccurrenceId({
   cameraPosition: Vector3;
   cameraOrbit: CameraOrbitPreset;
 }) {
-  const lookVector = resolveLookVector(cameraOrbit);
+  const lookVector = resolveCameraLookVector(cameraOrbit);
   let bestOccurrenceId = currentFocusOccurrenceId;
   let bestScore = Number.NEGATIVE_INFINITY;
   let currentScore = Number.NEGATIVE_INFINITY;
@@ -255,17 +407,6 @@ function scoreTraversalFocusCandidate({
   return forwardScore + distanceScore + salienceScore + terminalScore + stickiness;
 }
 
-function resolveLookVector(orbit: CameraOrbitPreset): Vector3 {
-  const normalizedOrbit = normalizeCameraOrbitState(orbit);
-  const planarDistance = Math.cos(normalizedOrbit.elevation);
-
-  return normalizeVector([
-    -(Math.sin(normalizedOrbit.azimuth) * planarDistance),
-    -Math.sin(normalizedOrbit.elevation),
-    -(Math.cos(normalizedOrbit.azimuth) * planarDistance)
-  ]);
-}
-
 function quantizeCameraOrbit(orbit: CameraOrbitPreset): CameraOrbitPreset {
   const normalizedOrbit = normalizeCameraOrbitState(orbit);
 
@@ -299,6 +440,20 @@ function normalizeVector(vector: Vector3): Vector3 {
   }
 
   return [vector[0] / length, vector[1] / length, vector[2] / length];
+}
+
+function resolveOrbitDelta(
+  left: CameraOrbitPreset,
+  right: CameraOrbitPreset
+) {
+  return Math.max(
+    Math.abs(resolveAngleDelta(left.azimuth, right.azimuth)),
+    Math.abs(left.elevation - right.elevation)
+  );
+}
+
+function resolveAngleDelta(left: number, right: number) {
+  return Math.atan2(Math.sin(left - right), Math.cos(left - right));
 }
 
 function quantizeNumber(value: number, step: number) {

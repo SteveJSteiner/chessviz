@@ -19,6 +19,9 @@ import { formatSubtreeLabel, formatTerminalOutcomeLabel } from './chessContext.t
 import {
   advanceCameraOrbitState,
   normalizeCameraOrbitState,
+  resolveCameraLookVector,
+  resolveDetachedKeyboardOrbit,
+  resolveDetachedKeyboardTranslation,
   resolveOrbitUpVector,
 } from './cameraOrbit.ts';
 import {
@@ -44,6 +47,7 @@ type SmokeCanvasProps = {
   onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
   onFocusOccurrenceChange: (occurrenceId: string) => void;
   onHoverOccurrenceChange: (occurrenceId: string | null) => void;
+  onResetCameraPose: () => void;
   renderTuning: ViewerRenderTuning;
   sceneBootstrap: SceneBootstrap;
   hoveredOccurrenceId: string | null;
@@ -54,6 +58,20 @@ const CAMERA_POSE_MIN_REPORT_MS = 120;
 const CAMERA_POSE_MAX_REPORT_MS = 260;
 const CAMERA_POSE_POSITION_EPSILON = 0.22;
 const CAMERA_POSE_ORBIT_EPSILON = 0.08;
+const KEYBOARD_TURN_RATE = 1.9;
+const KEYBOARD_PITCH_RATE = 1.45;
+const DETACHED_CONTROL_KEYS = new Set([
+  'w',
+  'a',
+  's',
+  'd',
+  'q',
+  'e',
+  'arrowup',
+  'arrowdown',
+  'arrowleft',
+  'arrowright'
+]);
 
 const labelTextureCache = new Map<
   string,
@@ -68,6 +86,7 @@ export function SmokeCanvas({
   onCameraPoseChange,
   onFocusOccurrenceChange,
   onHoverOccurrenceChange,
+  onResetCameraPose,
   renderTuning,
   sceneBootstrap,
   hoveredOccurrenceId,
@@ -93,6 +112,7 @@ export function SmokeCanvas({
         cameraOrbit={cameraOrbit}
         cameraPosition={cameraPosition}
         onCameraPoseChange={onCameraPoseChange}
+        onResetCameraPose={onResetCameraPose}
         travelSpeed={Math.max(
           1.2,
           Math.min(4.8, (cameraGrammar.cameraDistance * 0.82) + 0.65)
@@ -142,11 +162,13 @@ function CameraRig({
   cameraOrbit,
   cameraPosition,
   onCameraPoseChange,
+  onResetCameraPose,
   travelSpeed
 }: {
   cameraOrbit: CameraOrbitPreset;
   cameraPosition: Vector3;
   onCameraPoseChange: (position: Vector3, orbit: CameraOrbitPreset) => void;
+  onResetCameraPose: () => void;
   travelSpeed: number;
 }) {
   const { camera, gl } = useThree();
@@ -243,7 +265,22 @@ function CameraRig({
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      pressedKeysRef.current.add(event.key.toLowerCase());
+      if (event.code === 'Space') {
+        event.preventDefault();
+
+        if (!event.repeat) {
+          onResetCameraPose();
+        }
+
+        return;
+      }
+
+      const key = event.key.toLowerCase();
+      if (DETACHED_CONTROL_KEYS.has(key)) {
+        event.preventDefault();
+      }
+
+      pressedKeysRef.current.add(key);
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -269,13 +306,29 @@ function CameraRig({
       canvasElement.style.touchAction = previousTouchAction;
       canvasElement.style.cursor = previousCursor;
     };
-  }, [gl, onCameraPoseChange, travelSpeed]);
+  }, [gl, onCameraPoseChange, onResetCameraPose, travelSpeed]);
 
   useFrame((_, delta) => {
-    const movement = resolveKeyboardMovement(
+    const frameDelta = Math.min(delta, 0.05);
+    const nextOrbit = resolveDetachedKeyboardOrbit(
       pressedKeysRef.current,
       orbitStateRef.current,
-      Math.min(delta, 0.05) * travelSpeed
+      frameDelta * KEYBOARD_TURN_RATE,
+      frameDelta * KEYBOARD_PITCH_RATE
+    );
+
+    if (
+      nextOrbit.azimuth !== orbitStateRef.current.azimuth ||
+      nextOrbit.elevation !== orbitStateRef.current.elevation
+    ) {
+      orbitStateRef.current = nextOrbit;
+      viewDirtyRef.current = true;
+    }
+
+    const movement = resolveDetachedKeyboardTranslation(
+      pressedKeysRef.current,
+      orbitStateRef.current,
+      frameDelta * travelSpeed
     );
 
     if (movement) {
@@ -338,67 +391,12 @@ function CameraRig({
   return null;
 }
 
-function resolveKeyboardMovement(
-  pressedKeys: Set<string>,
-  orbit: CameraOrbitPreset,
-  distance: number
-) {
-  const step = Math.max(0.02, distance);
-  const lookVector = resolveCameraLookVector(orbit);
-  const rightVector = normalizeMarkerTangent(
-    crossProduct(lookVector, resolveOrbitUpVector(orbit))
-  );
-  let movement: Vector3 = [0, 0, 0];
-
-  if (pressedKeys.has('w') || pressedKeys.has('arrowup')) {
-    movement = addVector3(movement, scaleVector3(lookVector, step));
-  }
-  if (pressedKeys.has('s') || pressedKeys.has('arrowdown')) {
-    movement = addVector3(movement, scaleVector3(lookVector, -step));
-  }
-  if (pressedKeys.has('a') || pressedKeys.has('arrowleft')) {
-    movement = addVector3(movement, scaleVector3(rightVector, -step));
-  }
-  if (pressedKeys.has('d') || pressedKeys.has('arrowright')) {
-    movement = addVector3(movement, scaleVector3(rightVector, step));
-  }
-  if (pressedKeys.has('q')) {
-    movement = addVector3(movement, [0, -step, 0]);
-  }
-  if (pressedKeys.has('e')) {
-    movement = addVector3(movement, [0, step, 0]);
-  }
-
-  return movement[0] === 0 && movement[1] === 0 && movement[2] === 0
-    ? null
-    : movement;
-}
-
-function resolveCameraLookVector(orbit: CameraOrbitPreset): Vector3 {
-  const normalizedOrbit = normalizeCameraOrbitState(orbit);
-  const planarDistance = Math.cos(normalizedOrbit.elevation);
-
-  return normalizeMarkerTangent([
-    -(Math.sin(normalizedOrbit.azimuth) * planarDistance),
-    -Math.sin(normalizedOrbit.elevation),
-    -(Math.cos(normalizedOrbit.azimuth) * planarDistance)
-  ]);
-}
-
 function addVector3(left: Vector3, right: Vector3): Vector3 {
   return [left[0] + right[0], left[1] + right[1], left[2] + right[2]];
 }
 
 function scaleVector3(vector: Vector3, scale: number): Vector3 {
   return [vector[0] * scale, vector[1] * scale, vector[2] * scale];
-}
-
-function crossProduct(left: Vector3, right: Vector3): Vector3 {
-  return [
-    (left[1] * right[2]) - (left[2] * right[1]),
-    (left[2] * right[0]) - (left[0] * right[2]),
-    (left[0] * right[1]) - (left[1] * right[0])
-  ];
 }
 
 function roundVector3(vector: Vector3): Vector3 {

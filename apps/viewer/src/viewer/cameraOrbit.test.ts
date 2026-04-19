@@ -4,6 +4,9 @@ import {
   CAMERA_ORBIT_LIMITS,
   advanceCameraOrbitState,
   deriveCameraOrbitState,
+  resolveCameraLookVector,
+  resolveDetachedKeyboardOrbit,
+  resolveDetachedKeyboardTranslation,
   normalizeCameraOrbitState,
   resolveOrbitUpVector,
   resolveOrbitCameraPosition
@@ -58,6 +61,57 @@ test('projects orbit state into a camera position around the focus node', () => 
   assert.deepEqual(cameraPosition.map((value) => round(value)), [5.2, -0.4, 0.5]);
 });
 
+test('resolves the detached look vector from orbit state', () => {
+  const forward = resolveCameraLookVector({
+    azimuth: 0,
+    elevation: 0
+  });
+  const left = resolveCameraLookVector({
+    azimuth: Math.PI / 2,
+    elevation: 0
+  });
+
+  assert.deepEqual(forward.map((value) => round(value)), [0, 0, -1]);
+  assert.deepEqual(left.map((value) => round(value)), [-1, 0, 0]);
+});
+
+test('maps detached keyboard rotation to yaw on A/D and pitch on Q/E', () => {
+  const rotated = resolveDetachedKeyboardOrbit(
+    new Set(['a', 'q']),
+    {
+      azimuth: 0,
+      elevation: 0
+    },
+    0.2,
+    0.1
+  );
+
+  assert.equal(round(rotated.azimuth), 0.2);
+  assert.equal(round(rotated.elevation), -0.1);
+});
+
+test('maps detached keyboard translation to forward and reverse only', () => {
+  const forward = resolveDetachedKeyboardTranslation(
+    new Set(['w']),
+    {
+      azimuth: 0,
+      elevation: 0
+    },
+    0.5
+  );
+  const noStrafe = resolveDetachedKeyboardTranslation(
+    new Set(['a']),
+    {
+      azimuth: 0,
+      elevation: 0
+    },
+    0.5
+  );
+
+  assert.deepEqual(forward?.map((value) => round(value)), [0, 0, -0.5]);
+  assert.equal(noStrafe, null);
+});
+
 test('resolves a continuous up vector across the vertical pole', () => {
   const nearPoleUp = resolveOrbitUpVector({
     azimuth: 0.35,
@@ -74,7 +128,9 @@ test('resolves a continuous up vector across the vertical pole', () => {
 });
 
 function round(value: number) {
-  return Math.round(value * 1_000_000) / 1_000_000;
+  const rounded = Math.round(value * 1_000_000) / 1_000_000;
+
+  return Object.is(rounded, -0) ? 0 : rounded;
 }
 
 function magnitude(vector: [number, number, number]) {
